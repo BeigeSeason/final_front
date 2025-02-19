@@ -97,8 +97,8 @@ export const Modal: React.FC<ModalProps> = ({
 interface CheckModalProps {
   isOpen: boolean;
   onClose: () => void;
-  children: React.ReactNode; // 자식 요소
-  buttonProps?: React.ComponentProps<typeof Button>; // Button에 전달할 추가 props
+  children: React.ReactNode;
+  buttonProps?: React.ComponentProps<typeof Button>;
 }
 
 export const CheckModal: React.FC<CheckModalProps> = ({
@@ -125,15 +125,12 @@ export const CheckModal: React.FC<CheckModalProps> = ({
 interface CloseModalProps {
   isOpen: boolean;
   onClose: () => void;
-  children: React.ReactNode; // 자식 요소
-  buttonProps?: React.ComponentProps<typeof Button>; // Button에 전달할 추가 props
+  children: React.ReactNode;
 }
-
 export const CloseModal: React.FC<CloseModalProps> = ({
   isOpen,
   onClose,
   children,
-  buttonProps,
 }) => {
   if (!isOpen) return null;
 
