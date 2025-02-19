@@ -1,9 +1,11 @@
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Sample from "./page/sample";
 import { Main } from "./page/MainPage";
 import { Layout } from "./component/GlobalComponent";
+import Sample from "./page/sample";
 import AdminHome from "./page/Admin/AdminHome";
+import MypageMain from "./page/user/MypageMain";
+
 function App() {
   return (
     <>
@@ -13,6 +15,7 @@ function App() {
             <Route path="/" element={<Sample />} />
             <Route path="/main" element={<Main />} />
             <Route path="/admin" element={<AdminHome />} />
+            <Route path="/mypage" element={<MypageMain />} />
           </Route>
         </Routes>
       </Router>
