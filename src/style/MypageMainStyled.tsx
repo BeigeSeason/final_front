@@ -62,5 +62,5 @@ export const MyContentContainer = styled.div`
   width: 90%;
   height: 100%;
   margin: 0 auto 7vh;
-  background-color: #7c46ad;
+  border: 1px solid black;
 `;
