@@ -21,8 +21,14 @@ export const GlobalFont = createGlobalStyle`
   font-weight: 400; 
   font-style: normal;
 }
-
 `;
+
+export const colors = {
+  colorA: "rgb(31, 62, 87)",
+  colorB: "rgb(24, 97, 126)",
+  colorC: "rgb(96, 179, 214)",
+  colorD: "rgb(211, 237, 242)",
+};
 
 export const HeaderSt = styled.div`
   position: relative;
@@ -89,6 +95,7 @@ export const NavSt = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 0 5%;
   .menu {
     display: flex;
     gap: 20px;
