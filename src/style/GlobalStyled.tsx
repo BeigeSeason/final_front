@@ -52,29 +52,8 @@ export const HeaderSt = styled.div`
       object-fit: contain;
     }
   }
-
-  .search {
-    display: flex;
-    align-items: center;
-    position: relative;
+  .inputSearch {
     flex-grow: 0.8;
-    input {
-      width: 100%;
-      height: 20;
-      padding: 10px 20px;
-      border: 1px solid #ccc;
-      border-radius: 50px;
-      font-size: 14px;
-      outline: none;
-    }
-
-    .search-icon {
-      position: absolute;
-      right: 10px;
-      font-size: 16px;
-      color: #888;
-      cursor: pointer;
-    }
   }
 
   .usericon {

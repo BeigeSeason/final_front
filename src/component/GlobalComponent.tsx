@@ -8,9 +8,8 @@ import {
 } from "../style/GlobalStyled";
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import logoImg from "../img/sample.png";
+import { SearchBox } from "./InputComponent";
 
 // 헤더---------------------------------------------------------------------------------
 export const Header = () => {
@@ -38,20 +37,16 @@ export const Header = () => {
         <Link to="/" className="logo">
           <img src={logoImg} alt="로고" />
         </Link>
-        <div className="search">
-          <input
-            type="text"
-            placeholder="검색어를 입력하세요"
-            value={searchTerm}
+
+        <div className="inputSearch">
+          <SearchBox
+            searchTerm={searchTerm}
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
-          />
-          <FontAwesomeIcon
-            icon={faSearch}
-            className="search-icon"
-            onClick={handleSearch}
+            onSearch={handleSearch}
           />
         </div>
+
         <Link to="/mypage" className="usericon">
           <img alt="사용자 아이콘" />
         </Link>

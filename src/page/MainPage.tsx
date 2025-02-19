@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   MainBox,
   BestSpot,
@@ -21,6 +22,7 @@ export const Main = () => {
     { id: 4, name: "장소 4", imgSrc: "path/to/image4.jpg" },
     { id: 5, name: "장소 5", imgSrc: "path/to/image5.jpg" },
   ];
+
   return (
     <>
       <GlobalFont />
