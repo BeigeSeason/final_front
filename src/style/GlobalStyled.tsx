@@ -12,15 +12,16 @@ export const GlobalFont = createGlobalStyle`
   font-style: normal;
 }
 .content-font1{
-  font-family: "Nanum Brush Script", serif;
-  font-weight: 400; 
-  font-style: normal;
-}
-.content-font2{
   font-family: "Gothic A1", serif;
   font-weight: 400;
   font-style: normal;
 }
+.content-font2{
+  font-family: "Nanum Brush Script", serif;
+  font-weight: 400; 
+  font-style: normal;
+}
+
 `;
 
 export const HeaderSt = styled.div`
@@ -31,6 +32,7 @@ export const HeaderSt = styled.div`
   align-items: center;
   padding: 0 10%;
   justify-content: space-between;
+  gap: 50px;
   .logo {
     border: 1px solid black;
     height: 80px;
@@ -47,9 +49,9 @@ export const HeaderSt = styled.div`
     display: flex;
     align-items: center;
     position: relative;
-
+    flex-grow: 1;
     input {
-      width: 500px;
+      width: 100%;
       padding: 8px 35px 8px 10px;
       border: 1px solid #ccc;
       border-radius: 50px;
@@ -84,6 +86,25 @@ export const HeaderSt = styled.div`
 export const NavSt = styled.div`
   height: 50px;
   background-color: antiquewhite;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  .menu {
+    display: flex;
+    gap: 20px;
+  }
+  .tag {
+    text-decoration: none;
+    color: black;
+    transition: all 0.3s ease;
+    &:hover {
+      opacity: 0.7;
+    }
+    &.active {
+      text-decoration: underline;
+      color: #585891;
+    }
+  }
 `;
 
 export const FooterSt = styled.div`

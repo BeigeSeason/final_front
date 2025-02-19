@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import {
   HeaderSt,
   NavSt,
@@ -60,20 +60,44 @@ export const Header = () => {
 };
 
 export const Nav = () => {
+  const location = useLocation();
+
+  const isActive = (path: string): boolean => {
+    return location.pathname === path;
+  };
+
   return (
     <NavSt>
       <div className="menu">
-        <Link className="tag content-font1" to="/tourList">
+        <Link
+          className={`tag content-font1 ${
+            isActive("/tourList") ? "active" : ""
+          }`}
+          to="/tourList"
+        >
           관광지
         </Link>
-        <Link className="tag content-font1" to="/diaryList">
+        <Link
+          className={`tag content-font1 ${
+            isActive("/diaryList") ? "active" : ""
+          }`}
+          to="/diaryList"
+        >
           여행일지
         </Link>
-        <Link className="tag content-font1" to="/recommTour">
+        <Link
+          className={`tag content-font1 ${
+            isActive("/recommTour") ? "active" : ""
+          }`}
+          to="/recommTour"
+        >
           여행지 추천
         </Link>
       </div>
-      <Link className="tag content-font1" to="/createDiary">
+      <Link
+        className={`tag content-font1 ${isActive("/mypage") ? "active" : ""}`}
+        to="/mypage"
+      >
         여행일지 만들기
       </Link>
     </NavSt>
