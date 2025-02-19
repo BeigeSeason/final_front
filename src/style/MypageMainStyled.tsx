@@ -41,7 +41,7 @@ export const MypageMenuContainer = styled.div`
   align-items: center;
   width: 100%;
   height: 50px;
-  margin: 10px 0;
+  margin: 3vh 0 2vh;
   background-color: #d8e1f3;
 
   button {
