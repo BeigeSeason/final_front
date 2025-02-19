@@ -2,6 +2,7 @@ import styled from "styled-components"
 
 export const AdminContainer = styled.div`
   display: flex;
+  flex-direction: column;
   justify-content: center;
   background-color: pink;
   .center {
@@ -62,6 +63,45 @@ export const AdminContainer = styled.div`
       svg {
         width: 30px;
         height: 30px;
+      }
+    }
+  }
+  .data-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    .data-head {
+      display: flex;
+      justify-content: right;
+      .sort-box {
+        display: flex;
+        gap: 5px;
+        padding: 5px;
+        .sort-icon {
+          display: flex;
+          flex-direction: column;
+        }
+      }
+    }
+    .data-content {
+
+    }
+    .sort-selectBox {
+      padding: 5px;
+      display: flex;
+      flex-direction: column;
+      position: absolute;
+      top: 37px;
+      right: 0;
+      background-color: #999;
+      border-radius: 5px;
+      .sort-selected {
+        padding: 7.5% 10px;
+        border-radius: 5px;
+        &:hover {
+          background-color: #777;
+        }
       }
     }
   }
