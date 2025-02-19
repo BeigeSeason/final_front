@@ -101,6 +101,7 @@ const AdminHome = () => {
             <thead>
               <tr>
                 <th>번호</th>
+                <th>이미지</th>
                 <th>아이디</th>
                 <th>이메일</th>
                 <th>이름</th>
@@ -109,12 +110,14 @@ const AdminHome = () => {
                 <th>소셜</th>
                 <th>소셜아이디</th>
                 <th>상태</th>
+                <th>관리</th>
               </tr>
             </thead>
             <tbody>
               {members.map((member) => (
                 <tr key={member.id}>
-                  <td className="center">{member.id}</td>
+                  <td className="text-center">{member.id}</td>
+                  <td></td>
                   <td>{member.userId}</td>
                   <td>{member.email}</td>
                   <td>{member.name}</td>
@@ -123,6 +126,11 @@ const AdminHome = () => {
                   <td></td>
                   <td></td>
                   <td></td>
+                  <td className="center">
+                    <button>
+                      관리
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>

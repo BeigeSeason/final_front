@@ -4,18 +4,22 @@ export const AdminContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
   background-color: pink;
   .center {
     display: flex;
     justify-content: center;
     align-items: center;
   }
+  .text-center {
+    text-align: center;
+  }
   .search-container {
     position: relative;
     width: 80%;
     height: 50px;
     padding: 10px;
-    margin: 50px 0;
+    margin-top: 50px;
     flex-direction: row;
     gap: 10px;
     justify-content: space-between;
@@ -37,6 +41,7 @@ export const AdminContainer = styled.div`
       top: 45px;
       background-color: #999;
       border-radius: 5px;
+      z-index: 1;
       .search-selected {
         padding: 7.5% 10px;
         border-radius: 5px;
@@ -71,6 +76,7 @@ export const AdminContainer = styled.div`
     display: flex;
     flex-direction: column;
     position: relative;
+    margin-top: 50px;
     .data-head {
       display: flex;
       justify-content: right;
@@ -78,6 +84,7 @@ export const AdminContainer = styled.div`
         display: flex;
         gap: 5px;
         padding: 5px;
+        margin-right: 10px;
         .sort-icon {
           display: flex;
           flex-direction: column;
@@ -93,6 +100,7 @@ export const AdminContainer = styled.div`
       right: 0;
       background-color: #999;
       border-radius: 5px;
+      z-index: 1;
       .sort-selected {
         padding: 7.5% 10px;
         border-radius: 5px;
@@ -109,6 +117,13 @@ export const AdminContainer = styled.div`
         th, td {
           padding: 5px 3px;
           border: 1px solid #ddd;
+        }
+        tbody {
+          tr:hover {
+            td:not(:last-child) {
+              background-color: #ddd;
+            }
+          }
         }
       }
     }
