@@ -4,6 +4,34 @@ export const HeaderSt = styled.div`
   position: relative;
   height: 100px;
   background-color: aliceblue;
+  display: flex;
+  align-items: center;
+
+  .logo {
+    border: 1px solid black;
+  }
+  .search {
+    display: flex;
+    align-items: center;
+    position: relative;
+
+    input {
+      width: 500px;
+      padding: 8px 35px 8px 10px;
+      border: 1px solid #ccc;
+      border-radius: 50px;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .search-icon {
+      position: absolute;
+      right: 10px;
+      font-size: 16px;
+      color: #888;
+      cursor: pointer;
+    }
+  }
 `;
 
 export const NavSt = styled.div`
@@ -20,5 +48,5 @@ export const FooterSt = styled.div`
 `;
 
 export const Body = styled.div`
-  height: 1500px;
+  height: 800px;
 `;

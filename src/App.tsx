@@ -4,6 +4,7 @@ import { Main } from "./page/MainPage";
 import { Layout } from "./component/GlobalComponent";
 import AdminHome from "./page/Admin/AdminHome";
 import MypageMain from "./page/user/MypageMain";
+import { SearchPage } from "./page/SearchPage";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
             <Route path="/" element={<Main />} />
             <Route path="/admin" element={<AdminHome />} />
             <Route path="/mypage" element={<MypageMain />} />
+            <Route path="/searchpage" element={<SearchPage />} />
           </Route>
         </Routes>
       </Router>
