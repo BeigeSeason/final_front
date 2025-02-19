@@ -84,9 +84,6 @@ export const AdminContainer = styled.div`
         }
       }
     }
-    .data-content {
-
-    }
     .sort-selectBox {
       padding: 5px;
       display: flex;
@@ -101,6 +98,17 @@ export const AdminContainer = styled.div`
         border-radius: 5px;
         &:hover {
           background-color: #777;
+        }
+      }
+    }
+    .data-content {
+      table {
+        padding: 10px;
+        width: 100%;
+        border-spacing: 0;
+        th, td {
+          padding: 5px 3px;
+          border: 1px solid #ddd;
         }
       }
     }

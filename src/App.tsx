@@ -3,6 +3,9 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Main } from "./page/MainPage";
 import { Layout } from "./component/GlobalComponent";
 import AdminHome from "./page/admin/AdminHome";
+import AdminReportUser from "./page/admin/AdminReportUser";
+import AdminReportDiary from "./page/admin/AdminReportDiary";
+import AdminReportReview from "./page/admin/AdminReportReview";
 import MypageMain from "./page/user/MypageMain";
 import { SearchPage } from "./page/SearchPage";
 
@@ -14,6 +17,9 @@ function App() {
           <Route element={<Layout />}>
             <Route path="/" element={<Main />} />
             <Route path="/admin" element={<AdminHome />} />
+            <Route path="/admin/user" element={<AdminReportUser />} />
+            <Route path="/admin/diary" element={<AdminReportDiary />} />
+            <Route path="/admin/review" element={<AdminReportReview />} />
             <Route path="/mypage" element={<MypageMain />} />
             <Route path="/searchpage" element={<SearchPage />} />
           </Route>

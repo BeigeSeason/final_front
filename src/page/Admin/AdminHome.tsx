@@ -1,5 +1,6 @@
 import {useState} from "react";
 import { AdminContainer } from "./AdminComponent";
+import { GlobalFont } from "../../style/GlobalStyled";
 
 // icon
 import { FaSortDown, FaAngleUp, FaAngleDown } from "react-icons/fa";
@@ -30,8 +31,16 @@ const AdminHome = () => {
     setSortSelectOpen(false);
   }
 
+  // 임시 데이터
+  const members = [
+    { id: 1, userId: "user001", email: "user001@example.com", name: "홍길동", nickname: "길동", joinDate: "2025-01-01" },
+    { id: 2, userId: "user002", email: "user002@example.com", name: "김철수", nickname: "철수", joinDate: "2025-01-05" },
+    { id: 3, userId: "user003", email: "user003@example.com", name: "이영희", nickname: "영희", joinDate: "2025-01-10" }
+  ];
+
   return (
     <AdminContainer>
+      <GlobalFont/>
       {/* 검색 박스 */}
       <div className="search-container center">
         <div className="search-category center" onClick={handleCategory}>
@@ -71,9 +80,6 @@ const AdminHome = () => {
             </div>
           </div>
         </div>
-        <div className="data-content">
-
-        </div>
         {sortSelectOpen && (
           <div className="sort-selectBox">
             <div className="sort-selected" onClick={() => handleSelectSort("번호 낮은순")}>
@@ -90,6 +96,38 @@ const AdminHome = () => {
             </div>
           </div>
         )}
+        <div className="data-content">
+          <table>
+            <thead>
+              <tr>
+                <th>번호</th>
+                <th>아이디</th>
+                <th>이메일</th>
+                <th>이름</th>
+                <th>닉네임</th>
+                <th>가입일</th>
+                <th>소셜</th>
+                <th>소셜아이디</th>
+                <th>상태</th>
+              </tr>
+            </thead>
+            <tbody>
+              {members.map((member) => (
+                <tr key={member.id}>
+                  <td className="center">{member.id}</td>
+                  <td>{member.userId}</td>
+                  <td>{member.email}</td>
+                  <td>{member.name}</td>
+                  <td>{member.nickname}</td>
+                  <td>{member.joinDate}</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </AdminContainer>
   );
