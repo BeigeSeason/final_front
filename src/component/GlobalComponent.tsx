@@ -1,9 +1,16 @@
 import { Outlet } from "react-router-dom";
-import { HeaderSt, NavSt, FooterSt, Body } from "../style/GlobalStyled";
+import {
+  HeaderSt,
+  NavSt,
+  FooterSt,
+  Body,
+  GlobalFont,
+} from "../style/GlobalStyled";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import logoImg from "../img/sample.png";
 
 export const Header = () => {
   const navigate = useNavigate();
@@ -24,28 +31,53 @@ export const Header = () => {
     }
   };
   return (
-    <HeaderSt>
-      <div className="logo">로고이미지</div>
-      <div className="search">
-        <input
-          type="text"
-          placeholder="검색어를 입력하세요"
-          value={searchTerm}
-          onChange={handleInputChange}
-          onKeyDown={handleKeyDown}
-        />
-        <FontAwesomeIcon
-          icon={faSearch}
-          className="search-icon"
-          onClick={handleSearch}
-        />{" "}
-      </div>
-    </HeaderSt>
+    <>
+      <GlobalFont />
+      <HeaderSt>
+        <Link to="/" className="logo">
+          <img src={logoImg} alt="로고" />
+        </Link>
+        <div className="search">
+          <input
+            type="text"
+            placeholder="검색어를 입력하세요"
+            value={searchTerm}
+            onChange={handleInputChange}
+            onKeyDown={handleKeyDown}
+          />
+          <FontAwesomeIcon
+            icon={faSearch}
+            className="search-icon"
+            onClick={handleSearch}
+          />
+        </div>
+        <Link to="/mypage" className="usericon">
+          <img alt="사용자 아이콘" />
+        </Link>
+      </HeaderSt>
+    </>
   );
 };
 
 export const Nav = () => {
-  return <NavSt>네비</NavSt>;
+  return (
+    <NavSt>
+      <div className="menu">
+        <Link className="tag content-font1" to="/tourList">
+          관광지
+        </Link>
+        <Link className="tag content-font1" to="/diaryList">
+          여행일지
+        </Link>
+        <Link className="tag content-font1" to="/recommTour">
+          여행지 추천
+        </Link>
+      </div>
+      <Link className="tag content-font1" to="/createDiary">
+        여행일지 만들기
+      </Link>
+    </NavSt>
+  );
 };
 
 export const Footer = () => {

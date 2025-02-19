@@ -1,4 +1,27 @@
 import styled from "styled-components";
+import { createGlobalStyle } from "styled-components";
+
+export const GlobalFont = createGlobalStyle`
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Brush+Script&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Jua&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Gothic+A1&display=swap');
+  
+.title-font {
+  font-family: "Jua", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+.content-font1{
+  font-family: "Nanum Brush Script", serif;
+  font-weight: 400; 
+  font-style: normal;
+}
+.content-font2{
+  font-family: "Gothic A1", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+`;
 
 export const HeaderSt = styled.div`
   position: relative;
@@ -6,10 +29,20 @@ export const HeaderSt = styled.div`
   background-color: aliceblue;
   display: flex;
   align-items: center;
-
+  padding: 0 10%;
+  justify-content: space-between;
   .logo {
     border: 1px solid black;
+    height: 80px;
+    width: 120px;
+    overflow: hidden;
+    img {
+      height: 100%;
+      width: 100%;
+      object-fit: contain;
+    }
   }
+
   .search {
     display: flex;
     align-items: center;
@@ -30,6 +63,20 @@ export const HeaderSt = styled.div`
       font-size: 16px;
       color: #888;
       cursor: pointer;
+    }
+  }
+
+  .usericon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    overflow: hidden;
+    cursor: pointer;
+    border: 1px solid black;
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
   }
 `;
