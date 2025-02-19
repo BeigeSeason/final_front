@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Sample from "./page/sample";
 import { Main } from "./page/MainPage";
 import { Layout } from "./component/GlobalComponent";
-import AdminHome from "./Page/Admin/AdminHome";
+import AdminHome from "./page/Admin/AdminHome";
 function App() {
   return (
     <>
