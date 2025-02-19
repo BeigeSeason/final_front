@@ -2,7 +2,7 @@ import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Main } from "./page/MainPage";
 import { Layout } from "./component/GlobalComponent";
-import AdminHome from "./page/Admin/AdminHome";
+import AdminHome from "./page/admin/AdminHome";
 import MypageMain from "./page/user/MypageMain";
 import { SearchPage } from "./page/SearchPage";
 
