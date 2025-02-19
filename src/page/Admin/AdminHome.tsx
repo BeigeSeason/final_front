@@ -1,6 +1,7 @@
 import {useState} from "react";
 import { AdminContainer } from "./AdminComponent";
 import { GlobalFont } from "../../style/GlobalStyled";
+import { Modal } from "../../component/ModalComponent";
 
 // icon
 import { FaSortDown, FaAngleUp, FaAngleDown } from "react-icons/fa";
@@ -12,6 +13,8 @@ const AdminHome = () => {
 
   const [searchSelectOpen, setSearchSelectOpen] = useState(false);
   const [sortSelectOpen, setSortSelectOpen] = useState(false);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
   
   // 검색 카테고리 선택
   const handleCategory = () => {
@@ -29,6 +32,20 @@ const AdminHome = () => {
   const handleSelectSort = (select: string) => {
     setSort(select);
     setSortSelectOpen(false);
+  }
+
+  // 유저 관리 모달
+  const openModal = () => {
+    setIsModalOpen(true);
+  }
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  }
+
+  // 유저 관리
+  const manageUser = () => {
+    setIsModalOpen(false);
   }
 
   // 임시 데이터
@@ -127,7 +144,7 @@ const AdminHome = () => {
                   <td></td>
                   <td></td>
                   <td className="center">
-                    <button>
+                    <button onClick={openModal}>
                       관리
                     </button>
                   </td>
@@ -137,6 +154,15 @@ const AdminHome = () => {
           </table>
         </div>
       </div>
+
+      {/* 관리버튼 모달 */}
+      <Modal
+        isOpen={isModalOpen}
+        onConfirm={manageUser}
+        onClose={closeModal}
+      >
+        <p>dd</p>
+      </Modal>
     </AdminContainer>
   );
 };
