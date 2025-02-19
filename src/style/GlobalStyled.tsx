@@ -55,7 +55,7 @@ export const HeaderSt = styled.div`
     display: flex;
     align-items: center;
     position: relative;
-    flex-grow: 1;
+    flex-grow: 0.8;
     input {
       width: 100%;
       padding: 8px 35px 8px 10px;
@@ -123,5 +123,5 @@ export const FooterSt = styled.div`
 `;
 
 export const Body = styled.div`
-  height: 800px;
+  min-height: 800px;
 `;
