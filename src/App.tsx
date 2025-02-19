@@ -2,7 +2,6 @@ import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Main } from "./page/MainPage";
 import { Layout } from "./component/GlobalComponent";
-import Sample from "./page/sample";
 import AdminHome from "./page/Admin/AdminHome";
 import MypageMain from "./page/user/MypageMain";
 
@@ -12,8 +11,7 @@ function App() {
       <Router>
         <Routes>
           <Route element={<Layout />}>
-            <Route path="/" element={<Sample />} />
-            <Route path="/main" element={<Main />} />
+            <Route path="/" element={<Main />} />
             <Route path="/admin" element={<AdminHome />} />
             <Route path="/mypage" element={<MypageMain />} />
           </Route>
