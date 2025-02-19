@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { colors } from "../style/GlobalStyled";
 
 interface StyledButtonProps {
@@ -50,6 +50,7 @@ const StyledButton = styled.button<StyledButtonProps>`
   }
 `;
 
+// 일반 버튼 ----------------------------------------------------------------------
 interface ButtonProps extends StyledButtonProps {
   children: React.ReactNode;
   onClick?: () => void;
@@ -74,6 +75,7 @@ export const Button: React.FC<ButtonProps> = ({
   </StyledButton>
 );
 
+// 취소 버튼 ------------------------------------------------------------------------------
 interface CancelButtonProps {
   onClick?: () => void;
   children: React.ReactNode;
@@ -89,3 +91,26 @@ export const CancelButton: React.FC<CancelButtonProps> = ({
     {children}
   </Button>
 );
+
+// 스크롤바 스타일 ------------------------------------------------------------------------------
+export const ScrollBar = css`
+  /* 전체 스크롤바 영역 스타일 */
+  &::-webkit-scrollbar {
+    width: 6px; /* 스크롤바 두께 */
+    height: 6px; /* 가로 스크롤바 두께 */
+  }
+  /* 스크롤바 트랙(배경) 스타일 */
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1; /* 연한 배경색 */
+    border-radius: 10px; /* 부드러운 모서리 */
+  }
+  /* 스크롤바 핸들(움직이는 부분) 스타일 */
+  &::-webkit-scrollbar-thumb {
+    background: ${colors.colorC};
+    border-radius: 10px; /* 핸들의 모서리 둥글게 */
+  }
+  /* 스크롤바 핸들에 마우스를 올렸을 때 */
+  &::-webkit-scrollbar-thumb:hover {
+    background: rgb(80, 156, 189);
+  }
+`;

@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { createGlobalStyle } from "styled-components";
 
+// 글로벌 폰트 -------------------------------------------------------------------------------------
 export const GlobalFont = createGlobalStyle`
 @import url('https://fonts.googleapis.com/css2?family=Nanum+Brush+Script&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Jua&display=swap');
@@ -22,7 +23,7 @@ export const GlobalFont = createGlobalStyle`
   font-style: normal;
 }
 `;
-
+// 글로벌 색상 -------------------------------------------------------------------------------------
 export const colors = {
   colorA: "rgb(31, 62, 87)",
   colorB: "rgb(24, 97, 126)",
@@ -30,15 +31,16 @@ export const colors = {
   colorD: "rgb(211, 237, 242)",
 };
 
+// 헤더 스타일 -------------------------------------------------------------------------------------
 export const HeaderSt = styled.div`
   position: relative;
   height: 100px;
-  background-color: aliceblue;
   display: flex;
   align-items: center;
   padding: 0 10%;
   justify-content: space-between;
   gap: 50px;
+
   .logo {
     border: 1px solid black;
     height: 80px;
@@ -58,7 +60,8 @@ export const HeaderSt = styled.div`
     flex-grow: 0.8;
     input {
       width: 100%;
-      padding: 8px 35px 8px 10px;
+      height: 20;
+      padding: 10px 20px;
       border: 1px solid #ccc;
       border-radius: 50px;
       font-size: 14px;
@@ -89,16 +92,17 @@ export const HeaderSt = styled.div`
   }
 `;
 
+// 네비 스타일 -------------------------------------------------------------------------------------
 export const NavSt = styled.div`
   height: 50px;
-  background-color: antiquewhite;
+  background-color: ${colors.colorD};
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0 5%;
   .menu {
     display: flex;
-    gap: 20px;
+    gap: 50px;
   }
   .tag {
     text-decoration: none;
@@ -114,6 +118,7 @@ export const NavSt = styled.div`
   }
 `;
 
+// 푸터 스타일 -------------------------------------------------------------------------------------
 export const FooterSt = styled.div`
   height: 150px;
   width: 100%;
@@ -122,6 +127,7 @@ export const FooterSt = styled.div`
   bottom: 0;
 `;
 
+// 전체 적용하려면 여기서 -------------------------------------------------------------------------------------
 export const Body = styled.div`
   min-height: 800px;
 `;

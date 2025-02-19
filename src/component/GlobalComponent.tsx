@@ -12,6 +12,7 @@ import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import logoImg from "../img/sample.png";
 
+// 헤더---------------------------------------------------------------------------------
 export const Header = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
@@ -59,6 +60,7 @@ export const Header = () => {
   );
 };
 
+// 네비-------------------------------------------------------------------------------------
 export const Nav = () => {
   const location = useLocation();
 
@@ -104,10 +106,12 @@ export const Nav = () => {
   );
 };
 
+// 푸터---------------------------------------------------------------------------
 export const Footer = () => {
   return <FooterSt>푸터</FooterSt>;
 };
 
+// 전체 레이아웃 씌우기---------------------------------------------------------------
 export const Layout = () => {
   return (
     <div>
