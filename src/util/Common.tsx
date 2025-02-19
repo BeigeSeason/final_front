@@ -1,1 +1,1 @@
-export const sample = () => {};
+export {};
