@@ -1,35 +1,42 @@
 import React from "react";
 import styled from "styled-components";
+import { Link } from "react-router-dom"; // Link 임포트
 
-const SpotContainer = styled.div`
+const SpotContainer = styled(Link)`
   display: flex;
   align-items: center;
-  border: 1px solid #ccc;
-  border-radius: 8px;
   padding: 10px;
-  margin: 10px 0;
-  width: 300px; /* 네모칸의 너비 조정 */
+  margin: 10px auto;
+  width: 80%;
+  text-decoration: none;
+  color: inherit;
+  border-bottom: 1px solid #ddd;
 `;
 
 const SpotImage = styled.img`
-  width: 80px; /* 이미지 크기 조정 */
+  width: 80px;
   height: 80px;
   border-radius: 8px;
   margin-right: 10px;
 `;
 
 const SpotDescription = styled.div`
-  flex: 1;
+  display: flex;
 `;
 
 interface TourItemProps {
   image: string;
   description: string;
+  id: string;
 }
 
-export const TourItem: React.FC<TourItemProps> = ({ image, description }) => {
+export const TourItem: React.FC<TourItemProps> = ({
+  image,
+  description,
+  id,
+}) => {
   return (
-    <SpotContainer>
+    <SpotContainer to={`/tourspot/${id}`}>
       <SpotImage src={image} alt="관광지 이미지" />
       <SpotDescription>{description}</SpotDescription>
     </SpotContainer>

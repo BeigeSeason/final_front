@@ -40,6 +40,7 @@ const ModalContent = styled.div`
     display: flex;
     flex-direction: row;
     gap: 10px;
+    justify-content: center;
     button {
       height: 30px;
     }

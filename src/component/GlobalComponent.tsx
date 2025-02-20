@@ -10,6 +10,7 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import logoImg from "../img/sample.png";
 import { SearchBox } from "./InputComponent";
+import { Modal } from "./ModalComponent";
 
 // 헤더---------------------------------------------------------------------------------
 export const Header = () => {
@@ -57,15 +58,28 @@ export const Header = () => {
 
 // 네비-------------------------------------------------------------------------------------
 export const Nav = () => {
+  const [isLogoutModalOpen, setLogoutModalOpen] = useState(false);
   const location = useLocation();
 
   const isActive = (path: string): boolean => {
     return location.pathname === path;
   };
+  const handleLogoutClick = () => {
+    setLogoutModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setLogoutModalOpen(false);
+  };
+
+  const handleConfirmLogout = () => {
+    console.log("로그아웃 처리");
+    handleCloseModal(); // 모달 닫기
+  };
 
   return (
     <NavSt>
-      <div className="menu">
+      <div className="leftMenu">
         <Link
           className={`tag content-font1 ${
             isActive("/tourlist") ? "active" : ""
@@ -91,12 +105,36 @@ export const Nav = () => {
           여행지 추천
         </Link>
       </div>
-      <Link
-        className={`tag content-font1 ${isActive("/mypage") ? "active" : ""}`}
-        to="/mypage"
+      <div className="rightMenu">
+        <Link
+          className={`tag content-font1 ${
+            isActive("/creatediary") ? "active" : ""
+          }`}
+          to="/creatediary"
+        >
+          여행일지 만들기
+        </Link>
+        <Link
+          className={`tag content-font1 ${isActive("/mypage") ? "active" : ""}`}
+          to="mypage"
+        >
+          마이페이지
+        </Link>
+        <p
+          className="content-font1"
+          onClick={handleLogoutClick}
+          style={{ cursor: "pointer" }}
+        >
+          로그아웃
+        </p>
+      </div>
+      <Modal
+        isOpen={isLogoutModalOpen}
+        onClose={handleCloseModal}
+        onConfirm={handleConfirmLogout}
       >
-        여행일지 만들기
-      </Link>
+        로그아웃 하시겠습니까?
+      </Modal>
     </NavSt>
   );
 };

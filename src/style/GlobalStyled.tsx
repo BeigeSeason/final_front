@@ -79,9 +79,11 @@ export const NavSt = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 0 5%;
-  .menu {
+  .leftMenu,
+  .rightMenu {
     display: flex;
     gap: 50px;
+    align-items: center;
   }
   .tag {
     text-decoration: none;
