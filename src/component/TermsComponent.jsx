@@ -17,7 +17,7 @@ const TermsTitle = styled.h2`
 const TermsContent = styled.div`
   font-size: 1rem;
   line-height: 1.5;
-  height: 500px;
+  height: 300px;
   overflow-y: scroll;
   ${ScrollBar}
 `;

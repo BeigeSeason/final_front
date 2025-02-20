@@ -76,7 +76,7 @@ export const MypageMenuContainer = styled.div`
   height: 50px;
   margin: 3vh 0 2vh;
   background-color: #d8e1f3;
-
+  white-space: nowrap;
   button {
     width: 22%;
     height: 80%;

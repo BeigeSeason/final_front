@@ -1,12 +1,19 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { AuthBox } from "../../style/AuthStyled";
 import { SignupTerms1, SignupTerms2 } from "../../component/TermsComponent";
-import { Button } from "../../component/ButtonComponent"; // 버튼 컴포넌트 임포트
+import { Button } from "../../component/ButtonComponent";
+import { InputBox } from "../../component/InputComponent";
+import { CheckModal } from "../../component/ModalComponent";
+import { useNavigate } from "react-router-dom";
 
 export const SignupPage = () => {
   const [isTermsAgreed, setIsTermsAgreed] = useState(false);
   const [isPrivacyAgreed, setIsPrivacyAgreed] = useState(false);
   const [showForm, setShowForm] = useState(false);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const navigate = useNavigate();
 
   const handleTermsChange = () => {
     setIsTermsAgreed(!isTermsAgreed);
@@ -20,6 +27,25 @@ export const SignupPage = () => {
     if (isTermsAgreed && isPrivacyAgreed) {
       setShowForm(true);
     }
+  };
+
+  const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUsername(e.target.value);
+  };
+
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value);
+  };
+
+  const handleSignup = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    // 회원가입 로직 적어야댐
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    navigate("/");
   };
 
   return (
@@ -55,19 +81,33 @@ export const SignupPage = () => {
         </>
       ) : (
         <div>
-          <h3>회원가입 정보 입력</h3>
-          <form>
+          <form onSubmit={handleSignup}>
             <div>
               <label htmlFor="username">사용자 이름:</label>
-              <input type="text" id="username" required />
+              <InputBox
+                id="username"
+                value={username}
+                onChange={handleUsernameChange}
+                placeholder="사용자 이름을 입력하세요"
+                required
+              />
             </div>
             <div>
               <label htmlFor="password">비밀번호:</label>
-              <input type="password" id="password" required />
+              <InputBox
+                id="password"
+                type="password"
+                value={password}
+                onChange={handlePasswordChange}
+                placeholder="비밀번호를 입력하세요"
+                required
+              />
             </div>
-            {/* 추가 필드들... */}
-            <Button>회원가입</Button>
+            <Button type="submit">회원가입</Button>
           </form>
+          <CheckModal isOpen={showModal} onClose={handleCloseModal}>
+            회원가입이 완료되었습니다!
+          </CheckModal>
         </div>
       )}
     </AuthBox>
