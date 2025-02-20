@@ -91,16 +91,14 @@ const MyProfile = React.memo(() => {
             비밀번호를 다시 입력해주세요.
           </p>
           <div className="input-container check-pw">
-            {/* <input
-              type="text"
+            <InputBox
               placeholder="비밀번호 입력"
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
                   handleConfirmPw();
                 }
               }}
-            /> */}
-            <InputBox placeholder="비밀번호 입력" />
+            />
             <p className="validate">비밀번호가 일치하지 않습니다.</p>
             <Button onClick={() => handleConfirmPw()}>확인</Button>
           </div>

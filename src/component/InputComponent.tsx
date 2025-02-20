@@ -10,6 +10,7 @@ interface InputBoxProps {
   placeholder?: string;
   value?: string;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
   width?: string;
   padding?: string;
   fontSize?: string;
@@ -36,6 +37,7 @@ export const InputBox: React.FC<InputBoxProps> = ({
   placeholder,
   value,
   onChange,
+  onKeyDown,
   width,
   padding,
   fontSize,
@@ -48,6 +50,7 @@ export const InputBox: React.FC<InputBoxProps> = ({
       placeholder={placeholder}
       value={value}
       onChange={onChange}
+      onKeyDown={onKeyDown}
       width={width}
       padding={padding}
       fontSize={fontSize}
