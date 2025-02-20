@@ -1,4 +1,4 @@
-import {useState} from "react";
+import { useState } from "react";
 import { AdminContainer } from "./AdminComponent";
 import { GlobalFont } from "../../style/GlobalStyled";
 import { Modal } from "../../component/ModalComponent";
@@ -15,49 +15,70 @@ const AdminHome = () => {
   const [sortSelectOpen, setSortSelectOpen] = useState(false);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  
+
   // 검색 카테고리 선택
   const handleCategory = () => {
     setSearchSelectOpen((prev) => !prev);
-  }
+  };
   const handleSelectCategory = (select: string) => {
     setCategory(select);
     setSearchSelectOpen(false);
-  }
+  };
 
   // 데이터 정렬버튼
   const handleSort = () => {
     setSortSelectOpen((prev) => !prev);
-  }
+  };
   const handleSelectSort = (select: string) => {
     setSort(select);
     setSortSelectOpen(false);
-  }
+  };
 
   // 유저 관리 모달
   const openModal = () => {
     setIsModalOpen(true);
-  }
+  };
 
   const closeModal = () => {
     setIsModalOpen(false);
-  }
+  };
 
   // 유저 관리
   const manageUser = () => {
     setIsModalOpen(false);
-  }
+  };
 
   // 임시 데이터
   const members = [
-    { id: 1, userId: "user001", email: "user001@example.com", name: "홍길동", nickname: "길동", joinDate: "2025-01-01" },
-    { id: 2, userId: "user002", email: "user002@example.com", name: "김철수", nickname: "철수", joinDate: "2025-01-05" },
-    { id: 3, userId: "user003", email: "user003@example.com", name: "이영희", nickname: "영희", joinDate: "2025-01-10" }
+    {
+      id: 1,
+      userId: "user001",
+      email: "user001@example.com",
+      name: "홍길동",
+      nickname: "길동",
+      joinDate: "2025-01-01",
+    },
+    {
+      id: 2,
+      userId: "user002",
+      email: "user002@example.com",
+      name: "김철수",
+      nickname: "철수",
+      joinDate: "2025-01-05",
+    },
+    {
+      id: 3,
+      userId: "user003",
+      email: "user003@example.com",
+      name: "이영희",
+      nickname: "영희",
+      joinDate: "2025-01-10",
+    },
   ];
 
   return (
     <AdminContainer>
-      <GlobalFont/>
+      <GlobalFont />
       {/* 검색 박스 */}
       <div className="search-container center">
         <div className="search-category center" onClick={handleCategory}>
@@ -65,13 +86,22 @@ const AdminHome = () => {
         </div>
         {searchSelectOpen && (
           <div className="search-selectBox">
-            <div className="search-selected" onClick={() => handleSelectCategory("아이디")}>
+            <div
+              className="search-selected"
+              onClick={() => handleSelectCategory("아이디")}
+            >
               아이디
             </div>
-            <div className="search-selected" onClick={() => handleSelectCategory("닉네임")}>
+            <div
+              className="search-selected"
+              onClick={() => handleSelectCategory("닉네임")}
+            >
               닉네임
             </div>
-            <div className="search-selected" onClick={() => handleSelectCategory("이메일")}>
+            <div
+              className="search-selected"
+              onClick={() => handleSelectCategory("이메일")}
+            >
               이메일
             </div>
           </div>
@@ -92,23 +122,33 @@ const AdminHome = () => {
               <FaAngleUp />
               <FaAngleDown />
             </div>
-            <div className="sort-selected center">
-              {sort}
-            </div>
+            <div className="sort-selected center">{sort}</div>
           </div>
         </div>
         {sortSelectOpen && (
           <div className="sort-selectBox">
-            <div className="sort-selected" onClick={() => handleSelectSort("번호 낮은순")}>
+            <div
+              className="sort-selected"
+              onClick={() => handleSelectSort("번호 낮은순")}
+            >
               번호 낮은순
             </div>
-            <div className="sort-selected" onClick={() => handleSelectSort("번호 높은순")}>
+            <div
+              className="sort-selected"
+              onClick={() => handleSelectSort("번호 높은순")}
+            >
               번호 높은순
             </div>
-            <div className="sort-selected" onClick={() => handleSelectSort("아이디 오름차순")}>
+            <div
+              className="sort-selected"
+              onClick={() => handleSelectSort("아이디 오름차순")}
+            >
               아이디 오름차순
             </div>
-            <div className="sort-selected" onClick={() => handleSelectSort("아이디 내림차순")}>
+            <div
+              className="sort-selected"
+              onClick={() => handleSelectSort("아이디 내림차순")}
+            >
               아이디 내림차순
             </div>
           </div>
@@ -144,9 +184,7 @@ const AdminHome = () => {
                   <td></td>
                   <td></td>
                   <td className="center">
-                    <button onClick={openModal}>
-                      관리
-                    </button>
+                    <button onClick={openModal}>관리</button>
                   </td>
                 </tr>
               ))}
@@ -156,12 +194,17 @@ const AdminHome = () => {
       </div>
 
       {/* 관리버튼 모달 */}
-      <Modal
-        isOpen={isModalOpen}
-        onConfirm={manageUser}
-        onClose={closeModal}
-      >
-        <p>dd</p>
+      <Modal isOpen={isModalOpen} onConfirm={manageUser} onClose={closeModal}>
+        <p>정지일</p>
+        <select name="ban-date" id="ban-date">
+          <option value="1day">1일</option>
+          <option value="3days">3일</option>
+          <option value="7days">7일</option>
+          <option value="30days">30일</option>
+          <option value="fvr">영구 정지</option>
+        </select>
+        <p>정지 사유</p>
+        <input type="text" />
       </Modal>
     </AdminContainer>
   );
