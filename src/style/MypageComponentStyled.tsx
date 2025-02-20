@@ -33,7 +33,7 @@ export const MyProfileContainer = styled.div`
       top: 6px;
       font-size: 12px;
       color: red;
-      display: none;
+      /* display: none; */
     }
 
     button {

@@ -23,6 +23,7 @@ const StyledInput = styled.input<InputBoxProps>`
   font-size: ${(props) => props.fontSize || "15px"};
   border: 1px solid ${(props) => props.borderColor || "#ccc"};
   border-radius: ${(props) => props.borderRadius || "30px"};
+  box-sizing: border-box;
   outline: none;
 
   &:focus {

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { GlobalFont } from "../../style/GlobalStyled";
 import { Button } from "../../component/ButtonComponent";
+import { InputBox } from "../../component/InputComponent";
 import { MyProfileContainer } from "../../style/MypageComponentStyled";
 
 const MyProfile = React.memo(() => {
@@ -90,7 +91,7 @@ const MyProfile = React.memo(() => {
             비밀번호를 다시 입력해주세요.
           </p>
           <div className="input-container check-pw">
-            <input
+            {/* <input
               type="text"
               placeholder="비밀번호 입력"
               onKeyDown={(e) => {
@@ -98,7 +99,8 @@ const MyProfile = React.memo(() => {
                   handleConfirmPw();
                 }
               }}
-            />
+            /> */}
+            <InputBox placeholder="비밀번호 입력" />
             <p className="validate">비밀번호가 일치하지 않습니다.</p>
             <Button onClick={() => handleConfirmPw()}>확인</Button>
           </div>
