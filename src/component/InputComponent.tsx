@@ -11,11 +11,13 @@ interface InputBoxProps {
   value?: string;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
+  className?: string;
   width?: string;
   padding?: string;
   fontSize?: string;
   borderColor?: string;
   borderRadius?: string;
+  readOnly?: boolean;
 }
 
 const StyledInput = styled.input<InputBoxProps>`
@@ -38,11 +40,13 @@ export const InputBox: React.FC<InputBoxProps> = ({
   value,
   onChange,
   onKeyDown,
+  className,
   width,
   padding,
   fontSize,
   borderColor,
   borderRadius,
+  readOnly,
 }) => {
   return (
     <StyledInput
@@ -51,11 +55,13 @@ export const InputBox: React.FC<InputBoxProps> = ({
       value={value}
       onChange={onChange}
       onKeyDown={onKeyDown}
+      className={className}
       width={width}
       padding={padding}
       fontSize={fontSize}
       borderColor={borderColor}
       borderRadius={borderRadius}
+      readOnly={readOnly}
     />
   );
 };

@@ -29,7 +29,7 @@ const MyProfile = React.memo(() => {
             <>
               <div className="info-item">
                 <span className="title content-font1">{item.label}</span>
-                <input
+                <InputBox
                   className={`content content-font2 ${
                     item.editable ? "editable" : ""
                   }`}
