@@ -18,6 +18,8 @@ interface InputBoxProps {
   borderColor?: string;
   borderRadius?: string;
   readOnly?: boolean;
+  id?: string;
+  required?: boolean;
 }
 
 const StyledInput = styled.input<InputBoxProps>`
@@ -47,6 +49,8 @@ export const InputBox: React.FC<InputBoxProps> = ({
   borderColor,
   borderRadius,
   readOnly,
+  id,
+  required,
 }) => {
   return (
     <StyledInput
@@ -62,6 +66,8 @@ export const InputBox: React.FC<InputBoxProps> = ({
       borderColor={borderColor}
       borderRadius={borderRadius}
       readOnly={readOnly}
+      id={id}
+      required={required}
     />
   );
 };

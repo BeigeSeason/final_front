@@ -146,6 +146,7 @@ export const Nav = () => {
   const [isLogoutModalOpen, setLogoutModalOpen] = useState(false);
   const [isLoginModalOpen, setLoginModalOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
 
   const isActive = (path: string): boolean => {
     return location.pathname === path;
@@ -160,7 +161,8 @@ export const Nav = () => {
 
   const handleConfirmLogout = () => {
     console.log("로그아웃 처리");
-    handleCloseModal(); // 모달 닫기
+    handleCloseModal();
+    navigate("/");
   };
   // 로그인 모달 여닫기
   const handleLoginModalOpen = () => {

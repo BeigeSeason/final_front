@@ -54,21 +54,27 @@ const StyledButton = styled.button<StyledButtonProps>`
 interface ButtonProps extends StyledButtonProps {
   children: React.ReactNode;
   onClick?: () => void;
+  disabled?: boolean;
+  type?: "button" | "submit" | "reset";
 }
 
 export const Button: React.FC<ButtonProps> = ({
   children,
   onClick,
   bgColor,
+  disabled,
   hoverBgColor,
   border,
+  type = "button",
   ...props
 }) => (
   <StyledButton
     onClick={onClick}
     bgColor={bgColor}
+    disabled={disabled}
     hoverBgColor={hoverBgColor}
     border={border}
+    type={type}
     {...props}
   >
     {children}

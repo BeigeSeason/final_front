@@ -90,6 +90,7 @@ export const NavSt = styled.div`
     color: black;
     transition: all 0.3s ease;
     cursor: pointer;
+    white-space: nowrap;
     &:hover {
       opacity: 0.7;
     }

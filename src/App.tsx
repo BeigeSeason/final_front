@@ -8,7 +8,7 @@ import AdminReportUser from "./page/admin/AdminReportUser";
 import AdminReportDiary from "./page/admin/AdminReportDiary";
 import AdminReportReview from "./page/admin/AdminReportReview";
 import MypageMain from "./page/user/MypageMain";
-import { SearchPage } from "./page/SearchPage";
+import { SearchPage } from "./page/itemList/SearchPage";
 import { TourList } from "./page/itemList/TourList";
 import { DiaryList } from "./page/itemList/DiaryList";
 import { FindIdPage } from "./page/auth/FindIdPage";
