@@ -56,6 +56,26 @@ export const Header = () => {
   );
 };
 
+// 관리자 헤더 -----------------------------------------------------------------------------
+export const AdminHeader = () => {
+  const navigate = useNavigate();
+
+  return (
+    <>
+      <GlobalFont />
+      <HeaderSt>
+        <Link to="/" className="logo">
+          <img src={logoImg} alt="로고" />
+        </Link>
+
+        <Link className={`tag content-font1`} to="/tourlist">
+          관광지
+        </Link>
+      </HeaderSt>
+    </>
+  );
+};
+
 // 네비-------------------------------------------------------------------------------------
 export const Nav = () => {
   const [isLogoutModalOpen, setLogoutModalOpen] = useState(false);
@@ -161,6 +181,19 @@ export const Layout = () => {
     <div>
       <Header />
       <Nav />
+      <Body>
+        <Outlet />
+      </Body>
+      <Footer />
+    </div>
+  );
+};
+
+// 관리자 레이아웃 씌우기-------------------------------------------------------------
+export const AdminLayout = () => {
+  return (
+    <div>
+      <AdminHeader />
       <Body>
         <Outlet />
       </Body>
