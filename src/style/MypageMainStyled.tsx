@@ -6,6 +6,20 @@ export const MypageMainContainer = styled.div`
   width: 60%;
   height: 800px;
   margin: 5vh auto 0;
+
+  .modal-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    .profile-img-basic {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      margin: 10px;
+    }
+  }
 `;
 
 export const ProfileInfo = styled.div`
@@ -16,11 +30,13 @@ export const ProfileInfo = styled.div`
   height: 150px;
 
   .profile-img {
+    display: flex;
+    position: relative;
     width: 110px;
     height: 110px;
     border-radius: 50%;
     margin-right: 20px;
-    overflow: hidden;
+    /* overflow: hidden; */
     background-color: #fff;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 
@@ -28,6 +44,23 @@ export const ProfileInfo = styled.div`
       width: 100%;
       height: 100%;
       object-fit: cover;
+      clip-path: circle(
+        50% at center
+      ); // 이미지를 원형으로 자르지만 overflow: hidden;을 사용하지 않음.
+      cursor: pointer;
+    }
+
+    .upload-label {
+      display: flex;
+      position: absolute;
+      right: 8px;
+      bottom: 3px;
+      font-size: 20px;
+      background-color: white;
+      border-radius: 50%;
+      padding: 2px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
     }
   }
 

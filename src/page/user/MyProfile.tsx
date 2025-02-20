@@ -7,8 +7,9 @@ import { MyProfileContainer } from "../../style/MypageComponentStyled";
 const MyProfile = React.memo(() => {
   const [confirmPw, setConfirmPw] = useState(false);
   const [isEditable, setIsEditable] = useState(false);
+  const [isPwChange, setIsPwChange] = useState(false);
   const [selectedMenu, setSelectedMenu] = useState("내 정보 수정");
-  const menuItems = ["내 정보 수정", "비밀번호 변경", "내가 작성한 댓글"];
+  const menuItems = ["내 정보 수정", "내가 작성한 댓글"];
   const infoItems = [
     { label: "이름", value: "박지숙", editable: isEditable },
     { label: "닉네임", value: "그럴쑥도있지", editable: isEditable },
@@ -43,8 +44,11 @@ const MyProfile = React.memo(() => {
         </div>
         <div className="info-title">
           비밀 번호
-          <Button $margin="0 20px" onClick={() => setIsEditable(!isEditable)}>
-            {isEditable ? "변경완료" : "변경하기"}
+          <Button
+            $margin="0 10px 0 20px"
+            onClick={() => setIsPwChange(!isPwChange)}
+          >
+            {isPwChange ? "변경완료" : "변경하기"}
           </Button>
           <Button
             bgColor="transparent"
@@ -55,30 +59,43 @@ const MyProfile = React.memo(() => {
             회원 탈퇴
           </Button>
         </div>
+        {isPwChange && (
+          <>
+            <div className="info-item">
+              <span className="title content-font1 pw">신규 비밀번호</span>
+              <InputBox className={`content content-font2 editable`} />
+            </div>
+            <div className="info-item">
+              <span className="title content-font1 pw">비밀번호 확인</span>
+              <InputBox
+                className={`content content-font2 editable`}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleConfirmPwChange();
+                  }
+                }}
+              />
+            </div>
+          </>
+        )}
       </>
     );
   };
 
-  const ChangePw = () => {
+  const MyComments = () => {
     return (
       <>
-        <div className="info-item">
-          <span className="title content-font1 pw">신규 비밀번호</span>
-          <input className={`content content-font2 editable pw-input`} />
-        </div>
-        <div className="info-item">
-          <span className="title content-font1 pw">비밀번호 확인</span>
-          <input className={`content content-font2 editable pw-input`} />
-        </div>
-        <div className="button-container pw-button">
-          <Button onClick={() => setIsEditable(!isEditable)}>변경 완료</Button>
-        </div>
+        <div className="info-item">내가 작성한 댓글</div>
       </>
     );
   };
 
   const handleConfirmPw = () => {
     setConfirmPw(true);
+  };
+
+  const handleConfirmPwChange = () => {
+    setIsPwChange(!isPwChange);
   };
 
   return (
@@ -124,7 +141,7 @@ const MyProfile = React.memo(() => {
             ))}
           </div>
           {selectedMenu === "내 정보 수정" && <EditInfo />}
-          {selectedMenu === "비밀번호 변경" && <ChangePw />}
+          {selectedMenu === "내가 작성한 댓글" && <MyComments />}
         </>
       )}
     </MyProfileContainer>
