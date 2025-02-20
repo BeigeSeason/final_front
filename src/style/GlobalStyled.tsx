@@ -89,6 +89,7 @@ export const NavSt = styled.div`
     text-decoration: none;
     color: black;
     transition: all 0.3s ease;
+    cursor: pointer;
     &:hover {
       opacity: 0.7;
     }

@@ -10,6 +10,9 @@ import MypageMain from "./page/user/MypageMain";
 import { SearchPage } from "./page/SearchPage";
 import { TourList } from "./page/itemList/TourList";
 import { DiaryList } from "./page/itemList/DiaryList";
+import { FindIdPage } from "./page/auth/FindIdPage";
+import { FindPwPage } from "./page/auth/FindPwPage";
+import { SignupPage } from "./page/auth/SignupPage";
 
 function App() {
   return (
@@ -26,6 +29,9 @@ function App() {
             <Route path="/searchpage" element={<SearchPage />} />
             <Route path="/tourlist" element={<TourList />} />
             <Route path="/diarylist" element={<DiaryList />} />
+            <Route path="/findid" element={<FindIdPage />} />
+            <Route path="/findpw" element={<FindPwPage />} />
+            <Route path="/signup" element={<SignupPage />} />
           </Route>
         </Routes>
       </Router>

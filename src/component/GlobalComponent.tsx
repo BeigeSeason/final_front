@@ -10,7 +10,7 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import logoImg from "../img/sample.png";
 import { SearchBox } from "./InputComponent";
-import { Modal } from "./ModalComponent";
+import { Modal, LoginModal } from "./ModalComponent";
 
 // 헤더---------------------------------------------------------------------------------
 export const Header = () => {
@@ -59,6 +59,7 @@ export const Header = () => {
 // 네비-------------------------------------------------------------------------------------
 export const Nav = () => {
   const [isLogoutModalOpen, setLogoutModalOpen] = useState(false);
+  const [isLoginModalOpen, setLoginModalOpen] = useState(false);
   const location = useLocation();
 
   const isActive = (path: string): boolean => {
@@ -67,7 +68,7 @@ export const Nav = () => {
   const handleLogoutClick = () => {
     setLogoutModalOpen(true);
   };
-
+  // 로그아웃 모달 여닫기
   const handleCloseModal = () => {
     setLogoutModalOpen(false);
   };
@@ -75,6 +76,14 @@ export const Nav = () => {
   const handleConfirmLogout = () => {
     console.log("로그아웃 처리");
     handleCloseModal(); // 모달 닫기
+  };
+  // 로그인 모달 여닫기
+  const handleLoginModalOpen = () => {
+    setLoginModalOpen(true);
+  };
+
+  const handleLoginModalClose = () => {
+    setLoginModalOpen(false);
   };
 
   return (
@@ -120,13 +129,12 @@ export const Nav = () => {
         >
           마이페이지
         </Link>
-        <p
-          className="content-font1"
-          onClick={handleLogoutClick}
-          style={{ cursor: "pointer" }}
-        >
+        <p className="tag content-font1" onClick={handleLogoutClick}>
           로그아웃
         </p>
+        <p className="tag content-font1" onClick={handleLoginModalOpen}>
+          로그인
+        </p>{" "}
       </div>
       <Modal
         isOpen={isLogoutModalOpen}
@@ -135,6 +143,7 @@ export const Nav = () => {
       >
         로그아웃 하시겠습니까?
       </Modal>
+      <LoginModal isOpen={isLoginModalOpen} onClose={handleLoginModalClose} />
     </NavSt>
   );
 };
