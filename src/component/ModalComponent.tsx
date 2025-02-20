@@ -127,15 +127,21 @@ interface CloseModalProps {
   onClose: () => void;
   children: React.ReactNode;
 }
+
 export const CloseModal: React.FC<CloseModalProps> = ({
   isOpen,
   onClose,
   children,
 }) => {
   if (!isOpen) return null;
+  const handleBackdropClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (event.target === event.currentTarget) {
+      onClose();
+    }
+  };
 
   return (
-    <ModalBackdrop>
+    <ModalBackdrop onClick={handleBackdropClick}>
       <ModalContent>
         <CloseButton onClick={onClose}>✖</CloseButton>
         <p>{children}</p>

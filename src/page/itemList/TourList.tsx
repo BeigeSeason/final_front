@@ -1,3 +1,5 @@
+import { TourItem } from "../../component/ItemComponent";
+
 export const TourList = () => {
-  return <p>관광지 목록</p>;
+  return <TourItem image="url_to_image" description="관광지 설명" />;
 };
