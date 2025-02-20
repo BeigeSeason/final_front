@@ -1,4 +1,4 @@
-import styled from "styled-components"
+import styled from "styled-components";
 
 export const AdminContainer = styled.div`
   display: flex;
@@ -43,7 +43,7 @@ export const AdminContainer = styled.div`
       border-radius: 5px;
       z-index: 1;
       .search-selected {
-        padding: 7.5% 10px;
+        padding: 7.5px 10px;
         border-radius: 5px;
         &:hover {
           background-color: #777;
@@ -63,7 +63,7 @@ export const AdminContainer = styled.div`
         /* background-color: transparent; */
       }
     }
-    .search-button{
+    .search-button {
       width: 40px;
       svg {
         width: 30px;
@@ -114,7 +114,8 @@ export const AdminContainer = styled.div`
         padding: 10px;
         width: 100%;
         border-spacing: 0;
-        th, td {
+        th,
+        td {
           padding: 5px 3px;
           border: 1px solid #ddd;
         }
@@ -128,4 +129,50 @@ export const AdminContainer = styled.div`
       }
     }
   }
-`
+`;
+
+export const AdminHeaderSt = styled.div`
+  .leftMenu,
+  .rightMenu {
+    display: flex;
+    gap: 50px;
+    align-items: center;
+    position: relative;
+    .tag {
+    }
+  }
+
+  .click {
+    cursor: pointer;
+  }
+
+  .admin-selectBox-ban {
+    position: absolute;
+    background-color: #aaa;
+    padding: 5px;
+    border-radius: 5px;
+    top: 58px;
+    left: 220px;
+    z-index: 1;
+  }
+
+  .admin-selectBox-stats {
+    width: 62px;
+    position: absolute;
+    background-color: #aaa;
+    padding: 5px;
+    border-radius: 5px;
+    top: 58px;
+    left: 315px;
+    z-index: 1;
+  }
+
+  .admin-selected {
+    padding: 7.5px 10px;
+    &:hover {
+      padding: 7.5px 10px;
+      border-radius: 5px;
+      background-color: #777;
+    }
+  }
+`;

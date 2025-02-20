@@ -6,6 +6,7 @@ import {
   Body,
   GlobalFont,
 } from "../style/GlobalStyled";
+import { AdminHeaderSt } from "../page/admin/AdminComponent";
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import logoImg from "../img/sample.png";
@@ -59,20 +60,84 @@ export const Header = () => {
 // 관리자 헤더 -----------------------------------------------------------------------------
 export const AdminHeader = () => {
   const navigate = useNavigate();
+  const [isBanShow, setIsBanShow] = useState(false);
+  const [isStatsShow, setIsStatsShow] = useState(false);
+
+  const handleBan = () => {
+    setIsStatsShow(false);
+    setIsBanShow((prev) => !prev);
+  };
+
+  const handleStats = () => {
+    setIsBanShow(false);
+    setIsStatsShow((prev) => !prev);
+  };
+
+  const handleLogout = () => {};
 
   return (
-    <>
+    <AdminHeaderSt>
       <GlobalFont />
       <HeaderSt>
-        <Link to="/" className="logo">
-          <img src={logoImg} alt="로고" />
-        </Link>
-
-        <Link className={`tag content-font1`} to="/tourlist">
-          관광지
-        </Link>
+        <div className="leftMenu">
+          <Link to="/" className="logo">
+            <img src={logoImg} alt="로고" />
+          </Link>
+          <p
+            className="tag content-font1 click"
+            onClick={() => navigate("/admin")}
+          >
+            유저
+          </p>
+          <p className="tag content-font1 click headerBan" onClick={handleBan}>
+            신고
+          </p>
+          {isBanShow && (
+            <div className="admin-selectBox-ban">
+              <div
+                className="admin-selected"
+                onClick={() => navigate("/admin/report/user")}
+              >
+                유저
+              </div>
+              <div
+                className="admin-selected"
+                onClick={() => navigate("/admin/report/diary")}
+              >
+                여행 일기
+              </div>
+              <div
+                className="admin-selected"
+                onClick={() => navigate("/admin/report/review")}
+              >
+                관광지 댓글
+              </div>
+            </div>
+          )}
+          <p className="tag content-font1 click" onClick={handleStats}>
+            통계
+          </p>
+          {isStatsShow && (
+            <div className="admin-selectBox-stats">
+              <div className="admin-selected" onClick={() => navigate("")}>
+                통계1
+              </div>
+              <div className="admin-selected" onClick={() => navigate("")}>
+                통계2
+              </div>
+              <div className="admin-selected" onClick={() => navigate("")}>
+                통계3
+              </div>
+            </div>
+          )}
+        </div>
+        <div className="rightMenu">
+          <p className="tag content-font1 click" onClick={handleLogout}>
+            로그아웃
+          </p>
+        </div>
       </HeaderSt>
-    </>
+    </AdminHeaderSt>
   );
 };
 

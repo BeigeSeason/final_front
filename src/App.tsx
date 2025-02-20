@@ -32,9 +32,12 @@ function App() {
           </Route>
           <Route element={<AdminLayout />}>
             <Route path="/admin" element={<AdminHome />} />
-            <Route path="/admin/user" element={<AdminReportUser />} />
-            <Route path="/admin/diary" element={<AdminReportDiary />} />
-            <Route path="/admin/review" element={<AdminReportReview />} />
+            <Route path="/admin/report/user" element={<AdminReportUser />} />
+            <Route path="/admin/report/diary" element={<AdminReportDiary />} />
+            <Route
+              path="/admin/report/review"
+              element={<AdminReportReview />}
+            />
           </Route>
         </Routes>
       </Router>
