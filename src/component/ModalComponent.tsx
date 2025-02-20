@@ -53,24 +53,21 @@ const ModalContent = styled.div`
     scale: 0.7;
   }
 `;
+
 const LoginContainer = styled.div`
   min-width: 400px;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 10px;
-  border: 1px solid black;
   h2 {
     margin-bottom: 30px;
   }
-
-  /* InputBox에 스타일 적용 */
   input {
     margin-bottom: 20px;
   }
-
   button {
-    width: 100%; /* 버튼도 전체 너비 사용 */
+    width: 100%;
   }
 `;
 
@@ -82,9 +79,17 @@ const AuthMenu = styled.div`
   cursor: pointer;
   a,
   p {
+    font-size: 13px;
     margin-top: 20px;
     color: gray;
     text-decoration: none;
+  }
+  a {
+    transition: all 0.3s ease;
+    &:hover {
+      text-decoration: underline;
+      opacity: 0.7;
+    }
   }
   p {
     margin-right: 5px;
@@ -94,6 +99,7 @@ const AuthMenu = styled.div`
     display: flex;
   }
 `;
+
 const CloseButton = styled.button`
   position: absolute;
   top: 8px;
@@ -236,7 +242,7 @@ export const LoginModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
           <div className="find">
             <Link to="/findid">아이디 찾기</Link>
             <p>|</p>
-            <Link to="/findpw">비밀번호 찾기</Link>
+            <Link to="/findpw">비밀번호 발급</Link>
           </div>
           <Link to="/signup">회원가입</Link>
         </AuthMenu>
