@@ -8,6 +8,8 @@ import AdminReportDiary from "./page/admin/AdminReportDiary";
 import AdminReportReview from "./page/admin/AdminReportReview";
 import MypageMain from "./page/user/MypageMain";
 import { SearchPage } from "./page/SearchPage";
+import { TourList } from "./page/itemList/TourList";
+import { DiaryList } from "./page/itemList/DiaryList";
 
 function App() {
   return (
@@ -22,6 +24,8 @@ function App() {
             <Route path="/admin/review" element={<AdminReportReview />} />
             <Route path="/mypage" element={<MypageMain />} />
             <Route path="/searchpage" element={<SearchPage />} />
+            <Route path="/tourlist" element={<TourList />} />
+            <Route path="/diarylist" element={<DiaryList />} />
           </Route>
         </Routes>
       </Router>

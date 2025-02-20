@@ -68,17 +68,17 @@ export const Nav = () => {
       <div className="menu">
         <Link
           className={`tag content-font1 ${
-            isActive("/tourList") ? "active" : ""
+            isActive("/tourlist") ? "active" : ""
           }`}
-          to="/tourList"
+          to="/tourlist"
         >
           관광지
         </Link>
         <Link
           className={`tag content-font1 ${
-            isActive("/diaryList") ? "active" : ""
+            isActive("/diarylist") ? "active" : ""
           }`}
-          to="/diaryList"
+          to="/diarylist"
         >
           여행일지
         </Link>
