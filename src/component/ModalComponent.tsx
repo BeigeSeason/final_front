@@ -195,7 +195,7 @@ export const CloseModal: React.FC<CloseModalProps> = ({
     <ModalBackdrop onClick={handleBackdropClick}>
       <ModalContent>
         <CloseButton onClick={onClose}>✖</CloseButton>
-        <p>{children}</p>
+        {typeof children === "string" ? <p>{children}</p> : children}
       </ModalContent>
     </ModalBackdrop>
   );

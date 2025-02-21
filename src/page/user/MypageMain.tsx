@@ -137,14 +137,6 @@ const MypageMain = () => {
                   onClick={() => handleProfileSelect(selectedProfile)}
                 />
               )}
-              {/* <img
-                className="profile-img-basic"
-                src={
-                  selectedProfile === Profile1 ? Add : selectedProfile || Add
-                }
-                alt={"추가"}
-                onClick={() => handleProfileSelect(selectedProfile)}
-              /> */}
             </label>
             <input
               id="file-upload"
