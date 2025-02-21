@@ -7,11 +7,11 @@ interface StyledButtonProps {
   $height?: string;
   padding?: string;
   fontSize?: string;
-  border?: string;
+  $border?: string;
   borderRadius?: string;
-  bgColor?: string;
+  $bgColor?: string;
   color?: string;
-  hoverBgColor?: string;
+  $hoverBgColor?: string;
 }
 
 const StyledButton = styled.button<StyledButtonProps>`
@@ -20,9 +20,9 @@ const StyledButton = styled.button<StyledButtonProps>`
   ${(props) => props.$height && `height: ${props.$height};`}
   padding: ${(props) => props.padding || "5px 20px"};
   font-size: ${(props) => props.fontSize || "16px"};
-  border: ${(props) => props.border || `none`};
+  border: ${(props) => props.$border || `none`};
   border-radius: ${(props) => props.borderRadius || "8px"};
-  background-color: ${(props) => props.bgColor || colors.colorA};
+  background-color: ${(props) => props.$bgColor || colors.colorA};
   color: ${(props) => props.color || "white"};
   white-space: nowrap;
   cursor: pointer;
@@ -33,7 +33,7 @@ const StyledButton = styled.button<StyledButtonProps>`
 
   &:hover {
     opacity: 0.8;
-    background-color: ${(props) => props.hoverBgColor};
+    background-color: ${(props) => props.$hoverBgColor};
   }
 
   &:disabled {
@@ -56,6 +56,9 @@ interface ButtonProps extends StyledButtonProps {
   onClick?: () => void;
   disabled?: boolean;
   type?: "button" | "submit" | "reset";
+  bgColor?: string;
+  hoverBgColor?: string;
+  border?: string;
 }
 
 export const Button: React.FC<ButtonProps> = ({
@@ -70,10 +73,10 @@ export const Button: React.FC<ButtonProps> = ({
 }) => (
   <StyledButton
     onClick={onClick}
-    bgColor={bgColor}
+    $bgColor={bgColor}
     disabled={disabled}
-    hoverBgColor={hoverBgColor}
-    border={border}
+    $hoverBgColor={hoverBgColor}
+    $border={border}
     type={type}
     {...props}
   >

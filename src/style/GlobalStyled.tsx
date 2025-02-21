@@ -3,9 +3,6 @@ import { createGlobalStyle } from "styled-components";
 
 // 글로벌 폰트 -------------------------------------------------------------------------------------
 export const GlobalFont = createGlobalStyle`
-@import url('https://fonts.googleapis.com/css2?family=Nanum+Brush+Script&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Jua&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Gothic+A1&display=swap');
   
 .title-font {
   font-family: "Jua", serif;

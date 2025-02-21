@@ -1,33 +1,57 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { GlobalFont } from "../../style/GlobalStyled";
 import { Button } from "../../component/ButtonComponent";
 import { InputBox } from "../../component/InputComponent";
 import { MyProfileContainer } from "../../style/MypageComponentStyled";
 
+interface InfoItem {
+  label: string;
+  value: string;
+  editable: boolean;
+}
+
 const MyProfile = React.memo(() => {
-  const [confirmPw, setConfirmPw] = useState(false);
-  const [isEditable, setIsEditable] = useState(false);
-  const [isPwChange, setIsPwChange] = useState(false);
-  const [selectedMenu, setSelectedMenu] = useState("내 정보 수정");
-  const menuItems = ["내 정보 수정", "내가 작성한 댓글"];
-  const infoItems = [
-    { label: "이름", value: "박지숙", editable: isEditable },
-    { label: "닉네임", value: "그럴쑥도있지", editable: isEditable },
-    { label: "아이디", value: "jisuk0415", editable: isEditable },
-    { label: "이메일", value: "jisuk0415@naver.com", editable: false },
-  ];
+  const [confirmPw, setConfirmPw] = useState<boolean>(false);
+  const [isEditable, setIsEditable] = useState<boolean>(false);
+  const [isPwChange, setIsPwChange] = useState<boolean>(false);
+  const [selectedMenu, setSelectedMenu] = useState<string>("내 정보 수정");
+  const menuItems: string[] = ["내 정보 수정", "내가 작성한 댓글"];
+
+  const [editInfo, setEditInfo] = useState<any[]>([]);
+
   const EditInfo = () => {
+    const [infoItems, setInfoItems] = useState<InfoItem[]>([
+      { label: "이름", value: "박지숙", editable: isEditable },
+      { label: "닉네임", value: "그럴쑥도있지", editable: isEditable },
+      { label: "아이디", value: "jisuk0415", editable: isEditable },
+      { label: "이메일", value: "jisuk0415@naver.com", editable: false },
+    ]);
+
+    const [editName, setEditName] = useState<string>("박지숙");
+    const [editNickname, setEditNickname] = useState<string>("그럴쑥도있지");
+    const [editId, setEditId] = useState<string>("jisuk0415");
+
+    const handleEditClick = () => {
+      setIsEditable((prev) => !prev); // 이전 상태에서 반전시켜서 업데이트
+      const updatedInfoItems = infoItems.map((item) => ({
+        ...item,
+        editable: item.label !== "이메일" && !item.editable, // 이메일은 항상 false로 유지
+      }));
+
+      setInfoItems(updatedInfoItems);
+    };
+
     return (
       <>
         <div className="info-title">
           계정 정보
-          <Button $margin="0 20px" onClick={() => setIsEditable(!isEditable)}>
+          <Button $margin="0 20px" onClick={handleEditClick}>
             {isEditable ? "수정 완료" : "수정하기"}
           </Button>
         </div>
         <div className="info-container">
           {infoItems.map((item, index) => (
-            <>
+            <div key={item.label}>
               <div className="info-item">
                 <span className="title content-font1">{item.label}</span>
                 <InputBox
@@ -36,10 +60,15 @@ const MyProfile = React.memo(() => {
                   }`}
                   value={item.value}
                   readOnly={!item.editable}
+                  // onChange={
+                  //   item.editable
+                  //     ? (e) => handleInputChange(index, e.target.value)
+                  //     : undefined
+                  // }
                 />
               </div>
               {index < infoItems.length - 1 && <hr />}
-            </>
+            </div>
           ))}
         </div>
         <div className="info-title">
