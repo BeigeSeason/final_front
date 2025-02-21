@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { GlobalFont } from "../../style/GlobalStyled";
-import { CloseModal } from "../../component/ModalComponent";
+import { ExitModal } from "../../component/ModalComponent";
 import MyDiary from "./MyDiary";
 import MyBMDiary from "./MyBMDiary";
 import MyBMTourList from "./MyBMTourList";
@@ -109,7 +109,7 @@ const MypageMain = () => {
         {selectedMenu === "내 정보" && <MyProfile />}
       </MyContentContainer>
       {openEditProfileImgModal && (
-        <CloseModal
+        <ExitModal
           isOpen={openEditProfileImgModal}
           onClose={() => {
             setOpenEditProfileImgModal(false);
@@ -146,7 +146,7 @@ const MypageMain = () => {
               style={{ display: "none" }}
             />
           </div>
-        </CloseModal>
+        </ExitModal>
       )}
     </MypageMainContainer>
   );

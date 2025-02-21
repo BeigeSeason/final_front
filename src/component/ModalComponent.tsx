@@ -179,7 +179,7 @@ interface CloseModalProps {
   children: React.ReactNode;
 }
 
-export const CloseModal: React.FC<CloseModalProps> = ({
+export const ExitModal: React.FC<CloseModalProps> = ({
   isOpen,
   onClose,
   children,
@@ -222,7 +222,7 @@ export const LoginModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
   };
 
   return (
-    <CloseModal isOpen={isOpen} onClose={onClose}>
+    <ExitModal isOpen={isOpen} onClose={onClose}>
       <LoginContainer>
         <h2>로그인</h2>
         <InputBox
@@ -247,6 +247,6 @@ export const LoginModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
           <Link to="/signup">회원가입</Link>
         </AuthMenu>
       </LoginContainer>
-    </CloseModal>
+    </ExitModal>
   );
 };
