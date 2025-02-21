@@ -30,7 +30,7 @@ const MypageMain = () => {
   const [openEditProfileImgModal, setOpenEditProfileImgModal] =
     useState<boolean>(false);
   const fileInputRef = useRef(null);
-  const [selectedProfile, setSelectedProfile] = useState<string>(Profile1);
+  const [selectedProfile, setSelectedProfile] = useState<string | null>(null);
 
   const menuItems: string[] = [
     "내 여행일지",
@@ -47,8 +47,14 @@ const MypageMain = () => {
   ];
 
   const handleProfileSelect = (profileName: string) => {
-    setSelectedProfile(profileName);
+    if (profileImgs.some((profile) => profile.name === selectedProfile)) {
+      console.log("기본 이미지 선택된거임");
+    } else {
+      console.log("firebase에 선택한 이미지 업로드 해야됨");
+    }
+    // 그리고 DB에 프로필 이미지 경로 수정해서 넣어줘야되고, 토큰이든 localstorage든 imgPath 변경해줘야됨.
     setOpenEditProfileImgModal(false);
+    setSelectedProfile(null);
   };
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
@@ -107,7 +113,7 @@ const MypageMain = () => {
           isOpen={openEditProfileImgModal}
           onClose={() => {
             setOpenEditProfileImgModal(false);
-            setSelectedProfile(Profile1);
+            setSelectedProfile(null);
           }}
         >
           <div className="modal-container">
@@ -121,14 +127,24 @@ const MypageMain = () => {
               />
             ))}
             <label htmlFor="file-upload">
-              <img
+              {selectedProfile === null ? (
+                <img className="profile-img-basic" src={Add} alt="추가" />
+              ) : (
+                <img
+                  className="profile-img-basic"
+                  src={selectedProfile}
+                  alt="선택된 이미지"
+                  onClick={() => handleProfileSelect(selectedProfile)}
+                />
+              )}
+              {/* <img
                 className="profile-img-basic"
                 src={
                   selectedProfile === Profile1 ? Add : selectedProfile || Add
                 }
                 alt={"추가"}
                 onClick={() => handleProfileSelect(selectedProfile)}
-              />
+              /> */}
             </label>
             <input
               id="file-upload"
