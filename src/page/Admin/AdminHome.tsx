@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AdminContainer } from "./AdminComponent";
 import { GlobalFont } from "../../style/GlobalStyled";
 import { Modal } from "../../component/ModalComponent";
@@ -6,9 +6,26 @@ import { Modal } from "../../component/ModalComponent";
 // icon
 import { FaSortDown, FaAngleUp, FaAngleDown } from "react-icons/fa";
 import { IoSearch } from "react-icons/io5";
+import AxiosApi from "../../api/AxiosApi";
 
 const AdminHome = () => {
-  const [category, setCategory] = useState("아이디");
+  interface Member {
+    id: number;
+    userId: string;
+    email: string;
+    name: string;
+    nickname: string;
+    imgPath: string;
+    regDate: string;
+    banned: Boolean;
+  }
+  const [members, setMembers] = useState<Member[]>([]);
+  const [page, setPage] = useState(1);
+  const [size] = useState(10);
+  const [totalPages, setTotalPages] = useState(0);
+  const [searchType, setSearchType] = useState("NAME");
+  const [searchValue, setSearchValue] = useState("");
+
   const [sort, setSort] = useState("정렬");
 
   const [searchSelectOpen, setSearchSelectOpen] = useState(false);
@@ -16,13 +33,37 @@ const AdminHome = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  // 데이터 가져오기
+  const memberList = async () => {
+    try {
+      const data = await AxiosApi.memberList(page - 1, size, searchType, searchValue);
+      console.log("data: ", data);
+      setMembers(data.content);
+      setTotalPages(data.totalPages);
+    } catch (error) {
+      console.log("멤버 리스트 조회 실패:", error);
+    }
+  };
+
+  useEffect(() => {
+    memberList();
+  }, [page, searchType, searchValue]);
+
+  
+
   // 검색 카테고리 선택
   const handleCategory = () => {
     setSearchSelectOpen((prev) => !prev);
   };
   const handleSelectCategory = (select: string) => {
-    setCategory(select);
+    setSearchType(select);
     setSearchSelectOpen(false);
+  };
+
+  // 검색 기능
+  const handleSearch = () => {
+    setPage(1);
+    memberList();
   };
 
   // 데이터 정렬버튼
@@ -48,41 +89,13 @@ const AdminHome = () => {
     setIsModalOpen(false);
   };
 
-  // 임시 데이터
-  const members = [
-    {
-      id: 1,
-      userId: "user001",
-      email: "user001@example.com",
-      name: "홍길동",
-      nickname: "길동",
-      joinDate: "2025-01-01",
-    },
-    {
-      id: 2,
-      userId: "user002",
-      email: "user002@example.com",
-      name: "김철수",
-      nickname: "철수",
-      joinDate: "2025-01-05",
-    },
-    {
-      id: 3,
-      userId: "user003",
-      email: "user003@example.com",
-      name: "이영희",
-      nickname: "영희",
-      joinDate: "2025-01-10",
-    },
-  ];
-
   return (
     <AdminContainer>
       <GlobalFont />
       {/* 검색 박스 */}
       <div className="search-container center">
         <div className="search-category center" onClick={handleCategory}>
-          {category} <FaSortDown />
+          {searchType} <FaSortDown />
         </div>
         {searchSelectOpen && (
           <div className="search-selectBox">
@@ -171,7 +184,7 @@ const AdminHome = () => {
               </tr>
             </thead>
             <tbody>
-              {members.map((member) => (
+              {members && members.length > 0 ? (members.map((member) => (
                 <tr key={member.id}>
                   <td className="text-center">{member.id}</td>
                   <td></td>
@@ -179,7 +192,7 @@ const AdminHome = () => {
                   <td>{member.email}</td>
                   <td>{member.name}</td>
                   <td>{member.nickname}</td>
-                  <td>{member.joinDate}</td>
+                  <td>{member.regDate}</td>
                   <td></td>
                   <td></td>
                   <td></td>
@@ -187,7 +200,12 @@ const AdminHome = () => {
                     <button onClick={openModal}>관리</button>
                   </td>
                 </tr>
-              ))}
+              ))
+            ) : (
+              <tr>
+                <td colSpan={10} className="text-center">데이터가 없습니다.</td>
+              </tr>
+            )}
             </tbody>
           </table>
         </div>
