@@ -60,11 +60,11 @@ const MyProfile = React.memo(() => {
                   }`}
                   value={item.value}
                   readOnly={!item.editable}
-                  onChange={
-                    item.editable
-                      ? (e) => handleInputChange(index, e.target.value)
-                      : undefined
-                  }
+                  // onChange={
+                  //   item.editable
+                  //     ? (e) => handleInputChange(index, e.target.value)
+                  //     : undefined
+                  // }
                 />
               </div>
               {index < infoItems.length - 1 && <hr />}
