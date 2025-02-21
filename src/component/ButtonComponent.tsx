@@ -59,6 +59,7 @@ interface ButtonProps extends StyledButtonProps {
   bgColor?: string;
   hoverBgColor?: string;
   border?: string;
+  className?: string;
 }
 
 export const Button: React.FC<ButtonProps> = ({
