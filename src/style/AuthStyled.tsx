@@ -7,8 +7,27 @@ export const AuthBox = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  input {
-    margin-bottom: 20px;
+  form {
+    display: flex;
+    flex-direction: column;
+  }
+  .signupBox {
+    width: 500px;
+    height: 90px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    .errmsg {
+      margin: 0 0 5px 5px;
+      font-size: 13px;
+    }
+  }
+  .inputbox {
+    height: 50px;
+    border-radius: 15px;
+  }
+  button {
+    margin-top: 50px;
   }
 `;
 
