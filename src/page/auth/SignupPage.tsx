@@ -3,8 +3,15 @@ import { AuthBox } from "../../style/AuthStyled";
 import { SignupTerms1, SignupTerms2 } from "../../component/TermsComponent";
 import { Button } from "../../component/ButtonComponent";
 import { InputBox } from "../../component/InputComponent";
-import { CheckModal } from "../../component/ModalComponent";
+import { CheckModal, ExitModal } from "../../component/ModalComponent";
 import { useNavigate } from "react-router-dom";
+import { MdEdit } from "react-icons/md";
+import Profile1 from "../../img/profile/profile1.png";
+import Profile2 from "../../img/profile/profile2.png";
+import Profile3 from "../../img/profile/profile3.png";
+import Profile4 from "../../img/profile/profile4.png";
+import Profile5 from "../../img/profile/profile5.png";
+import Add from "../../img/profile/add.png";
 
 export const SignupPage = () => {
   const [isTermsAgreed, setIsTermsAgreed] = useState(false);
@@ -14,6 +21,10 @@ export const SignupPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [selectedProfile, setSelectedProfile] = useState<string | null>(null);
+  const [updatedProfile, setUpdatedProfile] = useState<string | null>(null);
+  const [openEditProfileImgModal, setOpenEditProfileImgModal] =
+    useState<boolean>(false);
   const [name, setName] = useState("");
   const [nickname, setNickname] = useState("");
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
@@ -21,6 +32,32 @@ export const SignupPage = () => {
 
   const isFormFilled =
     username && email && password && confirmPassword && name && nickname;
+
+  const profileImgs: { name: string; alt: string }[] = [
+    { name: Profile1, alt: "기본1" },
+    { name: Profile2, alt: "기본2" },
+    { name: Profile3, alt: "기본3" },
+    { name: Profile4, alt: "기본4" },
+    { name: Profile5, alt: "기본5" },
+  ];
+
+  const handleProfileSelect = (profileName: string) => {
+    setSelectedProfile(profileName);
+    if (profileImgs.some((profile) => profile.name === profileName)) {
+      console.log("기본 이미지 선택된거임");
+    } else {
+      console.log("firebase에 선택한 이미지 업로드 해야됨");
+    }
+    // 그리고 DB에 프로필 이미지 경로 수정해서 넣어줘야되고, 토큰이든 localstorage든 imgPath 변경해줘야됨.
+    setOpenEditProfileImgModal(false);
+    setUpdatedProfile(null);
+  };
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files[0]) {
+      const fileURL = URL.createObjectURL(event.target.files[0]);
+      setUpdatedProfile(fileURL);
+    }
+  };
 
   useEffect(() => {
     const noErrors = Object.values(errors).every((error) => error === "");
@@ -197,6 +234,20 @@ export const SignupPage = () => {
       ) : (
         <div>
           <form onSubmit={handleSignup}>
+            <div className="profile-img">
+              <img
+                src={selectedProfile === null ? Profile1 : selectedProfile}
+                alt="프로필"
+                onClick={() => setOpenEditProfileImgModal(true)}
+              />
+              <label
+                htmlFor="profile-upload"
+                className="upload-label"
+                onClick={() => setOpenEditProfileImgModal(true)}
+              >
+                <MdEdit />
+              </label>
+            </div>
             <div className="signupBox">
               {errors.username && (
                 <p className="errmsg" style={{ color: "red" }}>
@@ -299,6 +350,47 @@ export const SignupPage = () => {
           <CheckModal isOpen={showModal} onClose={handleCloseModal}>
             회원가입이 완료되었습니다!
           </CheckModal>
+
+          {openEditProfileImgModal && (
+            <ExitModal
+              isOpen={openEditProfileImgModal}
+              onClose={() => {
+                setOpenEditProfileImgModal(false);
+                setSelectedProfile(null);
+              }}
+            >
+              <div className="modal-container">
+                {profileImgs.map((profileImg, index) => (
+                  <img
+                    key={index}
+                    className="profile-img-basic"
+                    src={profileImg.name}
+                    alt={profileImg.alt}
+                    onClick={() => handleProfileSelect(profileImg.name)}
+                  />
+                ))}
+                <label htmlFor="file-upload">
+                  {updatedProfile === null ? (
+                    <img className="profile-img-basic" src={Add} alt="추가" />
+                  ) : (
+                    <img
+                      className="profile-img-basic"
+                      src={updatedProfile}
+                      alt="선택된 이미지"
+                      onClick={() => handleProfileSelect(updatedProfile)}
+                    />
+                  )}
+                </label>
+                <input
+                  id="file-upload"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                  style={{ display: "none" }}
+                />
+              </div>
+            </ExitModal>
+          )}
         </div>
       )}
     </AuthBox>
