@@ -60,7 +60,7 @@ export const AuthBox = styled.div`
     height: 50px;
     border-radius: 15px;
   }
-  button {
+  .submitButton {
     margin-top: 50px;
   }
   .modal-container {

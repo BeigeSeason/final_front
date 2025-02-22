@@ -12,26 +12,27 @@ import Profile3 from "../../img/profile/profile3.png";
 import Profile4 from "../../img/profile/profile4.png";
 import Profile5 from "../../img/profile/profile5.png";
 import Add from "../../img/profile/add.png";
+import AxiosApi from "../../api/AxiosApi";
 
 export const SignupPage = () => {
   const [isTermsAgreed, setIsTermsAgreed] = useState(false);
   const [isPrivacyAgreed, setIsPrivacyAgreed] = useState(false);
   const [showForm, setShowForm] = useState(false);
-  const [username, setUsername] = useState("");
+  const [id, setid] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [nickname, setNickname] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [selectedProfile, setSelectedProfile] = useState<string | null>(null);
   const [updatedProfile, setUpdatedProfile] = useState<string | null>(null);
   const [openEditProfileImgModal, setOpenEditProfileImgModal] =
     useState<boolean>(false);
-  const [name, setName] = useState("");
-  const [nickname, setNickname] = useState("");
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isAllValid, setIsAllValid] = useState(false);
 
   const isFormFilled =
-    username && email && password && confirmPassword && name && nickname;
+    id && email && password && confirmPassword && name && nickname;
 
   const profileImgs: { name: string; alt: string }[] = [
     { name: Profile1, alt: "기본1" },
@@ -65,7 +66,7 @@ export const SignupPage = () => {
   }, [errors]);
 
   // 아이디 유효성 검사 ---------------
-  const validateUsername = (value: string) => {
+  const validateid = (value: string) => {
     if (!/^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{5,}$/.test(value)) {
       return "아이디는 영어 또는 숫자를 사용한 5자 이상이어야 합니다.";
     }
@@ -123,8 +124,8 @@ export const SignupPage = () => {
   ) => {
     let errorMessage = "";
 
-    if (field === "username") {
-      errorMessage = await validateUsername(value);
+    if (field === "id") {
+      errorMessage = await validateid(value);
     }
 
     if (field === "email") {
@@ -162,7 +163,7 @@ export const SignupPage = () => {
       }
     };
 
-  const handleUsernameChange = handleInputChange(setUsername, "username");
+  const handleidChange = handleInputChange(setid, "id");
   const handleEmailChange = handleInputChange(setEmail, "email");
   const handlePasswordChange = handleInputChange(setPassword, "password");
   const handleConfirmPasswordChange = handleInputChange(
@@ -189,10 +190,22 @@ export const SignupPage = () => {
     }
   };
 
-  const handleSignup = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSignup = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // TODO:
-    setShowModal(true);
+    const signupRequest = {
+      id,
+      password,
+      name,
+      email,
+      nickname,
+    };
+
+    try {
+      const response = await AxiosApi.signup(signupRequest);
+      console.log("회원가입 성공");
+    } catch (error) {
+      console.log("회원가입 실패");
+    }
   };
 
   const handleCloseModal = () => {
@@ -249,16 +262,16 @@ export const SignupPage = () => {
               </label>
             </div>
             <div className="signupBox">
-              {errors.username && (
+              {errors.id && (
                 <p className="errmsg" style={{ color: "red" }}>
-                  {errors.username}
+                  {errors.id}
                 </p>
               )}
               <InputBox
                 className="inputbox"
-                id="username"
-                value={username}
-                onChange={handleUsernameChange}
+                id="id"
+                value={id}
+                onChange={handleidChange}
                 placeholder="아이디 입력"
                 required
               />
@@ -342,7 +355,11 @@ export const SignupPage = () => {
                 required
               />
             </div>
-            <Button type="submit" disabled={!isFormFilled || !isAllValid}>
+            <Button
+              className="submitButton"
+              type="submit"
+              disabled={!isFormFilled || !isAllValid}
+            >
               회원가입
             </Button>
           </form>
