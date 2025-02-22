@@ -54,6 +54,7 @@ const StyledButton = styled.button<StyledButtonProps>`
 interface ButtonProps extends StyledButtonProps {
   children: React.ReactNode;
   onClick?: () => void;
+  className?: string;
   disabled?: boolean;
   type?: "button" | "submit" | "reset";
   bgColor?: string;
@@ -64,6 +65,7 @@ interface ButtonProps extends StyledButtonProps {
 export const Button: React.FC<ButtonProps> = ({
   children,
   onClick,
+  className,
   bgColor,
   disabled,
   hoverBgColor,
@@ -73,6 +75,7 @@ export const Button: React.FC<ButtonProps> = ({
 }) => (
   <StyledButton
     onClick={onClick}
+    className={className}
     $bgColor={bgColor}
     disabled={disabled}
     $hoverBgColor={hoverBgColor}

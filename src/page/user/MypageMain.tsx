@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { GlobalFont } from "../../style/GlobalStyled";
 import { ExitModal } from "../../component/ModalComponent";
+import { Button } from "../../component/ButtonComponent";
 import MyDiary from "./MyDiary";
 import MyBMDiary from "./MyBMDiary";
 import MyBMTourList from "./MyBMTourList";
@@ -90,6 +91,7 @@ const MypageMain = () => {
         </div>
       </ProfileInfo>
       <MypageMenuContainer>
+        <Button className="write-diary-button">여행일지 작성</Button>
         {menuItems.map((menu) => (
           <button
             key={menu}

@@ -70,6 +70,7 @@ export const MyProfileContainer = styled.div`
   }
   .info-item {
     display: flex;
+    position: relative;
     align-items: center;
     width: 90%;
     height: 45px;
@@ -92,6 +93,14 @@ export const MyProfileContainer = styled.div`
     }
     .content.editable {
       border: 1px solid black;
+    }
+    .error-message {
+      display: flex;
+      position: absolute;
+      right: 4vw;
+      bottom: -8px;
+      font-size: 10px;
+      color: red;
     }
   }
   hr {

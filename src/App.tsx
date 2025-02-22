@@ -14,6 +14,7 @@ import { DiaryList } from "./page/itemList/DiaryList";
 import { FindIdPage } from "./page/auth/FindIdPage";
 import { FindPwPage } from "./page/auth/FindPwPage";
 import { SignupPage } from "./page/auth/SignupPage";
+import CreateDiary from "./page/diary/CreateDiary";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
             <Route path="/findid" element={<FindIdPage />} />
             <Route path="/findpw" element={<FindPwPage />} />
             <Route path="/signup" element={<SignupPage />} />
+            <Route path="/creatediary" element={<CreateDiary />} />
           </Route>
           <Route element={<AdminLayout />}>
             <Route path="/admin" element={<AdminHome />} />
