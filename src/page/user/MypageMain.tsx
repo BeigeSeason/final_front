@@ -91,7 +91,12 @@ const MypageMain = () => {
         </div>
       </ProfileInfo>
       <MypageMenuContainer>
-        <Button className="write-diary-button">여행일지 작성</Button>
+        <Button
+          className="write-diary-button"
+          onClick={() => navigate("/creatediary")}
+        >
+          여행일지 작성
+        </Button>
         {menuItems.map((menu) => (
           <button
             key={menu}

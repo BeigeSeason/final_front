@@ -1,6 +1,6 @@
 export const modules = {
   toolbar: [
-    [{ font: [] }],
+    // [{ font: [] }],
     [{ size: ["small", false, "large", "huge"] }], // custom dropdown
     // [{ header: [1, 2, 3, 4, 5, 6, false] }],
     [{ color: [] }, { background: [] }], // dropdown with defaults from theme
@@ -11,15 +11,16 @@ export const modules = {
       // { indent: "-1" },
       // { indent: "+1" },
     ],
-    ["link", "image"],
+    // ["link", "image"],
+    ["image"],
     ["clean"],
   ],
 };
 
 export const formats = [
-  "font",
+  // "font",
   "size",
-  "header",
+  // "header",
   "color",
   "background",
   "bold",
@@ -28,8 +29,8 @@ export const formats = [
   "strike",
   "blockquote",
   "list",
-  "bullet",
+  // "bullet",
   "indent",
-  "link",
+  // "link",
   "image",
 ];

@@ -10,9 +10,10 @@ import { Button } from "../../component/ButtonComponent";
 import {
   CreateDiaryContainer,
   TourInfoContainer,
+  StyledWrapper,
   TourContentContainer,
 } from "../../style/CreateDiaryStyled";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const CreateDiary = () => {
   const [selectedArea, setSelectedArea] = useState<string | null>(null);
@@ -23,6 +24,17 @@ const CreateDiary = () => {
   const [tags, setTags] = useState<string[]>([]);
   const [travelCost, setTravelCost] = useState<number | null>(null);
   const [title, setTitle] = useState<string>("");
+  const [isPublic, setIsPublic] = useState(true);
+  const [content, setContent] = useState<string>("");
+
+  const isFormValid =
+    selectedArea &&
+    selectedSubArea &&
+    startDate &&
+    title &&
+    title.trim().length > 0 &&
+    content &&
+    content.trim().replace(/<[^>]*>/g, "").length > 0;
 
   // 지역 선택
   const handleAreaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -98,10 +110,16 @@ const CreateDiary = () => {
       setTitle(e.target.value);
     }
   };
+  useEffect(() => {
+    console.log(content);
+  }, [content]);
 
   return (
     <CreateDiaryContainer>
       <TourInfoContainer>
+        <Button className="submit-button" disabled={!isFormValid}>
+          작성 완료
+        </Button>
         <div className="select-container">
           <SelectBox
             value={selectedArea ?? ""}
@@ -185,10 +203,34 @@ const CreateDiary = () => {
             onChange={handleTitleChange}
           />
           <span className="word-count">{title.length}/40</span>
+          <StyledWrapper>
+            <div className="checkbox-wrapper-10">
+              <input
+                defaultChecked
+                type="checkbox"
+                id="cb5"
+                className="tgl tgl-flip"
+                checked={isPublic}
+                onChange={(e) => setIsPublic(e.target.checked)}
+              />
+              <label
+                htmlFor="cb5"
+                data-tg-on="공개"
+                data-tg-off="비공개"
+                className="tgl-btn"
+              />
+            </div>
+          </StyledWrapper>
         </div>
       </TourInfoContainer>
       <TourContentContainer>
-        <ReactQuill theme="snow" modules={modules} formats={formats} />
+        <ReactQuill
+          theme="snow"
+          modules={modules}
+          formats={formats}
+          value={content}
+          onChange={setContent}
+        />
       </TourContentContainer>
     </CreateDiaryContainer>
   );
