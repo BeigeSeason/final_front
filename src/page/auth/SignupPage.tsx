@@ -18,7 +18,7 @@ export const SignupPage = () => {
   const [isTermsAgreed, setIsTermsAgreed] = useState(false);
   const [isPrivacyAgreed, setIsPrivacyAgreed] = useState(false);
   const [showForm, setShowForm] = useState(false);
-  const [id, setid] = useState("");
+  const [userId, setuserId] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
@@ -32,7 +32,7 @@ export const SignupPage = () => {
   const [isAllValid, setIsAllValid] = useState(false);
 
   const isFormFilled =
-    id && email && password && confirmPassword && name && nickname;
+    userId && email && password && confirmPassword && name && nickname;
 
   const profileImgs: { name: string; alt: string }[] = [
     { name: Profile1, alt: "기본1" },
@@ -163,7 +163,7 @@ export const SignupPage = () => {
       }
     };
 
-  const handleidChange = handleInputChange(setid, "id");
+  const handleidChange = handleInputChange(setuserId, "userId");
   const handleEmailChange = handleInputChange(setEmail, "email");
   const handlePasswordChange = handleInputChange(setPassword, "password");
   const handleConfirmPasswordChange = handleInputChange(
@@ -192,19 +192,31 @@ export const SignupPage = () => {
 
   const handleSignup = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (!isAllValid) {
+      setShowModal(true); // 오류 모달 표시
+      return;
+    }
+
     const signupRequest = {
-      id,
+      userId,
       password,
       name,
       email,
       nickname,
+      // profileImg: selectedProfile,
     };
+    console.log("회원가입 요청 데이터:", signupRequest);
 
     try {
       const response = await AxiosApi.signup(signupRequest);
-      console.log("회원가입 성공");
+      console.log("회원가입 성공:", response);
+      navigate("/");
     } catch (error) {
-      console.log("회원가입 실패");
+      setErrors((prev) => ({
+        ...prev,
+        general: "회원가입에 실패했습니다. 다시 시도해주세요.",
+      }));
     }
   };
 
@@ -270,7 +282,7 @@ export const SignupPage = () => {
               <InputBox
                 className="inputbox"
                 id="id"
-                value={id}
+                value={userId}
                 onChange={handleidChange}
                 placeholder="아이디 입력"
                 required
