@@ -29,7 +29,7 @@ export const Header = () => {
   };
   const handleSearch = () => {
     if (searchTerm.trim() !== "") {
-      navigate(`/searchpage?query=${searchTerm}`);
+      navigate(`/searchpage?searchQuery=${searchTerm}`);
     }
   };
   return (
