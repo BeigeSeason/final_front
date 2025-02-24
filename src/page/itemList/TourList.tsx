@@ -20,6 +20,7 @@ interface Filters {
   sortBy: string;
   currentPage: number;
   pageSize: number;
+  themeList?: string;
 }
 
 export const TourList: React.FC = () => {
@@ -212,7 +213,17 @@ export const TourList: React.FC = () => {
                 .join(",")
             : ""; // newFilters[key]가 undefined일 경우 기본값 설정
         }
-      } else {
+      } else if (
+        key === "areaCode" ||
+        key === "subAreaCode" ||
+        key === "category" ||
+        key === "searchQuery" ||
+        key === "topTheme" ||
+        key === "middleTheme" ||
+        key === "sortBy" ||
+        key === "themeList"
+      ) {
+        console.log(newFilters[key], key);
         newFilters[key] = "";
       }
 

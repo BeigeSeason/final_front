@@ -3,6 +3,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import { ko } from "date-fns/locale";
 import ReactQuill from "react-quill-new";
 import "react-quill/dist/quill.snow.css";
+// import Quill from "quill";
+// import QuillImageCompress from "quill-image-compress";
 import { modules, formats } from "./ReactQuillModule";
 import { areas } from "../../util/TourCodes";
 import { SelectBox, InputBox } from "../../component/InputComponent";
@@ -15,6 +17,10 @@ import {
 } from "../../style/CreateDiaryStyled";
 import React, { useEffect, useState } from "react";
 
+// import ImageCompress from "quill-image-compress";
+
+// Quill.register("modules/imageCompress", ImageCompress);
+
 const CreateDiary = () => {
   const [selectedArea, setSelectedArea] = useState<string | null>(null);
   const [selectedSubArea, setSelectedSubArea] = useState<string | null>(null);
@@ -26,6 +32,8 @@ const CreateDiary = () => {
   const [title, setTitle] = useState<string>("");
   const [isPublic, setIsPublic] = useState(true);
   const [content, setContent] = useState<string>("");
+
+  const maxBytes = 5000000; // 5MB
 
   const isFormValid =
     selectedArea &&
@@ -110,9 +118,13 @@ const CreateDiary = () => {
       setTitle(e.target.value);
     }
   };
-  useEffect(() => {
-    console.log(content);
-  }, [content]);
+
+  // 작성 내용
+  // useEffect(() => {
+  //   if (typeof window !== "undefined") {
+  //     Quill.register("modules/imageCompress", QuillImageCompress);
+  //   }
+  // }, []);
 
   return (
     <CreateDiaryContainer>
@@ -203,7 +215,7 @@ const CreateDiary = () => {
             onChange={handleTitleChange}
           />
           <span className="word-count">{title.length}/40</span>
-          <StyledWrapper>
+          {/* <StyledWrapper>
             <div className="checkbox-wrapper-10">
               <input
                 defaultChecked
@@ -220,6 +232,21 @@ const CreateDiary = () => {
                 className="tgl-btn"
               />
             </div>
+          </StyledWrapper> */}
+          <StyledWrapper>
+            <div className="toggle">
+              <label className="switch">
+                <input
+                  type="checkbox"
+                  checked={!isPublic}
+                  onChange={(e) => setIsPublic(!e.target.checked)}
+                />
+                <span>
+                  <em />
+                  <strong />
+                </span>
+              </label>
+            </div>
           </StyledWrapper>
         </div>
       </TourInfoContainer>
@@ -231,6 +258,9 @@ const CreateDiary = () => {
           value={content}
           onChange={setContent}
         />
+        <div>
+          현재 내용 길이: {new TextEncoder().encode(content).length} bytes
+        </div>
       </TourContentContainer>
     </CreateDiaryContainer>
   );
