@@ -20,6 +20,7 @@ interface Filters {
   sortBy: string;
   currentPage: number;
   pageSize: number;
+  themeList?: string;
 }
 
 export const TourList: React.FC = () => {
@@ -204,17 +205,27 @@ export const TourList: React.FC = () => {
   //         cat.cat2List.flatMap((cat2) => cat2.cat3List)
   //       ).find((cat3) => cat3.cat3Name === name)?.cat3;
 
-  //       if (code) {
-  //         newFilters[key] = newFilters[key]
-  //           ? newFilters[key]
-  //               .split(",")
-  //               .filter((theme) => theme !== code)
-  //               .join(",")
-  //           : ""; // newFilters[key]가 undefined일 경우 기본값 설정
-  //       }
-  //     } else {
-  //       newFilters[key] = "";
-  //     }
+        if (code) {
+          newFilters[key] = newFilters[key]
+            ? newFilters[key]
+                .split(",")
+                .filter((theme) => theme !== code)
+                .join(",")
+            : ""; // newFilters[key]가 undefined일 경우 기본값 설정
+        }
+      } else if (
+        key === "areaCode" ||
+        key === "subAreaCode" ||
+        key === "category" ||
+        key === "searchQuery" ||
+        key === "topTheme" ||
+        key === "middleTheme" ||
+        key === "sortBy" ||
+        key === "themeList"
+      ) {
+        console.log(newFilters[key], key);
+        newFilters[key] = "";
+      }
 
   //     return newFilters;
   //   });
