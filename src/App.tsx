@@ -15,34 +15,41 @@ import { FindIdPage } from "./page/auth/FindIdPage";
 import { FindPwPage } from "./page/auth/FindPwPage";
 import { SignupPage } from "./page/auth/SignupPage";
 import CreateDiary from "./page/diary/CreateDiary";
+import { Provider } from "react-redux";
+import store from "./redux/store";
 
 function App() {
   return (
     <>
-      <Router>
-        <Routes>
-          <Route element={<Layout />}>
-            <Route path="/" element={<Main />} />
-            <Route path="/mypage" element={<MypageMain />} />
-            <Route path="/searchpage" element={<SearchPage />} />
-            <Route path="/tourlist" element={<TourList />} />
-            <Route path="/diarylist" element={<DiaryList />} />
-            <Route path="/findid" element={<FindIdPage />} />
-            <Route path="/findpw" element={<FindPwPage />} />
-            <Route path="/signup" element={<SignupPage />} />
-            <Route path="/creatediary" element={<CreateDiary />} />
-          </Route>
-          <Route element={<AdminLayout />}>
-            <Route path="/admin" element={<AdminHome />} />
-            <Route path="/admin/report/user" element={<AdminReportUser />} />
-            <Route path="/admin/report/diary" element={<AdminReportDiary />} />
-            <Route
-              path="/admin/report/review"
-              element={<AdminReportReview />}
-            />
-          </Route>
-        </Routes>
-      </Router>
+      <Provider store={store}>
+        <Router>
+          <Routes>
+            <Route element={<Layout />}>
+              <Route path="/" element={<Main />} />
+              <Route path="/mypage" element={<MypageMain />} />
+              <Route path="/searchpage" element={<SearchPage />} />
+              <Route path="/tourlist" element={<TourList />} />
+              <Route path="/diarylist" element={<DiaryList />} />
+              <Route path="/findid" element={<FindIdPage />} />
+              <Route path="/findpw" element={<FindPwPage />} />
+              <Route path="/signup" element={<SignupPage />} />
+              <Route path="/creatediary" element={<CreateDiary />} />
+            </Route>
+            <Route element={<AdminLayout />}>
+              <Route path="/admin" element={<AdminHome />} />
+              <Route path="/admin/report/user" element={<AdminReportUser />} />
+              <Route
+                path="/admin/report/diary"
+                element={<AdminReportDiary />}
+              />
+              <Route
+                path="/admin/report/review"
+                element={<AdminReportReview />}
+              />
+            </Route>
+          </Routes>
+        </Router>
+      </Provider>
     </>
   );
 }

@@ -195,30 +195,30 @@ export const TourList: React.FC = () => {
     updateFilters("category", newCategory);
   };
 
-  const handleTopFilterChange = (key: keyof Filters, name: string) => {
-    setFilters((prev) => {
-      const newFilters: Filters = { ...prev };
+  // const handleTopFilterChange = (key: keyof Filters, name: string) => {
+  //   setFilters((prev) => {
+  //     const newFilters: Filters = { ...prev };
 
-      if (key === "bottomTheme") {
-        const code = ServiceCode.flatMap((cat) =>
-          cat.cat2List.flatMap((cat2) => cat2.cat3List)
-        ).find((cat3) => cat3.cat3Name === name)?.cat3;
+  //     if (key === "bottomTheme") {
+  //       const code = ServiceCode.flatMap((cat) =>
+  //         cat.cat2List.flatMap((cat2) => cat2.cat3List)
+  //       ).find((cat3) => cat3.cat3Name === name)?.cat3;
 
-        if (code) {
-          newFilters[key] = newFilters[key]
-            ? newFilters[key]
-                .split(",")
-                .filter((theme) => theme !== code)
-                .join(",")
-            : ""; // newFilters[key]가 undefined일 경우 기본값 설정
-        }
-      } else {
-        newFilters[key] = "";
-      }
+  //       if (code) {
+  //         newFilters[key] = newFilters[key]
+  //           ? newFilters[key]
+  //               .split(",")
+  //               .filter((theme) => theme !== code)
+  //               .join(",")
+  //           : ""; // newFilters[key]가 undefined일 경우 기본값 설정
+  //       }
+  //     } else {
+  //       newFilters[key] = "";
+  //     }
 
-      return newFilters;
-    });
-  };
+  //     return newFilters;
+  //   });
+  // };
 
   const handleToggleSelect = () => {
     setIsSelectOpen(!isSelectOpen);
@@ -404,10 +404,10 @@ export const TourList: React.FC = () => {
           </ToggleSection>
         </div>
       </SelectSearchItem>
-      <SelectedFilters
+      {/* <SelectedFilters
         filters={filters}
         onRemoveFilter={handleTopFilterChange}
-      />
+      /> */}
     </>
   );
 };

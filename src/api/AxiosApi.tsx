@@ -4,7 +4,7 @@ import axios from "axios";
 import Common from "../util/Common";
 
 interface LoginRequest {
-  id: string;
+  userId: string;
   password?: string;
 }
 
@@ -27,9 +27,11 @@ const AxiosApi = {
     password: string
   ): Promise<AxiosResponse<any>> => {
     const loginRequest: LoginRequest = {
-      id: userId,
+      userId: userId,
       password: password,
     };
+    console.log("로그인 요청:", loginRequest); // 로그인 요청 정보 출력
+
     return await JwtAxios.post("/auth/login", loginRequest);
   },
   // 회원가입
@@ -55,23 +57,23 @@ const AxiosApi = {
     }
   },
   // 멤버 조회 (전체)
-    memberList: async (
+  memberList: async (
     page = 1,
     size = 10,
     searchType = "NAME",
     searchValue = ""
   ) => {
-        console.log("params:", { page, size, searchType, searchValue });
-        try {
-            const response = await JwtAxios.get("/member/list", {
-                params: {page, size, searchType, searchValue},
-            });
-            return response.data;
-        } catch (error) {
-            console.error("멤버 리스트 조회 중 오류 발생:", error);
-            throw error;
-        }
-    },
+    console.log("params:", { page, size, searchType, searchValue });
+    try {
+      const response = await JwtAxios.get("/member/list", {
+        params: { page, size, searchType, searchValue },
+      });
+      return response.data;
+    } catch (error) {
+      console.error("멤버 리스트 조회 중 오류 발생:", error);
+      throw error;
+    }
+  },
 };
 
 export default AxiosApi;
