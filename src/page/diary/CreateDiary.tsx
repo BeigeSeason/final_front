@@ -3,8 +3,6 @@ import "react-datepicker/dist/react-datepicker.css";
 import { ko } from "date-fns/locale";
 import ReactQuill from "react-quill-new";
 import "react-quill/dist/quill.snow.css";
-// import Quill from "quill";
-// import QuillImageCompress from "quill-image-compress";
 import { modules, formats } from "./ReactQuillModule";
 import { areas } from "../../util/TourCodes";
 import { SelectBox, InputBox } from "../../component/InputComponent";
@@ -15,11 +13,12 @@ import {
   StyledWrapper,
   TourContentContainer,
 } from "../../style/CreateDiaryStyled";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
-// import ImageCompress from "quill-image-compress";
-
-// Quill.register("modules/imageCompress", ImageCompress);
+// 공홈
+// https://tiptap.dev/docs/examples/basics/default-text-editor
+// 참고 블로그
+// https://velog.io/@bae-sh/React-quill%EC%97%90%EC%84%9C-tiptap-%EC%9C%BC%EB%A1%9C
 
 const CreateDiary = () => {
   const [selectedArea, setSelectedArea] = useState<string | null>(null);
