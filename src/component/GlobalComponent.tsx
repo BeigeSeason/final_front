@@ -73,6 +73,24 @@ export const AdminHeader = () => {
     setIsStatsShow((prev) => !prev);
   };
 
+  // 신고 - 유저
+  const handleReport1 = () => {
+    setIsBanShow(false);
+    navigate("/admin/report/user");
+  }
+
+  // 신고 - 여행 일기
+  const handleReport2 = () => {
+    setIsBanShow(false);
+    navigate("/admin/report/diary");
+  }
+
+  // 신고 - 관광지 댓글
+  const handleReport3 = () => {
+    setIsBanShow(false);
+    navigate("/admin/report/review");
+  }
+
   const handleLogout = () => {};
 
   return (
@@ -96,19 +114,19 @@ export const AdminHeader = () => {
             <div className="admin-selectBox-ban">
               <div
                 className="admin-selected"
-                onClick={() => navigate("/admin/report/user")}
+                onClick={handleReport1}
               >
                 유저
               </div>
               <div
                 className="admin-selected"
-                onClick={() => navigate("/admin/report/diary")}
+                onClick={handleReport2}
               >
                 여행 일기
               </div>
               <div
                 className="admin-selected"
-                onClick={() => navigate("/admin/report/review")}
+                onClick={handleReport3}
               >
                 관광지 댓글
               </div>

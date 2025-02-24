@@ -63,7 +63,7 @@ const AxiosApi = {
   ) => {
     console.log("params:", { page, size, searchType, searchValue });
     try {
-      const response = await axios.get(`${Common.FINAL_DOMAIN}/member/list`, {
+      const response = await axios.get(`${Common.FINAL_DOMAIN}/admin/member-list`, {
         params: { page, size, searchType, searchValue },
       });
       return response.data;
@@ -72,6 +72,22 @@ const AxiosApi = {
       throw error;
     }
   },
+  // 신고 조회 (전체)
+  reportList: async (
+    page = 1,
+    size = 10,
+    reportType = "MEMBER"
+  ) => {
+    try {
+      const response = await axios.get(`${Common.FINAL_DOMAIN}/admin/report-list`, {
+        params: { page, size, reportType },
+      });
+      return response.data;
+    } catch (error) {
+      console.error("신고 리스트 조회 중 오류 발생:", error);
+      throw error;
+    }
+  }
 };
 
 export default AxiosApi;

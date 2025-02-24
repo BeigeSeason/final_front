@@ -2,11 +2,11 @@ import { useState, useEffect } from "react";
 import { AdminContainer } from "./AdminComponent";
 import { GlobalFont } from "../../style/GlobalStyled";
 import { Modal } from "../../component/ModalComponent";
+import AxiosApi from "../../api/AxiosApi";
 
 // icon
 import { FaSortDown, FaAngleUp, FaAngleDown } from "react-icons/fa";
 import { IoSearch } from "react-icons/io5";
-import AxiosApi from "../../api/AxiosApi";
 
 const AdminHome = () => {
   interface Member {
