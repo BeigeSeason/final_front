@@ -12,6 +12,9 @@ import { useNavigate, Link } from "react-router-dom";
 import logoImg from "../img/sample.png";
 import { SearchBox } from "./InputComponent";
 import { Modal, LoginModal } from "./ModalComponent";
+import { useSelector, useDispatch } from "react-redux";
+import { logout } from "../redux/axtions";
+import { RootState } from "../redux/store";
 
 // 헤더---------------------------------------------------------------------------------
 export const Header = () => {
@@ -147,6 +150,8 @@ export const Nav = () => {
   const [isLoginModalOpen, setLoginModalOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+  const accessToken = useSelector((state: RootState) => state.auth.accessToken);
+  const dispatch = useDispatch();
 
   const isActive = (path: string): boolean => {
     return location.pathname === path;
@@ -160,7 +165,9 @@ export const Nav = () => {
   };
 
   const handleConfirmLogout = () => {
-    console.log("로그아웃 처리");
+    dispatch(logout());
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
     handleCloseModal();
     navigate("/");
   };
@@ -216,12 +223,17 @@ export const Nav = () => {
         >
           마이페이지
         </Link>
-        <p className="tag content-font1" onClick={handleLogoutClick}>
-          로그아웃
-        </p>
-        <p className="tag content-font1" onClick={handleLoginModalOpen}>
-          로그인
-        </p>{" "}
+        <div>
+          {accessToken ? (
+            <p className="tag content-font1" onClick={handleLogoutClick}>
+              로그아웃
+            </p>
+          ) : (
+            <p className="tag content-font1" onClick={handleLoginModalOpen}>
+              로그인
+            </p>
+          )}
+        </div>
       </div>
       <Modal
         isOpen={isLogoutModalOpen}
