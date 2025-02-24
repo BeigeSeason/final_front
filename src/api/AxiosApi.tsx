@@ -65,7 +65,7 @@ const AxiosApi = {
   ) => {
     console.log("params:", { page, size, searchType, searchValue });
     try {
-      const response = await JwtAxios.get("/member/list", {
+      const response = await JwtAxios.get("/admin/member-list", {
         params: { page, size, searchType, searchValue },
       });
       return response.data;
