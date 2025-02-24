@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { colors } from "./GlobalStyled";
 
 export const MypageMainContainer = styled.div`
   display: flex;
@@ -70,12 +71,14 @@ export const ProfileInfo = styled.div`
 
 export const MypageMenuContainer = styled.div`
   display: flex;
+  position: relative;
   justify-content: space-around;
   align-items: center;
   width: 100%;
   height: 50px;
   margin: 3vh 0 2vh;
-  background-color: #d8e1f3;
+  /* background-color: #d8e1f3; */
+  background-color: ${colors.colorD};
   white-space: nowrap;
   button {
     width: 22%;
@@ -88,6 +91,15 @@ export const MypageMenuContainer = styled.div`
     &.selected {
       font-weight: bold;
     }
+  }
+  .write-diary-button {
+    display: flex;
+    position: absolute;
+    right: 0;
+    top: -37px;
+    background-color: ${colors.colorA};
+    width: 150px;
+    height: 32px;
   }
 `;
 
