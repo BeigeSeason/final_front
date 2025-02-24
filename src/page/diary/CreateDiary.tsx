@@ -7,6 +7,7 @@ import { modules, formats } from "./ReactQuillModule";
 import { areas } from "../../util/TourCodes";
 import { SelectBox, InputBox } from "../../component/InputComponent";
 import { Button } from "../../component/ButtonComponent";
+import { TipTap } from "./TipTap";
 import {
   CreateDiaryContainer,
   TourInfoContainer,
@@ -250,7 +251,8 @@ const CreateDiary = () => {
         </div>
       </TourInfoContainer>
       <TourContentContainer>
-        <ReactQuill
+        <TipTap />
+        {/* <ReactQuill
           theme="snow"
           modules={modules}
           formats={formats}
@@ -259,7 +261,7 @@ const CreateDiary = () => {
         />
         <div>
           현재 내용 길이: {new TextEncoder().encode(content).length} bytes
-        </div>
+        </div> */}
       </TourContentContainer>
     </CreateDiaryContainer>
   );
