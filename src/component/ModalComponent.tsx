@@ -4,6 +4,10 @@ import { Button, CancelButton } from "./ButtonComponent";
 import { InputBox } from "./InputComponent";
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
+import AxiosApi from "../api/AxiosApi";
+import { useDispatch } from "react-redux";
+import { setTokens } from "../redux/authSlice";
+import store from "../redux/store";
 
 const ModalBackdrop = styled.div`
   position: fixed;
@@ -206,30 +210,64 @@ export const LoginModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
   isOpen,
   onClose,
 }) => {
-  const [username, setUsername] = useState("");
+  const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(""); // 에러 메시지를 위한 상태
   const location = useLocation();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (isOpen) {
+      setError(""); // 모달이 열릴 때 에러 메시지 초기화
+    }
+  }, [isOpen]);
 
   useEffect(() => {
     if (isOpen) {
       onClose(); // 페이지 이동 시 모달 닫기
     }
-  }, [location.pathname]); // 경로 변경될 때 실행
+  }, [location.pathname]);
 
-  const handleLogin = () => {
-    console.log("로그인 시도:", { username, password });
-    onClose(); // 로그인 후 모달 닫기
+  const handleLogin = async () => {
+    try {
+      console.log("로그인 시도:", { userId, password });
+      const response = await AxiosApi.login(userId, password);
+
+      if (response.status === 200) {
+        console.log("로그인 성공:", response.data);
+
+        // 토큰을 Redux에 저장
+        dispatch(
+          setTokens({
+            accessToken: response.data.accessToken,
+            refreshToken: response.data.refreshToken,
+          })
+        );
+        localStorage.setItem("accessToken", response.data.accessToken);
+        localStorage.setItem("refreshToken", response.data.refreshToken);
+        console.log("현재 Redux 상태:", store.getState()); // Redux 상태 출력
+
+        onClose(); // 로그인 후 모달 닫기
+      } else {
+        setError("아이디 또는 비밀번호가 올바르지 않습니다.");
+      }
+    } catch (error) {
+      console.error("로그인 실패:", error);
+      setError("아이디 또는 비밀번호가 올바르지 않습니다.");
+    }
   };
 
   return (
     <ExitModal isOpen={isOpen} onClose={onClose}>
       <LoginContainer>
         <h2>로그인</h2>
+        {error && <p style={{ color: "red" }}>{error}</p>}{" "}
+        {/* 에러 메시지 표시 */}
         <InputBox
           type="text"
           placeholder="아이디"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          value={userId}
+          onChange={(e) => setUserId(e.target.value)}
         />
         <InputBox
           type="password"

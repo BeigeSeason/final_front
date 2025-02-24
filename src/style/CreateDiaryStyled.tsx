@@ -86,126 +86,158 @@ export const TourInfoContainer = styled.div`
 `;
 
 export const StyledWrapper = styled.div`
-  display: flex;
-  position: absolute;
-  right: -85px;
-  bottom: 0;
-  .checkbox-wrapper-10 .tgl {
-    display: none;
+  .toggle {
+    display: flex;
+    position: absolute;
+    right: -90px;
+    bottom: 3px;
+    scale: 1.3;
   }
-
-  .checkbox-wrapper-10 .tgl,
-  .checkbox-wrapper-10 .tgl:after,
-  .checkbox-wrapper-10 .tgl:before,
-  .checkbox-wrapper-10 .tgl *,
-  .checkbox-wrapper-10 .tgl *:after,
-  .checkbox-wrapper-10 .tgl *:before,
-  .checkbox-wrapper-10 .tgl + .tgl-btn {
-    box-sizing: border-box;
-  }
-
-  .checkbox-wrapper-10 .tgl::-moz-selection,
-  .checkbox-wrapper-10 .tgl:after::-moz-selection,
-  .checkbox-wrapper-10 .tgl:before::-moz-selection,
-  .checkbox-wrapper-10 .tgl *::-moz-selection,
-  .checkbox-wrapper-10 .tgl *:after::-moz-selection,
-  .checkbox-wrapper-10 .tgl *:before::-moz-selection,
-  .checkbox-wrapper-10 .tgl + .tgl-btn::-moz-selection,
-  .checkbox-wrapper-10 .tgl::selection,
-  .checkbox-wrapper-10 .tgl:after::selection,
-  .checkbox-wrapper-10 .tgl:before::selection,
-  .checkbox-wrapper-10 .tgl *::selection,
-  .checkbox-wrapper-10 .tgl *:after::selection,
-  .checkbox-wrapper-10 .tgl *:before::selection,
-  .checkbox-wrapper-10 .tgl + .tgl-btn::selection {
-    background: none;
-  }
-
-  .checkbox-wrapper-10 .tgl + .tgl-btn {
-    outline: 0;
+  .switch {
+    height: 24px;
     display: block;
-    width: 4em;
-    height: 2em;
     position: relative;
     cursor: pointer;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
   }
-
-  .checkbox-wrapper-10 .tgl + .tgl-btn:after,
-  .checkbox-wrapper-10 .tgl + .tgl-btn:before {
-    position: relative;
-    display: block;
-    content: "";
-    width: 50%;
-    height: 100%;
-  }
-
-  .checkbox-wrapper-10 .tgl + .tgl-btn:after {
-    left: 0;
-  }
-
-  .checkbox-wrapper-10 .tgl + .tgl-btn:before {
+  .switch input {
     display: none;
   }
-
-  .checkbox-wrapper-10 .tgl:checked + .tgl-btn:after {
-    left: 50%;
+  .switch input + span {
+    padding-left: 50px;
+    min-height: 24px;
+    line-height: 24px;
+    display: block;
+    color: #99a3ba;
+    position: relative;
+    vertical-align: middle;
+    white-space: nowrap;
+    transition: color 0.3s ease;
   }
-
-  .checkbox-wrapper-10 .tgl-flip + .tgl-btn {
-    padding: 2px;
-    transition: all 0.2s ease;
-    font-family: sans-serif;
-    perspective: 100px;
-  }
-
-  .checkbox-wrapper-10 .tgl-flip + .tgl-btn:after,
-  .checkbox-wrapper-10 .tgl-flip + .tgl-btn:before {
-    display: inline-block;
-    transition: all 0.4s ease;
-    width: 100%;
-    text-align: center;
+  .switch input + span:before,
+  .switch input + span:after {
+    content: "";
+    display: block;
     position: absolute;
-    line-height: 2em;
-    font-weight: bold;
-    color: #fff;
+    border-radius: 12px;
+  }
+  .switch input + span:before {
     top: 0;
     left: 0;
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-    border-radius: 4px;
+    width: 42px;
+    height: 24px;
+    background: ${colors.colorD};
+    transition: all 0.3s ease;
   }
-
-  .checkbox-wrapper-10 .tgl-flip + .tgl-btn:after {
-    content: attr(data-tg-on);
+  .switch input + span:after {
+    width: 18px;
+    height: 18px;
+    background: #fff;
+    top: 3px;
+    left: 3px;
+    box-shadow: 0 1px 3px rgba(18, 22, 33, 0.1);
+    transition: all 0.45s ease;
+  }
+  .switch input + span em {
+    width: 8px;
+    height: 7px;
     background: ${colors.colorB};
-    transform: rotateY(-180deg);
+    position: absolute;
+    left: 8px;
+    bottom: 7px;
+    border-radius: 2px;
+    display: block;
+    z-index: 1;
+    transition: all 0.45s ease;
   }
-
-  .checkbox-wrapper-10 .tgl-flip + .tgl-btn:before {
-    background: ${colors.colorA};
-    content: attr(data-tg-off);
+  .switch input + span em:before {
+    content: "";
+    width: 2px;
+    height: 2px;
+    border-radius: 1px;
+    background: #fff;
+    position: absolute;
+    display: block;
+    left: 50%;
+    top: 50%;
+    margin: -1px 0 0 -1px;
   }
-
-  .checkbox-wrapper-10 .tgl-flip + .tgl-btn:active:before {
-    transform: rotateY(-20deg);
+  .switch input + span em:after {
+    content: "";
+    display: block;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    border: 1px solid #99a3ba;
+    border-bottom: 0;
+    width: 6px;
+    height: 4px;
+    left: 1px;
+    bottom: 6px;
+    position: absolute;
+    z-index: 1;
+    transform-origin: 0 100%;
+    transition: all 0.45s ease;
+    transform: rotate(-35deg) translate(0, 1px);
   }
-
-  .checkbox-wrapper-10 .tgl-flip:checked + .tgl-btn:before {
-    transform: rotateY(180deg);
+  .switch input + span strong {
+    font-weight: normal;
+    position: relative;
+    display: block;
+    top: 1px;
   }
-
-  .checkbox-wrapper-10 .tgl-flip:checked + .tgl-btn:after {
-    transform: rotateY(0);
+  .switch input + span strong:before,
+  .switch input + span strong:after {
+    font-size: 14px;
+    font-weight: 500;
+    display: block;
+    font-family: "Mukta Malar", Arial;
+    -webkit-backface-visibility: hidden;
+  }
+  .switch input + span strong:before {
+    /* content: "Unlocked"; */
+    transition: all 0.3s ease 0.2s;
+  }
+  .switch input + span strong:after {
+    /* content: "Locked"; */
+    opacity: 0;
+    visibility: hidden;
+    position: absolute;
     left: 0;
-    background: ${colors.colorC};
+    top: 0;
+    color: #383838;
+    transition: all 0.3s ease;
+    transform: translate(2px, 0);
+  }
+  .switch input:checked + span:before {
+    background: #eae7e7;
+  }
+  .switch input:checked + span:after {
+    background: #fff;
+    transform: translate(18px, 0);
+  }
+  .switch input:checked + span em {
+    transform: translate(18px, 0);
+    background: #666;
+  }
+  .switch input:checked + span em:after {
+    border-color: #666;
+    transform: rotate(0deg) translate(0, 0);
+  }
+  .switch input:checked + span strong:before {
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    transform: translate(-2px, 0);
+  }
+  .switch input:checked + span strong:after {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(0, 0);
+    transition: all 0.3s ease 0.2s;
   }
 
-  .checkbox-wrapper-10 .tgl-flip:checked + .tgl-btn:active:after {
-    transform: rotateY(20deg);
+  .switch :before,
+  :after {
+    box-sizing: border-box;
   }
 `;
 

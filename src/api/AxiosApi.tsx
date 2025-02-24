@@ -4,7 +4,7 @@ import axios from "axios";
 import Common from "../util/Common";
 
 interface LoginRequest {
-  id: string;
+  userId: string;
   password?: string;
 }
 
@@ -27,9 +27,11 @@ const AxiosApi = {
     password: string
   ): Promise<AxiosResponse<any>> => {
     const loginRequest: LoginRequest = {
-      id: userId,
+      userId: userId,
       password: password,
     };
+    console.log("로그인 요청:", loginRequest); // 로그인 요청 정보 출력
+
     return await JwtAxios.post("/auth/login", loginRequest);
   },
   // 회원가입
@@ -63,7 +65,7 @@ const AxiosApi = {
   ) => {
     console.log("params:", { page, size, searchType, searchValue });
     try {
-      const response = await axios.get(`${Common.FINAL_DOMAIN}/admin/member-list`, {
+      const response = await JwtAxios.get("/member/list", {
         params: { page, size, searchType, searchValue },
       });
       return response.data;

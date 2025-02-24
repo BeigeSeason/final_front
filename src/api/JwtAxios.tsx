@@ -1,9 +1,25 @@
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosError, AxiosResponse } from "axios";
+import axios, {AxiosInstance, AxiosRequestConfig, AxiosError, AxiosResponse, InternalAxiosRequestConfig} from "axios";
 import Common from "../util/Common"; // Common 모듈 import (경로에 맞게 수정)
 
 const JwtAxios: AxiosInstance = axios.create({
     baseURL: Common.FINAL_DOMAIN,
 });
+
+// 요청 인터셉터 추가
+JwtAxios.interceptors.request.use(
+    async (config: InternalAxiosRequestConfig<any>): Promise<InternalAxiosRequestConfig<any>> => {
+        console.log("JwtAxios 요청 인터셉터");
+        const accessToken = Common.getAccessToken();
+        if (accessToken) { // accessToken이 null 또는 undefined가 아닌 경우에만 헤더에 추가
+            config.headers.Authorization = `Bearer ${accessToken}`;
+        }
+        return config;
+    },
+    (error: AxiosError) => {
+        console.log("JwtAxios 요청 에러: ", error);
+        return Promise.reject(error);
+    }
+);
 
 let isRefreshing: boolean = false;
 let refreshSubscribers: ((newToken: string | null) => void)[] = []; // 콜백 함수 타입 명시 (newToken: string | null)

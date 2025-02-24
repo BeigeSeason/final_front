@@ -45,11 +45,13 @@ export const SignupPage = () => {
   const handleProfileSelect = (profileName: string) => {
     setSelectedProfile(profileName);
     if (profileImgs.some((profile) => profile.name === profileName)) {
+      const profileImage = profileImgs.find((pic) => pic.name === profileName);
+      console.log(">>>", profileImage?.name);
       console.log("기본 이미지 선택된거임");
     } else {
       console.log("firebase에 선택한 이미지 업로드 해야됨");
     }
-    // 그리고 DB에 프로필 이미지 경로 수정해서 넣어줘야되고, 토큰이든 localstorage든 imgPath 변경해줘야됨.
+    // 그리고 DB에 프로필 이미지 경로 넣어줘야되고, 토큰이든 localstorage든 imgPath 변경해줘야됨.
     setOpenEditProfileImgModal(false);
     setUpdatedProfile(null);
   };
@@ -172,6 +174,11 @@ export const SignupPage = () => {
   );
   const handleNameChange = handleInputChange(setName, "name");
   const handleNicknameChange = handleInputChange(setNickname, "nickname");
+
+  useEffect(() => {
+    console.log("원래 경로 : ", profileImgs[0].name);
+    console.log(selectedProfile);
+  }, [selectedProfile]);
 
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();

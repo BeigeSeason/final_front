@@ -1,7 +1,12 @@
 import React from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom"; // Link 임포트
+import { Link } from "react-router-dom";
+import { colors } from "../style/GlobalStyled";
+import { areas, types } from "../util/TourCodes";
+import { ServiceCode } from "../util/ServiceCode";
+import { useMemo } from "react";
 
+// 관광지 목록 아이템 컴포넌트 -------------------------------------------------------------------
 const SpotContainer = styled(Link)`
   display: flex;
   align-items: center;
@@ -40,5 +45,285 @@ export const TourItem: React.FC<TourItemProps> = ({
       <SpotImage src={image} alt="관광지 이미지" />
       <SpotDescription>{description}</SpotDescription>
     </SpotContainer>
+  );
+};
+
+// 관광지 검색 토글 컴포넌트 -------------------------------------------------------------------------------------
+interface StyledToggleButtonProps {
+  isOpen: boolean;
+}
+
+const StyledToggleButton = styled.button<StyledToggleButtonProps>`
+  background-color: transparent;
+  width: 20px !important;
+  height: 20px !important;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  color: ${(props) => (props.isOpen ? colors.colorB : "#666")};
+  transition: color 0.2s ease;
+
+  .icon {
+    display: inline-block;
+    transform: ${(props) => (props.isOpen ? "rotate(180deg)" : "rotate(0deg)")};
+    transition: transform 0.3s ease;
+
+    @media (max-width: 768px) {
+      font-size: 13px;
+    }
+  }
+`;
+
+interface ToggleButtonProps {
+  isOpen: boolean;
+  onToggle: () => void;
+}
+
+export const ToggleButton: React.FC<ToggleButtonProps> = ({
+  isOpen,
+  onToggle,
+}) => {
+  return (
+    <StyledToggleButton
+      isOpen={isOpen}
+      onClick={onToggle}
+      className="toggle-button"
+    >
+      <span className="icon">{isOpen ? "▼" : "▼"}</span>
+    </StyledToggleButton>
+  );
+};
+
+const SectionContainer = styled.div`
+  margin-bottom: 20px;
+`;
+
+const SectionTitle = styled.h3`
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  padding: 5px 0 10px 5px;
+  border-bottom: 1px solid #ddd;
+`;
+
+const SectionContent = styled.div<{ isOpen: boolean }>`
+  overflow: hidden;
+  transition: max-height 0.3s linear;
+  max-height: ${(props) => (props.isOpen ? "500px" : "0")};
+`;
+
+interface ToggleSectionProps {
+  title: string;
+  isOpen: boolean;
+  onToggle: () => void;
+  children: React.ReactNode;
+}
+
+export const ToggleSection: React.FC<ToggleSectionProps> = ({
+  title,
+  isOpen,
+  onToggle,
+  children,
+}) => {
+  return (
+    <SectionContainer>
+      <SectionTitle className="title-font">
+        {title}
+        <ToggleButton isOpen={isOpen} onToggle={onToggle} />
+      </SectionTitle>
+      <SectionContent isOpen={isOpen}>{children}</SectionContent>
+    </SectionContainer>
+  );
+};
+
+// 검색 토글 필터 컴포넌트 ---------------------------------------------------------------------------------------
+const TopFilters = styled.div`
+  align-self: flex-start;
+  margin: 15px 0 10px 0;
+  width: 100%;
+
+  .filterList {
+    width: 100%;
+    display: flex;
+
+    h4 {
+      white-space: nowrap;
+    }
+  }
+
+  .filter-tags {
+    width: 100%;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-left: 10px;
+    flex-wrap: wrap;
+  }
+
+  .filter-tag {
+    background-color: #f0f0f0;
+    padding: 6px 10px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    height: 20px;
+  }
+
+  .filter-tag button {
+    background: none;
+    border: none;
+    margin-left: 4px;
+    cursor: pointer;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 13px;
+
+    .filter-tag {
+      font-size: 10px;
+      padding: 3px 4px;
+    }
+  }
+`;
+
+// 필터 인터페이스 정의
+interface SelectFilters {
+  areaCode?: string;
+  subAreaCode?: string;
+  topTheme?: string;
+  middleTheme?: string;
+  bottomTheme?: string;
+  category?: string;
+  themeList?: string;
+  searchQuery?: string;
+}
+
+// 선택한 필터를 포맷하는 함수
+const formatSelectedFilters = (filters: SelectFilters) => {
+  const selectedFilters: { key: string; name: string }[] = [];
+
+  if (filters.areaCode) {
+    const selectedArea = areas.find((area) => area.code === filters.areaCode);
+    if (selectedArea) {
+      selectedFilters.push({ key: "areaCode", name: selectedArea.name });
+      const selectedSubArea = selectedArea.subAreas.find(
+        (subArea) => subArea.code === filters.subAreaCode
+      );
+      if (selectedSubArea) {
+        selectedFilters.push({
+          key: "subAreaCode",
+          name: selectedSubArea.name,
+        });
+      }
+    }
+  }
+
+  if (filters.topTheme) {
+    const selectedTopTheme = ServiceCode.find(
+      (cat) => cat.cat1 === filters.topTheme
+    );
+    if (selectedTopTheme) {
+      selectedFilters.push({
+        key: "topTheme",
+        name: selectedTopTheme.cat1Name,
+      });
+    }
+  }
+
+  if (filters.middleTheme) {
+    const selectedMiddleTheme = ServiceCode.find(
+      (cat) => cat.cat1 === filters.topTheme
+    )?.cat2List.find((cat2) => cat2.cat2 === filters.middleTheme);
+    if (selectedMiddleTheme) {
+      selectedFilters.push({
+        key: "middleTheme",
+        name: selectedMiddleTheme.cat2Name,
+      });
+    }
+  }
+
+  if (filters.bottomTheme) {
+    const selectedBottomThemes = filters.bottomTheme
+      .split(",")
+      .map((cat3) =>
+        ServiceCode.find((cat) => cat.cat1 === filters.topTheme)
+          ?.cat2List.find((cat2) => cat2.cat2 === filters.middleTheme)
+          ?.cat3List.find((cat3Item) => cat3Item.cat3 === cat3)
+      )
+      .filter(Boolean)
+      .map((cat3) => ({ key: "bottomTheme", name: cat3?.cat3Name || "" }));
+    selectedFilters.push(...selectedBottomThemes);
+  }
+
+  if (filters.category) {
+    const selectedCategory = types.find(
+      (type) => type.code === filters.category
+    );
+    if (selectedCategory) {
+      selectedFilters.push({ key: "category", name: selectedCategory.name });
+    }
+  }
+
+  if (filters.themeList) {
+    const selectedThemes = filters.themeList.split(",").map((theme) => ({
+      key: "themeList",
+      name: theme,
+    }));
+    selectedFilters.push(...selectedThemes);
+  }
+
+  if (filters.searchQuery) {
+    selectedFilters.push({
+      key: "searchQuery",
+      name: `검색어: ${filters.searchQuery}`,
+    });
+  }
+
+  return selectedFilters;
+};
+
+// SelectedFilters의 props 타입 정의
+interface SelectedFiltersProps {
+  filters: SelectFilters;
+  onRemoveFilter: (key: keyof SelectFilters, name: string) => void;
+}
+
+// 선택한 필터를 표시하고 클릭하면 필터를 제거하는 컴포넌트
+export const SelectedFilters: React.FC<SelectedFiltersProps> = ({
+  filters,
+  onRemoveFilter,
+}) => {
+  // useMemo 사용하여 불필요한 렌더링 줄임
+  const selectedFilters = useMemo(
+    () => formatSelectedFilters(filters),
+    [filters]
+  );
+
+  return (
+    <TopFilters>
+      <div className="filterList">
+        <h4>태그:</h4>
+        {selectedFilters.length > 0 && (
+          <div className="filter-tags">
+            {selectedFilters.map((filter, index) => (
+              <span key={index} className="filter-tag">
+                {filter.name}
+                <button
+                  onClick={() =>
+                    onRemoveFilter(
+                      filter.key as keyof SelectFilters,
+                      filter.name
+                    )
+                  }
+                >
+                  x
+                </button>
+              </span>
+            ))}
+          </div>
+        )}
+      </div>
+    </TopFilters>
   );
 };
