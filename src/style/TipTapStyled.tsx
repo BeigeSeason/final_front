@@ -12,7 +12,7 @@ export const TipTapContainer = styled.div`
 
 export const ToolContainer = styled.div`
   display: flex;
-  position: relative;
+  /* position: relative; */
   align-items: center;
   width: 100%;
   padding: 10px;
@@ -44,7 +44,7 @@ export const ToolContainer = styled.div`
     display: flex;
     width: 200px;
     position: absolute;
-    z-index: 9999;
+    /* z-index: 9999; */
     background-color: aquamarine;
   }
   .select-font-size {

@@ -5,6 +5,7 @@ import { colors } from "../style/GlobalStyled";
 import { areas, types } from "../util/TourCodes";
 import { ServiceCode } from "../util/ServiceCode";
 import { useMemo } from "react";
+import basicImg from "../img/item/type_200.png";
 
 // 관광지 목록 아이템 컴포넌트 -------------------------------------------------------------------
 const SpotContainer = styled(Link)`
@@ -12,17 +13,18 @@ const SpotContainer = styled(Link)`
   align-items: center;
   padding: 10px;
   margin: 10px auto;
-  width: 80%;
+  width: 100%;
   text-decoration: none;
   color: inherit;
   border-bottom: 1px solid #ddd;
 `;
 
 const SpotImage = styled.img`
-  width: 80px;
+  width: 100px;
   height: 80px;
   border-radius: 8px;
   margin-right: 10px;
+  object-fit: cover;
 `;
 
 const SpotDescription = styled.div`
@@ -42,11 +44,7 @@ export const TourItem: React.FC<TourItemProps> = ({
 }) => {
   return (
     <SpotContainer to={`/tourspot/${id}`}>
-      {image ? (
-        <SpotImage src={image} alt="관광지 이미지" />
-      ) : (
-        <p>이미지가 없습니다.</p> // 이미지가 없을 경우 대체 텍스트
-      )}
+      <SpotImage src={image || basicImg} alt="관광지 이미지" />{" "}
       <SpotDescription>{description}</SpotDescription>
     </SpotContainer>
   );

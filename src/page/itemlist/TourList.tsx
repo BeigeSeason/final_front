@@ -7,13 +7,19 @@ import { ServiceCode } from "../../util/ServiceCode";
 import { types, areas } from "../../util/TourCodes";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
-import { List, SelectSearchItem, ItemList } from "../../style/ListStyled";
+import {
+  List,
+  SelectSearchItem,
+  ItemList,
+  FilterButton,
+} from "../../style/ListStyled";
 import { FaUndo } from "react-icons/fa";
 import { Button } from "../../component/ButtonComponent";
 import { SearchBox } from "../../component/InputComponent";
 import { ItemApi } from "../../api/ItemApi";
 import { Pagination } from "../../component/PaginationComponent";
 import { Loading } from "../../component/Loading";
+import { FaBars } from "react-icons/fa";
 
 interface Filters {
   areaCode: string;
@@ -100,7 +106,7 @@ export const TourList: React.FC = () => {
         }
       }
     });
-
+    queryParams.set("page", currentPage.toString());
     navigate(
       `/tourlist${queryParams.toString() ? `?${queryParams.toString()}` : ""}`,
       { replace: true }
@@ -256,205 +262,215 @@ export const TourList: React.FC = () => {
       setIsSelectOpen(false);
     }
   };
-
-  // useEffect(() => {
-  //   document.addEventListener("mousedown", handleClickOutside);
-  //   return () => {
-  //     document.removeEventListener("mousedown", handleClickOutside);
-  //   };
-  // }, []);
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const selectedAreaData = areas.find((area) => area.code === filters.areaCode);
 
   return (
-    <List>
-      <SelectSearchItem className={isSelectOpen ? "open" : ""} ref={selectRef}>
-        <button className="reset-button" onClick={handleResetSelections}>
-          초기화
-          <FaUndo style={{ marginLeft: "6px" }} />
-        </button>
-        <SearchBox
-          searchTerm={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          onKeyDown={handleKeyDown}
-          onSearch={handleSearch}
-        />
+    <>
+      <FilterButton onClick={handleToggleSelect}>
+        <FaBars />
+      </FilterButton>
+      <List>
+        <SelectSearchItem
+          className={isSelectOpen ? "open" : ""}
+          ref={selectRef}
+        >
+          <button className="reset-button" onClick={handleResetSelections}>
+            초기화
+            <FaUndo style={{ marginLeft: "6px" }} />
+          </button>
+          <SearchBox
+            searchTerm={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyDown={handleKeyDown}
+            onSearch={handleSearch}
+          />
 
-        <div className="mainarea">
-          <ToggleSection
-            title="지역 선택"
-            isopen={isAreaOpen}
-            onToggle={() => setIsAreaOpen(!isAreaOpen)}
-          >
-            <div className="buttons">
-              {areas.map((area) => (
-                <Button
-                  key={area.code}
-                  onClick={() => handleAreaChange(area.code)}
-                  className={`area-button ${
-                    filters.areaCode === area.code ? "selected" : ""
-                  }`}
-                >
-                  {area.name}
-                </Button>
-              ))}
-            </div>
-          </ToggleSection>
-        </div>
-
-        {selectedAreaData && (
-          <div className="subarea">
+          <div className="mainarea">
             <ToggleSection
-              title="세부 지역 선택"
-              isopen={isSubAreaOpen}
-              onToggle={() => setIsSubAreaOpen(!isSubAreaOpen)}
+              title="지역 선택"
+              isopen={isAreaOpen}
+              onToggle={() => setIsAreaOpen(!isAreaOpen)}
             >
               <div className="buttons">
-                {selectedAreaData.subAreas.map((subArea) => (
+                {areas.map((area) => (
                   <Button
-                    key={subArea.code}
-                    onClick={() => handleSubAreaChange(subArea.code)}
-                    className={`subarea-button ${
-                      filters.subAreaCode === subArea.code ? "selected" : ""
+                    key={area.code}
+                    onClick={() => handleAreaChange(area.code)}
+                    className={`area-button ${
+                      filters.areaCode === area.code ? "selected" : ""
                     }`}
                   >
-                    {subArea.name}
+                    {area.name}
                   </Button>
                 ))}
               </div>
             </ToggleSection>
           </div>
-        )}
 
-        <div className="top">
-          <ToggleSection
-            title="대분류"
-            isopen={isTopThemeOpen}
-            onToggle={() => setIsTopThemeOpen(!isTopThemeOpen)}
-          >
-            <div className="buttons">
-              {ServiceCode.map((cat) => (
-                <Button
-                  key={cat.cat1}
-                  onClick={() => handleTopThemeChange(cat.cat1)}
-                  className={`theme-button ${
-                    filters.topTheme === cat.cat1 ? "selected" : ""
-                  }`}
-                >
-                  {cat.cat1Name}
-                </Button>
-              ))}
+          {selectedAreaData && (
+            <div className="subarea">
+              <ToggleSection
+                title="세부 지역 선택"
+                isopen={isSubAreaOpen}
+                onToggle={() => setIsSubAreaOpen(!isSubAreaOpen)}
+              >
+                <div className="buttons">
+                  {selectedAreaData.subAreas.map((subArea) => (
+                    <Button
+                      key={subArea.code}
+                      onClick={() => handleSubAreaChange(subArea.code)}
+                      className={`subarea-button ${
+                        filters.subAreaCode === subArea.code ? "selected" : ""
+                      }`}
+                    >
+                      {subArea.name}
+                    </Button>
+                  ))}
+                </div>
+              </ToggleSection>
             </div>
-          </ToggleSection>
-        </div>
+          )}
 
-        {filters.topTheme && (
-          <div className="middle">
+          <div className="top">
             <ToggleSection
-              title="중분류"
-              isopen={isMiddleThemeOpen}
-              onToggle={() => setIsMiddleThemeOpen(!isMiddleThemeOpen)}
+              title="대분류"
+              isopen={isTopThemeOpen}
+              onToggle={() => setIsTopThemeOpen(!isTopThemeOpen)}
             >
               <div className="buttons">
-                {ServiceCode.find(
-                  (cat) => cat.cat1 === filters.topTheme
-                )?.cat2List.map((cat2) => (
+                {ServiceCode.map((cat) => (
                   <Button
-                    key={cat2.cat2}
-                    onClick={() => handleMiddleThemeChange(cat2.cat2)}
+                    key={cat.cat1}
+                    onClick={() => handleTopThemeChange(cat.cat1)}
                     className={`theme-button ${
-                      filters.middleTheme === cat2.cat2 ? "selected" : ""
+                      filters.topTheme === cat.cat1 ? "selected" : ""
                     }`}
                   >
-                    {cat2.cat2Name}
+                    {cat.cat1Name}
                   </Button>
                 ))}
               </div>
             </ToggleSection>
           </div>
-        )}
 
-        {filters.middleTheme && (
-          <div className="bottom">
+          {filters.topTheme && (
+            <div className="middle">
+              <ToggleSection
+                title="중분류"
+                isopen={isMiddleThemeOpen}
+                onToggle={() => setIsMiddleThemeOpen(!isMiddleThemeOpen)}
+              >
+                <div className="buttons">
+                  {ServiceCode.find(
+                    (cat) => cat.cat1 === filters.topTheme
+                  )?.cat2List.map((cat2) => (
+                    <Button
+                      key={cat2.cat2}
+                      onClick={() => handleMiddleThemeChange(cat2.cat2)}
+                      className={`theme-button ${
+                        filters.middleTheme === cat2.cat2 ? "selected" : ""
+                      }`}
+                    >
+                      {cat2.cat2Name}
+                    </Button>
+                  ))}
+                </div>
+              </ToggleSection>
+            </div>
+          )}
+
+          {filters.middleTheme && (
+            <div className="bottom">
+              <ToggleSection
+                title="소분류"
+                isopen={isBottomThemeOpen}
+                onToggle={() => setIsBottomThemeOpen(!isBottomThemeOpen)}
+              >
+                <div className="buttons">
+                  {filters.middleTheme &&
+                    ServiceCode.find((cat) => cat.cat1 === filters.topTheme)
+                      ?.cat2List.find(
+                        (cat2) => cat2.cat2 === filters.middleTheme
+                      )
+                      ?.cat3List.map((cat3) => (
+                        <Button
+                          key={cat3.cat3}
+                          onClick={() => handleBottomThemeChange(cat3.cat3)}
+                          className={`theme-button ${
+                            filters.bottomTheme.includes(cat3.cat3)
+                              ? "selected"
+                              : ""
+                          }`}
+                          disabled={
+                            filters.bottomTheme.split(",").length >= 3 &&
+                            !filters.bottomTheme.includes(cat3.cat3)
+                          }
+                        >
+                          {cat3.cat3Name}
+                        </Button>
+                      ))}
+                </div>
+              </ToggleSection>
+            </div>
+          )}
+          <div className="category">
             <ToggleSection
-              title="소분류"
-              isopen={isBottomThemeOpen}
-              onToggle={() => setIsBottomThemeOpen(!isBottomThemeOpen)}
+              title="카테고리 선택"
+              isopen={isCategoryOpen}
+              onToggle={() => setIsCategoryOpen(!isCategoryOpen)}
             >
               <div className="buttons">
-                {filters.middleTheme &&
-                  ServiceCode.find((cat) => cat.cat1 === filters.topTheme)
-                    ?.cat2List.find((cat2) => cat2.cat2 === filters.middleTheme)
-                    ?.cat3List.map((cat3) => (
-                      <Button
-                        key={cat3.cat3}
-                        onClick={() => handleBottomThemeChange(cat3.cat3)}
-                        className={`theme-button ${
-                          filters.bottomTheme.includes(cat3.cat3)
-                            ? "selected"
-                            : ""
-                        }`}
-                        disabled={
-                          filters.bottomTheme.split(",").length >= 3 &&
-                          !filters.bottomTheme.includes(cat3.cat3)
-                        }
-                      >
-                        {cat3.cat3Name}
-                      </Button>
-                    ))}
+                {types.map((type) => (
+                  <Button
+                    key={type.code}
+                    onClick={() => handleCategoryChange(type.code)}
+                    className={`category-button ${
+                      filters.category === type.code ? "selected" : ""
+                    }`}
+                  >
+                    {type.name}
+                  </Button>
+                ))}
               </div>
             </ToggleSection>
           </div>
-        )}
-        <div className="category">
-          <ToggleSection
-            title="카테고리 선택"
-            isopen={isCategoryOpen}
-            onToggle={() => setIsCategoryOpen(!isCategoryOpen)}
-          >
-            <div className="buttons">
-              {types.map((type) => (
-                <Button
-                  key={type.code}
-                  onClick={() => handleCategoryChange(type.code)}
-                  className={`category-button ${
-                    filters.category === type.code ? "selected" : ""
-                  }`}
-                >
-                  {type.name}
-                </Button>
-              ))}
-            </div>
-          </ToggleSection>
-        </div>
-      </SelectSearchItem>
-      <ItemList>
-        <div className="totalCount">총 {totalItems.toLocaleString()}건</div>
-        <SelectedFilters
-          filters={filters}
-          onRemoveFilter={handleTopFilterChange}
-        />
-        {loading && (
-          <Loading>
-            <p>목록을 불러오는 중 입니다.</p>
-          </Loading>
-        )}
-        <ul>
+        </SelectSearchItem>
+        <ItemList>
+          <div className="totalCount">
+            총 {totalItems > 9999 ? "9,999+" : totalItems.toLocaleString()}건
+          </div>
+          <SelectedFilters
+            filters={filters}
+            onRemoveFilter={handleTopFilterChange}
+          />
+          {loading && (
+            <Loading>
+              <p>목록을 불러오는 중 입니다.</p>
+            </Loading>
+          )}
+
           {tourSpots.map((spot) => (
             <TourItem
               key={spot.spotId}
               id={spot.spotId}
-              image={spot.thumbnail} // thumbnail을 image로 전달
-              description={spot.title} // title을 description으로 전달
+              image={spot.thumbnail}
+              description={spot.title}
             />
           ))}
-        </ul>
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          handlePageChange={handlePageChange}
-        />
-      </ItemList>
-    </List>
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            handlePageChange={handlePageChange}
+          />
+        </ItemList>
+      </List>
+    </>
   );
 };
