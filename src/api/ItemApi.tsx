@@ -18,7 +18,31 @@ interface TourSpot {
 
 interface TourSpotResponse {
   content: TourSpot[];
+  pageable: {
+    sort: {
+      empty: boolean;
+      unsorted: boolean;
+      sorted: boolean;
+    };
+    offset: number;
+    pageNumber: number;
+    pageSize: number;
+    paged: boolean;
+    unpaged: boolean;
+  };
+  last: boolean;
+  totalElements: number; // 추가된 부분
   totalPages: number;
+  first: boolean;
+  size: number;
+  number: number;
+  sort: {
+    empty: boolean;
+    unsorted: boolean;
+    sorted: boolean;
+  };
+  numberOfElements: number;
+  empty: boolean;
 }
 export const ItemApi = {
   getTourSpotList: async (
