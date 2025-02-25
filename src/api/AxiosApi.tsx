@@ -1,5 +1,5 @@
 import JwtAxios from "./JwtAxios";
-import { AxiosResponse } from "axios";
+import {AxiosResponse} from "axios";
 import axios from "axios";
 import Common from "../util/Common";
 
@@ -85,7 +85,7 @@ const AxiosApi = {
     reportType = "MEMBER"
   ) => {
     try {
-      const response = await axios.get(`${Common.FINAL_DOMAIN}/admin/report-list`, {
+      const response = await JwtAxios.get(`/admin/report-list`, {
         params: { page, size, reportType },
       });
       return response.data;

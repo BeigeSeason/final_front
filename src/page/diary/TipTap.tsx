@@ -1,30 +1,33 @@
-// import { EditorContent, useEditor } from "@tiptap/react";
-// import StarterKit from "@tiptap/starter-kit";
-// import Placeholder from "@tiptap/extension-placeholder";
-// import { TextStyle } from "@tiptap/extension-text-style";
-// import { Color } from "@tiptap/extension-color";
-// import Underline from "@tiptap/extension-underline";
-// import Code from "@tiptap/extension-code";
-// import CodeBlock from "@tiptap/extension-code-block";
-// import ListItem from "@tiptap/extension-list-item";
-// import { Image } from "@tiptap/extension-image";
-
 import { useEditor, EditorContent, Editor } from "@tiptap/react";
 import { Extension } from "@tiptap/core";
 import StarterKit from "@tiptap/starter-kit";
-import Bold from "@tiptap/extension-bold";
+// StarterKit에 기본 기능 포함돼있음.
+// 특정 기능을 변경하고 싶을때 개별 확장 사용 (ex. Bold는 strong태그 사용하는데 b태그 사용하고싶을때 커스텀)
+// StarterKit: Document, Paragraph, Text, Bold, Italic, Strike(취소선), Code, Blockquote, HardBreak(줄바꿈),
+// Heading(h1~h6), History(실행취소/재실행), HorizontalRule(<hr>), ListItem, BulletList, OrderedList, CodeBlock, GapCursor
 import Color from "@tiptap/extension-color";
-import Heading from "@tiptap/extension-heading";
 import Highlight from "@tiptap/extension-highlight";
 import Image from "@tiptap/extension-image";
-import Italic from "@tiptap/extension-italic";
 import Link from "@tiptap/extension-link";
-import ListItem from "@tiptap/extension-list-item";
 import Placeholder from "@tiptap/extension-placeholder";
 import TextAlign from "@tiptap/extension-text-align";
 import TextStyle from "@tiptap/extension-text-style";
+import FontSize from "@tiptap/extension-font-size";
 import Underline from "@tiptap/extension-underline";
+
 import { useState } from "react";
+import { TipTapContainer, ToolContainer } from "../../style/TipTapStyled";
+
+import {
+  FaBold,
+  FaItalic,
+  FaList,
+  FaListOl,
+  FaMinus,
+  FaQuoteLeft,
+  FaTextSlash,
+} from "react-icons/fa6";
+import { LuBan, LuUndo2, LuRedo2 } from "react-icons/lu";
 
 interface ToolBarProps {
   editor?: Editor | null;
@@ -36,18 +39,13 @@ export const TipTap: React.FC<ToolBarProps> = () => {
   const [isDropdownVisible, setDropdownVisible] = useState<boolean>(false);
   const editor = useEditor({
     extensions: [
-      StarterKit,
-      TextStyle,
+      StarterKit, // bold, italic, list 등 기본 편집기능 제공
+      TextStyle, // 글자 스타일 확장
+      FontSize.configure({ types: ["textStyle"] }), // 글자 크기 확장
       Color.configure({ types: [TextStyle.name] }), // TextStyle 확장과 연동
       Underline,
+      TextAlign.configure({ types: ["heading", "paragraph"] }),
       Image,
-      Placeholder.configure({
-        placeholder: `- 학습 관련 질문을 남겨주세요. 상세히 작성하면 더 좋아요!
-  - 마크다운, 단축키를 이용해서 편리하게 글을 작성할 수 있어요.
-  - 먼저 유사한 질문이 있었는지 검색해보세요.
-  - 서로 예의를 지키며 존중하는 문화를 만들어가요.
-  - 서비스 운영 관련 문의는 홈페이지 우측 CS 메뉴를 이용해주세요.`,
-      }),
     ],
     content: "",
   });
@@ -84,153 +82,142 @@ export const TipTap: React.FC<ToolBarProps> = () => {
     setDropdownVisible(false);
   };
 
-  const headingLevels = [1, 2, 3, 4, 5, 6];
+  const textAlignOptions = ["left", "center", "right"];
+
+  const addLink = () => {
+    const url = prompt("Enter the URL");
+    if (url) {
+      editor.chain().focus().setLink({ href: url }).run();
+    }
+  };
+
+  const addImage = () => {
+    const url = prompt("Enter the image URL");
+    if (url) {
+      editor.chain().focus().setImage({ src: url }).run();
+    }
+  };
 
   return (
-    <div className="control-group">
-      <div className="button-group">
+    <TipTapContainer>
+      <ToolContainer>
         <button
-          // style={{ backgroundImage: "url(/images/tiptap/Editor_Toolbar_01_Bold.svg)" }}
+          className={`tool-button ${
+            editor.isActive("bold") ? "is-active" : ""
+          }`}
           onClick={() => editor.chain().focus().toggleBold().run()}
-          className={editor.isActive("bold") ? "is-active" : ""}
+          title="굵게"
         >
-          Bold
+          <FaBold />
         </button>
         <button
-          // style={{ backgroundImage: "url(/images/tiptap/Editor_Toolbar_02_Italic.svg)" }}
+          className={`tool-button ${
+            editor.isActive("italic") ? "is-active" : ""
+          }`}
           onClick={() => editor.chain().focus().toggleItalic().run()}
-          className={editor.isActive("italic") ? "is-active" : ""}
+          title="기울이기"
         >
-          Italic
+          <FaItalic />
         </button>
-        <button onClick={() => editor.chain().focus().unsetAllMarks().run()}>
-          Clear marks
-        </button>
-        <button onClick={() => editor.chain().focus().clearNodes().run()}>
-          Clear nodes
+        <button
+          className="tool-button"
+          onClick={() => editor.chain().focus().unsetAllMarks().run()}
+          title="텍스트 스타일 제거"
+        >
+          <FaTextSlash />
         </button>
         <select
-          onChange={(e) =>
-            editor
-              .chain()
-              .focus()
-              .toggleHeading({
-                level: Number(e.target.value) as 1 | 2 | 3 | 4 | 5 | 6,
-              })
-              .run()
-          }
-          value={
-            headingLevels.find((level) =>
-              editor.isActive("heading", { level })
-            ) || ""
-          }
+          onChange={(e) => {
+            editor.chain().focus().setFontSize(e.target.value).run();
+          }}
         >
           <option value="" disabled>
-            글씨 크기
+            글자 크기 선택
           </option>
-          {headingLevels.map((level) => (
-            <option
-              key={level}
-              value={level}
-              style={{ fontSize: `${14 + level * 2}px` }}
-            >
-              본문{level}
-            </option>
-          ))}
+          <option value="12px">12px</option>
+          <option value="16px">16px(기본)</option>
+          <option value="20px">20px</option>
+          <option value="24px">24px</option>
+          <option value="32px">32px</option>
         </select>
-        {/* <button
-          onClick={() =>
-            editor.chain().focus().toggleHeading({ level: 1 }).run()
-          }
-          className={
-            editor.isActive("heading", { level: 1 }) ? "is-active" : ""
-          }
-        >
-          H1
-        </button>
+        <span className="separate-line">|</span>
+        {textAlignOptions.map((align) => (
+          <button
+            key={align}
+            onClick={() => editor.chain().focus().setTextAlign(align).run()}
+            className={
+              editor.isActive("textAlign", { textAlign: align })
+                ? "is-active"
+                : ""
+            }
+          >
+            {align}
+          </button>
+        ))}
         <button
-          onClick={() =>
-            editor.chain().focus().toggleHeading({ level: 2 }).run()
-          }
-          className={
-            editor.isActive("heading", { level: 2 }) ? "is-active" : ""
-          }
-        >
-          H2
-        </button>
-        <button
-          onClick={() =>
-            editor.chain().focus().toggleHeading({ level: 3 }).run()
-          }
-          className={
-            editor.isActive("heading", { level: 3 }) ? "is-active" : ""
-          }
-        >
-          H3
-        </button>
-        <button
-          onClick={() =>
-            editor.chain().focus().toggleHeading({ level: 4 }).run()
-          }
-          className={
-            editor.isActive("heading", { level: 4 }) ? "is-active" : ""
-          }
-        >
-          H4
-        </button>
-        <button
-          onClick={() =>
-            editor.chain().focus().toggleHeading({ level: 5 }).run()
-          }
-          className={
-            editor.isActive("heading", { level: 5 }) ? "is-active" : ""
-          }
-        >
-          H5
-        </button>
-        <button
-          onClick={() =>
-            editor.chain().focus().toggleHeading({ level: 6 }).run()
-          }
-          className={
-            editor.isActive("heading", { level: 6 }) ? "is-active" : ""
-          }
-        >
-          H6
-        </button> */}
-        <button
+          className={`tool-button ${
+            editor.isActive("bulletList") ? "is-active" : ""
+          }`}
           onClick={() => editor.chain().focus().toggleBulletList().run()}
-          className={editor.isActive("bulletList") ? "is-active" : ""}
+          // className={editor.isActive("bulletList") ? "is-active" : ""}
         >
-          Bullet list
+          <FaList />
         </button>
         <button
+          className={`tool-button ${
+            editor.isActive("orderedList") ? "is-active" : ""
+          }`}
           onClick={() => editor.chain().focus().toggleOrderedList().run()}
-          className={editor.isActive("orderedList") ? "is-active" : ""}
+          // className={editor.isActive("orderedList") ? "is-active" : ""}
         >
-          Ordered list
+          <FaListOl />
         </button>
         <button
+          className={`tool-button ${
+            editor.isActive("blockquote") ? "is-active" : ""
+          }`}
           onClick={() => editor.chain().focus().toggleBlockquote().run()}
-          className={editor.isActive("blockquote") ? "is-active" : ""}
+          // className={editor.isActive("blockquote") ? "is-active" : ""}
         >
-          Blockquote
+          <FaQuoteLeft />
         </button>
         <button
+          className="tool-button"
           onClick={() => editor.chain().focus().setHorizontalRule().run()}
+          title="구분선"
         >
-          Horizontal rule
-        </button>
-        <button onClick={() => editor.chain().focus().setHardBreak().run()}>
-          Hard break
-        </button>
-        <button onClick={() => editor.chain().focus().undo().run()}>
-          Undo
-        </button>
-        <button onClick={() => editor.chain().focus().redo().run()}>
-          Redo
+          <FaMinus />
         </button>
         <button
+          className="tool-button"
+          onClick={() => editor.chain().focus().clearNodes().run()}
+          title="문단 스타일 제거"
+        >
+          <LuBan />
+        </button>
+        <span className="separate-line">|</span>
+        <button
+          onClick={addImage}
+          className={editor.isActive("image") ? "is-active" : ""}
+        >
+          Add Image
+        </button>
+        <span className="separate-line">|</span>
+        <button
+          className="tool-button"
+          onClick={() => editor.chain().focus().undo().run()}
+          title="되돌리기"
+        >
+          <LuUndo2 />
+        </button>
+        <button
+          className="tool-button"
+          onClick={() => editor.chain().focus().redo().run()}
+          title="다시 실행"
+        >
+          <LuRedo2 />
+        </button>
+        {/* <button
           onClick={() => editor.chain().focus().setColor("#958DF1").run()}
           className={
             editor.isActive("textStyle", { color: "#958DF1" })
@@ -239,11 +226,13 @@ export const TipTap: React.FC<ToolBarProps> = () => {
           }
         >
           Purple
-        </button>
+        </button> */}
         {/* <button
           // style={{ backgroundImage: "url(/images/tiptap/Editor_Toolbar_05_TextColor.svg)", backgroundSize: "80%" }}
           onClick={() => setDropdownVisible(!isDropdownVisible)}
-        />
+        >
+          다예님 색상
+        </button>
         {isDropdownVisible && (
           <div className="dropdown-menu">
             {["black", "blue", "red", "green", "yellow", "gray"].map(
@@ -297,8 +286,8 @@ export const TipTap: React.FC<ToolBarProps> = () => {
       </button>
 
       {/* 에디터 */}
-      </div>
-      <EditorContent editor={editor} />
-    </div>
+      </ToolContainer>
+      <EditorContent className="tiptap-content" editor={editor} />
+    </TipTapContainer>
   );
 };
