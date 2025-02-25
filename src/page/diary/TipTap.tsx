@@ -169,7 +169,24 @@ export const TipTap: React.FC<ToolBarProps> = () => {
           >
             <AiOutlineFontColors />
           </button>
-          {isColorToggleOpen && <div className="tool-toggle">토글 오픈!</div>}
+          {isColorToggleOpen && (
+            <div className="tool-toggle">
+              {colorOptions.map(({ label, color }) => (
+                <button
+                  key={color}
+                  className="tool-button"
+                  onClick={() => {
+                    editor.chain().focus().setColor(color).run();
+                  }}
+                >
+                  <AiOutlineFontColors
+                    className="toggle-element"
+                    style={{ color }}
+                  />
+                </button>
+              ))}
+            </div>
+          )}
         </div>
         {colorOptions.map(({ label, color }) => (
           <button
