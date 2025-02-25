@@ -13,6 +13,7 @@ import { Button } from "../../component/ButtonComponent";
 import { SearchBox } from "../../component/InputComponent";
 import { ItemApi } from "../../api/ItemApi";
 import { Pagination } from "../../component/PaginationComponent";
+import { Loading } from "../../component/Loading";
 
 interface Filters {
   areaCode: string;
@@ -33,6 +34,7 @@ export const TourList: React.FC = () => {
   const navigate = useNavigate();
   const [tourSpots, setTourSpots] = useState<any[]>([]); // 여행지 데이터 (타입 지정 필요시 인터페이스 정의)
   const [currentPage, setCurrentPage] = useState(0);
+  const [totalItems, setTotalItems] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [loading, setLoading] = useState<boolean>(true); // 로딩 상태
   const [error, setError] = useState<string | null>(null); // <- string | null로 타입 지정
@@ -64,8 +66,8 @@ export const TourList: React.FC = () => {
   const [isSelectOpen, setIsSelectOpen] = useState<boolean>(false);
   const selectRef = useRef<HTMLDivElement | null>(null);
   const fetchTourSpots = async (page: number) => {
-    setLoading(true); // 로딩 시작
     try {
+      setLoading(true);
       const filters = {
         keyword: searchQuery || undefined,
         page: page,
@@ -73,11 +75,12 @@ export const TourList: React.FC = () => {
       };
       const data = await ItemApi.getTourSpotList(filters);
       setTourSpots(data.content || []);
-      setTotalPages(data.totalPages); // 총 페이지 수 업데이트
+      setTotalPages(data.totalPages);
+      setTotalItems(data.totalElements);
     } catch (err) {
       setError("데이터를 가져오는 데 오류가 발생했습니다.");
     } finally {
-      setLoading(false); // 로딩 종료
+      setLoading(false);
     }
   };
   useEffect(() => {
@@ -104,9 +107,6 @@ export const TourList: React.FC = () => {
     );
     fetchTourSpots(currentPage);
   }, [filters, navigate, currentPage]);
-
-  if (loading) return <p>로딩 중...</p>;
-  if (error) return <p>{error}</p>;
 
   const updateFilters = (key: keyof Filters, value: string | number) => {
     setFilters((prev) => {
@@ -429,12 +429,16 @@ export const TourList: React.FC = () => {
         </div>
       </SelectSearchItem>
       <ItemList>
+        <div className="totalCount">총 {totalItems.toLocaleString()}건</div>
         <SelectedFilters
           filters={filters}
           onRemoveFilter={handleTopFilterChange}
         />
-
-        <h2>관광지 목록</h2>
+        {loading && (
+          <Loading>
+            <p>목록을 불러오는 중 입니다.</p>
+          </Loading>
+        )}
         <ul>
           {tourSpots.map((spot) => (
             <TourItem
