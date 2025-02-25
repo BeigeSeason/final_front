@@ -129,6 +129,11 @@ export const AdminContainer = styled.div`
       }
     }
   }
+  .pagination {
+    .activePage {
+      background-color: #aaa;
+    }
+  }
 `;
 
 export const AdminHeaderSt = styled.div`
