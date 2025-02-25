@@ -42,7 +42,11 @@ export const TourItem: React.FC<TourItemProps> = ({
 }) => {
   return (
     <SpotContainer to={`/tourspot/${id}`}>
-      <SpotImage src={image} alt="관광지 이미지" />
+      {image ? (
+        <SpotImage src={image} alt="관광지 이미지" />
+      ) : (
+        <p>이미지가 없습니다.</p> // 이미지가 없을 경우 대체 텍스트
+      )}
       <SpotDescription>{description}</SpotDescription>
     </SpotContainer>
   );
@@ -50,7 +54,7 @@ export const TourItem: React.FC<TourItemProps> = ({
 
 // 관광지 검색 토글 컴포넌트 -------------------------------------------------------------------------------------
 interface StyledToggleButtonProps {
-  isOpen: boolean;
+  isopen: boolean;
 }
 
 const StyledToggleButton = styled.button<StyledToggleButtonProps>`
@@ -60,12 +64,12 @@ const StyledToggleButton = styled.button<StyledToggleButtonProps>`
   border: none;
   cursor: pointer;
   font-size: 18px;
-  color: ${(props) => (props.isOpen ? colors.colorB : "#666")};
+  color: ${(props) => (props.isopen ? colors.colorB : "#666")};
   transition: color 0.2s ease;
 
   .icon {
     display: inline-block;
-    transform: ${(props) => (props.isOpen ? "rotate(180deg)" : "rotate(0deg)")};
+    transform: ${(props) => (props.isopen ? "rotate(180deg)" : "rotate(0deg)")};
     transition: transform 0.3s ease;
 
     @media (max-width: 768px) {
@@ -75,21 +79,21 @@ const StyledToggleButton = styled.button<StyledToggleButtonProps>`
 `;
 
 interface ToggleButtonProps {
-  isOpen: boolean;
+  isopen: boolean;
   onToggle: () => void;
 }
 
 export const ToggleButton: React.FC<ToggleButtonProps> = ({
-  isOpen,
+  isopen,
   onToggle,
 }) => {
   return (
     <StyledToggleButton
-      isOpen={isOpen}
+      isopen={isopen}
       onClick={onToggle}
       className="toggle-button"
     >
-      <span className="icon">{isOpen ? "▼" : "▼"}</span>
+      <span className="icon">{isopen ? "▼" : "▼"}</span>
     </StyledToggleButton>
   );
 };
@@ -106,22 +110,22 @@ const SectionTitle = styled.h3`
   border-bottom: 1px solid #ddd;
 `;
 
-const SectionContent = styled.div<{ isOpen: boolean }>`
+const SectionContent = styled.div<{ isopen: boolean }>`
   overflow: hidden;
   transition: max-height 0.3s linear;
-  max-height: ${(props) => (props.isOpen ? "500px" : "0")};
+  max-height: ${(props) => (props.isopen ? "500px" : "0")};
 `;
 
 interface ToggleSectionProps {
   title: string;
-  isOpen: boolean;
+  isopen: boolean;
   onToggle: () => void;
   children: React.ReactNode;
 }
 
 export const ToggleSection: React.FC<ToggleSectionProps> = ({
   title,
-  isOpen,
+  isopen,
   onToggle,
   children,
 }) => {
@@ -129,9 +133,9 @@ export const ToggleSection: React.FC<ToggleSectionProps> = ({
     <SectionContainer>
       <SectionTitle className="title-font">
         {title}
-        <ToggleButton isOpen={isOpen} onToggle={onToggle} />
+        <ToggleButton isopen={isopen} onToggle={onToggle} />
       </SectionTitle>
-      <SectionContent isOpen={isOpen}>{children}</SectionContent>
+      <SectionContent isopen={isopen}>{children}</SectionContent>
     </SectionContainer>
   );
 };

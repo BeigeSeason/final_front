@@ -1,13 +1,18 @@
-// import { TourItem } from "../../component/ItemComponent";
-import { ToggleSection, SelectedFilters } from "../../component/ItemComponent";
+import {
+  TourItem,
+  ToggleSection,
+  SelectedFilters,
+} from "../../component/ItemComponent";
 import { ServiceCode } from "../../util/ServiceCode";
 import { types, areas } from "../../util/TourCodes";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
-import { SelectSearchItem } from "../../style/ListStyled";
+import { List, SelectSearchItem, ItemList } from "../../style/ListStyled";
 import { FaUndo } from "react-icons/fa";
 import { Button } from "../../component/ButtonComponent";
 import { SearchBox } from "../../component/InputComponent";
+import { ItemApi } from "../../api/ItemApi";
+import { Pagination } from "../../component/PaginationComponent";
 
 interface Filters {
   areaCode: string;
@@ -26,6 +31,12 @@ interface Filters {
 export const TourList: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const [tourSpots, setTourSpots] = useState<any[]>([]); // 여행지 데이터 (타입 지정 필요시 인터페이스 정의)
+  const [currentPage, setCurrentPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const [loading, setLoading] = useState<boolean>(true); // 로딩 상태
+  const [error, setError] = useState<string | null>(null); // <- string | null로 타입 지정
+
   const [isAreaOpen, setIsAreaOpen] = useState(true);
   const [isSubAreaOpen, setIsSubAreaOpen] = useState(true);
   const [isTopThemeOpen, setIsTopThemeOpen] = useState(true);
@@ -52,25 +63,24 @@ export const TourList: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState<string>(filters.searchQuery);
   const [isSelectOpen, setIsSelectOpen] = useState<boolean>(false);
   const selectRef = useRef<HTMLDivElement | null>(null);
-
+  const fetchTourSpots = async (page: number) => {
+    setLoading(true); // 로딩 시작
+    try {
+      const filters = {
+        keyword: searchQuery || undefined,
+        page: page,
+        size: 10,
+      };
+      const data = await ItemApi.getTourSpotList(filters);
+      setTourSpots(data.content || []);
+      setTotalPages(data.totalPages); // 총 페이지 수 업데이트
+    } catch (err) {
+      setError("데이터를 가져오는 데 오류가 발생했습니다.");
+    } finally {
+      setLoading(false); // 로딩 종료
+    }
+  };
   useEffect(() => {
-    // const fetchFilteredTravelSpots = async () => {
-    //   try {
-    //     setLoading(true);
-    //     const validFilters = Object.fromEntries(
-    //       Object.entries(filters).filter(([, value]) => value)
-    //     );
-    //     const data = await TravelSpotApi.getTravelSpots(validFilters);
-    //     setTotalItems(data.totalElements);
-    //     setTotalPages(data.totalPages);
-    //     setTravelSpots(data.content);
-    //   } catch (error) {
-    //     setError("여행지 데이터를 가져오는 데 실패했습니다.");
-    //   } finally {
-    //     setLoading(false);
-    //   }
-    // };
-
     const queryParams = new URLSearchParams();
     Object.entries(filters).forEach(([key, value]) => {
       if (value) {
@@ -92,8 +102,11 @@ export const TourList: React.FC = () => {
       `/tourlist${queryParams.toString() ? `?${queryParams.toString()}` : ""}`,
       { replace: true }
     );
-    // fetchFilteredTravelSpots();
-  }, [filters, navigate]);
+    fetchTourSpots(currentPage);
+  }, [filters, navigate, currentPage]);
+
+  if (loading) return <p>로딩 중...</p>;
+  if (error) return <p>{error}</p>;
 
   const updateFilters = (key: keyof Filters, value: string | number) => {
     setFilters((prev) => {
@@ -130,8 +143,10 @@ export const TourList: React.FC = () => {
     setSearchQuery("");
   };
 
-  const handlePageChange = (newPage: number) => {
-    updateFilters("currentPage", newPage);
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    fetchTourSpots(page); // 페이지 변경 시 데이터를 다시 가져옵니다.
+    updateFilters("currentPage", page);
   };
 
   const handleSearch = () => {
@@ -242,17 +257,17 @@ export const TourList: React.FC = () => {
     }
   };
 
-  useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
+  // useEffect(() => {
+  //   document.addEventListener("mousedown", handleClickOutside);
+  //   return () => {
+  //     document.removeEventListener("mousedown", handleClickOutside);
+  //   };
+  // }, []);
 
   const selectedAreaData = areas.find((area) => area.code === filters.areaCode);
 
   return (
-    <>
+    <List>
       <SelectSearchItem className={isSelectOpen ? "open" : ""} ref={selectRef}>
         <button className="reset-button" onClick={handleResetSelections}>
           초기화
@@ -268,7 +283,7 @@ export const TourList: React.FC = () => {
         <div className="mainarea">
           <ToggleSection
             title="지역 선택"
-            isOpen={isAreaOpen}
+            isopen={isAreaOpen}
             onToggle={() => setIsAreaOpen(!isAreaOpen)}
           >
             <div className="buttons">
@@ -291,7 +306,7 @@ export const TourList: React.FC = () => {
           <div className="subarea">
             <ToggleSection
               title="세부 지역 선택"
-              isOpen={isSubAreaOpen}
+              isopen={isSubAreaOpen}
               onToggle={() => setIsSubAreaOpen(!isSubAreaOpen)}
             >
               <div className="buttons">
@@ -314,7 +329,7 @@ export const TourList: React.FC = () => {
         <div className="top">
           <ToggleSection
             title="대분류"
-            isOpen={isTopThemeOpen}
+            isopen={isTopThemeOpen}
             onToggle={() => setIsTopThemeOpen(!isTopThemeOpen)}
           >
             <div className="buttons">
@@ -337,7 +352,7 @@ export const TourList: React.FC = () => {
           <div className="middle">
             <ToggleSection
               title="중분류"
-              isOpen={isMiddleThemeOpen}
+              isopen={isMiddleThemeOpen}
               onToggle={() => setIsMiddleThemeOpen(!isMiddleThemeOpen)}
             >
               <div className="buttons">
@@ -363,7 +378,7 @@ export const TourList: React.FC = () => {
           <div className="bottom">
             <ToggleSection
               title="소분류"
-              isOpen={isBottomThemeOpen}
+              isopen={isBottomThemeOpen}
               onToggle={() => setIsBottomThemeOpen(!isBottomThemeOpen)}
             >
               <div className="buttons">
@@ -394,7 +409,7 @@ export const TourList: React.FC = () => {
         <div className="category">
           <ToggleSection
             title="카테고리 선택"
-            isOpen={isCategoryOpen}
+            isopen={isCategoryOpen}
             onToggle={() => setIsCategoryOpen(!isCategoryOpen)}
           >
             <div className="buttons">
@@ -413,10 +428,29 @@ export const TourList: React.FC = () => {
           </ToggleSection>
         </div>
       </SelectSearchItem>
-      <SelectedFilters
-        filters={filters}
-        onRemoveFilter={handleTopFilterChange}
-      />
-    </>
+      <ItemList>
+        <SelectedFilters
+          filters={filters}
+          onRemoveFilter={handleTopFilterChange}
+        />
+
+        <h2>관광지 목록</h2>
+        <ul>
+          {tourSpots.map((spot) => (
+            <TourItem
+              key={spot.spotId}
+              id={spot.spotId}
+              image={spot.thumbnail} // thumbnail을 image로 전달
+              description={spot.title} // title을 description으로 전달
+            />
+          ))}
+        </ul>
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          handlePageChange={handlePageChange}
+        />
+      </ItemList>
+    </List>
   );
 };

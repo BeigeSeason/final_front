@@ -1,5 +1,5 @@
 import JwtAxios from "./JwtAxios";
-import {AxiosResponse} from "axios";
+import { AxiosResponse } from "axios";
 import axios from "axios";
 import Common from "../util/Common";
 
@@ -75,11 +75,7 @@ const AxiosApi = {
     }
   },
   // 신고 조회 (전체)
-  reportList: async (
-    page = 1,
-    size = 10,
-    reportType = "MEMBER"
-  ) => {
+  reportList: async (page = 1, size = 10, reportType = "MEMBER") => {
     try {
       const response = await JwtAxios.get(`/admin/report-list`, {
         params: { page, size, reportType },
@@ -89,7 +85,7 @@ const AxiosApi = {
       console.error("신고 리스트 조회 중 오류 발생:", error);
       throw error;
     }
-  }
+  },
 };
 
 export default AxiosApi;
