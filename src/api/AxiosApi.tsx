@@ -82,9 +82,13 @@ const AxiosApi = {
   // 신고 조회 (전체)
   reportList: async (page = 1, size = 10, reportType = "MEMBER") => {
     try {
-      const response = await JwtAxios.get(`/admin/report-list`, {
+      // const response = await JwtAxios.get(`/admin/report-list`, {
+      //   params: { page, size, reportType },
+      // });
+      // 토큰, 관리자 구현전까지 그냥 다이렉트 조회
+      const response = await axios.get(`${Common.FINAL_DOMAIN}/admin/report-list`, {
         params: { page, size, reportType },
-      });
+      })
       return response.data;
     } catch (error) {
       console.error("신고 리스트 조회 중 오류 발생:", error);

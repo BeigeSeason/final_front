@@ -31,7 +31,7 @@ const AdminReportReview = () => {
   const [reports, setReports] = useState<Report[]>([]);
   const [sort, setSort] = useState("정렬");
   const [page, setPage] = useState(1);
-  const [size] = useState(3);
+  const [size] = useState(10);
   const [totalElements, setTotalElements] = useState(0);
 
   const [sortSelectOpen, setSortSelectOpen] = useState(false);
@@ -87,17 +87,17 @@ const AdminReportReview = () => {
           </div>
         </div>
         {sortSelectOpen && (
-          <div className="sort-selectBox">
-            <div className="sort-selected" onClick={() => handleSelectSort("번호 낮은순")}>
+          <div className="selectBox sort">
+            <div className="selected" onClick={() => handleSelectSort("번호 낮은순")}>
               번호 낮은순
             </div>
-            <div className="sort-selected" onClick={() => handleSelectSort("번호 높은순")}>
+            <div className="selected" onClick={() => handleSelectSort("번호 높은순")}>
               번호 높은순
             </div>
-            <div className="sort-selected" onClick={() => handleSelectSort("댓글번호 낮은순")}>
+            <div className="selected" onClick={() => handleSelectSort("댓글번호 낮은순")}>
               댓글번호 낮은순
             </div>
-            <div className="sort-selected" onClick={() => handleSelectSort("댓글번호 높은순")}>
+            <div className="selected" onClick={() => handleSelectSort("댓글번호 높은순")}>
               댓글번호 높은순
             </div>
           </div>
@@ -125,7 +125,20 @@ const AdminReportReview = () => {
                   <td>{report.reviewContent}</td>
                   <td>{report.reporter.userId}</td>
                   <td>{report.reason}</td>
-                  <td>{report.state}</td>
+                  <td className="center">
+                    {(() => {
+                        switch (report.state) {
+                          case 'WAIT':
+                            return '대기';
+                          case 'ACCEPT':
+                            return '승인';
+                          case 'REJECT':
+                            return '거절';
+                          default:
+                            return '알 수 없음';  // 예기치 않은 값에 대한 처리
+                        }
+                      })()}
+                  </td>
                   <td className="center">
                     <button>
                       관리
