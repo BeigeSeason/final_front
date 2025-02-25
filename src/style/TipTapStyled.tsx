@@ -8,6 +8,34 @@ export const TipTapContainer = styled.div`
   border-radius: 7px;
   min-height: 400px;
   z-index: 0;
+
+  .tiptap {
+    margin: 10px;
+    min-height: 330px;
+    line-height: 25px;
+    z-index: 1;
+    &:focus {
+      outline: none;
+    }
+    p {
+      margin: 0;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    th,
+    td {
+      border: 1px solid black;
+      padding: 8px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f4f4f4;
+    }
+  }
 `;
 
 export const ToolContainer = styled.div`

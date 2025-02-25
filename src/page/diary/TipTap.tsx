@@ -13,6 +13,10 @@ import TextAlign from "@tiptap/extension-text-align";
 import TextStyle from "@tiptap/extension-text-style";
 import FontSize from "@tiptap/extension-font-size";
 import Underline from "@tiptap/extension-underline";
+import Table from "@tiptap/extension-table";
+import TableRow from "@tiptap/extension-table-row";
+import TableCell from "@tiptap/extension-table-cell";
+import TableHeader from "@tiptap/extension-table-header";
 
 import { useState } from "react";
 import {
@@ -68,6 +72,12 @@ export const TipTap: React.FC<ToolBarProps> = () => {
       Highlight.configure({ multicolor: true }),
       Underline,
       TextAlign.configure({ types: ["heading", "paragraph"] }),
+      Table.configure({
+        resizable: true, // 테이블 크기 조절 가능
+      }),
+      TableRow,
+      TableCell,
+      TableHeader,
       Image,
     ],
     content: "",
@@ -221,11 +231,10 @@ export const TipTap: React.FC<ToolBarProps> = () => {
           onChange={(e) => {
             editor.chain().focus().setFontSize(e.target.value).run();
           }}
+          defaultValue={"16px"}
         >
           <option value="12px">12</option>
-          <option value="16px" selected>
-            16
-          </option>
+          <option value="16px">16</option>
           <option value="20px">20</option>
           <option value="24px">24</option>
           <option value="32px">32</option>
@@ -298,6 +307,39 @@ export const TipTap: React.FC<ToolBarProps> = () => {
           style={{ display: "none" }}
           onChange={handleImageUpload}
         />
+        <button
+          onClick={() =>
+            editor
+              .chain()
+              .focus()
+              .insertTable({ rows: 3, cols: 3, withHeaderRow: true })
+              .run()
+          }
+        >
+          표 추가
+        </button>
+        {/* https://tiptap.dev/docs/editor/extensions/nodes/table */}
+        <button onClick={() => editor.chain().focus().addColumnBefore().run()}>
+          열 추가 (왼쪽)
+        </button>
+        <button onClick={() => editor.chain().focus().addColumnAfter().run()}>
+          열 추가 (오른쪽)
+        </button>
+        <button onClick={() => editor.chain().focus().addRowBefore().run()}>
+          행 추가 (위쪽)
+        </button>
+        <button onClick={() => editor.chain().focus().addRowAfter().run()}>
+          행 추가 (아래쪽)
+        </button>
+        <button onClick={() => editor.chain().focus().deleteColumn().run()}>
+          열 삭제
+        </button>
+        <button onClick={() => editor.chain().focus().deleteRow().run()}>
+          행 삭제
+        </button>
+        <button onClick={() => editor.chain().focus().deleteTable().run()}>
+          표 삭제
+        </button>
         <span className="separate-line">|</span>
         <button
           className="tool-button"
@@ -314,9 +356,8 @@ export const TipTap: React.FC<ToolBarProps> = () => {
           <LuRedo2 />
         </button>
       </ToolContainer>
-      <ContentContainer>
-        <EditorContent className="tiptap-content" editor={editor} />
-      </ContentContainer>
+
+      <EditorContent className="tiptap-content" editor={editor} />
     </TipTapContainer>
   );
 };
