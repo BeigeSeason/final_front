@@ -1,5 +1,5 @@
 import { useEditor, EditorContent, Editor } from "@tiptap/react";
-import { Extension } from "@tiptap/core";
+import { Node, mergeAttributes } from "@tiptap/core";
 import StarterKit from "@tiptap/starter-kit";
 // StarterKit에 기본 기능 포함돼있음.
 // 특정 기능을 변경하고 싶을때 개별 확장 사용 (ex. Bold는 strong태그 사용하는데 b태그 사용하고싶을때 커스텀)
@@ -8,7 +8,6 @@ import StarterKit from "@tiptap/starter-kit";
 import Color from "@tiptap/extension-color";
 import Highlight from "@tiptap/extension-highlight";
 import Image from "@tiptap/extension-image";
-import Link from "@tiptap/extension-link";
 import Placeholder from "@tiptap/extension-placeholder";
 import TextAlign from "@tiptap/extension-text-align";
 import TextStyle from "@tiptap/extension-text-style";
@@ -16,18 +15,39 @@ import FontSize from "@tiptap/extension-font-size";
 import Underline from "@tiptap/extension-underline";
 
 import { useState } from "react";
-import { TipTapContainer, ToolContainer } from "../../style/TipTapStyled";
+import {
+  TipTapContainer,
+  ToolContainer,
+  ContentContainer,
+} from "../../style/TipTapStyled";
 
 import {
   FaBold,
   FaItalic,
+  FaAlignLeft,
+  FaAlignCenter,
+  FaAlignRight,
   FaList,
   FaListOl,
   FaMinus,
   FaQuoteLeft,
   FaTextSlash,
 } from "react-icons/fa6";
-import { LuBan, LuUndo2, LuRedo2 } from "react-icons/lu";
+import {
+  LuBold,
+  LuItalic,
+  LuUnderline,
+  LuAlignLeft,
+  LuAlignCenter,
+  LuAlignRight,
+  LuList,
+  LuListOrdered,
+  LuBan,
+  LuUndo2,
+  LuRedo2,
+  LuImage,
+} from "react-icons/lu";
+import { AiOutlineStrikethrough, AiOutlineFontColors } from "react-icons/ai";
 
 interface ToolBarProps {
   editor?: Editor | null;
@@ -36,13 +56,16 @@ interface ToolBarProps {
 // https://velog.io/@gaoridang/tiptap%EC%9C%BC%EB%A1%9C-React-rich-text-editor-%EA%B5%AC%ED%98%84%ED%95%98%EA%B8%B0
 
 export const TipTap: React.FC<ToolBarProps> = () => {
-  const [isDropdownVisible, setDropdownVisible] = useState<boolean>(false);
+  const [isColorToggleOpen, setIsColorToggleOpen] = useState<boolean>(false);
+  const [isBGColorToggleOpen, setIsBGColorToggleOpen] =
+    useState<boolean>(false);
   const editor = useEditor({
     extensions: [
       StarterKit, // bold, italic, list 등 기본 편집기능 제공
       TextStyle, // 글자 스타일 확장
       FontSize.configure({ types: ["textStyle"] }), // 글자 크기 확장
       Color.configure({ types: [TextStyle.name] }), // TextStyle 확장과 연동
+      Highlight.configure({ multicolor: true }),
       Underline,
       TextAlign.configure({ types: ["heading", "paragraph"] }),
       Image,
@@ -68,35 +91,37 @@ export const TipTap: React.FC<ToolBarProps> = () => {
   };
 
   // 색상 변경 처리
-  const handleColorChange = (color: string) => {
-    const colorMap: Record<string, string> = {
-      black: "#000000",
-      blue: "#228be6",
-      red: "#fa5252",
-      green: "#00C471",
-      yellow: "#ffff00",
-      gray: "#868e96",
-    };
-    const selectedColor = colorMap[color];
-    editor.chain().focus().setColor(selectedColor).run();
-    setDropdownVisible(false);
-  };
+  // const handleColorChange = (color: string) => {
+  //   const colorMap: Record<string, string> = {
+  //     black: "#000000",
+  //     blue: "#228be6",
+  //     red: "#fa5252",
+  //     green: "#00C471",
+  //     yellow: "#ffff00",
+  //     gray: "#868e96",
+  //   };
+  //   const selectedColor = colorMap[color];
+  //   editor.chain().focus().setColor(selectedColor).run();
+  //   setDropdownVisible(false);
+  // };
+  const colorOptions = [
+    { label: "Red", color: "red" },
+    { label: "Blue", color: "blue" },
+    { label: "Green", color: "green" },
+    { label: "Yellow", color: "yellow" },
+  ];
 
-  const textAlignOptions = ["left", "center", "right"];
+  const highlightOptions = [
+    { label: "Yellow", color: "#ffc078" },
+    { label: "Green", color: "#8ce99a" },
+    { label: "Lightblue", color: "#74c0fc" },
+  ];
 
-  const addLink = () => {
-    const url = prompt("Enter the URL");
-    if (url) {
-      editor.chain().focus().setLink({ href: url }).run();
-    }
-  };
-
-  const addImage = () => {
-    const url = prompt("Enter the image URL");
-    if (url) {
-      editor.chain().focus().setImage({ src: url }).run();
-    }
-  };
+  const textAlignOptions = [
+    { align: "left", icon: <LuAlignLeft /> },
+    { align: "center", icon: <LuAlignCenter /> },
+    { align: "right", icon: <LuAlignRight /> },
+  ];
 
   return (
     <TipTapContainer>
@@ -108,7 +133,7 @@ export const TipTap: React.FC<ToolBarProps> = () => {
           onClick={() => editor.chain().focus().toggleBold().run()}
           title="굵게"
         >
-          <FaBold />
+          <LuBold />
         </button>
         <button
           className={`tool-button ${
@@ -117,8 +142,56 @@ export const TipTap: React.FC<ToolBarProps> = () => {
           onClick={() => editor.chain().focus().toggleItalic().run()}
           title="기울이기"
         >
-          <FaItalic />
+          <LuItalic />
         </button>
+        <button
+          className={`tool-button ${
+            editor.isActive("underline") ? "is-active" : ""
+          }`}
+          onClick={() => editor.chain().focus().toggleUnderline().run()}
+          title="밑줄"
+        >
+          <LuUnderline />
+        </button>
+        <button
+          className={`tool-button ${
+            editor.isActive("strike") ? "is-active" : ""
+          }`}
+          onClick={() => editor.chain().focus().toggleStrike().run()}
+          title="취소선"
+        >
+          <AiOutlineStrikethrough />
+        </button>
+        <div className="toggle-button-container">
+          <button
+            className="tool-button"
+            onClick={() => setIsColorToggleOpen(!isColorToggleOpen)}
+          >
+            <AiOutlineFontColors />
+          </button>
+          {isColorToggleOpen && <div className="tool-toggle">토글 오픈!</div>}
+        </div>
+        {colorOptions.map(({ label, color }) => (
+          <button
+            key={color}
+            onClick={() => {
+              editor.chain().focus().setColor(color).run();
+            }}
+            style={{ backgroundColor: color }}
+          >
+            {label}
+          </button>
+        ))}
+        {highlightOptions.map(({ label, color }) => (
+          <button
+            key={color}
+            onClick={() => {
+              editor.chain().focus().toggleHighlight({ color: color }).run();
+            }}
+          >
+            {label}
+          </button>
+        ))}
         <button
           className="tool-button"
           onClick={() => editor.chain().focus().unsetAllMarks().run()}
@@ -127,31 +200,31 @@ export const TipTap: React.FC<ToolBarProps> = () => {
           <FaTextSlash />
         </button>
         <select
+          className="select-font-size"
           onChange={(e) => {
             editor.chain().focus().setFontSize(e.target.value).run();
           }}
         >
-          <option value="" disabled>
-            글자 크기 선택
+          <option value="12px">12</option>
+          <option value="16px" selected>
+            16
           </option>
-          <option value="12px">12px</option>
-          <option value="16px">16px(기본)</option>
-          <option value="20px">20px</option>
-          <option value="24px">24px</option>
-          <option value="32px">32px</option>
+          <option value="20px">20</option>
+          <option value="24px">24</option>
+          <option value="32px">32</option>
         </select>
         <span className="separate-line">|</span>
-        {textAlignOptions.map((align) => (
+        {textAlignOptions.map(({ align, icon }) => (
           <button
             key={align}
             onClick={() => editor.chain().focus().setTextAlign(align).run()}
-            className={
+            className={`tool-button ${
               editor.isActive("textAlign", { textAlign: align })
                 ? "is-active"
                 : ""
-            }
+            }`}
           >
-            {align}
+            {icon}
           </button>
         ))}
         <button
@@ -159,25 +232,23 @@ export const TipTap: React.FC<ToolBarProps> = () => {
             editor.isActive("bulletList") ? "is-active" : ""
           }`}
           onClick={() => editor.chain().focus().toggleBulletList().run()}
-          // className={editor.isActive("bulletList") ? "is-active" : ""}
         >
-          <FaList />
+          <LuList />
         </button>
         <button
           className={`tool-button ${
             editor.isActive("orderedList") ? "is-active" : ""
           }`}
           onClick={() => editor.chain().focus().toggleOrderedList().run()}
-          // className={editor.isActive("orderedList") ? "is-active" : ""}
         >
-          <FaListOl />
+          <LuListOrdered />
         </button>
         <button
           className={`tool-button ${
             editor.isActive("blockquote") ? "is-active" : ""
           }`}
           onClick={() => editor.chain().focus().toggleBlockquote().run()}
-          // className={editor.isActive("blockquote") ? "is-active" : ""}
+          title="인용"
         >
           <FaQuoteLeft />
         </button>
@@ -196,12 +267,20 @@ export const TipTap: React.FC<ToolBarProps> = () => {
           <LuBan />
         </button>
         <span className="separate-line">|</span>
-        <button
-          onClick={addImage}
-          className={editor.isActive("image") ? "is-active" : ""}
-        >
-          Add Image
-        </button>
+        <label htmlFor="upload-image" className="upload-button">
+          <LuImage
+            className={`tool-button ${
+              editor?.isActive("image") ? "is-active" : ""
+            }`}
+          />
+        </label>
+        <input
+          id="upload-image"
+          type="file"
+          accept="image/*"
+          style={{ display: "none" }}
+          onChange={handleImageUpload}
+        />
         <span className="separate-line">|</span>
         <button
           className="tool-button"
@@ -217,77 +296,10 @@ export const TipTap: React.FC<ToolBarProps> = () => {
         >
           <LuRedo2 />
         </button>
-        {/* <button
-          onClick={() => editor.chain().focus().setColor("#958DF1").run()}
-          className={
-            editor.isActive("textStyle", { color: "#958DF1" })
-              ? "is-active"
-              : ""
-          }
-        >
-          Purple
-        </button> */}
-        {/* <button
-          // style={{ backgroundImage: "url(/images/tiptap/Editor_Toolbar_05_TextColor.svg)", backgroundSize: "80%" }}
-          onClick={() => setDropdownVisible(!isDropdownVisible)}
-        >
-          다예님 색상
-        </button>
-        {isDropdownVisible && (
-          <div className="dropdown-menu">
-            {["black", "blue", "red", "green", "yellow", "gray"].map(
-              (color, index) => (
-                <button
-                  key={color}
-                  // style={{
-                  //   backgroundColor: "#fff",
-                  //   backgroundImage: `url(/images/tiptap/Editor_Toolbar_05_0${index + 1}_${capitalizeFirstLetter(color)}.svg)`,
-                  //   backgroundSize: "80%",
-                  //   backgroundPosition: "center",
-                  //   backgroundRepeat: "no-repeat",
-                  // }}
-                  onClick={() => handleColorChange(color)}
-                />
-              )
-            )}
-          </div>
-        )} */}
-        <label htmlFor="upload-image" className="upload-button" />
-        <input
-          id="upload-image"
-          type="file"
-          accept="image/*"
-          style={{ display: "none" }}
-          onChange={handleImageUpload}
-        />
-        {/* <button onClick={() => editor.chain().focus().toggleCodeBlock().run()}>
-        코드 블록
-      </button>
-      <button
-        onClick={() => {
-          const url = prompt("링크 URL을 입력하세요:");
-          if (url) editor.chain().focus().setLink({ href: url }).run();
-        }}
-      >
-        링크 추가
-      </button>
-      <button onClick={() => editor.chain().focus().setTextAlign("left").run()}>
-        왼쪽 정렬
-      </button>
-      <button
-        onClick={() => editor.chain().focus().setTextAlign("center").run()}
-      >
-        가운데 정렬
-      </button>
-      <button
-        onClick={() => editor.chain().focus().setTextAlign("right").run()}
-      >
-        오른쪽 정렬
-      </button>
-
-      {/* 에디터 */}
       </ToolContainer>
-      <EditorContent className="tiptap-content" editor={editor} />
+      <ContentContainer>
+        <EditorContent className="tiptap-content" editor={editor} />
+      </ContentContainer>
     </TipTapContainer>
   );
 };
