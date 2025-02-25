@@ -35,8 +35,6 @@ const AdminReportUser = () => {
 
   const [sortSelectOpen, setSortSelectOpen] = useState(false);
 
-  
-
   // 데이터 가져오기
   const reportList = async () => {
     try {
@@ -51,7 +49,7 @@ const AdminReportUser = () => {
     reportList();
   }, [page]);
 
-  // 🔢 페이지 번호 생성
+  // 페이지 번호 생성
   const pageNumbers = [];
   for (let i = 1; i <= Math.ceil(totalElements / size); i++) {
     pageNumbers.push(i);
@@ -60,8 +58,6 @@ const AdminReportUser = () => {
   // 페이지 이동
   const handlePageClick = (pageNumber: number) => {
     setPage(pageNumber);
-    console.log(reports);
-    console.log(totalElements);
   };
 
   // 데이터 정렬버튼
@@ -153,7 +149,7 @@ const AdminReportUser = () => {
           </button>
 
           {/* 페이지 번호 표시 */}
-          {Array.from({ length: 9 }).map((_, index) => {
+          {Array.from({ length: Math.min(pageNumbers.length, 9) }).map((_, index) => {
             let pageNumber: number; // 타입을 명시적으로 지정
 
             if (page <= 4) {
