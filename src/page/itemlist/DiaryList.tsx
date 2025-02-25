@@ -190,7 +190,7 @@ export const DiaryList: React.FC = () => {
         <div className="mainarea">
           <ToggleSection
             title="지역 선택"
-            isOpen={isAreaOpen}
+            isopen={isAreaOpen}
             onToggle={() => setIsAreaOpen(!isAreaOpen)}
           >
             <div className="buttons">
@@ -213,7 +213,7 @@ export const DiaryList: React.FC = () => {
           <div className="subarea">
             <ToggleSection
               title="세부 지역 선택"
-              isOpen={isSubAreaOpen}
+              isopen={isSubAreaOpen}
               onToggle={() => setIsSubAreaOpen(!isSubAreaOpen)}
             >
               <div className="buttons">
