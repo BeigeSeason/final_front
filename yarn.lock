@@ -2427,6 +2427,11 @@
   dependencies:
     tippy.js "^6.3.7"
 
+"@tiptap/extension-font-size@^3.0.0-next.3":
+  version "3.0.0-next.3"
+  resolved "https://registry.yarnpkg.com/@tiptap/extension-font-size/-/extension-font-size-3.0.0-next.3.tgz#2cc00e5fa39d52e13674366ddf4f0129dc505952"
+  integrity sha512-JmmrCboLvDH4HG1nOAMkiwmeFluliXaeEh5+RDxOofuzxsHjSYVJpNP846eLtMnjkUAxjvh7tBz7GTjATm3OuQ==
+
 "@tiptap/extension-gapcursor@^2.11.5":
   version "2.11.5"
   resolved "https://registry.yarnpkg.com/@tiptap/extension-gapcursor/-/extension-gapcursor-2.11.5.tgz#6771e387d90ef85ee834f4572627d76e303e1297"
