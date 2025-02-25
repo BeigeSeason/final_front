@@ -26,8 +26,8 @@ const AdminHome = () => {
   const [searchType, setSearchType] = useState("ID");
   const [searchValue, setSearchValue] = useState("");
 
-  const [type, setType] = useState(false);
-  const [sort, setSort] = useState("정렬");
+  const [type, setType] = useState<boolean | null>(null);
+  const [sort, setSort] = useState("");
 
   const [searchSelectOpen, setSearchSelectOpen] = useState(false);
   const [typeSelectOpen, setTypeSelectOpen] = useState(false);
@@ -38,9 +38,7 @@ const AdminHome = () => {
   // 데이터 가져오기
   const memberList = async () => {
     try {
-      console.log("searchValue:", searchValue);
-      const data = await AxiosApi.memberList(page - 1, size, searchType, searchValue);
-      console.log("data:", data);
+      const data = await AxiosApi.memberList(page - 1, size, searchType, searchValue, type, sort);
       setMembers(data.members);
       setTotalElements(data.totalElements);
     } catch (error) {
@@ -49,7 +47,7 @@ const AdminHome = () => {
   };
   useEffect(() => {
     memberList();
-  }, [page]);
+  }, [page, type, sort]);
 
   // 페이지 번호 생성
   const pageNumbers = [];
@@ -87,11 +85,11 @@ const AdminHome = () => {
     setTypeSelectOpen((prev) => !prev);
     setSortSelectOpen(false);
   }
-  const handleSelectType = (select: boolean) => {
+  const handleSelectType = (select: boolean | null) => {
+    console.log("select:", select);
     setType(select);
     setTypeSelectOpen(false);
   }
-
   // 데이터 정렬버튼
   const handleSort = () => {
     setSortSelectOpen((prev) => !prev);
@@ -186,7 +184,16 @@ const AdminHome = () => {
               <FaAngleDown />
             </div>
             <div className="type-selected center">
-              {type ? "정지" : "정상"}
+              {(() => {
+                switch (type) {
+                  case false:
+                    return "정상";
+                  case true:
+                    return "정지";
+                  default:
+                    return "분류"
+                }
+              })()}
             </div>
           </div>
           <div className="sort-box" onClick={handleSort}>
@@ -194,11 +201,32 @@ const AdminHome = () => {
               <FaAngleUp />
               <FaAngleDown />
             </div>
-            <div className="sort-selected center">{sort}</div>
+            <div className="sort-selected center">
+              {(() => {
+                switch (sort) {
+                  case "idAsc":
+                    return "번호 낮은순";
+                  case "idDesc":
+                    return "번호 높은순";
+                  case "userIdAsc":
+                    return "아이디 오름차순";
+                  case "userIdDesc":
+                    return "아이디 내림차순";
+                  default:
+                    return "정렬"
+                }
+              })()}
+            </div>
           </div>
         </div>
         {typeSelectOpen && (
           <div className="selectBox type">
+            <div
+              className="selected"
+              onClick={() => handleSelectType(null)}
+            >
+              분류
+            </div>
             <div
               className="selected"
               onClick={() => handleSelectType(false)}
@@ -216,26 +244,32 @@ const AdminHome = () => {
         {sortSelectOpen && (
           <div className="selectBox sort">
             <div
-              className="selected"
-              onClick={() => handleSelectSort("번호 낮은순")}
+              className="selected center"
+              onClick={() => handleSelectSort("")}
+            >
+              정렬
+            </div>
+            <div
+              className="selected center"
+              onClick={() => handleSelectSort("idAsc")}
             >
               번호 낮은순
             </div>
             <div
-              className="selected"
-              onClick={() => handleSelectSort("번호 높은순")}
+              className="selected center"
+              onClick={() => handleSelectSort("idDesc")}
             >
               번호 높은순
             </div>
             <div
-              className="selected"
-              onClick={() => handleSelectSort("아이디 오름차순")}
+              className="selected center"
+              onClick={() => handleSelectSort("userIdAsc")}
             >
               아이디 오름차순
             </div>
             <div
-              className="selected"
-              onClick={() => handleSelectSort("아이디 내림차순")}
+              className="selected center"
+              onClick={() => handleSelectSort("userIdDesc")}
             >
               아이디 내림차순
             </div>
