@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { ScrollBar } from "../component/ButtonComponent";
 
 export const TipTapContainer = styled.div`
-  position: relative;
+  /* position: relative; */
   width: 100%;
   border: 1px solid #ccc;
   border-radius: 7px;
@@ -35,17 +35,23 @@ export const ToolContainer = styled.div`
     position: relative;
     background-color: transparent;
     border: none;
-    /* height: 20px; */
     font-size: 16px;
     color: #333;
     cursor: pointer;
   }
-  .tool-toggle {
+  .toggle-button-container {
     display: flex;
-    width: 200px;
-    position: absolute;
-    /* z-index: 9999; */
-    background-color: aquamarine;
+    position: relative;
+    .tool-toggle {
+      display: flex;
+      position: absolute;
+      left: 26px;
+      top: -1px;
+      background-color: #e29696;
+      .toggle-element {
+        margin: 1px 0;
+      }
+    }
   }
   .select-font-size {
     border: none;
