@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 export const SearchPage = () => {
   const location = useLocation();
   const params = new URLSearchParams(location.search);
-  const query = params.get("query");
+  const query = params.get("searchQuery");
 
   return (
     <div>

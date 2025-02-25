@@ -41,9 +41,9 @@ export const TourList: React.FC = () => {
       middleTheme: queryParams.get("cat2") || "",
       bottomTheme: queryParams.get("cat3") || "",
       category: queryParams.get("category") || "",
-      searchQuery: queryParams.get("searchQuery")
-        ? decodeURIComponent(queryParams.get("searchQuery")!)
-        : "",
+      searchQuery: queryParams.get("searchQuery") || "",
+      // ? decodeURIComponent(queryParams.get("searchQuery")!)
+      // : "",
       sortBy: queryParams.get("sort") || "",
       currentPage: parseInt(queryParams.get("currentPage") || "0", 10),
       pageSize: parseInt(queryParams.get("pageSize") || "10", 10),
@@ -81,7 +81,7 @@ export const TourList: React.FC = () => {
         } else if (key === "middleTheme") {
           queryParams.set("cat2", value);
         } else if (key === "searchQuery") {
-          queryParams.set(key, encodeURIComponent(value));
+          queryParams.set(key, value);
         } else {
           queryParams.set(key, value.toString());
         }
@@ -135,9 +135,7 @@ export const TourList: React.FC = () => {
   };
 
   const handleSearch = () => {
-    if (searchQuery.trim() !== "") {
-      updateFilters("searchQuery", searchQuery.trim());
-    }
+    updateFilters("searchQuery", searchQuery);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {

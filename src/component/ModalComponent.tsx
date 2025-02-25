@@ -233,27 +233,43 @@ export const LoginModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
       console.log("로그인 시도:", { userId, password });
       const response = await AxiosApi.login(userId, password);
 
-      if (response.status === 200) {
+      // ✅ 백엔드가 정상적으로 토큰을 보내는지 확인
+      if (response.status === 200 && response.data.accessToken) {
         console.log("로그인 성공:", response.data);
 
-        // 토큰을 Redux에 저장
+        // Redux에 토큰 저장
         dispatch(
           setTokens({
             accessToken: response.data.accessToken,
             refreshToken: response.data.refreshToken,
           })
         );
+
+        // 로컬 스토리지에 토큰 저장
         localStorage.setItem("accessToken", response.data.accessToken);
         localStorage.setItem("refreshToken", response.data.refreshToken);
-        console.log("현재 Redux 상태:", store.getState()); // Redux 상태 출력
 
+        console.log("현재 Redux 상태:", store.getState()); // Redux 상태 확인
         onClose(); // 로그인 후 모달 닫기
       } else {
+        console.error("로그인 실패: 응답 데이터 없음 또는 토큰 없음");
         setError("아이디 또는 비밀번호가 올바르지 않습니다.");
       }
-    } catch (error) {
-      console.error("로그인 실패:", error);
-      setError("아이디 또는 비밀번호가 올바르지 않습니다.");
+    } catch (error: any) {
+      console.error("로그인 요청 중 오류 발생:", error);
+
+      // Axios 에러 처리
+      if (error.response) {
+        console.error(
+          "서버 응답 오류:",
+          error.response.status,
+          error.response.data
+        );
+        setError("아이디 또는 비밀번호가 올바르지 않습니다.");
+      } else {
+        console.error("네트워크 오류 또는 요청 실패");
+        setError("로그인 요청을 처리할 수 없습니다.");
+      }
     }
   };
 
