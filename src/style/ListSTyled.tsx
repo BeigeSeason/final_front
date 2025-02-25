@@ -264,3 +264,23 @@ export const ItemList = styled.div`
     width: 80%;
   }
 `;
+export const PriceRange = styled.div`
+  .slider {
+    width: 100%;
+    height: 10px;
+    margin: 15px 0;
+  }
+
+  .track {
+    background: #ddd;
+    border-radius: 5px;
+  }
+
+  .thumb {
+    height: 20px;
+    width: 20px;
+    background: #007bff;
+    border-radius: 50%;
+    cursor: grab;
+  }
+`;

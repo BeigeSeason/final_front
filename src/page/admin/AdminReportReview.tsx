@@ -1,13 +1,66 @@
-import {useState} from "react";
+import {useState, useEffect} from "react";
 import { AdminContainer } from "./AdminComponent";
+import AxiosApi from "../../api/AxiosApi";
 
 // icon
 import { FaAngleUp, FaAngleDown } from "react-icons/fa";
 
 const AdminReportReview = () => {
+  interface Member {
+    id: number;
+    userId: string;
+    email: string;
+    name: string;
+    nickname: string;
+    imgPath: string;
+    regDate: string;
+    banned: Boolean;
+  }
+  interface Report {
+    id: number;
+    reportType: string;
+    reporter: Member;
+    reported: Member;
+    reportEntity: string;
+    reason: string;
+    createdAt: Date;
+    checkedAt: Date;
+    state: string;
+    reviewContent: string;
+  }
+  const [reports, setReports] = useState<Report[]>([]);
   const [sort, setSort] = useState("정렬");
+  const [page, setPage] = useState(1);
+  const [size] = useState(3);
+  const [totalElements, setTotalElements] = useState(0);
 
   const [sortSelectOpen, setSortSelectOpen] = useState(false);
+
+  // 데이터 가져오기
+  const reportList = async () => {
+    try {
+      const data = await AxiosApi.reportList(page - 1, size, "REVIEW");
+      setReports(data.reports);
+      setTotalElements(data.totalElements);
+    } catch (error) {
+      console.log("신고 리스트 조회 실패:", error);
+    }
+  };
+  useEffect(() => {
+    reportList();
+  }, [page]);
+
+  // 페이지 번호 생성
+  const pageNumbers = [];
+  for (let i = 1; i <= Math.ceil(totalElements / size); i++) {
+    pageNumbers.push(i);
+  }
+
+  // 페이지 이동
+  const handlePageClick = (pageNumber: number) => {
+    setPage(pageNumber);
+    console.log(reports);
+  };
 
   // 데이터 정렬버튼
   const handleSort = () => {
@@ -17,13 +70,6 @@ const AdminReportReview = () => {
     setSort(select);
     setSortSelectOpen(false);
   }
-
-  // 임시 데이터
-  const reports = [
-    { id: 1, commentId: 201, authorId: "user001", commentContent: "이 글은 정말 별로네요.", reporterId: "user010", reportDetails: "악의적인 댓글", status: "대기중" },
-    { id: 2, commentId: 202, authorId: "user002", commentContent: "광고성 링크를 포함하고 있어요.", reporterId: "user011", reportDetails: "스팸/광고", status: "대기중" },
-    { id: 3, commentId: 203, authorId: "user003", commentContent: "비방하는 내용이 포함되어 있습니다.", reporterId: "user012", reportDetails: "타인 비방", status: "대기중" }
-  ];
 
   return (
     <AdminContainer>
@@ -74,12 +120,12 @@ const AdminReportReview = () => {
               {reports.map((report) => (
                 <tr key={report.id}>
                   <td>{report.id}</td>
-                  <td>{report.commentId}</td>
-                  <td>{report.authorId}</td>
-                  <td>{report.commentContent}</td>
-                  <td>{report.reporterId}</td>
-                  <td>{report.reportDetails}</td>
-                  <td>{report.status}</td>
+                  <td>{report.reportEntity}</td>
+                  <td>{report.reported.userId}</td>
+                  <td>{report.reviewContent}</td>
+                  <td>{report.reporter.userId}</td>
+                  <td>{report.reason}</td>
+                  <td>{report.state}</td>
                   <td className="center">
                     <button>
                       관리
@@ -89,6 +135,70 @@ const AdminReportReview = () => {
               ))}
             </tbody>
           </table>
+        </div>
+        {/* 페이징 영역 */}
+        <div className="pagination center">
+          <button
+            className="page-btn"
+            onClick={() => handlePageClick(1)}
+            disabled={page === 1}
+          >
+            {"<<"} {/* 첫 페이지로 이동 */}
+          </button>
+          <button
+            className="page-btn"
+            onClick={() => handlePageClick(page - 1)}
+            disabled={page === 1}
+          >
+            {"<"} {/* 이전 페이지로 이동 */}
+          </button>
+
+          {/* 페이지 번호 표시 */}
+          {Array.from({ length: 9 }).map((_, index) => {
+            let pageNumber: number; // 타입을 명시적으로 지정
+
+            if (page <= 4) {
+              // 1~4 페이지일 때는 1~9까지 페이지를 표시
+              pageNumber = index + 1;
+            } else if (pageNumbers.length - page <= 4) {
+              // 마지막 4페이지 근처일 때는 뒤쪽으로 9개 페이지를 표시
+              pageNumber = pageNumbers.length - (8 - index);
+            } else {
+              // 그 외에는 현재 페이지 기준으로 앞 4개, 뒤 4개 표시
+              pageNumber = page - 4 + index;
+            }
+
+            // 페이지 번호가 1 이상, 마지막 페이지 이하로 보정
+            pageNumber = Math.max(pageNumber, 1);
+            pageNumber = Math.min(pageNumber, pageNumbers.length);
+
+            return (
+              pageNumber >= 1 && pageNumber <= pageNumbers.length && (
+                <button
+                  key={pageNumber}
+                  className={page === pageNumber ? "activePage" : ""}
+                  onClick={() => handlePageClick(pageNumber)}
+                >
+                  {pageNumber}
+                </button>
+              )
+            );
+          })}
+
+          <button
+            className="page-btn"
+            onClick={() => handlePageClick(page + 1)}
+            disabled={page === pageNumbers.length}
+          >
+            {">"} {/* 다음 페이지로 이동 */}
+          </button>
+          <button
+            className="page-btn"
+            onClick={() => handlePageClick(pageNumbers.length)}
+            disabled={page === pageNumbers.length}
+          >
+            {">>"} {/* 마지막 페이지로 이동 */}
+          </button>
         </div>
       </div>
     </AdminContainer>

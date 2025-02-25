@@ -7,8 +7,8 @@ interface AuthState {
 }
 
 const initialState: AuthState = {
-  accessToken: null,
-  refreshToken: null,
+  accessToken: localStorage.getItem("accessToken") || null,
+  refreshToken: localStorage.getItem("refreshToken") || null,
 };
 
 const authSlice = createSlice({

@@ -27,14 +27,20 @@ export const Header = () => {
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && searchTerm.trim() !== "") {
-      navigate(`/searchpage?query=${searchTerm}`);
+      const params = new URLSearchParams();
+      params.set("searchQuery", searchTerm.trim());
+      navigate(`/searchpage?${params.toString()}`);
     }
   };
+
   const handleSearch = () => {
     if (searchTerm.trim() !== "") {
-      navigate(`/searchpage?searchQuery=${searchTerm}`);
+      const params = new URLSearchParams();
+      params.set("searchQuery", searchTerm.trim());
+      navigate(`/searchpage?${params.toString()}`);
     }
   };
+
   return (
     <>
       <GlobalFont />
@@ -80,19 +86,19 @@ export const AdminHeader = () => {
   const handleReport1 = () => {
     setIsBanShow(false);
     navigate("/admin/report/user");
-  }
+  };
 
   // 신고 - 여행 일기
   const handleReport2 = () => {
     setIsBanShow(false);
     navigate("/admin/report/diary");
-  }
+  };
 
   // 신고 - 관광지 댓글
   const handleReport3 = () => {
     setIsBanShow(false);
     navigate("/admin/report/review");
-  }
+  };
 
   const handleLogout = () => {};
 
@@ -115,22 +121,13 @@ export const AdminHeader = () => {
           </p>
           {isBanShow && (
             <div className="admin-selectBox-ban">
-              <div
-                className="admin-selected"
-                onClick={handleReport1}
-              >
+              <div className="admin-selected" onClick={handleReport1}>
                 유저
               </div>
-              <div
-                className="admin-selected"
-                onClick={handleReport2}
-              >
+              <div className="admin-selected" onClick={handleReport2}>
                 여행 일기
               </div>
-              <div
-                className="admin-selected"
-                onClick={handleReport3}
-              >
+              <div className="admin-selected" onClick={handleReport3}>
                 관광지 댓글
               </div>
             </div>
