@@ -21,14 +21,16 @@ const AdminHome = () => {
   }
   const [members, setMembers] = useState<Member[]>([]);
   const [page, setPage] = useState(1);
-  const [size] = useState(10);
-  const [totalPages, setTotalPages] = useState(0);
-  const [searchType, setSearchType] = useState("NAME");
+  const [size] = useState(3);
+  const [totalElements, setTotalElements] = useState(0);
+  const [searchType, setSearchType] = useState("ID");
   const [searchValue, setSearchValue] = useState("");
 
+  const [type, setType] = useState(false);
   const [sort, setSort] = useState("정렬");
 
   const [searchSelectOpen, setSearchSelectOpen] = useState(false);
+  const [typeSelectOpen, setTypeSelectOpen] = useState(false);
   const [sortSelectOpen, setSortSelectOpen] = useState(false);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -36,20 +38,29 @@ const AdminHome = () => {
   // 데이터 가져오기
   const memberList = async () => {
     try {
+      console.log("searchValue:", searchValue);
       const data = await AxiosApi.memberList(page - 1, size, searchType, searchValue);
-      console.log("data: ", data);
-      setMembers(data.content);
-      setTotalPages(data.totalPages);
+      console.log("data:", data);
+      setMembers(data.members);
+      setTotalElements(data.totalElements);
     } catch (error) {
       console.log("멤버 리스트 조회 실패:", error);
     }
   };
-
   useEffect(() => {
     memberList();
-  }, [page, searchType, searchValue]);
+  }, [page]);
 
-  
+  // 페이지 번호 생성
+  const pageNumbers = [];
+  for (let i = 1; i <= Math.ceil(totalElements / size); i++) {
+    pageNumbers.push(i);
+  }
+
+  // 페이지 이동
+  const handlePageClick = (pageNumber: number) => {
+    setPage(pageNumber);
+  };
 
   // 검색 카테고리 선택
   const handleCategory = () => {
@@ -62,13 +73,29 @@ const AdminHome = () => {
 
   // 검색 기능
   const handleSearch = () => {
-    setPage(1);
     memberList();
+    setPage(1);
   };
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleSearch();
+    }
+  }
+
+  // 데이터 분류버튼
+  const handleType = () => {
+    setTypeSelectOpen((prev) => !prev);
+    setSortSelectOpen(false);
+  }
+  const handleSelectType = (select: boolean) => {
+    setType(select);
+    setTypeSelectOpen(false);
+  }
 
   // 데이터 정렬버튼
   const handleSort = () => {
     setSortSelectOpen((prev) => !prev);
+    setTypeSelectOpen(false);
   };
   const handleSelectSort = (select: string) => {
     setSort(select);
@@ -79,7 +106,6 @@ const AdminHome = () => {
   const openModal = () => {
     setIsModalOpen(true);
   };
-
   const closeModal = () => {
     setIsModalOpen(false);
   };
@@ -95,34 +121,58 @@ const AdminHome = () => {
       {/* 검색 박스 */}
       <div className="search-container center">
         <div className="search-category center" onClick={handleCategory}>
-          {searchType} <FaSortDown />
+          {(() => {
+            switch (searchType) {
+              case "ID":
+                return "아이디";
+              case "NAME":
+                return "이름";
+              case "NICKNAME":
+                return "닉네임";
+              case "EMAIL":
+                return "이메일";
+              default:
+                return "아이디"
+            }
+          })()} <FaSortDown />
         </div>
         {searchSelectOpen && (
           <div className="search-selectBox">
             <div
               className="search-selected"
-              onClick={() => handleSelectCategory("아이디")}
+              onClick={() => handleSelectCategory("ID")}
             >
               아이디
             </div>
             <div
               className="search-selected"
-              onClick={() => handleSelectCategory("닉네임")}
+              onClick={() => handleSelectCategory("NAME")}
+            >
+              이름
+            </div>
+            <div
+              className="search-selected"
+              onClick={() => handleSelectCategory("NICKNAME")}
             >
               닉네임
             </div>
             <div
               className="search-selected"
-              onClick={() => handleSelectCategory("이메일")}
+              onClick={() => handleSelectCategory("EMAIL")}
             >
               이메일
             </div>
           </div>
         )}
         <div className="search-input center">
-          <input type="text" />
+          <input 
+            type="text" 
+            value={searchValue} 
+            onChange={(e) => setSearchValue(e.target.value)} 
+            onKeyDown={handleKeyDown}
+          />
         </div>
-        <div className="search-button center">
+        <div className="search-button center" onClick={() => handleSearch()}>
           <IoSearch />
         </div>
       </div>
@@ -130,6 +180,15 @@ const AdminHome = () => {
       {/* 데이터 박스 */}
       <div className="data-container">
         <div className="data-head">
+          <div className="sort-box" onClick={handleType}>
+            <div className="sort-icon">
+              <FaAngleUp />
+              <FaAngleDown />
+            </div>
+            <div className="type-selected center">
+              {type ? "정지" : "정상"}
+            </div>
+          </div>
           <div className="sort-box" onClick={handleSort}>
             <div className="sort-icon">
               <FaAngleUp />
@@ -138,28 +197,44 @@ const AdminHome = () => {
             <div className="sort-selected center">{sort}</div>
           </div>
         </div>
-        {sortSelectOpen && (
-          <div className="sort-selectBox">
+        {typeSelectOpen && (
+          <div className="selectBox type">
             <div
-              className="sort-selected"
+              className="selected"
+              onClick={() => handleSelectType(false)}
+            >
+              정상
+            </div>
+            <div
+              className="selected"
+              onClick={() => handleSelectType(true)}
+            >
+              정지
+            </div>
+          </div>
+        )}
+        {sortSelectOpen && (
+          <div className="selectBox sort">
+            <div
+              className="selected"
               onClick={() => handleSelectSort("번호 낮은순")}
             >
               번호 낮은순
             </div>
             <div
-              className="sort-selected"
+              className="selected"
               onClick={() => handleSelectSort("번호 높은순")}
             >
               번호 높은순
             </div>
             <div
-              className="sort-selected"
+              className="selected"
               onClick={() => handleSelectSort("아이디 오름차순")}
             >
               아이디 오름차순
             </div>
             <div
-              className="sort-selected"
+              className="selected"
               onClick={() => handleSelectSort("아이디 내림차순")}
             >
               아이디 내림차순
@@ -195,7 +270,9 @@ const AdminHome = () => {
                   <td>{member.regDate}</td>
                   <td></td>
                   <td></td>
-                  <td></td>
+                  <td className={member.banned ? "text-red" : "text-green"}>
+                    {member.banned ? "정지" : "정상"}
+                  </td>
                   <td className="center">
                     <button onClick={openModal}>관리</button>
                   </td>
@@ -208,6 +285,70 @@ const AdminHome = () => {
             )}
             </tbody>
           </table>
+        </div>
+        {/* 페이징 영역 */}
+        <div className="pagination center">
+          <button
+            className="page-btn"
+            onClick={() => handlePageClick(1)}
+            disabled={page === 1}
+          >
+            {"<<"} {/* 첫 페이지로 이동 */}
+          </button>
+          <button
+            className="page-btn"
+            onClick={() => handlePageClick(page - 1)}
+            disabled={page === 1}
+          >
+            {"<"} {/* 이전 페이지로 이동 */}
+          </button>
+
+          {/* 페이지 번호 표시 */}
+          {Array.from({ length: Math.min(pageNumbers.length, 9) }).map((_, index) => {
+            let pageNumber: number; // 타입을 명시적으로 지정
+
+            if (page <= 4) {
+              // 1~4 페이지일 때는 1~9까지 페이지를 표시
+              pageNumber = index + 1;
+            } else if (pageNumbers.length - page <= 4) {
+              // 마지막 4페이지 근처일 때는 뒤쪽으로 9개 페이지를 표시
+              pageNumber = pageNumbers.length - (8 - index);
+            } else {
+              // 그 외에는 현재 페이지 기준으로 앞 4개, 뒤 4개 표시
+              pageNumber = page - 4 + index;
+            }
+
+            // 페이지 번호가 1 이상, 마지막 페이지 이하로 보정
+            pageNumber = Math.max(pageNumber, 1);
+            pageNumber = Math.min(pageNumber, pageNumbers.length);
+
+            return (
+              pageNumber >= 1 && pageNumber <= pageNumbers.length && (
+                <button
+                  key={pageNumber}
+                  className={page === pageNumber ? "activePage" : ""}
+                  onClick={() => handlePageClick(pageNumber)}
+                >
+                  {pageNumber}
+                </button>
+              )
+            );
+          })}
+
+          <button
+            className="page-btn"
+            onClick={() => handlePageClick(page + 1)}
+            disabled={page === pageNumbers.length}
+          >
+            {">"} {/* 다음 페이지로 이동 */}
+          </button>
+          <button
+            className="page-btn"
+            onClick={() => handlePageClick(pageNumbers.length)}
+            disabled={page === pageNumbers.length}
+          >
+            {">>"} {/* 마지막 페이지로 이동 */}
+          </button>
         </div>
       </div>
 

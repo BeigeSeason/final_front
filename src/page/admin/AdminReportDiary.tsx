@@ -152,7 +152,7 @@ const AdminReportDiary = () => {
           </button>
 
           {/* 페이지 번호 표시 */}
-          {Array.from({ length: 9 }).map((_, index) => {
+          {Array.from({ length: Math.min(pageNumbers.length, 9) }).map((_, index) => {
             let pageNumber: number; // 타입을 명시적으로 지정
 
             if (page <= 4) {

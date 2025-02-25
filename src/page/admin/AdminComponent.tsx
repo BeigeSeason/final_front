@@ -65,6 +65,7 @@ export const AdminContainer = styled.div`
     }
     .search-button {
       width: 40px;
+      cursor: pointer;
       svg {
         width: 30px;
         height: 30px;
@@ -89,25 +90,35 @@ export const AdminContainer = styled.div`
           display: flex;
           flex-direction: column;
         }
+        .sort-selected {
+          width: 117px;
+        }
       }
     }
-    .sort-selectBox {
+    .selectBox {
       padding: 5px;
       display: flex;
       flex-direction: column;
       position: absolute;
-      top: 37px;
-      right: 0;
+      
       background-color: #999;
       border-radius: 5px;
       z-index: 1;
-      .sort-selected {
+      .selected {
         padding: 7.5% 10px;
         border-radius: 5px;
         &:hover {
           background-color: #777;
         }
       }
+    }
+    .type {
+      top: 37px;
+      right:156px;
+    }
+    .sort {
+      top: 37px;
+      right: 0;
     }
     .data-content {
       table {
@@ -133,6 +144,12 @@ export const AdminContainer = styled.div`
     .activePage {
       background-color: #aaa;
     }
+  }
+  .text-red {
+    color: red;
+  }
+  .text-green {
+    color: green;
   }
 `;
 
