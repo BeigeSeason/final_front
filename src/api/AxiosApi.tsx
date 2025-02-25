@@ -61,16 +61,17 @@ const AxiosApi = {
     page = 1,
     size = 10,
     searchType = "NAME",
-    searchValue = ""
+    searchValue = "",
+    type : boolean | null = null,
+    sort = "idDesc"
   ) => {
-    console.log("params:", { page, size, searchType, searchValue });
     try {
       // const response = await JwtAxios.get("/admin/member-list", {
       //   params: { page, size, searchType, searchValue },
       // });
       // 토큰, 관리자 구현전까지 그냥 다이렉트 조회
       const response = await axios.get(`${Common.FINAL_DOMAIN}/admin/member-list`, {
-        params: { page, size, searchType, searchValue },
+        params: { page, size, searchType, searchValue, type, sort },
       });
       return response.data;
     } catch (error) {
