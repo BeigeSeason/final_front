@@ -29,11 +29,13 @@ const AdminReportReview = () => {
     reviewContent: string;
   }
   const [reports, setReports] = useState<Report[]>([]);
+  const [type, setType] = useState("");
   const [sort, setSort] = useState("정렬");
   const [page, setPage] = useState(1);
   const [size] = useState(10);
   const [totalElements, setTotalElements] = useState(0);
 
+  const [typeSelectOpen, setTypeSelectOpen] = useState(false);
   const [sortSelectOpen, setSortSelectOpen] = useState(false);
 
   // 데이터 가져오기
@@ -62,6 +64,17 @@ const AdminReportReview = () => {
     console.log(reports);
   };
 
+  // 데이터 분류버튼
+  const handleType = () => {
+    setTypeSelectOpen((prev) => !prev);
+    setSortSelectOpen(false);
+  }
+  const handleSelectType = (select: string) => {
+    console.log("select:", select);
+    setType(select);
+    setTypeSelectOpen(false);
+  }
+
   // 데이터 정렬버튼
   const handleSort = () => {
     setSortSelectOpen((prev) => !prev);
@@ -76,6 +89,26 @@ const AdminReportReview = () => {
       {/* 데이터 박스 */}
       <div className="data-container">
         <div className="data-head">
+          <div className="sort-box" onClick={handleType}>
+            <div className="sort-icon">
+              <FaAngleUp />
+              <FaAngleDown />
+            </div>
+            <div className="type-selected center">
+              {(() => {
+                switch (type) {
+                  case "WAIT":
+                    return "대기";
+                  case "ACCEPT":
+                    return "승인";
+                  case "REJECT":
+                    return "거절";
+                  default:
+                    return "분류"
+                }
+              })()}
+            </div>
+          </div>
           <div className="sort-box" onClick={handleSort}>
             <div className="sort-icon">
               <FaAngleUp />
@@ -86,6 +119,34 @@ const AdminReportReview = () => {
             </div>
           </div>
         </div>
+        {typeSelectOpen && (
+          <div className="selectBox type">
+            <div
+              className="selected"
+              onClick={() => handleSelectType("")}
+            >
+              분류
+            </div>
+            <div
+              className="selected"
+              onClick={() => handleSelectType("WAIT")}
+            >
+              대기
+            </div>
+            <div
+              className="selected"
+              onClick={() => handleSelectType("ACCEPT")}
+            >
+              승인
+            </div>
+            <div
+              className="selected"
+              onClick={() => handleSelectType("REJECT")}
+            >
+              거절
+            </div>
+          </div>
+        )}
         {sortSelectOpen && (
           <div className="selectBox sort">
             <div className="selected" onClick={() => handleSelectSort("번호 낮은순")}>
@@ -93,12 +154,6 @@ const AdminReportReview = () => {
             </div>
             <div className="selected" onClick={() => handleSelectSort("번호 높은순")}>
               번호 높은순
-            </div>
-            <div className="selected" onClick={() => handleSelectSort("댓글번호 낮은순")}>
-              댓글번호 낮은순
-            </div>
-            <div className="selected" onClick={() => handleSelectSort("댓글번호 높은순")}>
-              댓글번호 높은순
             </div>
           </div>
         )}
