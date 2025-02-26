@@ -16,6 +16,7 @@ const PaginationContainer = styled.div`
     background-color: transparent;
     cursor: pointer;
     transition: background-color 0.3s, border-color 0.3s;
+    white-space: nowrap;
   }
 
   button:hover {

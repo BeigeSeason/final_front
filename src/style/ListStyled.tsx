@@ -15,10 +15,18 @@ export const List = styled.div`
 `;
 
 export const SelectSearchItem = styled.div`
-  padding-top: 40px;
   position: relative;
-  margin-right: 30px;
-  width: 450px;
+  margin-right: 50px;
+  margin-top: 100px;
+  width: 350px;
+  height: 100%;
+  padding: 40px 20px 20px 20px;
+  border-radius: 30px;
+  background-color: #f5f5f5;
+  input {
+    height: 20px;
+    padding: 8px 10px;
+  }
   .title {
     width: 100%;
     border-bottom: 1px solid #ddd;
@@ -30,24 +38,19 @@ export const SelectSearchItem = styled.div`
     }
   }
   .buttons {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    place-items: center;
+    display: flex;
+    flex-wrap: wrap;
   }
   button {
     font-size: 11px;
     font-weight: bold;
-    background-color: white;
+    background-color: transparent;
     color: ${colors.colorA};
     height: 30px;
-    width: 90%;
     margin: 3px;
-    border: 1px solid ${colors.colorC};
-
-    &.load {
-      width: 97%;
-    }
-
+    /* border: 1px solid ${colors.colorC}; */
+    border-radius: 30px;
+    padding: 5px 10px;
     &:hover {
       opacity: 0.7;
     }
@@ -66,7 +69,7 @@ export const SelectSearchItem = styled.div`
     height: 20px;
     font-size: 10px;
     padding: 0;
-    background-color: #f3f3f3;
+    background-color: #e0e0e0;
     border: none;
     border-radius: 50px;
     color: gray;
@@ -157,66 +160,6 @@ export const FilterButton = styled.div`
     transition: all 0.3s ease;
     &:hover {
       opacity: 0.7;
-    }
-  }
-`;
-export const SearchSt = styled.div`
-  position: relative;
-  flex-grow: 1;
-  display: flex;
-  align-items: center;
-
-  .search-wrapper {
-    position: relative;
-    flex-grow: 0.9;
-    display: flex;
-    align-items: center;
-  }
-
-  .search {
-    font-size: 14px;
-    height: 40px;
-    border-radius: 50px;
-    border: 2px solid ${colors.colorB};
-    padding-left: 20px;
-    outline: none;
-    width: 100%;
-    box-sizing: border-box;
-  }
-
-  .search-button {
-    position: absolute;
-    right: 15px;
-    top: 10%;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    font-size: 20px;
-    color: ${colors.colorB};
-    width: 20px;
-
-    &:hover {
-      background: transparent;
-      color: ${colors.colorA};
-      border: none;
-      transform: none;
-    }
-  }
-  button.search-button:hover {
-    background: transparent;
-    color: ${colors.colorA};
-    border: none;
-    transform: none;
-  }
-  @media (max-width: 768px) {
-    margin-top: 20px;
-    .search {
-      height: 30px;
-      font-size: 10px;
-    }
-    .search-button {
-      top: 0%;
-      scale: 0.8;
     }
   }
 `;

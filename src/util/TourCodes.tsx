@@ -133,12 +133,12 @@ export const areas = [
   },
   {
     code: "8",
-    name: "세종특별자치시",
+    name: "세종",
     subAreas: [{ code: "1", name: "세종특별자치시" }],
   },
   {
     code: "31",
-    name: "경기도",
+    name: "경기",
     subAreas: [
       { code: "1", name: "가평군" },
       { code: "2", name: "고양시" },
@@ -175,7 +175,7 @@ export const areas = [
   },
   {
     code: "32",
-    name: "강원특별자치도",
+    name: "강원",
     subAreas: [
       { code: "1", name: "강릉시" },
       { code: "2", name: "고성군" },
@@ -199,7 +199,7 @@ export const areas = [
   },
   {
     code: "33",
-    name: "충청북도",
+    name: "충청",
     subAreas: [
       { code: "1", name: "괴산군" },
       { code: "2", name: "단양군" },
@@ -217,7 +217,7 @@ export const areas = [
   },
   {
     code: "34",
-    name: "충청남도",
+    name: "충청",
     subAreas: [
       { code: "1", name: "공주시" },
       { code: "2", name: "금산군" },
@@ -238,7 +238,7 @@ export const areas = [
   },
   {
     code: "35",
-    name: "경상북도",
+    name: "경북",
     subAreas: [
       { code: "1", name: "경산시" },
       { code: "2", name: "경주시" },
@@ -266,7 +266,7 @@ export const areas = [
   },
   {
     code: "36",
-    name: "경상남도",
+    name: "경남",
     subAreas: [
       { code: "1", name: "거제시" },
       { code: "2", name: "거창군" },
@@ -292,7 +292,7 @@ export const areas = [
   },
   {
     code: "37",
-    name: "전북특별자치도",
+    name: "전북",
     subAreas: [
       { code: "1", name: "고창군" },
       { code: "2", name: "군산시" },
@@ -312,7 +312,7 @@ export const areas = [
   },
   {
     code: "38",
-    name: "전라남도",
+    name: "전남",
     subAreas: [
       { code: "1", name: "강진군" },
       { code: "2", name: "고흥군" },
@@ -340,7 +340,7 @@ export const areas = [
   },
   {
     code: "39",
-    name: "제주도",
+    name: "제주",
     subAreas: [
       { code: "1", name: "남제주군" },
       { code: "2", name: "북제주군" },

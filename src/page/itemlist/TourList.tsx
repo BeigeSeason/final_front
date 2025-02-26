@@ -294,7 +294,7 @@ export const TourList: React.FC = () => {
 
           <div className="mainarea">
             <ToggleSection
-              title="지역 선택"
+              title="지역"
               isopen={isAreaOpen}
               onToggle={() => setIsAreaOpen(!isAreaOpen)}
             >
@@ -307,7 +307,7 @@ export const TourList: React.FC = () => {
                       filters.areaCode === area.code ? "selected" : ""
                     }`}
                   >
-                    {area.name}
+                    # {area.name}
                   </Button>
                 ))}
               </div>
@@ -317,7 +317,7 @@ export const TourList: React.FC = () => {
           {selectedAreaData && (
             <div className="subarea">
               <ToggleSection
-                title="세부 지역 선택"
+                title="세부 지역"
                 isopen={isSubAreaOpen}
                 onToggle={() => setIsSubAreaOpen(!isSubAreaOpen)}
               >
@@ -330,7 +330,7 @@ export const TourList: React.FC = () => {
                         filters.subAreaCode === subArea.code ? "selected" : ""
                       }`}
                     >
-                      {subArea.name}
+                      # {subArea.name}
                     </Button>
                   ))}
                 </div>
@@ -353,7 +353,7 @@ export const TourList: React.FC = () => {
                       filters.topTheme === cat.cat1 ? "selected" : ""
                     }`}
                   >
-                    {cat.cat1Name}
+                    # {cat.cat1Name}
                   </Button>
                 ))}
               </div>
@@ -378,7 +378,7 @@ export const TourList: React.FC = () => {
                         filters.middleTheme === cat2.cat2 ? "selected" : ""
                       }`}
                     >
-                      {cat2.cat2Name}
+                      # {cat2.cat2Name}
                     </Button>
                   ))}
                 </div>
@@ -413,7 +413,7 @@ export const TourList: React.FC = () => {
                             !filters.bottomTheme.includes(cat3.cat3)
                           }
                         >
-                          {cat3.cat3Name}
+                          # {cat3.cat3Name}
                         </Button>
                       ))}
                 </div>
@@ -422,7 +422,7 @@ export const TourList: React.FC = () => {
           )}
           <div className="category">
             <ToggleSection
-              title="카테고리 선택"
+              title="카테고리"
               isopen={isCategoryOpen}
               onToggle={() => setIsCategoryOpen(!isCategoryOpen)}
             >
@@ -435,7 +435,7 @@ export const TourList: React.FC = () => {
                       filters.category === type.code ? "selected" : ""
                     }`}
                   >
-                    {type.name}
+                    # {type.name}
                   </Button>
                 ))}
               </div>
@@ -461,7 +461,7 @@ export const TourList: React.FC = () => {
               key={spot.spotId}
               id={spot.spotId}
               image={spot.thumbnail}
-              description={spot.title}
+              description={[spot.title, spot.addr]}
             />
           ))}
           <Pagination

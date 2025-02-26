@@ -1,6 +1,6 @@
 // import { TourItem } from "../../component/ItemComponent";
 import { ToggleSection, SelectedFilters } from "../../component/ItemComponent";
-import { types, areas } from "../../util/TourCodes";
+import { areas } from "../../util/TourCodes";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import { SelectSearchItem, PriceRange } from "../../style/ListStyled";
@@ -52,13 +52,7 @@ export const DiaryList: React.FC = () => {
     const queryParams = new URLSearchParams();
     Object.entries(filters).forEach(([key, value]) => {
       if (value) {
-        if (key === "bottomTheme" && typeof value === "string") {
-          queryParams.set("cat3", value);
-        } else if (key === "topTheme") {
-          queryParams.set("cat1", value);
-        } else if (key === "middleTheme") {
-          queryParams.set("cat2", value);
-        } else if (key === "searchQuery") {
+        if (key === "searchQuery") {
           queryParams.set(key, value);
         } else {
           queryParams.set(key, value.toString());
@@ -124,6 +118,24 @@ export const DiaryList: React.FC = () => {
     const newSubAreaCode =
       filters.subAreaCode === subAreaCode ? "" : subAreaCode;
     updateFilters("subAreaCode", newSubAreaCode);
+  };
+
+  const handleTopFilterChange = (key: keyof Filters, name: string) => {
+    setFilters((prev) => {
+      const newFilters: Filters = { ...prev };
+
+      if (
+        key === "areaCode" ||
+        key === "subAreaCode" ||
+        key === "searchQuery" ||
+        key === "sortBy"
+      ) {
+        console.log(newFilters[key], key);
+        newFilters[key] = "";
+      }
+
+      return newFilters;
+    });
   };
 
   const handleToggleSelect = () => {
@@ -202,7 +214,7 @@ export const DiaryList: React.FC = () => {
                     filters.areaCode === area.code ? "selected" : ""
                   }`}
                 >
-                  {area.name}
+                  # {area.name}
                 </Button>
               ))}
             </div>
@@ -225,7 +237,7 @@ export const DiaryList: React.FC = () => {
                       filters.subAreaCode === subArea.code ? "selected" : ""
                     }`}
                   >
-                    {subArea.name}
+                    # {subArea.name}
                   </Button>
                 ))}
               </div>

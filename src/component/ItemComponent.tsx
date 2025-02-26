@@ -20,20 +20,30 @@ const SpotContainer = styled(Link)`
 `;
 
 const SpotImage = styled.img`
-  width: 100px;
-  height: 80px;
-  border-radius: 8px;
+  min-width: 150px;
+  min-height: 90px;
+  max-width: 150px;
+  max-height: 90px;
   margin-right: 10px;
   object-fit: cover;
 `;
 
 const SpotDescription = styled.div`
   display: flex;
+  flex-direction: column;
+  .title {
+    font-size: 17px;
+    font-weight: bold;
+  }
+  .addr {
+    font-size: 13px;
+    color: gray;
+  }
 `;
 
 interface TourItemProps {
   image: string;
-  description: string;
+  description: React.ReactNode[];
   id: string;
 }
 
@@ -45,7 +55,10 @@ export const TourItem: React.FC<TourItemProps> = ({
   return (
     <SpotContainer to={`/tourspot/${id}`}>
       <SpotImage src={image || basicImg} alt="관광지 이미지" />{" "}
-      <SpotDescription>{description}</SpotDescription>
+      <SpotDescription>
+        <div className="title">{description[0]}</div>
+        <div className="addr">{description[1]}</div>
+      </SpotDescription>
     </SpotContainer>
   );
 };
@@ -64,7 +77,9 @@ const StyledToggleButton = styled.button<StyledToggleButtonProps>`
   font-size: 18px;
   color: ${(props) => (props.isopen ? colors.colorB : "#666")};
   transition: color 0.2s ease;
-
+  display: flex;
+  align-items: center;
+  justify-content: center;
   .icon {
     display: inline-block;
     transform: ${(props) => (props.isopen ? "rotate(180deg)" : "rotate(0deg)")};
