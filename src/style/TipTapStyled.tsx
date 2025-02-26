@@ -20,20 +20,36 @@ export const TipTapContainer = styled.div`
     p {
       margin: 0;
     }
-    table {
-      border-collapse: collapse;
-      width: 100%;
+
+    hr {
+      width: 90%;
     }
 
+    table {
+      border-collapse: collapse;
+      table-layout: fixed;
+      width: 100%;
+      margin: 0 auto;
+    }
     th,
     td {
       border: 1px solid black;
       padding: 8px;
       text-align: left;
+      max-width: 33%;
     }
-
     th {
-      background-color: #f4f4f4;
+      background-color: #e6f0f7;
+      font-weight: normal;
+    }
+    .resize-handle {
+      cursor: pointer;
+      width: 5px; /* 핸들러 크기 */
+      height: 100%;
+      background-color: #ddd; /* 시각적으로 구분 가능하도록 */
+    }
+    &.resize-cursor {
+      cursor: col-resize;
     }
   }
 `;
@@ -58,7 +74,8 @@ export const ToolContainer = styled.div`
   &::-webkit-scrollbar-thumb:hover {
     background: #999;
   }
-  .tool-button {
+  .tool-button,
+  .upload-button {
     display: inline-flex;
     position: relative;
     background-color: transparent;
@@ -67,15 +84,30 @@ export const ToolContainer = styled.div`
     color: #333;
     cursor: pointer;
   }
+  .upload-button {
+    padding: 1px 6px;
+  }
   .toggle-button-container {
     display: flex;
     position: relative;
+    align-items: center;
     .tool-toggle {
       display: flex;
       position: absolute;
+      z-index: 99;
       left: 26px;
       top: -1px;
-      background-color: #e29696;
+      margin-left: 4px; /* 버튼과 살짝 띄우기 */
+      background-color: #fff;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      opacity: 0; /* 처음엔 숨김 */
+      transform: translateX(-10px); /* 살짝 왼쪽에서 시작 */
+      transition: opacity 0.5s ease, transform 0.5s ease; /* 부드러운 전환 */
+
+      &.visible {
+        opacity: 1;
+        transform: translateX(0);
+      }
       .toggle-element {
         margin: 1px 0;
       }
@@ -94,22 +126,6 @@ export const ToolContainer = styled.div`
     color: #ccc;
     font-size: 18px;
     margin: auto 13px;
-  }
-`;
-
-export const ContentContainer = styled.div`
-  display: flex;
-  position: relative;
-  z-index: 1;
-  padding: 10px;
-  .tiptap {
-    min-height: 330px;
-    line-height: 25px;
-    &:focus {
-      outline: none;
-    }
-    p {
-      margin: 0;
-    }
+    padding-bottom: 1px;
   }
 `;

@@ -19,24 +19,9 @@ import TableCell from "@tiptap/extension-table-cell";
 import TableHeader from "@tiptap/extension-table-header";
 
 import { useState } from "react";
-import {
-  TipTapContainer,
-  ToolContainer,
-  ContentContainer,
-} from "../../style/TipTapStyled";
+import { TipTapContainer, ToolContainer } from "../../style/TipTapStyled";
 
-import {
-  FaBold,
-  FaItalic,
-  FaAlignLeft,
-  FaAlignCenter,
-  FaAlignRight,
-  FaList,
-  FaListOl,
-  FaMinus,
-  FaQuoteLeft,
-  FaTextSlash,
-} from "react-icons/fa6";
+import { FaMinus, FaQuoteLeft, FaTextSlash } from "react-icons/fa6";
 import {
   LuBold,
   LuItalic,
@@ -52,6 +37,20 @@ import {
   LuImage,
 } from "react-icons/lu";
 import { AiOutlineStrikethrough, AiOutlineFontColors } from "react-icons/ai";
+import { PiTextAUnderlineFill } from "react-icons/pi";
+import {
+  TbTableDashed,
+  TbTablePlus,
+  TbColumnInsertLeft,
+  TbColumnInsertRight,
+  TbRowInsertTop,
+  TbRowInsertBottom,
+  TbTableMinus,
+  TbColumnRemove,
+  TbRowRemove,
+  TbTableOff,
+} from "react-icons/tb";
+import { VscColorMode } from "react-icons/vsc";
 
 interface ToolBarProps {
   editor?: Editor | null;
@@ -60,15 +59,18 @@ interface ToolBarProps {
 // https://velog.io/@gaoridang/tiptap%EC%9C%BC%EB%A1%9C-React-rich-text-editor-%EA%B5%AC%ED%98%84%ED%95%98%EA%B8%B0
 
 export const TipTap: React.FC<ToolBarProps> = () => {
-  const [isColorToggleOpen, setIsColorToggleOpen] = useState<boolean>(false);
-  const [isBGColorToggleOpen, setIsBGColorToggleOpen] =
-    useState<boolean>(false);
+  const [openToggle, setOpenToggle] = useState<string | null>(null);
+
+  const handleToggle = (toggleName: string | null) => {
+    setOpenToggle((prev) => (prev === toggleName ? null : toggleName));
+  };
+
   const editor = useEditor({
     extensions: [
       StarterKit, // bold, italic, list 등 기본 편집기능 제공
       TextStyle, // 글자 스타일 확장
-      FontSize.configure({ types: ["textStyle"] }), // 글자 크기 확장
-      Color.configure({ types: [TextStyle.name] }), // TextStyle 확장과 연동
+      FontSize.configure({ types: ["textStyle"] }),
+      Color.configure({ types: [TextStyle.name] }),
       Highlight.configure({ multicolor: true }),
       Underline,
       TextAlign.configure({ types: ["heading", "paragraph"] }),
@@ -78,7 +80,7 @@ export const TipTap: React.FC<ToolBarProps> = () => {
       TableRow,
       TableCell,
       TableHeader,
-      Image,
+      Image.configure({ inline: true, allowBase64: true }),
     ],
     content: "",
   });
@@ -115,6 +117,7 @@ export const TipTap: React.FC<ToolBarProps> = () => {
   //   setDropdownVisible(false);
   // };
   const colorOptions = [
+    { label: "Black", color: "black" },
     { label: "Red", color: "red" },
     { label: "Blue", color: "blue" },
     { label: "Green", color: "green" },
@@ -175,18 +178,24 @@ export const TipTap: React.FC<ToolBarProps> = () => {
         <div className="toggle-button-container">
           <button
             className="tool-button"
-            onClick={() => setIsColorToggleOpen(!isColorToggleOpen)}
+            onClick={() => handleToggle("color")}
+            title="글자 색상"
           >
             <AiOutlineFontColors />
           </button>
-          {isColorToggleOpen && (
-            <div className="tool-toggle">
-              {colorOptions.map(({ label, color }) => (
+          {openToggle === "color" && (
+            <div
+              className={`tool-toggle ${
+                openToggle === "color" ? "visible" : ""
+              }`}
+            >
+              {colorOptions.map(({ color }) => (
                 <button
                   key={color}
                   className="tool-button"
                   onClick={() => {
                     editor.chain().focus().setColor(color).run();
+                    handleToggle(null);
                   }}
                 >
                   <AiOutlineFontColors
@@ -198,27 +207,70 @@ export const TipTap: React.FC<ToolBarProps> = () => {
             </div>
           )}
         </div>
-        {colorOptions.map(({ label, color }) => (
+        <div className="toggle-button-container">
           <button
-            key={color}
+            className="tool-button"
             onClick={() => {
-              editor.chain().focus().setColor(color).run();
+              editor.chain().focus().toggleHighlight().run();
+              handleToggle("bgColor");
             }}
-            style={{ backgroundColor: color }}
+            style={{ fontSize: "18px", color: "#444" }}
           >
-            {label}
+            <PiTextAUnderlineFill />
           </button>
-        ))}
-        {highlightOptions.map(({ label, color }) => (
-          <button
-            key={color}
-            onClick={() => {
-              editor.chain().focus().toggleHighlight({ color: color }).run();
-            }}
-          >
-            {label}
-          </button>
-        ))}
+          {openToggle === "bgColor" && (
+            <div
+              className={`tool-toggle ${
+                openToggle === "bgColor" ? "visible" : ""
+              }`}
+            >
+              <button
+                className="tool-button"
+                onClick={() => {
+                  editor
+                    .chain()
+                    .focus()
+                    .toggleHighlight({ color: "transparent" })
+                    .run();
+                }}
+                style={{ fontSize: "18px" }}
+              >
+                <PiTextAUnderlineFill
+                  className="toggle-element"
+                  style={{ color: "#444" }}
+                  onClick={() => {
+                    editor
+                      .chain()
+                      .focus()
+                      .toggleHighlight({ color: "black" })
+                      .run();
+                    handleToggle(null);
+                  }}
+                />
+              </button>
+              {highlightOptions.map(({ color }) => (
+                <button
+                  key={color}
+                  className="tool-button"
+                  onClick={() => {
+                    editor
+                      .chain()
+                      .focus()
+                      .toggleHighlight({ color: color })
+                      .run();
+                    handleToggle(null);
+                  }}
+                  style={{ fontSize: "18px" }}
+                >
+                  <PiTextAUnderlineFill
+                    className="toggle-element"
+                    style={{ color }}
+                  />
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
         <button
           className="tool-button"
           onClick={() => editor.chain().focus().unsetAllMarks().run()}
@@ -308,6 +360,7 @@ export const TipTap: React.FC<ToolBarProps> = () => {
           onChange={handleImageUpload}
         />
         <button
+          className="tool-button"
           onClick={() =>
             editor
               .chain()
@@ -315,30 +368,119 @@ export const TipTap: React.FC<ToolBarProps> = () => {
               .insertTable({ rows: 3, cols: 3, withHeaderRow: true })
               .run()
           }
+          title="표 생성"
         >
-          표 추가
+          <TbTableDashed />
         </button>
-        {/* https://tiptap.dev/docs/editor/extensions/nodes/table */}
-        <button onClick={() => editor.chain().focus().addColumnBefore().run()}>
-          열 추가 (왼쪽)
+        <div className="toggle-button-container">
+          <button
+            className="tool-button"
+            onClick={() => handleToggle("tableAdd")}
+            title="행/열 추가"
+          >
+            <TbTablePlus />
+          </button>
+          {openToggle === "tableAdd" && (
+            <div
+              className={`tool-toggle ${
+                openToggle === "tableAdd" ? "visible" : ""
+              }`}
+            >
+              <button
+                className="tool-button"
+                style={{ fontSize: "18px" }}
+                onClick={() => {
+                  editor.chain().focus().addColumnBefore().run();
+                  handleToggle(null);
+                }}
+              >
+                <TbColumnInsertLeft className="toggle-element" />
+              </button>
+              <button
+                className="tool-button"
+                style={{ fontSize: "18px" }}
+                onClick={() => {
+                  editor.chain().focus().addColumnAfter().run();
+                  handleToggle(null);
+                }}
+              >
+                <TbColumnInsertRight className="toggle-element" />
+              </button>
+              <button
+                className="tool-button"
+                style={{ fontSize: "18px" }}
+                onClick={() => {
+                  editor.chain().focus().addRowBefore().run();
+                  handleToggle(null);
+                }}
+              >
+                <TbRowInsertTop className="toggle-element" />
+              </button>
+              <button
+                className="tool-button"
+                style={{ fontSize: "18px" }}
+                onClick={() => {
+                  editor.chain().focus().addRowAfter().run();
+                  handleToggle(null);
+                }}
+              >
+                <TbRowInsertBottom className="toggle-element" />
+              </button>
+            </div>
+          )}
+        </div>
+        <div className="toggle-button-container">
+          <button
+            className="tool-button"
+            onClick={() => handleToggle("tableRemove")}
+            title="행/열 삭제"
+          >
+            <TbTableMinus />
+          </button>
+          {openToggle === "tableRemove" && (
+            <div
+              className={`tool-toggle ${
+                openToggle === "tableRemove" ? "visible" : ""
+              }`}
+            >
+              <button
+                className="tool-button"
+                style={{ fontSize: "18px" }}
+                onClick={() => {
+                  editor.chain().focus().deleteColumn().run();
+                  handleToggle(null);
+                }}
+                title="열 삭제"
+              >
+                <TbColumnRemove className="toggle-element" />
+              </button>
+              <button
+                className="tool-button"
+                style={{ fontSize: "18px" }}
+                onClick={() => {
+                  editor.chain().focus().deleteRow().run();
+                  handleToggle(null);
+                }}
+                title="행 삭제"
+              >
+                <TbRowRemove className="toggle-element" />
+              </button>
+            </div>
+          )}
+        </div>
+        <button
+          className="tool-button"
+          onClick={() => editor.chain().focus().deleteTable().run()}
+          title="표 삭제"
+        >
+          <TbTableOff />
         </button>
-        <button onClick={() => editor.chain().focus().addColumnAfter().run()}>
-          열 추가 (오른쪽)
-        </button>
-        <button onClick={() => editor.chain().focus().addRowBefore().run()}>
-          행 추가 (위쪽)
-        </button>
-        <button onClick={() => editor.chain().focus().addRowAfter().run()}>
-          행 추가 (아래쪽)
-        </button>
-        <button onClick={() => editor.chain().focus().deleteColumn().run()}>
-          열 삭제
-        </button>
-        <button onClick={() => editor.chain().focus().deleteRow().run()}>
-          행 삭제
-        </button>
-        <button onClick={() => editor.chain().focus().deleteTable().run()}>
-          표 삭제
+        <button
+          className="tool-button"
+          onClick={() => editor.chain().focus().toggleHeaderCell().run()}
+          title="배경색 제거"
+        >
+          <VscColorMode />
         </button>
         <span className="separate-line">|</span>
         <button
@@ -357,7 +499,14 @@ export const TipTap: React.FC<ToolBarProps> = () => {
         </button>
       </ToolContainer>
 
-      <EditorContent className="tiptap-content" editor={editor} />
+      <EditorContent
+        className="tiptap-content"
+        editor={editor}
+        onClick={() => {
+          setOpenToggle(null);
+          console.log(editor.getHTML());
+        }}
+      />
     </TipTapContainer>
   );
 };
