@@ -3,6 +3,8 @@ import { Button } from "../../component/ButtonComponent";
 import { ItemApi } from "../../api/ItemApi";
 import { useState, useEffect } from "react";
 import { TourItem } from "../../component/ItemComponent";
+import { SearchResultBox } from "../../style/ListStyled";
+import { GlobalFont } from "../../style/GlobalStyled";
 
 interface Filters {
   searchQuery: string;
@@ -79,24 +81,32 @@ export const SearchPage = () => {
 
   return (
     <div>
-      <h1>검색 결과</h1>
-      <p>검색어: {filters.searchQuery}</p>
-      <Button onClick={handleTourMoreClick}>관광지 더보기</Button>
-      {loading ? (
-        <p>로딩 중...</p>
-      ) : error ? (
-        <p>{error}</p>
-      ) : (
-        tourSpots.map((spot) => (
-          <TourItem
-            key={spot.spotId}
-            id={spot.spotId}
-            image={spot.thumbnail}
-            description={[spot.title, spot.addr]}
-          />
-        ))
-      )}
-      <Button onClick={handleDiaryMoreClick}>여행일기 더보기</Button>
+      <GlobalFont />
+      <h1>"{filters.searchQuery}" 검색 결과</h1>
+      <SearchResultBox>
+        <div className="more">
+          <p className="title-font">관광지</p>
+          <Button onClick={handleTourMoreClick}>더보기 › </Button>
+        </div>
+        {loading ? (
+          <p>로딩 중...</p>
+        ) : error ? (
+          <p>{error}</p>
+        ) : (
+          tourSpots.map((spot) => (
+            <TourItem
+              key={spot.spotId}
+              id={spot.spotId}
+              image={spot.thumbnail}
+              description={[spot.title, spot.addr]}
+            />
+          ))
+        )}
+        <div className="more">
+          <p className="title-font">여행일기</p>
+          <Button onClick={handleDiaryMoreClick}>더보기 ›</Button>
+        </div>
+      </SearchResultBox>
     </div>
   );
 };

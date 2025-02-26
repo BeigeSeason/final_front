@@ -227,3 +227,25 @@ export const PriceRange = styled.div`
     cursor: grab;
   }
 `;
+
+// 검색 페이지 스타일 ------------------------------------------------------------------------------------------
+export const SearchResultBox = styled.div`
+  width: 80vw;
+  margin: auto;
+
+  .more {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 40px;
+    p {
+      font-size: 30px;
+      font-weight: bold;
+    }
+    button {
+      height: 20px;
+      background-color: #ddd;
+      color: #7c7c7c;
+    }
+  }
+`;

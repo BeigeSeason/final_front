@@ -190,7 +190,7 @@ export const DiaryList: React.FC = () => {
                 setMinPrice(values[0]);
                 setMaxPrice(values[1]);
               }}
-              renderThumb={(props) => <div {...props} />}
+              renderThumb={(props) => <div {...props} key={props.key} />}
             />
           </div>
           <div>
