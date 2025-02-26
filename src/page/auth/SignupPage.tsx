@@ -29,10 +29,15 @@ export const SignupPage = () => {
   const [openEditProfileImgModal, setOpenEditProfileImgModal] =
     useState<boolean>(false);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
-  const [isAllValid, setIsAllValid] = useState(false);
+  // const [isAllValid, setIsAllValid] = useState(false);
 
   const isFormFilled =
-    userId && email && password && confirmPassword && name && nickname;
+    !!userId &&
+    !!email &&
+    !!password &&
+    !!confirmPassword &&
+    !!name &&
+    !!nickname;
 
   const profileImgs: { name: string; alt: string }[] = [
     { name: Profile1, alt: "기본1" },
@@ -46,10 +51,10 @@ export const SignupPage = () => {
     setSelectedProfile(profileName);
     if (profileImgs.some((profile) => profile.name === profileName)) {
       const profileImage = profileImgs.find((pic) => pic.name === profileName);
-      console.log(">>>", profileImage?.name);
-      console.log("기본 이미지 선택된거임");
+      // console.log(">>>", profileImage?.name);
+      // console.log("기본 이미지 선택된거임");
     } else {
-      console.log("firebase에 선택한 이미지 업로드 해야됨");
+      // console.log("firebase에 선택한 이미지 업로드 해야됨");
     }
     // 그리고 DB에 프로필 이미지 경로 넣어줘야되고, 토큰이든 localstorage든 imgPath 변경해줘야됨.
     setOpenEditProfileImgModal(false);
@@ -61,11 +66,6 @@ export const SignupPage = () => {
       setUpdatedProfile(fileURL);
     }
   };
-
-  useEffect(() => {
-    const noErrors = Object.values(errors).every((error) => error === "");
-    setIsAllValid(noErrors);
-  }, [errors]);
 
   // 아이디 유효성 검사 ---------------
   const validateid = (value: string) => {
@@ -119,68 +119,114 @@ export const SignupPage = () => {
     return "";
   };
 
-  const validateField = async (
-    field: string,
-    value: string,
-    password?: string
-  ) => {
+  const [isValid, setIsValid] = useState({
+    id: false,
+    email: false,
+    password: false,
+    confirmPassword: false,
+    name: false,
+    nickname: false,
+  });
+
+  const handleChange = (field: string, value: string, password?: string) => {
+    // 해당 필드에 대해 상태 업데이트
+    switch (field) {
+      case "userId":
+        setuserId(value);
+        break;
+      case "email":
+        setEmail(value);
+        break;
+      case "password":
+        setPassword(value);
+        break;
+      case "confirmPassword":
+        setConfirmPassword(value);
+        break;
+      case "name":
+        setName(value);
+        break;
+      case "nickname":
+        setNickname(value);
+        break;
+      default:
+        break;
+    }
+
+    // 유효성 검사
     let errorMessage = "";
-
-    if (field === "id") {
-      errorMessage = await validateid(value);
+    switch (field) {
+      case "userId":
+        errorMessage = validateid(value);
+        break;
+      case "email":
+        errorMessage = validateEmail(value);
+        break;
+      case "password":
+        errorMessage = validatePassword(value);
+        break;
+      case "confirmPassword":
+        if (password) {
+          errorMessage = validateConfirmPassword(password, value);
+        }
+        break;
+      case "name":
+        errorMessage = validateName(value);
+        break;
+      case "nickname":
+        errorMessage = validateNickname(value);
+        break;
+      default:
+        break;
     }
 
-    if (field === "email") {
-      errorMessage = validateEmail(value);
-    }
-
-    if (field === "password") {
-      errorMessage = validatePassword(value);
-    }
-
-    if (field === "confirmPassword" && password) {
-      errorMessage = validateConfirmPassword(password, value);
-    }
-
-    if (field === "name") {
-      errorMessage = validateName(value);
-    }
-
-    if (field === "nickname") {
-      errorMessage = validateNickname(value);
-    }
-
-    setErrors((prev) => ({ ...prev, [field]: errorMessage }));
+    // 에러 메시지 상태 업데이트
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [field]: errorMessage,
+    }));
   };
 
-  const handleInputChange =
-    (setter: React.Dispatch<React.SetStateAction<string>>, field: string) =>
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const value = e.target.value;
-      setter(value);
-      if (field === "confirmPassword") {
-        validateField(field, value, password);
-      } else {
-        validateField(field, value);
-      }
-    };
+  // 각 필드에서 handleChange 호출
+  const handleidChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    handleChange("userId", value);
+  };
 
-  const handleidChange = handleInputChange(setuserId, "userId");
-  const handleEmailChange = handleInputChange(setEmail, "email");
-  const handlePasswordChange = handleInputChange(setPassword, "password");
-  const handleConfirmPasswordChange = handleInputChange(
-    setConfirmPassword,
-    "confirmPassword"
-  );
-  const handleNameChange = handleInputChange(setName, "name");
-  const handleNicknameChange = handleInputChange(setNickname, "nickname");
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    handleChange("email", value);
+  };
+
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    handleChange("password", value);
+  };
+
+  const handleConfirmPasswordChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const { value } = e.target;
+    handleChange("confirmPassword", value, password);
+  };
+
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    handleChange("name", value);
+  };
+
+  const handleNicknameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    handleChange("nickname", value);
+  };
 
   useEffect(() => {
-    console.log("원래 경로 : ", profileImgs[0].name);
-    console.log(selectedProfile);
+    // console.log("원래 경로 : ", profileImgs[0].name);
+    // console.log(selectedProfile);
   }, [selectedProfile]);
 
   const [showModal, setShowModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
   const navigate = useNavigate();
 
   const handleTermsChange = () => {
@@ -196,15 +242,60 @@ export const SignupPage = () => {
       setShowForm(true);
     }
   };
+  const [idChecked, setIdChecked] = useState(false);
+  const [emailChecked, setEmailChecked] = useState(false);
+  const [nicknameChecked, setNicknameChecked] = useState(false);
+  const [isIdAvailable, setIsIdAvailable] = useState(false);
+  const [isEmailAvailable, setIsEmailAvailable] = useState(false);
+  const [isNicknameAvailable, setIsNicknameAvailable] = useState(false);
+  const [isSignupSuccess, setIsSignupSuccess] = useState<boolean>(false);
+
+  const handleCheckId = async () => {
+    const isIdAvailable = await AxiosApi.checkMemberIdExists(userId);
+    if (isIdAvailable) {
+      setErrors((prev) => ({ ...prev, userId: "이미 존재하는 아이디입니다." }));
+      setIsIdAvailable(false); // 중복인 경우 false
+    } else {
+      setErrors((prev) => ({ ...prev, userId: "사용 가능한 아이디입니다." }));
+      setIsIdAvailable(true); // 중복이 아닌 경우 true
+    }
+    setIdChecked(true);
+    console.log("아이디 중복 검사 완료:", isIdAvailable);
+  };
+
+  const handleCheckEmail = async () => {
+    const isEmailAvailable = await AxiosApi.checkMemberEmailExists(email);
+    if (isEmailAvailable) {
+      setErrors((prev) => ({ ...prev, email: "이미 존재하는 이메일입니다." }));
+      setIsEmailAvailable(false); // 이메일이 이미 존재하면 사용 불가능 상태
+    } else {
+      setErrors((prev) => ({ ...prev, email: "사용 가능한 이메일입니다." }));
+      setIsEmailAvailable(true); // 이메일이 사용 가능하면 상태 업데이트
+    }
+    setEmailChecked(true); // 중복 확인 후 상태 업데이트
+    console.log("이메일 중복 검사 완료:", isEmailAvailable);
+  };
+
+  const handleCheckNickname = async () => {
+    const isNicknameAvailable = await AxiosApi.checkMemberNicknameExists(
+      nickname
+    );
+    if (isNicknameAvailable) {
+      setErrors((prev) => ({
+        ...prev,
+        nickname: "이미 존재하는 닉네임입니다.",
+      }));
+      setIsNicknameAvailable(false); // 닉네임이 이미 존재하면 사용 불가능 상태
+    } else {
+      setErrors((prev) => ({ ...prev, nickname: "사용 가능한 닉네임입니다." }));
+      setIsNicknameAvailable(true); // 닉네임이 사용 가능하면 상태 업데이트
+    }
+    setNicknameChecked(true); // 중복 확인 후 상태 업데이트
+    console.log("닉네임 중복 검사 완료:", isNicknameAvailable);
+  };
 
   const handleSignup = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    if (!isAllValid) {
-      setShowModal(true); // 오류 모달 표시
-      return;
-    }
-
     const signupRequest = {
       userId,
       password,
@@ -213,13 +304,16 @@ export const SignupPage = () => {
       nickname,
       // profileImg: selectedProfile,
     };
-    console.log("회원가입 요청 데이터:", signupRequest);
-
     try {
       const response = await AxiosApi.signup(signupRequest);
       console.log("회원가입 성공:", response);
-      navigate("/");
+      setModalMessage("회원가입이 완료되었습니다!");
+      setIsSignupSuccess(true);
+      setShowModal(true);
     } catch (error) {
+      setModalMessage("회원가입에 실패했습니다. 다시 시도해주세요.");
+      setIsSignupSuccess(false);
+      setShowModal(true);
       setErrors((prev) => ({
         ...prev,
         general: "회원가입에 실패했습니다. 다시 시도해주세요.",
@@ -227,11 +321,18 @@ export const SignupPage = () => {
     }
   };
 
+  useEffect(() => {
+    console.log("isFormFilled:", isFormFilled);
+    console.log("isValid:", isValid);
+  }, [isFormFilled, isValid]);
+
   const handleCloseModal = () => {
     setShowModal(false);
-    navigate("/");
-  };
 
+    if (isSignupSuccess) {
+      navigate("/");
+    }
+  };
   return (
     <AuthBox>
       <h2>회원가입</h2>
@@ -281,9 +382,9 @@ export const SignupPage = () => {
               </label>
             </div>
             <div className="signupBox">
-              {errors.id && (
+              {errors.userId && (
                 <p className="errmsg" style={{ color: "red" }}>
-                  {errors.id}
+                  {errors.userId}
                 </p>
               )}
               <InputBox
@@ -294,6 +395,9 @@ export const SignupPage = () => {
                 placeholder="아이디 입력"
                 required
               />
+              <Button type="button" onClick={handleCheckId}>
+                중복 확인
+              </Button>
             </div>
             <div className="signupBox">
               {errors.email && (
@@ -310,6 +414,9 @@ export const SignupPage = () => {
                 placeholder="이메일 입력"
                 required
               />
+              <Button type="button" onClick={handleCheckEmail}>
+                중복 확인
+              </Button>
             </div>
 
             <div className="signupBox">
@@ -359,6 +466,7 @@ export const SignupPage = () => {
                 required
               />
             </div>
+
             <div className="signupBox">
               {errors.nickname && (
                 <p className="errmsg" style={{ color: "red" }}>
@@ -374,17 +482,27 @@ export const SignupPage = () => {
                 required
               />
             </div>
+            <Button type="button" onClick={handleCheckNickname}>
+              중복 확인
+            </Button>
+
             <Button
               className="submitButton"
               type="submit"
-              disabled={!isFormFilled || !isAllValid}
+              disabled={
+                !isFormFilled || Object.values(isValid).includes(false)
+                //  ||
+                // isIdAvailable ||
+                // isEmailAvailable ||
+                // isNicknameAvailable
+              }
             >
               회원가입
             </Button>
           </form>
 
           <CheckModal isOpen={showModal} onClose={handleCloseModal}>
-            회원가입이 완료되었습니다!
+            {modalMessage}
           </CheckModal>
 
           {openEditProfileImgModal && (

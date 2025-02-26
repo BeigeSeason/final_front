@@ -2,6 +2,7 @@ import JwtAxios from "./JwtAxios";
 import { AxiosResponse } from "axios";
 import axios from "axios";
 import Common from "../util/Common";
+import { API_BASE_URL } from "../util/Common";
 
 interface LoginRequest {
   userId: string;
@@ -62,7 +63,7 @@ const AxiosApi = {
     size = 10,
     searchType = "NAME",
     searchValue = "",
-    type : boolean | null = null,
+    type: boolean | null = null,
     sort = "idDesc"
   ) => {
     try {
@@ -70,9 +71,12 @@ const AxiosApi = {
       //   params: { page, size, searchType, searchValue },
       // });
       // 토큰, 관리자 구현전까지 그냥 다이렉트 조회
-      const response = await axios.get(`${Common.FINAL_DOMAIN}/admin/member-list`, {
-        params: { page, size, searchType, searchValue, type, sort },
-      });
+      const response = await axios.get(
+        `${Common.FINAL_DOMAIN}/admin/member-list`,
+        {
+          params: { page, size, searchType, searchValue, type, sort },
+        }
+      );
       return response.data;
     } catch (error) {
       console.error("멤버 리스트 조회 중 오류 발생:", error);
@@ -86,15 +90,63 @@ const AxiosApi = {
       //   params: { page, size, reportType },
       // });
       // 토큰, 관리자 구현전까지 그냥 다이렉트 조회
-      const response = await axios.get(`${Common.FINAL_DOMAIN}/admin/report-list`, {
-        params: { page, size, reportType },
-      })
+      const response = await axios.get(
+        `${Common.FINAL_DOMAIN}/admin/report-list`,
+        {
+          params: { page, size, reportType },
+        }
+      );
       return response.data;
     } catch (error) {
       console.error("신고 리스트 조회 중 오류 발생:", error);
       throw error;
     }
   },
+  // 유저 정지
+  banMember: async (id = 1, day = 0, reason = "") => {
+    try {
+      const response = await axios.post(`${Common.FINAL_DOMAIN}/admin/member-ban`, { id, day, reason });
+      return response.data;
+    } catch (error) {
+      console.error("유저 정지 실패:", error);
+      throw error;
+    }
+  },
+  checkMemberIdExists: async (userId: string) => {
+    try {
+      const response = await axios.post(
+        `${API_BASE_URL}/member/idExists/${userId}`
+      );
+      return response.data;
+    } catch (error) {
+      console.error("아이디 중복 확인 에러:", error);
+      return true;
+    }
+  },
+  checkMemberEmailExists: async (email: string) => {
+    try {
+      const response = await axios.post(
+        `${API_BASE_URL}/member/emailExists/${email}`
+      );
+      return response.data;
+    } catch (error) {
+      console.error("이메일 중복 확인 에러:", error);
+      return true;
+    }
+  },
+  checkMemberNicknameExists: async (nickname: string) => {
+    try {
+      const response = await axios.post(
+        `${API_BASE_URL}/member/nicknameExists/${nickname}`
+      );
+      return response.data;
+    } catch (error) {
+      console.error("닉네임 중복 확인 에러:", error);
+      return true;
+    }
+  },
 };
 
 export default AxiosApi;
+
+// 회원 닉네임 중복 확인
