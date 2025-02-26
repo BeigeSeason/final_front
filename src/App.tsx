@@ -15,6 +15,7 @@ import { FindIdPage } from "./page/auth/FindIdPage";
 import { FindPwPage } from "./page/auth/FindPwPage";
 import { SignupPage } from "./page/auth/SignupPage";
 import CreateDiary from "./page/diary/CreateDiary";
+import { TourSpot } from "./page/itemlist/TourSpot";
 import { Provider } from "react-redux";
 import store from "./redux/store";
 
@@ -34,6 +35,8 @@ function App() {
               <Route path="/findpw" element={<FindPwPage />} />
               <Route path="/signup" element={<SignupPage />} />
               <Route path="/creatediary" element={<CreateDiary />} />
+              <Route path="/tourspot" element={<TourSpot />} />
+              <Route path="/tourspot/:id" element={<TourSpot />} />
             </Route>
             <Route element={<AdminLayout />}>
               <Route path="/admin" element={<AdminHome />} />
