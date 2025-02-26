@@ -95,6 +95,16 @@ const AxiosApi = {
       throw error;
     }
   },
+  // 유저 정지
+  banMember: async (id = 1, day = 0, reason = "") => {
+    try {
+      const response = await axios.post(`${Common.FINAL_DOMAIN}/admin/member-ban`, { id, day, reason });
+      return response.data;
+    } catch (error) {
+      console.error("유저 정지 실패:", error);
+      throw error;
+    }
+  },
 };
 
 export default AxiosApi;

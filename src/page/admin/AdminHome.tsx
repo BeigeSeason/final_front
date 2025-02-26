@@ -26,6 +26,11 @@ const AdminHome = () => {
   const [searchType, setSearchType] = useState("ID");
   const [searchValue, setSearchValue] = useState("");
 
+  const [banId, setBanId] = useState<number | undefined>(undefined);
+  const [banUserId, setBanUserId] = useState<String | undefined>(undefined);
+  const [banDate, setBanDate] = useState(0);
+  const [banReason, setBanReason] = useState("");
+
   const [type, setType] = useState<boolean | null>(null);
   const [sort, setSort] = useState("");
 
@@ -101,16 +106,28 @@ const AdminHome = () => {
   };
 
   // 유저 관리 모달
-  const openModal = () => {
+  const openModal = (id: number, userId: string) => {
     setIsModalOpen(true);
+    setBanId(id);
+    setBanUserId(userId);
   };
   const closeModal = () => {
     setIsModalOpen(false);
+    setBanDate(0);
+    setBanReason("");
   };
 
   // 유저 관리
-  const manageUser = () => {
+  const manageUser = async () => {
     setIsModalOpen(false);
+    try {
+      await AxiosApi.banMember(banId, banDate, banReason);
+    } catch (error) {
+      console.log("유저 정지 에러:", error);
+    }
+    setBanDate(0);
+    setBanReason("");
+    memberList();
   };
 
   return (
@@ -308,7 +325,7 @@ const AdminHome = () => {
                     {member.banned ? "정지" : "정상"}
                   </td>
                   <td className="center">
-                    <button onClick={openModal}>관리</button>
+                    <button onClick={() => openModal(member.id, member.userId)}>관리</button>
                   </td>
                 </tr>
               ))
@@ -388,16 +405,28 @@ const AdminHome = () => {
 
       {/* 관리버튼 모달 */}
       <Modal isOpen={isModalOpen} onConfirm={manageUser} onClose={closeModal}>
-        <p>정지일</p>
-        <select name="ban-date" id="ban-date">
-          <option value="1day">1일</option>
-          <option value="3days">3일</option>
-          <option value="7days">7일</option>
-          <option value="30days">30일</option>
-          <option value="fvr">영구 정지</option>
+        <span>번호 : {banId}</span>
+        <p>아이디 : {banUserId}</p>
+        <span>정지일 : </span>
+        <select 
+          name="ban-date" 
+          id="ban-date" 
+          value={banDate}
+          onChange={(e) => setBanDate(Number(e.target.value))}
+          className="text-center"
+        >
+          <option value={1}>1일</option>
+          <option value={3}>3일</option>
+          <option value={7}>7일</option>
+          <option value={30}>30일</option>
+          <option value={36500}>영구 정지</option>
         </select>
         <p>정지 사유</p>
-        <input type="text" />
+        <input 
+          type="text" 
+          value={banReason} 
+          onChange={(e) => setBanReason(e.target.value)}
+        />
       </Modal>
     </AdminContainer>
   );

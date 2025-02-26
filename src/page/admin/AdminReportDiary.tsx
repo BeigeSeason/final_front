@@ -123,7 +123,7 @@ const AdminReportDiary = () => {
                   <td>{report.reported.userId}</td>
                   <td>{report.reporter.userId}</td>
                   <td>{report.reason}</td>
-                  <td className="center">
+                  <td className="text-center">
                     {(() => {
                         switch (report.state) {
                           case 'WAIT':
@@ -137,7 +137,7 @@ const AdminReportDiary = () => {
                         }
                       })()}
                   </td>
-                  <td className="center">
+                  <td className="text-center">
                     <button>
                       관리
                     </button>

@@ -125,7 +125,7 @@ const AdminReportReview = () => {
                   <td>{report.reviewContent}</td>
                   <td>{report.reporter.userId}</td>
                   <td>{report.reason}</td>
-                  <td className="center">
+                  <td className="text-center">
                     {(() => {
                         switch (report.state) {
                           case 'WAIT':
@@ -139,7 +139,7 @@ const AdminReportReview = () => {
                         }
                       })()}
                   </td>
-                  <td className="center">
+                  <td className="text-center">
                     <button>
                       관리
                     </button>

@@ -14,6 +14,9 @@ export const AdminContainer = styled.div`
   .text-center {
     text-align: center;
   }
+  .text-right {
+    text-align: right;
+  }
   .search-container {
     position: relative;
     width: 80%;
