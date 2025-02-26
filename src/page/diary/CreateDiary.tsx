@@ -16,11 +16,6 @@ import {
 } from "../../style/CreateDiaryStyled";
 import React, { useState } from "react";
 
-// 공홈
-// https://tiptap.dev/docs/examples/basics/default-text-editor
-// 참고 블로그
-// https://velog.io/@bae-sh/React-quill%EC%97%90%EC%84%9C-tiptap-%EC%9C%BC%EB%A1%9C
-
 const CreateDiary = () => {
   const [selectedArea, setSelectedArea] = useState<string | null>(null);
   const [selectedSubArea, setSelectedSubArea] = useState<string | null>(null);
@@ -215,24 +210,6 @@ const CreateDiary = () => {
             onChange={handleTitleChange}
           />
           <span className="word-count">{title.length}/40</span>
-          {/* <StyledWrapper>
-            <div className="checkbox-wrapper-10">
-              <input
-                defaultChecked
-                type="checkbox"
-                id="cb5"
-                className="tgl tgl-flip"
-                checked={isPublic}
-                onChange={(e) => setIsPublic(e.target.checked)}
-              />
-              <label
-                htmlFor="cb5"
-                data-tg-on="공개"
-                data-tg-off="비공개"
-                className="tgl-btn"
-              />
-            </div>
-          </StyledWrapper> */}
           <StyledWrapper>
             <div className="toggle">
               <label className="switch">
@@ -251,8 +228,8 @@ const CreateDiary = () => {
         </div>
       </TourInfoContainer>
       <TourContentContainer>
-        <TipTap />
-        {/* <ReactQuill
+        {/* <TipTap /> */}
+        <ReactQuill
           theme="snow"
           modules={modules}
           formats={formats}
@@ -261,7 +238,7 @@ const CreateDiary = () => {
         />
         <div>
           현재 내용 길이: {new TextEncoder().encode(content).length} bytes
-        </div> */}
+        </div>
       </TourContentContainer>
     </CreateDiaryContainer>
   );
