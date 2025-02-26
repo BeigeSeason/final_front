@@ -1,6 +1,7 @@
 import {useState, useEffect} from "react";
 import { AdminContainer } from "./AdminComponent";
 import AxiosApi from "../../api/AxiosApi";
+import { Modal } from "../../component/ModalComponent";
 
 // icon
 import { FaAngleUp, FaAngleDown } from "react-icons/fa";
@@ -34,8 +35,15 @@ const AdminReportUser = () => {
   const [size] = useState(10);
   const [totalElements, setTotalElements] = useState(0);
 
+  const [banId, setBanId] = useState<number | undefined>(undefined);
+  const [banUserId, setBanUserId] = useState<String | undefined>(undefined);
+  const [banDate, setBanDate] = useState(0);
+  const [banReason, setBanReason] = useState("");
+
   const [typeSelectOpen, setTypeSelectOpen] = useState(false);
   const [sortSelectOpen, setSortSelectOpen] = useState(false);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // 데이터 가져오기
   const reportList = async () => {
@@ -82,6 +90,30 @@ const AdminReportUser = () => {
     setSortSelectOpen(false);
     // setTotalPages = Math.ceil(totalReports / size);
   }
+
+  // 유저 관리 모달
+  const openModal = (id: number, userId: string) => {
+    setIsModalOpen(true);
+    setBanId(id);
+    setBanUserId(userId);
+  };
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setBanDate(0);
+    setBanReason("");
+  };
+
+  // 유저 관리
+  const manageDiary = async () => {
+    setIsModalOpen(false);
+    try {
+      await AxiosApi.banMember(banId, banDate, banReason);
+    } catch (error) {
+      console.log("유저 정지 에러:", error);
+    }
+    setBanDate(0);
+    setBanReason("");
+  };
 
   return (
     <AdminContainer>
@@ -202,7 +234,7 @@ const AdminReportUser = () => {
                       })()}
                   </td>
                   <td className="text-center">
-                    <button>
+                    <button onClick={() => openModal(report.id, report.reported.userId)}>
                       관리
                     </button>
                   </td>
@@ -276,6 +308,32 @@ const AdminReportUser = () => {
           </button>
         </div>
       </div>
+
+      {/* 관리버튼 모달 */}
+      <Modal isOpen={isModalOpen} onConfirm={manageDiary} onClose={closeModal}>
+        <span>번호 : {banId}</span>
+        <p>대상자 : {banUserId}</p>
+        <span>정지일 : </span>
+        <select 
+          name="ban-date" 
+          id="ban-date" 
+          value={banDate}
+          onChange={(e) => setBanDate(Number(e.target.value))}
+          className="text-center"
+        >
+          <option value={1}>1일</option>
+          <option value={3}>3일</option>
+          <option value={7}>7일</option>
+          <option value={30}>30일</option>
+          <option value={36500}>영구 정지</option>
+        </select>
+        <p>정지 사유</p>
+        <input 
+          type="text" 
+          value={banReason} 
+          onChange={(e) => setBanReason(e.target.value)}
+        />
+      </Modal>
     </AdminContainer>
   );
 };

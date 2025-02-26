@@ -325,7 +325,9 @@ const AdminHome = () => {
                     {member.banned ? "정지" : "정상"}
                   </td>
                   <td className="center">
-                    <button onClick={() => openModal(member.id, member.userId)}>관리</button>
+                    <button onClick={() => openModal(member.id, member.userId)}>
+                      관리
+                    </button>
                   </td>
                 </tr>
               ))

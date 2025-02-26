@@ -1,6 +1,7 @@
 import {useState, useEffect} from "react";
 import { AdminContainer } from "./AdminComponent";
 import AxiosApi from "../../api/AxiosApi";
+import { Modal } from "../../component/ModalComponent";
 
 // icon
 import { FaAngleUp, FaAngleDown } from "react-icons/fa";
@@ -36,6 +37,8 @@ const AdminReportDiary = () => {
 
   const [typeSelectOpen, setTypeSelectOpen] = useState(false);
   const [sortSelectOpen, setSortSelectOpen] = useState(false);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // 데이터 가져오기
   const reportList = async () => {
