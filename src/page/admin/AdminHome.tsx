@@ -21,7 +21,7 @@ const AdminHome = () => {
   }
   const [members, setMembers] = useState<Member[]>([]);
   const [page, setPage] = useState(1);
-  const [size] = useState(3);
+  const [size] = useState(10);
   const [totalElements, setTotalElements] = useState(0);
   const [searchType, setSearchType] = useState("ID");
   const [searchValue, setSearchValue] = useState("");
