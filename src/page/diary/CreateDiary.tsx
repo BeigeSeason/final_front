@@ -3,6 +3,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { ko } from "date-fns/locale";
 import ReactQuill from "react-quill-new";
 import "react-quill/dist/quill.snow.css";
+import { v4 as uuidv4 } from "uuid";
 import { modules, formats } from "./ReactQuillModule";
 import { areas } from "../../util/TourCodes";
 import { SelectBox, InputBox } from "../../component/InputComponent";
@@ -19,15 +20,15 @@ import {
   TourContentContainer,
 } from "../../style/CreateDiaryStyled";
 import React, { useEffect, useState } from "react";
+import { DiaryApi } from "../../api/DiaryApi";
+import { useNavigate } from "react-router-dom";
 
 const CreateDiary = () => {
   const { userId, refreshToken } = useSelector(
     (state: RootState) => state.auth
   );
-  useEffect(() => {
-    console.log(userId);
-    console.log("refreshToken : ", refreshToken);
-  }, [userId, refreshToken]);
+  const diaryId = uuidv4();
+  const navigate = useNavigate();
   const [selectedArea, setSelectedArea] = useState<string | null>(null);
   const [selectedSubArea, setSelectedSubArea] = useState<string | null>(null);
   const [startDate, setStartDate] = useState<Date | null>(null);
@@ -138,24 +139,36 @@ const CreateDiary = () => {
       .map((img) => img.src)
       .filter((src) => src.startsWith("data:image/")); // base64 데이터만 필터링
   };
+
   // 작성 완료 버튼 클릭 시 실행되는 함수
   const handleSubmit = async () => {
+    console.log("이거이거 : ", isPublic);
     setLoading(true);
     // 1. content에서 base64 이미지 추출
     const base64Images = extractBase64Images(content);
     if (base64Images.length === 0) {
       console.log("업로드할 이미지가 없습니다.");
       // 이미지가 없으면 바로 제출 로직 실행 (필요 시)
-
-      console.log("selectedArea : ", selectedArea);
-      console.log("selectedSubArea : ", selectedSubArea);
-      console.log("제출용 area : ", selectedArea + " " + selectedSubArea);
-      console.log("startDate : ", startDate);
-      console.log("endDate : ", endDate);
-      console.log("tags : ", tags);
-      console.log("travelCost : ", travelCost);
-      console.log("title : ", title);
-      console.log("isPublic : ", isPublic);
+      const diaryData = {
+        diaryId: diaryId,
+        title: title,
+        region: selectedArea + " " + selectedSubArea,
+        startDate: startDate ? startDate.toISOString() : null,
+        endDate: endDate ? endDate.toISOString() : null,
+        tags: tags,
+        totalCost: travelCost || 0,
+        content: content,
+        userId: userId as string,
+        isPublic: isPublic,
+      };
+      console.log(diaryData);
+      const isDiarySaved = await DiaryApi.postDiary(diaryData);
+      setLoading(false);
+      if (isDiarySaved) {
+        navigate(`/diary/${diaryId}`);
+      } else {
+        console.log("다이어리 생성 중 에러");
+      }
       setLoading(false);
       return;
     }
@@ -165,7 +178,7 @@ const CreateDiary = () => {
       pics: base64Images, // base64 데이터 배열
       type: "diary" as const, // 타입 설정 (필요에 따라 수정)
       userId: userId, // 실제 userId로 교체
-      diaryId: 1, // 예시 diaryId, 실제 값으로 교체
+      diaryId: diaryId, // 예시 diaryId, 실제 값으로 교체
     };
 
     const uploadedUrls = await Upload(uploadParams);
@@ -183,20 +196,29 @@ const CreateDiary = () => {
 
     // 4. 상태 업데이트
     setContent(updatedContent);
-    console.log("업로드 및 URL 교체 완료:", updatedContent);
+    // console.log("업로드 및 URL 교체 완료:", updatedContent);
 
     // 5. 이후 제출 로직 추가 (예: 서버에 저장 등)
+    const diaryData = {
+      diaryId: diaryId,
+      title: title,
+      region: selectedArea + " " + selectedSubArea,
+      startDate: startDate ? startDate.toISOString() : null,
+      endDate: endDate ? endDate.toISOString() : null,
+      tags: tags,
+      totalCost: travelCost || 0,
+      content: content,
+      userId: userId as string,
+      isPublic: isPublic,
+    };
+    console.log(diaryData);
+    const isDiarySaved = await DiaryApi.postDiary(diaryData);
     setLoading(false);
-    console.log(updatedContent);
-    console.log("selectedArea : ", selectedArea);
-    console.log("selectedSubArea : ", selectedSubArea);
-    console.log("제출용 area : ", selectedArea + " " + selectedSubArea);
-    console.log("startDate : ", startDate);
-    console.log("endDate : ", endDate);
-    console.log("tags : ", tags);
-    console.log("travelCost : ", travelCost);
-    console.log("title : ", title);
-    console.log("isPublic : ", isPublic);
+    if (isDiarySaved) {
+      navigate(`/diary/${diaryId}`);
+    } else {
+      console.log("다이어리 생성 중 에러");
+    }
   };
 
   return (
