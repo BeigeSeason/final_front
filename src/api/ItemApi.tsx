@@ -44,6 +44,21 @@ interface TourSpotResponse {
   numberOfElements: number;
   empty: boolean;
 }
+
+interface TourSpotDetailDto {
+  contentId: string;
+  title: string;
+  addr1: string;
+  contact: string;
+  mapX: number;
+  mapY: number;
+  images: string[];
+  overview: string;
+  homepage: string;
+  useTime: string;
+  parking: string;
+}
+
 export const ItemApi = {
   getTourSpotList: async (
     filters: TourSpotFilters = {}
@@ -58,6 +73,20 @@ export const ItemApi = {
       return response.data; // 반환 데이터에서 content와 totalPages를 가져옵니다.
     } catch (error) {
       console.error("여행지 데이터 조회 오류:", error);
+      throw error;
+    }
+  },
+  getTourSpotDetail: async (tourSpotId: string): Promise<TourSpotDetailDto> => {
+    try {
+      const response = await axios.get<TourSpotDetailDto>(
+        `${API_BASE_URL}/search/spot-detail`,
+        {
+          params: { tourSpotId }, // 'tourSpotId'로 전달
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("관광지 상세 정보 조회 오류:", error);
       throw error;
     }
   },
