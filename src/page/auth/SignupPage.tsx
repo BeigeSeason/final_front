@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { AuthBox } from "../../style/AuthStyled";
+import { AuthBox, TermBox } from "../../style/AuthStyled";
 import { SignupTerms1, SignupTerms2 } from "../../component/TermsComponent";
 import { Button } from "../../component/ButtonComponent";
 import { InputBox } from "../../component/InputComponent";
@@ -76,7 +76,7 @@ export const SignupPage = () => {
 
   // 유효성 검사 함수들
   const validateid = (value: string) => {
-    if (!/^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{5,}$/.test(value)) {
+    if (!/^[a-zA-Z\d]{5,}$/.test(value)) {
       return "아이디는 영어 또는 숫자를 사용한 5자 이상이어야 합니다.";
     }
     return "";
@@ -125,9 +125,11 @@ export const SignupPage = () => {
     switch (field) {
       case "userId":
         setuserId(value);
+        setIdChecked(false);
         break;
       case "email":
         setEmail(value);
+        setEmailChecked(false);
         break;
       case "password":
         setPassword(value);
@@ -140,6 +142,7 @@ export const SignupPage = () => {
         break;
       case "nickname":
         setNickname(value);
+        setNicknameChecked(false);
         break;
     }
 
@@ -262,34 +265,37 @@ export const SignupPage = () => {
   return (
     <AuthBox>
       <h2>회원가입</h2>
+
       {!showForm ? (
         <>
-          <label>
-            <input
-              type="checkbox"
-              checked={isAllChecked}
-              onChange={handleAllAgreedChange}
-            />
-            전체 선택
-          </label>
-          <SignupTerms1 />
-          <label>
-            <input
-              type="checkbox"
-              checked={isTermsAgreed}
-              onChange={handleTermsChange}
-            />
-            이용약관에 동의합니다.
-          </label>
-          <SignupTerms2 />
-          <label>
-            <input
-              type="checkbox"
-              checked={isPrivacyAgreed}
-              onChange={handlePrivacyChange}
-            />
-            개인정보 처리방침에 동의합니다.
-          </label>
+          <TermBox>
+            <label>
+              <input
+                type="checkbox"
+                checked={isAllChecked}
+                onChange={handleAllAgreedChange}
+              />
+              전체 선택
+            </label>
+            <SignupTerms1 />
+            <label>
+              <input
+                type="checkbox"
+                checked={isTermsAgreed}
+                onChange={handleTermsChange}
+              />
+              이용약관에 동의합니다.
+            </label>
+            <SignupTerms2 />
+            <label>
+              <input
+                type="checkbox"
+                checked={isPrivacyAgreed}
+                onChange={handlePrivacyChange}
+              />
+              개인정보 처리방침에 동의합니다.
+            </label>
+          </TermBox>
           <Button onClick={handleConfirmClick} disabled={!isAllChecked}>
             확인
           </Button>

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { AuthBox, ResultBox } from "../../style/AuthStyled";
+import { AuthBox, ResultBox, FindBox } from "../../style/AuthStyled";
 import { InputBox } from "../../component/InputComponent";
 import { Button } from "../../component/ButtonComponent";
 import { CheckModal } from "../../component/ModalComponent";
@@ -16,18 +16,20 @@ export const FindPwPage = () => {
   return (
     <AuthBox>
       <h2>임시 비밀번호 발급</h2>
-      <InputBox
-        type="text"
-        placeholder="아이디 입력"
-        value={id}
-        onChange={(e) => setId(e.target.value)}
-      />
-      <InputBox
-        type="email"
-        placeholder="이메일 입력"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
+      <FindBox>
+        <InputBox
+          type="text"
+          placeholder="아이디 입력"
+          value={id}
+          onChange={(e) => setId(e.target.value)}
+        />
+        <InputBox
+          type="email"
+          placeholder="이메일 입력"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+      </FindBox>
       <Button onClick={handleSubmit} disabled={!isFormValid}>
         비밀번호 찾기
       </Button>
