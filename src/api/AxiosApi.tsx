@@ -57,6 +57,11 @@ const AxiosApi = {
       throw error;
     }
   },
+  // 멤버 정보 조회
+  memberInfo: async (userId?: string) => {
+    console.log(JwtAxios.get(`/member/get-info/${userId}`));
+    return JwtAxios.get(`/member/get-info/${userId}`);
+  },
   // 멤버 조회 (전체)
   memberList: async (
     page = 1,
@@ -104,30 +109,36 @@ const AxiosApi = {
   },
   // 신고 처리
   reportProcess: async (
-    reportId: number = 1, 
-    state: boolean = true, 
-    userId: number | null = null, 
-    day: number = 1, 
-    reason: string = "", 
-    diaryId: string | null = null, 
+    reportId: number = 1,
+    state: boolean = true,
+    userId: number | null = null,
+    day: number = 1,
+    reason: string = "",
+    diaryId: string | null = null,
     reviewId: number | null = null
   ) => {
     try {
-      const response = await axios.post(`${Common.FINAL_DOMAIN}/admin/report-manage`, {
-        reportId, 
-        state, 
-        ...(userId !== null ? { userId } : {}), 
-        ...(day !== null ? { day } : {}), 
-        reason, 
-        ...(diaryId !== null ? { diaryId } : {}), 
-        ...(reviewId !== null ? { reviewId } : {}),
-      },
-    { headers: { "Content-Type": "application/json" }}
-  );
+      const response = await axios.post(
+        `${Common.FINAL_DOMAIN}/admin/report-manage`,
+        {
+          reportId,
+          state,
+          ...(userId !== null ? { userId } : {}),
+          ...(day !== null ? { day } : {}),
+          reason,
+          ...(diaryId !== null ? { diaryId } : {}),
+          ...(reviewId !== null ? { reviewId } : {}),
+        },
+        { headers: { "Content-Type": "application/json" } }
+      );
       return response.data;
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        console.error("신고 처리 실패:", error.response?.status, error.response?.data);
+        console.error(
+          "신고 처리 실패:",
+          error.response?.status,
+          error.response?.data
+        );
       } else {
         console.error("신고 처리 실패:", error);
       }
@@ -137,7 +148,10 @@ const AxiosApi = {
   // 유저 정지
   banMember: async (id = 1, day = 0, reason = "") => {
     try {
-      const response = await axios.post(`${Common.FINAL_DOMAIN}/admin/member-ban`, { id, day, reason });
+      const response = await axios.post(
+        `${Common.FINAL_DOMAIN}/admin/member-ban`,
+        { id, day, reason }
+      );
       return response.data;
     } catch (error) {
       console.error("유저 정지 실패:", error);

@@ -5,9 +5,10 @@ import { InputBox } from "./InputComponent";
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import AxiosApi from "../api/AxiosApi";
-import { useDispatch } from "react-redux";
-import { setTokens } from "../redux/authSlice";
-import store from "../redux/store";
+import { jwtDecode } from "jwt-decode";
+import { useDispatch, useSelector } from "react-redux";
+import { setTokens, setUserInfo } from "../redux/authSlice";
+import store, { RootState } from "../redux/store";
 
 const ModalBackdrop = styled.div`
   position: fixed;
@@ -219,6 +220,8 @@ export const LoginModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
   useEffect(() => {
     if (isOpen) {
       setError(""); // 모달이 열릴 때 에러 메시지 초기화
+      setUserId(""); // 모달 열릴 때 id, pw 초기화
+      setPassword("");
     }
   }, [isOpen]);
 
@@ -245,11 +248,27 @@ export const LoginModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
           })
         );
 
-        // 로컬 스토리지에 토큰 저장
-        localStorage.setItem("accessToken", response.data.accessToken);
-        localStorage.setItem("refreshToken", response.data.refreshToken);
+        // accessToken 디코딩
+        const decoded = jwtDecode(response.data.accessToken);
+        const decodedUserId = decoded.sub;
+        console.log("userId : ", userId);
 
-        console.log("현재 Redux 상태:", store.getState()); // Redux 상태 확인
+        const userResponse = await AxiosApi.memberInfo(decodedUserId);
+        console.log(userResponse.data);
+        dispatch(
+          setUserInfo({
+            userId: userResponse.data.userId,
+            nickname: userResponse.data.nickname,
+            name: userResponse.data.name,
+            email: userResponse.data.email,
+            profile: userResponse.data.imgPath,
+          })
+        );
+        // 로컬 스토리지에 토큰 저장
+        // localStorage.setItem("accessToken", response.data.accessToken);
+        // localStorage.setItem("refreshToken", response.data.refreshToken);
+
+        // console.log("현재 Redux 상태:", store.getState()); // Redux 상태 확인
         onClose(); // 로그인 후 모달 닫기
       } else {
         console.error("로그인 실패: 응답 데이터 없음 또는 토큰 없음");
@@ -270,6 +289,8 @@ export const LoginModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
         console.error("네트워크 오류 또는 요청 실패");
         setError("로그인 요청을 처리할 수 없습니다.");
       }
+    } finally {
+      setPassword("");
     }
   };
 

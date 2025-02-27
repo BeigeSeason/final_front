@@ -13,7 +13,8 @@ import logoImg from "../img/sample.png";
 import { SearchBox } from "./InputComponent";
 import { Modal, LoginModal } from "./ModalComponent";
 import { useSelector, useDispatch } from "react-redux";
-import { logout } from "../redux/axtions";
+// import { logout } from "../redux/axtions";
+import { clearTokens } from "../redux/authSlice";
 import { RootState } from "../redux/store";
 
 // 헤더---------------------------------------------------------------------------------
@@ -180,9 +181,9 @@ export const Nav = () => {
   };
 
   const handleConfirmLogout = () => {
-    dispatch(logout());
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
+    dispatch(clearTokens());
+    // localStorage.removeItem("accessToken");
+    // localStorage.removeItem("refreshToken");
     handleCloseModal();
     navigate("/");
   };

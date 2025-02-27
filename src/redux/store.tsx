@@ -1,19 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "./authSlice";
 
-const initialState = {
-  auth: {
-    accessToken: localStorage.getItem("accessToken") || null,
-    refreshToken: localStorage.getItem("refreshToken") || null,
-  },
-};
-
 const store = configureStore({
   reducer: {
     auth: authReducer,
   },
-  preloadedState: initialState, // 초기 상태로 설정
 });
-export type RootState = ReturnType<typeof store.getState>; // 현재 스토어 상태 타입
 
+export type RootState = ReturnType<typeof store.getState>; // 현재 스토어 상태 타입
+export type AppDispatch = typeof store.dispatch; // 디스패치 타입 추가(useDispatch 타입 안전성을 위해)
 export default store;
