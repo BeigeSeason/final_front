@@ -94,24 +94,36 @@ export const StyledWrapper = styled.div`
     content: "★";
   }
 
+  /* ⭐ 별점 채우기 (선택한 별 이하의 별까지 전부 채움) */
   .rating input:checked ~ label,
   .rating label:hover,
   .rating label:hover ~ label {
     color: ${colors.colorC};
   }
 `;
+
 export const CommentBox = styled.div`
   .commentInput {
     display: flex;
     gap: 10px;
   }
+  .commentCount {
+    color: #8d8d8d;
+  }
   .commentList {
     border-bottom: 1px solid #ddd;
     display: flex;
     justify-content: space-between;
+    align-items: center;
     padding: 10px;
     .date {
       color: #8d8d8d;
+    }
+  }
+  .commentInfo {
+    .rate,
+    .date {
+      margin: 0;
     }
   }
 `;

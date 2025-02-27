@@ -17,7 +17,7 @@ import { FaUndo } from "react-icons/fa";
 import { Button } from "../../component/ButtonComponent";
 import { SearchBox } from "../../component/InputComponent";
 import { ItemApi } from "../../api/ItemApi";
-import { Pagination } from "../../component/PaginationComponent";
+import { Paginating } from "../../component/PaginationComponent";
 import { Loading } from "../../component/Loading";
 import { FaBars } from "react-icons/fa";
 
@@ -464,7 +464,7 @@ export const TourList: React.FC = () => {
               description={[spot.title, spot.addr]}
             />
           ))}
-          <Pagination
+          <Paginating
             currentPage={currentPage}
             totalPages={totalPages}
             handlePageChange={handlePageChange}
