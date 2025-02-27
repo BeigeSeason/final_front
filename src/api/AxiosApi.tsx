@@ -106,7 +106,7 @@ const AxiosApi = {
   reportProcess: async (
     reportId: number = 1, 
     state: boolean = true, 
-    userId: number = 1, 
+    userId: number | null = null, 
     day: number = 1, 
     reason: string = "", 
     diaryId: string | null = null, 

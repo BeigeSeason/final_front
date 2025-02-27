@@ -110,7 +110,7 @@ const AdminReportUser = () => {
   const manageUser = async () => {
     setIsModalOpen(false);
     try {
-      await AxiosApi.reportProcess(reportId, reportState, reportedId, banDate, banReason, null, null);
+      await AxiosApi.reportProcess(reportId, reportState, (banDate === 0 ? null : reportedId), banDate, banReason, null, null);
     } catch (error) {
       console.log("유저 정지 에러:", error);
     }
@@ -326,6 +326,7 @@ const AdminReportUser = () => {
           onChange={(e) => setBanDate(Number(e.target.value))}
           className="text-center"
         >
+          <option value={0}>보류</option>
           <option value={1}>1일</option>
           <option value={3}>3일</option>
           <option value={7}>7일</option>
