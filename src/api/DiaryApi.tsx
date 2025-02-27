@@ -9,5 +9,5 @@ export const DiaryApi = {
   //     )
   //   ).data;
   // },
-  saveDiary: async (): Promise
+  // saveDiary: async (): Promise
 };
