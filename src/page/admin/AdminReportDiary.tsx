@@ -35,6 +35,14 @@ const AdminReportDiary = () => {
   const [size] = useState(10);
   const [totalElements, setTotalElements] = useState(0);
 
+  const [reportId, setReportId] = useState<number | undefined>(undefined);
+  const [reportState, setReportState] = useState(true);
+  const [reportedId, setReportedId] = useState<number | undefined>(undefined);
+  const [reportedUserId, setReportedUserId] = useState<String | undefined>(undefined);
+  const [banDate, setBanDate] = useState(0);
+  const [banReason, setBanReason] = useState("");
+  const [diaryId, setDiaryId] = useState<string | null>(null);
+
   const [typeSelectOpen, setTypeSelectOpen] = useState(false);
   const [sortSelectOpen, setSortSelectOpen] = useState(false);
 
@@ -43,7 +51,7 @@ const AdminReportDiary = () => {
   // 데이터 가져오기
   const reportList = async () => {
     try {
-      const data = await AxiosApi.reportList(page - 1, size, "DIARY");
+      const data = await AxiosApi.reportList(page - 1, size, "DIARY", type, sort);
       setReports(data.reports);
       setTotalElements(data.totalElements);
     } catch (error) {
@@ -52,7 +60,7 @@ const AdminReportDiary = () => {
   };
   useEffect(() => {
     reportList();
-  }, [page]);
+  }, [page, type, sort]);
 
   // 페이지 번호 생성
   const pageNumbers = [];
@@ -63,8 +71,6 @@ const AdminReportDiary = () => {
   // 페이지 이동
   const handlePageClick = (pageNumber: number) => {
     setPage(pageNumber);
-    console.log(reports);
-    console.log(totalElements);
   };
 
   // 데이터 분류버튼
@@ -86,6 +92,35 @@ const AdminReportDiary = () => {
     setSort(select);
     setSortSelectOpen(false);
   }
+
+  // 신고 관리 모달
+  const openModal = (reportId: number, reportedId: number, reportedUserId: string, diaryId: string) => {
+    setIsModalOpen(true);
+    setReportId(reportId);
+    setReportedId(reportedId);
+    setReportedUserId(reportedUserId);
+    setDiaryId(diaryId);
+  };
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setBanDate(0);
+    setBanReason("");
+    setReportState(true);
+  };
+
+  // 신고 처리
+  const manageUser = async () => {
+    setIsModalOpen(false);
+    try {
+      await AxiosApi.reportProcess(reportId, reportState, (banDate === 0 ? null : reportedId), banDate, banReason, diaryId, null);
+    } catch (error) {
+      console.log("유저 정지 에러:", error);
+    }
+    setBanDate(0);
+    setBanReason("");
+    setReportState(true);
+    reportList();
+  };
 
   return (
     <AdminContainer>
@@ -190,7 +225,21 @@ const AdminReportDiary = () => {
                   <td>{report.reported.userId}</td>
                   <td>{report.reporter.userId}</td>
                   <td>{report.reason}</td>
-                  <td className="text-center">
+                  <td 
+                    className="text-center"
+                    style={{
+                      color: (() => {
+                        switch (report.state) {
+                          case 'ACCEPT':
+                            return 'green';
+                          case 'REJECT':
+                            return 'red';
+                          default:
+                            return 'black';
+                        }
+                      })()
+                    }}
+                  >
                     {(() => {
                         switch (report.state) {
                           case 'WAIT':
@@ -205,7 +254,7 @@ const AdminReportDiary = () => {
                       })()}
                   </td>
                   <td className="text-center">
-                    <button>
+                    <button onClick={() => openModal(report.id, report.reported.id, report.reported.userId, report.reportEntity)}>
                       관리
                     </button>
                   </td>
@@ -279,6 +328,49 @@ const AdminReportDiary = () => {
           </button>
         </div>
       </div>
+
+      {/* 관리버튼 모달 */}
+      <Modal isOpen={isModalOpen} onConfirm={manageUser} onClose={closeModal}>
+        <span>신고 번호 : {reportId}</span><br />
+        <span>일기 번호 : {diaryId}</span><br />
+        <span>대상자 번호 : {reportedId}</span><br />
+        <span>대상자 아이디 : {reportedUserId}</span><br />
+        <span>정지일 : </span>
+        <select 
+          name="ban-date" 
+          id="ban-date" 
+          value={banDate}
+          onChange={(e) => setBanDate(Number(e.target.value))}
+          className="text-center"
+        >
+          <option value={0}>보류</option>
+          <option value={1}>1일</option>
+          <option value={3}>3일</option>
+          <option value={7}>7일</option>
+          <option value={30}>30일</option>
+          <option value={36500}>영구 정지</option>
+        </select>
+        <br />
+        <span>정지 사유</span><br />
+        <input 
+          type="text" 
+          value={banReason} 
+          onChange={(e) => setBanReason(e.target.value)}
+        />
+        <br />
+        <span>신고 처리 : </span>
+        <select 
+          name="report-state" 
+          id="report-state"
+          value={reportState ? "true" : "false"}
+          onChange={(e) => setReportState(e.target.value === "true")}
+        >
+          <option value="true">승인</option>
+          <option value="false">거절</option>
+        </select>
+        <br />
+        <span>일기 처리 : {reportState ? "삭제" : "보류"}</span>
+      </Modal>
     </AdminContainer>
   );
 };

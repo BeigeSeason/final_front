@@ -36,6 +36,14 @@ const AdminReportReview = () => {
   const [size] = useState(10);
   const [totalElements, setTotalElements] = useState(0);
 
+  const [reportId, setReportId] = useState<number | undefined>(undefined);
+  const [reportState, setReportState] = useState(true);
+  const [reportedId, setReportedId] = useState<number | undefined>(undefined);
+  const [reportedUserId, setReportedUserId] = useState<String | undefined>(undefined);
+  const [banDate, setBanDate] = useState(0);
+  const [banReason, setBanReason] = useState("");
+  const [reviewId, setreviewId] = useState(null);
+
   const [typeSelectOpen, setTypeSelectOpen] = useState(false);
   const [sortSelectOpen, setSortSelectOpen] = useState(false);
 
@@ -44,7 +52,7 @@ const AdminReportReview = () => {
   // 데이터 가져오기
   const reportList = async () => {
     try {
-      const data = await AxiosApi.reportList(page - 1, size, "REVIEW");
+      const data = await AxiosApi.reportList(page - 1, size, "REVIEW", type, sort);
       setReports(data.reports);
       setTotalElements(data.totalElements);
     } catch (error) {
@@ -53,7 +61,7 @@ const AdminReportReview = () => {
   };
   useEffect(() => {
     reportList();
-  }, [page]);
+  }, [page, type, sort]);
 
   // 페이지 번호 생성
   const pageNumbers = [];
@@ -64,7 +72,6 @@ const AdminReportReview = () => {
   // 페이지 이동
   const handlePageClick = (pageNumber: number) => {
     setPage(pageNumber);
-    console.log(reports);
   };
 
   // 데이터 분류버튼
@@ -192,7 +199,21 @@ const AdminReportReview = () => {
                   <td>{report.reviewContent}</td>
                   <td>{report.reporter.userId}</td>
                   <td>{report.reason}</td>
-                  <td className="text-center">
+                  <td 
+                    className="text-center"
+                    style={{
+                      color: (() => {
+                        switch (report.state) {
+                          case 'ACCEPT':
+                            return 'green';
+                          case 'REJECT':
+                            return 'red';
+                          default:
+                            return 'black';
+                        }
+                      })()
+                    }}
+                  >
                     {(() => {
                         switch (report.state) {
                           case 'WAIT':

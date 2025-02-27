@@ -38,7 +38,7 @@ const AdminReportUser = () => {
   const [reportId, setReportId] = useState<number | undefined>(undefined);
   const [reportState, setReportState] = useState(true);
   const [reportedId, setReportedId] = useState<number | undefined>(undefined);
-  const [reportedUserId, setReportedUserId] = useState<String | undefined>(undefined);
+  const [reportedUserId, setReportedUserId] = useState<string | undefined>(undefined);
   const [banDate, setBanDate] = useState(0);
   const [banReason, setBanReason] = useState("");
 
@@ -103,6 +103,7 @@ const AdminReportUser = () => {
     setIsModalOpen(false);
     setBanDate(0);
     setBanReason("");
+    setReportState(true);
   };
 
   // 신고 처리
@@ -115,6 +116,7 @@ const AdminReportUser = () => {
     }
     setBanDate(0);
     setBanReason("");
+    setReportState(true);
     reportList();
   };
 
@@ -231,7 +233,21 @@ const AdminReportUser = () => {
                   <td>{report.reported.userId}</td>
                   <td>{report.reporter.userId}</td>
                   <td>{report.reason}</td>
-                  <td className="text-center">
+                  <td 
+                    className="text-center"
+                    style={{
+                      color: (() => {
+                        switch (report.state) {
+                          case 'ACCEPT':
+                            return 'green';
+                          case 'REJECT':
+                            return 'red';
+                          default:
+                            return 'black';
+                        }
+                      })()
+                    }}
+                  >
                     {(() => {
                         switch (report.state) {
                           case 'WAIT':
