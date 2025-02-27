@@ -53,7 +53,7 @@ interface PaginationProps {
 }
 
 // 페이지네이션 컴포넌트-------------------------------------------------------------------
-export const Pagination: React.FC<PaginationProps> = ({
+export const Paginating: React.FC<PaginationProps> = ({
   currentPage,
   totalPages,
   handlePageChange,
