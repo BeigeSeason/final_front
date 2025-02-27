@@ -5,9 +5,10 @@ import { InputBox } from "./InputComponent";
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import AxiosApi from "../api/AxiosApi";
-import { useDispatch } from "react-redux";
-import { setTokens } from "../redux/authSlice";
-import store from "../redux/store";
+import { jwtDecode } from "jwt-decode";
+import { useDispatch, useSelector } from "react-redux";
+import { setTokens, setUserInfo } from "../redux/authSlice";
+import store, { RootState } from "../redux/store";
 
 const ModalBackdrop = styled.div`
   position: fixed;
@@ -247,11 +248,27 @@ export const LoginModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
           })
         );
 
+        // accessToken 디코딩
+        const decoded = jwtDecode(response.data.accessToken);
+        const decodedUserId = decoded.sub;
+        console.log("userId : ", userId);
+
+        const userResponse = await AxiosApi.memberInfo(decodedUserId);
+        console.log(userResponse.data);
+        dispatch(
+          setUserInfo({
+            userId: userResponse.data.userId,
+            nickname: userResponse.data.nickname,
+            name: userResponse.data.name,
+            email: userResponse.data.email,
+            profile: userResponse.data.imgPath,
+          })
+        );
         // 로컬 스토리지에 토큰 저장
         // localStorage.setItem("accessToken", response.data.accessToken);
         // localStorage.setItem("refreshToken", response.data.refreshToken);
 
-        console.log("현재 Redux 상태:", store.getState()); // Redux 상태 확인
+        // console.log("현재 Redux 상태:", store.getState()); // Redux 상태 확인
         onClose(); // 로그인 후 모달 닫기
       } else {
         console.error("로그인 실패: 응답 데이터 없음 또는 토큰 없음");

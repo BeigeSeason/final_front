@@ -10,6 +10,9 @@ import { Button } from "../../component/ButtonComponent";
 import { Upload } from "../../component/FirebaseComponent";
 import { Loading } from "../../component/Loading";
 import { TipTap } from "./TipTap";
+import { jwtDecode } from "jwt-decode";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 import {
   CreateDiaryContainer,
   TourInfoContainer,
@@ -177,9 +180,18 @@ const CreateDiary = () => {
     console.log("isPublic : ", isPublic);
   };
 
+  const { userId, nickname, name, email, profile } = useSelector(
+    (state: RootState) => state.auth
+  );
+
   useEffect(() => {
     console.log("accessToken : ", localStorage.getItem("accessToken"));
     console.log("refreshToken : ", localStorage.getItem("refreshToken"));
+    console.log("userId : ", userId);
+    console.log("nickname : ", nickname);
+    console.log("name : ", name);
+    console.log("email : ", email);
+    console.log("profile : ", profile);
   }, []);
 
   return (
