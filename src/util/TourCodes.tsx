@@ -134,7 +134,7 @@ export const areas = [
   {
     code: "8",
     name: "세종",
-    subAreas: [{ code: "1", name: "세종특별자치시" }],
+    subAreas: [{ code: "1", name: "세종시" }],
   },
   {
     code: "31",
@@ -199,7 +199,7 @@ export const areas = [
   },
   {
     code: "33",
-    name: "충청",
+    name: "충북",
     subAreas: [
       { code: "1", name: "괴산군" },
       { code: "2", name: "단양군" },
@@ -217,7 +217,7 @@ export const areas = [
   },
   {
     code: "34",
-    name: "충청",
+    name: "충남",
     subAreas: [
       { code: "1", name: "공주시" },
       { code: "2", name: "금산군" },

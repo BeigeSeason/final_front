@@ -7,6 +7,8 @@ import { modules, formats } from "./ReactQuillModule";
 import { areas } from "../../util/TourCodes";
 import { SelectBox, InputBox } from "../../component/InputComponent";
 import { Button } from "../../component/ButtonComponent";
+import { Upload } from "../../component/FirebaseComponent";
+import { Loading } from "../../component/Loading";
 import { TipTap } from "./TipTap";
 import {
   CreateDiaryContainer,
@@ -27,6 +29,7 @@ const CreateDiary = () => {
   const [title, setTitle] = useState<string>("");
   const [isPublic, setIsPublic] = useState(true);
   const [content, setContent] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
 
   const maxBytes = 5000000; // 5MB
 
@@ -63,7 +66,9 @@ const CreateDiary = () => {
     if (e.key === "Enter" || e.key === " ") {
       if (inputTag.trim() === "") return;
 
-      setTags((prevTags) => [...prevTags, inputTag.trim()]);
+      const formattedTag = `#${inputTag.trim()}`;
+
+      setTags((prevTags) => [...prevTags, formattedTag]);
       setInputTag("");
     }
   };
@@ -115,16 +120,71 @@ const CreateDiary = () => {
   };
 
   // 작성 내용
-  // useEffect(() => {
-  //   if (typeof window !== "undefined") {
-  //     Quill.register("modules/imageCompress", QuillImageCompress);
-  //   }
-  // }, []);
+  // base64 이미지 추출 함수
+  const extractBase64Images = (htmlContent: string): string[] => {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(htmlContent, "text/html");
+    const images = Array.from(doc.getElementsByTagName("img"));
+    return images
+      .map((img) => img.src)
+      .filter((src) => src.startsWith("data:image/")); // base64 데이터만 필터링
+  };
+  // 작성 완료 버튼 클릭 시 실행되는 함수
+  const handleSubmit = async () => {
+    // setLoading(true);
+    // // 1. content에서 base64 이미지 추출
+    // const base64Images = extractBase64Images(content);
+    // if (base64Images.length === 0) {
+    //   console.log("업로드할 이미지가 없습니다.");
+    //   // 이미지가 없으면 바로 제출 로직 실행 (필요 시)
+    //   return;
+    // }
+
+    // // 2. Firebase에 이미지 업로드
+    // const uploadParams = {
+    //   pics: base64Images, // base64 데이터 배열
+    //   type: "diary" as const, // 타입 설정 (필요에 따라 수정)
+    //   userId: "jisuk0415", // 실제 userId로 교체
+    //   diaryId: 1, // 예시 diaryId, 실제 값으로 교체
+    // };
+
+    // const uploadedUrls = await Upload(uploadParams);
+    // if (!uploadedUrls) {
+    //   console.log("이미지 업로드 실패");
+    //   return;
+    // }
+
+    // // 3. base64를 Firebase URL로 교체
+    // let updatedContent = content;
+    // base64Images.forEach((base64, index) => {
+    //   updatedContent = updatedContent.replace(base64, uploadedUrls[index]);
+    // });
+
+    // // 4. 상태 업데이트
+    // setContent(updatedContent);
+    // console.log("업로드 및 URL 교체 완료:", updatedContent);
+
+    // // 5. 이후 제출 로직 추가 (예: 서버에 저장 등)
+    // setLoading(false);
+    // console.log(updatedContent);
+    console.log("selectedArea : ", selectedArea);
+    console.log("selectedSubArea : ", selectedSubArea);
+    console.log("startDate : ", startDate);
+    console.log("endDate : ", endDate);
+    console.log("tags : ", tags);
+    console.log("travelCost : ", travelCost);
+    console.log("title : ", title);
+    console.log("isPublic : ", isPublic);
+  };
 
   return (
     <CreateDiaryContainer>
       <TourInfoContainer>
-        <Button className="submit-button" disabled={!isFormValid}>
+        <Button
+          className="submit-button"
+          disabled={!isFormValid}
+          onClick={handleSubmit}
+        >
           작성 완료
         </Button>
         <div className="select-container">
@@ -240,6 +300,11 @@ const CreateDiary = () => {
           현재 내용 길이: {new TextEncoder().encode(content).length} bytes
         </div>
       </TourContentContainer>
+      {loading && (
+        <Loading>
+          <p>여행일지를 업로드 중입니다.</p>
+        </Loading>
+      )}
     </CreateDiaryContainer>
   );
 };

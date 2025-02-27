@@ -17,9 +17,9 @@ export const Upload = async ({
     type === "profile"
       ? `/UserProfilePic/${userId}`
       : `/DiaryPic/${userId}/${diaryId}`;
-  const imgName = type === "profile" ? "profile.png" : `${diaryId}.png`;
-  console.log(imgFolder);
-  console.log(imgName);
+  // const imgName = type === "profile" ? "profile.png" : `${diaryId}.png`;
+  // console.log(imgFolder);
+  // console.log(imgName);
 
   const uploadedUrls: string[] = [];
   // currentPics가 없거나 빈 경우
@@ -34,16 +34,17 @@ export const Upload = async ({
   try {
     // 모든 이미지 업로드를 병렬로 처리
     const uploadPromises = picsArray.map(async (pic, index) => {
-      if (pic && pic.startsWith("blob:")) {
+      // if (pic && pic.startsWith("blob:")) {
+      if (pic.startsWith("data:image/")) {
         // Blob URL을 실제 Blob으로 변환
         const response = await fetch(pic);
         const blob = await response.blob();
 
-        // 파일 이름 생성: 1.png, 2.png, ...
-        const imgName = `${index + 1}.png`;
+        // 파일 이름 생성: 0.png, 1.png, ...
+        const imgName = `${index}.png`;
 
         // Firebase Storage 참조
-        const storageRef = storage.ref(`${imgFolder}/${userId}`);
+        const storageRef = storage.ref(`${imgFolder}`);
         const fileRef = storageRef.child(imgName);
 
         // 파일 업로드
@@ -55,8 +56,8 @@ export const Upload = async ({
 
         console.log(`이미지 업로드 성공 (${imgName}):`, downloadUrl);
       } else {
-        // Blob이 아닌 경우 그대로 추가 (예: 기존 URL)
-        uploadedUrls.push(pic);
+        // base64가 아닌 경우 (기존 URL 등)
+        uploadedUrls[index] = pic;
       }
     });
 
