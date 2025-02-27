@@ -4,7 +4,7 @@ interface UploadParams {
   pics: string[] | null;
   type: "profile" | "diary";
   userId: string | null;
-  diaryId: number | null;
+  diaryId: string | null;
 }
 
 export const Upload = async ({
