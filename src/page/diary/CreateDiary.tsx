@@ -10,7 +10,6 @@ import { Button } from "../../component/ButtonComponent";
 import { Upload } from "../../component/FirebaseComponent";
 import { Loading } from "../../component/Loading";
 import { TipTap } from "./TipTap";
-import { jwtDecode } from "jwt-decode";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import {
@@ -22,6 +21,13 @@ import {
 import React, { useEffect, useState } from "react";
 
 const CreateDiary = () => {
+  const { userId, refreshToken } = useSelector(
+    (state: RootState) => state.auth
+  );
+  useEffect(() => {
+    console.log(userId);
+    console.log("refreshToken : ", refreshToken);
+  }, [userId, refreshToken]);
   const [selectedArea, setSelectedArea] = useState<string | null>(null);
   const [selectedSubArea, setSelectedSubArea] = useState<string | null>(null);
   const [startDate, setStartDate] = useState<Date | null>(null);
@@ -134,44 +140,57 @@ const CreateDiary = () => {
   };
   // 작성 완료 버튼 클릭 시 실행되는 함수
   const handleSubmit = async () => {
-    // setLoading(true);
-    // // 1. content에서 base64 이미지 추출
-    // const base64Images = extractBase64Images(content);
-    // if (base64Images.length === 0) {
-    //   console.log("업로드할 이미지가 없습니다.");
-    //   // 이미지가 없으면 바로 제출 로직 실행 (필요 시)
-    //   return;
-    // }
+    setLoading(true);
+    // 1. content에서 base64 이미지 추출
+    const base64Images = extractBase64Images(content);
+    if (base64Images.length === 0) {
+      console.log("업로드할 이미지가 없습니다.");
+      // 이미지가 없으면 바로 제출 로직 실행 (필요 시)
 
-    // // 2. Firebase에 이미지 업로드
-    // const uploadParams = {
-    //   pics: base64Images, // base64 데이터 배열
-    //   type: "diary" as const, // 타입 설정 (필요에 따라 수정)
-    //   userId: "jisuk0415", // 실제 userId로 교체
-    //   diaryId: 1, // 예시 diaryId, 실제 값으로 교체
-    // };
+      console.log("selectedArea : ", selectedArea);
+      console.log("selectedSubArea : ", selectedSubArea);
+      console.log("제출용 area : ", selectedArea + " " + selectedSubArea);
+      console.log("startDate : ", startDate);
+      console.log("endDate : ", endDate);
+      console.log("tags : ", tags);
+      console.log("travelCost : ", travelCost);
+      console.log("title : ", title);
+      console.log("isPublic : ", isPublic);
+      setLoading(false);
+      return;
+    }
 
-    // const uploadedUrls = await Upload(uploadParams);
-    // if (!uploadedUrls) {
-    //   console.log("이미지 업로드 실패");
-    //   return;
-    // }
+    // 2. Firebase에 이미지 업로드
+    const uploadParams = {
+      pics: base64Images, // base64 데이터 배열
+      type: "diary" as const, // 타입 설정 (필요에 따라 수정)
+      userId: userId, // 실제 userId로 교체
+      diaryId: 1, // 예시 diaryId, 실제 값으로 교체
+    };
 
-    // // 3. base64를 Firebase URL로 교체
-    // let updatedContent = content;
-    // base64Images.forEach((base64, index) => {
-    //   updatedContent = updatedContent.replace(base64, uploadedUrls[index]);
-    // });
+    const uploadedUrls = await Upload(uploadParams);
+    if (!uploadedUrls) {
+      console.log("이미지 업로드 실패");
+      setLoading(false);
+      return;
+    }
 
-    // // 4. 상태 업데이트
-    // setContent(updatedContent);
-    // console.log("업로드 및 URL 교체 완료:", updatedContent);
+    // 3. base64를 Firebase URL로 교체
+    let updatedContent = content;
+    base64Images.forEach((base64, index) => {
+      updatedContent = updatedContent.replace(base64, uploadedUrls[index]);
+    });
 
-    // // 5. 이후 제출 로직 추가 (예: 서버에 저장 등)
-    // setLoading(false);
-    // console.log(updatedContent);
+    // 4. 상태 업데이트
+    setContent(updatedContent);
+    console.log("업로드 및 URL 교체 완료:", updatedContent);
+
+    // 5. 이후 제출 로직 추가 (예: 서버에 저장 등)
+    setLoading(false);
+    console.log(updatedContent);
     console.log("selectedArea : ", selectedArea);
     console.log("selectedSubArea : ", selectedSubArea);
+    console.log("제출용 area : ", selectedArea + " " + selectedSubArea);
     console.log("startDate : ", startDate);
     console.log("endDate : ", endDate);
     console.log("tags : ", tags);
@@ -179,20 +198,6 @@ const CreateDiary = () => {
     console.log("title : ", title);
     console.log("isPublic : ", isPublic);
   };
-
-  const { userId, nickname, name, email, profile } = useSelector(
-    (state: RootState) => state.auth
-  );
-
-  useEffect(() => {
-    console.log("accessToken : ", localStorage.getItem("accessToken"));
-    console.log("refreshToken : ", localStorage.getItem("refreshToken"));
-    console.log("userId : ", userId);
-    console.log("nickname : ", nickname);
-    console.log("name : ", name);
-    console.log("email : ", email);
-    console.log("profile : ", profile);
-  }, []);
 
   return (
     <CreateDiaryContainer>

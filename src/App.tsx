@@ -1,5 +1,13 @@
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Provider, useDispatch, useSelector } from "react-redux";
+import { setUserInfo, clearTokens } from "./redux/authSlice";
+import { RootState } from "./redux/store";
+import { jwtDecode } from "jwt-decode";
+import store from "./redux/store";
+import { useEffect } from "react";
+import AxiosApi from "./api/AxiosApi";
+
 import { Main } from "./page/MainPage";
 import { Layout } from "./component/GlobalComponent";
 import { AdminLayout } from "./component/GlobalComponent";
@@ -16,10 +24,36 @@ import { FindPwPage } from "./page/auth/FindPwPage";
 import { SignupPage } from "./page/auth/SignupPage";
 import CreateDiary from "./page/diary/CreateDiary";
 import { TourSpot } from "./page/itemlist/TourSpot";
-import { Provider } from "react-redux";
-import store from "./redux/store";
 
 function App() {
+  // const dispatch = useDispatch();
+  // const { accessToken, userId } = useSelector((state: RootState) => state.auth);
+
+  // useEffect(() => {
+  //   const fetchUserInfo = async () => {
+  //     if (accessToken && !userId) {
+  //       const decoded = jwtDecode(accessToken);
+  //       const decodedUserId = decoded.sub;
+  //       try {
+  //         const response = await AxiosApi.memberInfo(decodedUserId);
+  //         dispatch(
+  //           setUserInfo({
+  //             userId: response.data.userId,
+  //             nickname: response.data.nickname,
+  //             name: response.data.name,
+  //             email: response.data.email,
+  //             profile: response.data.imgPath,
+  //           })
+  //         );
+  //       } catch (error) {
+  //         console.error("사용자 정보 복원 실패:", error);
+  //         dispatch(clearTokens());
+  //       }
+  //     }
+  //   };
+  //   fetchUserInfo();
+  // }, [accessToken, userId, dispatch]);
+
   return (
     <>
       <Provider store={store}>

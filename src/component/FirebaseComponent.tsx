@@ -3,7 +3,7 @@ import { storage } from "../api/Firebase";
 interface UploadParams {
   pics: string[] | null;
   type: "profile" | "diary";
-  userId: string;
+  userId: string | null;
   diaryId: number | null;
 }
 
