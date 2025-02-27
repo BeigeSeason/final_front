@@ -219,6 +219,8 @@ export const LoginModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
   useEffect(() => {
     if (isOpen) {
       setError(""); // 모달이 열릴 때 에러 메시지 초기화
+      setUserId(""); // 모달 열릴 때 id, pw 초기화
+      setPassword("");
     }
   }, [isOpen]);
 
@@ -246,8 +248,8 @@ export const LoginModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
         );
 
         // 로컬 스토리지에 토큰 저장
-        localStorage.setItem("accessToken", response.data.accessToken);
-        localStorage.setItem("refreshToken", response.data.refreshToken);
+        // localStorage.setItem("accessToken", response.data.accessToken);
+        // localStorage.setItem("refreshToken", response.data.refreshToken);
 
         console.log("현재 Redux 상태:", store.getState()); // Redux 상태 확인
         onClose(); // 로그인 후 모달 닫기
@@ -270,6 +272,8 @@ export const LoginModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
         console.error("네트워크 오류 또는 요청 실패");
         setError("로그인 요청을 처리할 수 없습니다.");
       }
+    } finally {
+      setPassword("");
     }
   };
 

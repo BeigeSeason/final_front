@@ -16,7 +16,7 @@ import {
   StyledWrapper,
   TourContentContainer,
 } from "../../style/CreateDiaryStyled";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const CreateDiary = () => {
   const [selectedArea, setSelectedArea] = useState<string | null>(null);
@@ -176,6 +176,11 @@ const CreateDiary = () => {
     console.log("title : ", title);
     console.log("isPublic : ", isPublic);
   };
+
+  useEffect(() => {
+    console.log("accessToken : ", localStorage.getItem("accessToken"));
+    console.log("refreshToken : ", localStorage.getItem("refreshToken"));
+  }, []);
 
   return (
     <CreateDiaryContainer>
