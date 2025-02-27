@@ -26,38 +26,11 @@ import CreateDiary from "./page/diary/CreateDiary";
 import { TourSpot } from "./page/itemlist/TourSpot";
 
 function App() {
-  // const dispatch = useDispatch();
-  // const { accessToken, userId } = useSelector((state: RootState) => state.auth);
-
-  // useEffect(() => {
-  //   const fetchUserInfo = async () => {
-  //     if (accessToken && !userId) {
-  //       const decoded = jwtDecode(accessToken);
-  //       const decodedUserId = decoded.sub;
-  //       try {
-  //         const response = await AxiosApi.memberInfo(decodedUserId);
-  //         dispatch(
-  //           setUserInfo({
-  //             userId: response.data.userId,
-  //             nickname: response.data.nickname,
-  //             name: response.data.name,
-  //             email: response.data.email,
-  //             profile: response.data.imgPath,
-  //           })
-  //         );
-  //       } catch (error) {
-  //         console.error("사용자 정보 복원 실패:", error);
-  //         dispatch(clearTokens());
-  //       }
-  //     }
-  //   };
-  //   fetchUserInfo();
-  // }, [accessToken, userId, dispatch]);
-
   return (
     <>
       <Provider store={store}>
         <Router>
+          <AuthInitializer />
           <Routes>
             <Route element={<Layout />}>
               <Route path="/" element={<Main />} />
@@ -90,5 +63,37 @@ function App() {
     </>
   );
 }
+
+const AuthInitializer = () => {
+  const dispatch = useDispatch();
+  const { accessToken, userId } = useSelector((state: RootState) => state.auth);
+
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      if (accessToken && !userId) {
+        const decoded = jwtDecode(accessToken);
+        const decodedUserId = decoded.sub;
+        try {
+          const response = await AxiosApi.memberInfo(decodedUserId);
+          dispatch(
+            setUserInfo({
+              userId: response.data.userId,
+              nickname: response.data.nickname,
+              name: response.data.name,
+              email: response.data.email,
+              profile: response.data.imgPath,
+            })
+          );
+        } catch (error) {
+          console.error("사용자 정보 복원 실패:", error);
+          dispatch(clearTokens());
+        }
+      }
+    };
+    fetchUserInfo();
+  }, [accessToken, userId]);
+
+  return null;
+};
 
 export default App;
