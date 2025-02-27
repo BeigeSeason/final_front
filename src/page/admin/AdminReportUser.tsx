@@ -35,8 +35,10 @@ const AdminReportUser = () => {
   const [size] = useState(10);
   const [totalElements, setTotalElements] = useState(0);
 
-  const [banId, setBanId] = useState<number | undefined>(undefined);
-  const [banUserId, setBanUserId] = useState<String | undefined>(undefined);
+  const [reportId, setReportId] = useState<number | undefined>(undefined);
+  const [reportState, setReportState] = useState(true);
+  const [reportedId, setReportedId] = useState<number | undefined>(undefined);
+  const [reportedUserId, setReportedUserId] = useState<String | undefined>(undefined);
   const [banDate, setBanDate] = useState(0);
   const [banReason, setBanReason] = useState("");
 
@@ -91,11 +93,12 @@ const AdminReportUser = () => {
     // setTotalPages = Math.ceil(totalReports / size);
   }
 
-  // 유저 관리 모달
-  const openModal = (id: number, userId: string) => {
+  // 신고 관리 모달
+  const openModal = (reportId: number, reportedId: number, reportedUserId: string) => {
     setIsModalOpen(true);
-    setBanId(id);
-    setBanUserId(userId);
+    setReportId(reportId);
+    setReportedId(reportedId);
+    setReportedUserId(reportedUserId);
   };
   const closeModal = () => {
     setIsModalOpen(false);
@@ -103,16 +106,17 @@ const AdminReportUser = () => {
     setBanReason("");
   };
 
-  // 유저 관리
-  const manageDiary = async () => {
+  // 신고 처리
+  const manageUser = async () => {
     setIsModalOpen(false);
     try {
-      await AxiosApi.banMember(banId, banDate, banReason);
+      await AxiosApi.reportProcess(reportId, reportState, (banDate === 0 ? null : reportedId), banDate, banReason, null, null);
     } catch (error) {
       console.log("유저 정지 에러:", error);
     }
     setBanDate(0);
     setBanReason("");
+    reportList();
   };
 
   return (
@@ -234,7 +238,7 @@ const AdminReportUser = () => {
                       })()}
                   </td>
                   <td className="text-center">
-                    <button onClick={() => openModal(report.id, report.reported.userId)}>
+                    <button onClick={() => openModal(report.id, report.reported.id, report.reported.userId)}>
                       관리
                     </button>
                   </td>
@@ -310,9 +314,10 @@ const AdminReportUser = () => {
       </div>
 
       {/* 관리버튼 모달 */}
-      <Modal isOpen={isModalOpen} onConfirm={manageDiary} onClose={closeModal}>
-        <span>번호 : {banId}</span>
-        <p>대상자 : {banUserId}</p>
+      <Modal isOpen={isModalOpen} onConfirm={manageUser} onClose={closeModal}>
+        <span>신고 번호 : {reportId}</span><br />
+        <span>대상자 번호 : {reportedId}</span><br />
+        <span>대상자 아이디 : {reportedUserId}</span><br />
         <span>정지일 : </span>
         <select 
           name="ban-date" 
@@ -321,18 +326,31 @@ const AdminReportUser = () => {
           onChange={(e) => setBanDate(Number(e.target.value))}
           className="text-center"
         >
+          <option value={0}>보류</option>
           <option value={1}>1일</option>
           <option value={3}>3일</option>
           <option value={7}>7일</option>
           <option value={30}>30일</option>
           <option value={36500}>영구 정지</option>
         </select>
-        <p>정지 사유</p>
+        <br />
+        <span>정지 사유</span><br />
         <input 
           type="text" 
           value={banReason} 
           onChange={(e) => setBanReason(e.target.value)}
         />
+        <br />
+        <span>신고 처리 : </span>
+        <select 
+          name="report-state" 
+          id="report-state"
+          value={reportState ? "true" : "false"}
+          onChange={(e) => setReportState(e.target.value === "true")}
+        >
+          <option value="true">승인</option>
+          <option value="false">거절</option>
+        </select>
       </Modal>
     </AdminContainer>
   );
