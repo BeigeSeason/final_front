@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { AuthBox, ResultBox } from "../../style/AuthStyled";
+import { AuthBox, ResultBox, FindBox } from "../../style/AuthStyled";
 import { InputBox } from "../../component/InputComponent";
 import { Button } from "../../component/ButtonComponent";
 import { CheckModal } from "../../component/ModalComponent";
@@ -22,22 +22,23 @@ export const FindIdPage = () => {
   return (
     <AuthBox>
       <h2>아이디 찾기</h2>
-      <InputBox
-        type="text"
-        placeholder="이름 입력"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-      />
-      <InputBox
-        type="email"
-        placeholder="이메일 입력"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
+      <FindBox>
+        <InputBox
+          type="text"
+          placeholder="이름 입력"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+        <InputBox
+          type="email"
+          placeholder="이메일 입력"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+      </FindBox>
       <Button onClick={handleSubmit} disabled={!isFormValid}>
         아이디 찾기
       </Button>
-
       <CheckModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <ResultBox>
           <p>아이디 찾기 결과</p>

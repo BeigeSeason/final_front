@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { colors } from "./GlobalStyled";
 
 export const AuthBox = styled.div`
   width: 50vw;
@@ -89,11 +90,65 @@ export const AuthBox = styled.div`
   }
 `;
 
+export const TermBox = styled.div`
+  margin-bottom: 50px;
+  label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 16px;
+    color: #333;
+    cursor: pointer;
+  }
+  input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    position: relative;
+    outline: none;
+    cursor: pointer;
+
+    &:checked {
+      background-color: ${colors.colorB};
+      border-color: none;
+    }
+
+    &:checked::after {
+      content: "✔";
+      color: white;
+      font-size: 14px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    &:hover {
+      border-color: #999;
+    }
+  }
+  button {
+    margin: auto;
+  }
+`;
+export const FindBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 60vw;
+  gap: 30px;
+  margin-bottom: 30px;
+`;
+
 export const ResultBox = styled.div`
   padding: 20px;
   border-radius: 8px;
   color: #333;
   text-align: center;
+
   p {
     margin: 0;
     font-size: 20px;
