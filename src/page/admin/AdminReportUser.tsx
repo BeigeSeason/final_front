@@ -50,7 +50,7 @@ const AdminReportUser = () => {
   // 데이터 가져오기
   const reportList = async () => {
     try {
-      const data = await AxiosApi.reportList(page - 1, size, "MEMBER");
+      const data = await AxiosApi.reportList(page - 1, size, "MEMBER", type, sort);
       setReports(data.reports);
       setTotalElements(data.totalElements);
     } catch (error) {
@@ -59,7 +59,7 @@ const AdminReportUser = () => {
   };
   useEffect(() => {
     reportList();
-  }, [page]);
+  }, [page, type, sort]);
 
   // 페이지 번호 생성
   const pageNumbers = [];
@@ -78,7 +78,6 @@ const AdminReportUser = () => {
     setSortSelectOpen(false);
   }
   const handleSelectType = (select: string) => {
-    console.log("select:", select);
     setType(select);
     setTypeSelectOpen(false);
   }
@@ -86,11 +85,11 @@ const AdminReportUser = () => {
   // 데이터 정렬버튼
   const handleSort = () => {
     setSortSelectOpen((prev) => !prev);
+    setTypeSelectOpen(false);
   }
   const handleSelectSort = (select: string) => {
     setSort(select);
     setSortSelectOpen(false);
-    // setTotalPages = Math.ceil(totalReports / size);
   }
 
   // 신고 관리 모달
@@ -150,7 +149,16 @@ const AdminReportUser = () => {
               <FaAngleDown />
             </div>
             <div className="sort-selected center">
-              {sort}
+            {(() => {
+                switch (sort) {
+                  case "idAsc":
+                    return "번호 낮은순";
+                  case "idDesc":
+                    return "번호 높은순";
+                  default:
+                    return "정렬"
+                }
+              })()}
             </div>
           </div>
         </div>

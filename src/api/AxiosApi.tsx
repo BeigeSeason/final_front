@@ -84,7 +84,7 @@ const AxiosApi = {
     }
   },
   // 신고 조회 (전체)
-  reportList: async (page = 1, size = 10, reportType = "MEMBER") => {
+  reportList: async (page = 1, size = 10, reportType = "MEMBER", type = "WAIT", sort = "idAsc") => {
     try {
       // const response = await JwtAxios.get(`/admin/report-list`, {
       //   params: { page, size, reportType },
@@ -93,7 +93,7 @@ const AxiosApi = {
       const response = await axios.get(
         `${Common.FINAL_DOMAIN}/admin/report-list`,
         {
-          params: { page, size, reportType },
+          params: { page, size, reportType, type, sort },
         }
       );
       return response.data;

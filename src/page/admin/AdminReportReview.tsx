@@ -118,7 +118,16 @@ const AdminReportReview = () => {
               <FaAngleDown />
             </div>
             <div className="sort-selected center">
-              {sort}
+              {(() => {
+                switch (sort) {
+                  case "idAsc":
+                    return "번호 낮은순";
+                  case "idDesc":
+                    return "번호 높은순";
+                  default:
+                    return "정렬"
+                }
+              })()}
             </div>
           </div>
         </div>
