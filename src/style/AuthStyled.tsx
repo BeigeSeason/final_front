@@ -55,6 +55,16 @@ export const AuthBox = styled.div`
       margin: 0 0 5px 5px;
       font-size: 13px;
     }
+    .validBox {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      button {
+        height: 35px;
+        width: 70px;
+        font-size: 13px;
+      }
+    }
   }
   .inputbox {
     height: 50px;
