@@ -102,6 +102,38 @@ const AxiosApi = {
       throw error;
     }
   },
+  // 신고 처리
+  reportProcess: async (
+    reportId: number = 1, 
+    state: boolean = true, 
+    userId: number = 1, 
+    day: number = 1, 
+    reason: string = "", 
+    diaryId: string | null = null, 
+    reviewId: number | null = null
+  ) => {
+    try {
+      const response = await axios.post(`${Common.FINAL_DOMAIN}/admin/report-manage`, {
+        reportId, 
+        state, 
+        ...(userId !== null ? { userId } : {}), 
+        ...(day !== null ? { day } : {}), 
+        reason, 
+        ...(diaryId !== null ? { diaryId } : {}), 
+        ...(reviewId !== null ? { reviewId } : {}),
+      },
+    { headers: { "Content-Type": "application/json" }}
+  );
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.error("신고 처리 실패:", error.response?.status, error.response?.data);
+      } else {
+        console.error("신고 처리 실패:", error);
+      }
+      throw error;
+    }
+  },
   // 유저 정지
   banMember: async (id = 1, day = 0, reason = "") => {
     try {
