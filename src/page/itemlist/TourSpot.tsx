@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { ItemApi } from "../../api/ItemApi";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
@@ -17,6 +17,7 @@ import basicImg from "../../img/item/type_200.png";
 import { Loading } from "../../component/Loading";
 import { InputBox } from "../../component/InputComponent";
 import { Button } from "../../component/ButtonComponent";
+import { Paginating } from "../../component/PaginationComponent";
 
 // 데이터 타입 정의
 interface TourSpotDetail {
@@ -43,20 +44,37 @@ export const TourSpot = () => {
   const [tourSpotDetail, setTourSpotDetail] = useState<TourSpotDetail | null>(
     null
   );
-  const [comment, setComment] = useState<string>("");
-  const [comments, setComments] = useState<Comment[]>([]);
+  const [rating, setRating] = useState<number | null>(null); // ⭐ 별점 상태 추가
+  const [comment, setComment] = useState("");
+  const [comments, setComments] = useState<
+    { text: string; rating: number | null; date: Date }[]
+  >([]);
+
+  const [currentPage, setCurrentPage] = useState(0); // 현재 페이지 상태 추가
+  const commentsPerPage = 10;
+  const totalPages = Math.ceil(comments.length / commentsPerPage);
 
   const handleAddComment = () => {
-    if (comment.trim() === "") return;
+    if (!comment.trim() || rating === null) {
+      alert("별점과 댓글을 모두 입력해주세요!"); // ⭐ 별점과 댓글이 없으면 등록 불가
+      return;
+    }
 
-    const newComment: Comment = {
-      date: new Date(), // 현재 날짜 및 시간 저장
-      text: comment,
-    };
-
-    setComments([...comments, newComment]);
+    setComments([{ text: comment, rating, date: new Date() }, ...comments]);
     setComment(""); // 입력 필드 초기화
+    setRating(null); // ⭐ 별점 초기화
   };
+
+  const getPaginatedComments = () => {
+    const startIndex = currentPage * commentsPerPage;
+    const endIndex = startIndex + commentsPerPage;
+    return comments.slice(startIndex, endIndex);
+  };
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
   const parseLinks = (htmlString: string): React.ReactNode[] => {
     // <a> 태그와 <br/> 태그를 모두 매칭하는 정규식
     const regex =
@@ -192,21 +210,26 @@ export const TourSpot = () => {
             <p>여기에 주변 관광지 목록</p>
           </div>
         </SpotDetail>
-        <StyledWrapper>
-          <div className="rating">
-            <input defaultValue={5} name="rating" id="star5" type="radio" />
-            <label htmlFor="star5" />
-            <input defaultValue={4} name="rating" id="star4" type="radio" />
-            <label htmlFor="star4" />
-            <input defaultValue={3} name="rating" id="star3" type="radio" />
-            <label htmlFor="star3" />
-            <input defaultValue={2} name="rating" id="star2" type="radio" />
-            <label htmlFor="star2" />
-            <input defaultValue={1} name="rating" id="star1" type="radio" />
-            <label htmlFor="star1" />
-          </div>
-        </StyledWrapper>
+
         <CommentBox>
+          <StyledWrapper>
+            <div className="rating">
+              {[5, 4, 3, 2, 1].map((value) => (
+                <React.Fragment key={value}>
+                  <input
+                    type="radio"
+                    id={`star${value}`}
+                    name="rating"
+                    value={value}
+                    checked={rating === value}
+                    onChange={() => setRating(value)}
+                  />
+                  <label htmlFor={`star${value}`} />
+                </React.Fragment>
+              ))}
+            </div>
+          </StyledWrapper>
+          <div className="commentCount">댓글 수 {comments.length}</div>
           <div className="commentInput">
             <InputBox
               placeholder="댓글을 입력하세요..."
@@ -217,14 +240,24 @@ export const TourSpot = () => {
             <Button onClick={handleAddComment}> 등록</Button>
           </div>
 
-          {comments.map((c, index) => (
+          {getPaginatedComments().map((c, index) => (
             <div key={index}>
               <div className="commentList">
                 <p className="comment">{c.text}</p>
-                <p className="date">{c.date.toLocaleString()}</p>
+                <div className="commentInfo">
+                  <p className="date">{c.date.toLocaleString()}</p>
+                  <p className="rate">⭐ {c.rating}점</p>
+                </div>
               </div>
             </div>
           ))}
+          {comments.length > commentsPerPage && (
+            <Paginating
+              currentPage={currentPage}
+              totalPages={totalPages}
+              handlePageChange={handlePageChange}
+            />
+          )}
         </CommentBox>
       </TourItemInfoBox>
     </>
