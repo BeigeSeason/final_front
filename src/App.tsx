@@ -23,6 +23,7 @@ import { FindIdPage } from "./page/auth/FindIdPage";
 import { FindPwPage } from "./page/auth/FindPwPage";
 import { SignupPage } from "./page/auth/SignupPage";
 import CreateDiary from "./page/diary/CreateDiary";
+import Diary from "./page/diary/Diary";
 import { TourSpot } from "./page/itemlist/TourSpot";
 
 function App() {
@@ -42,6 +43,7 @@ function App() {
               <Route path="/findpw" element={<FindPwPage />} />
               <Route path="/signup" element={<SignupPage />} />
               <Route path="/creatediary" element={<CreateDiary />} />
+              <Route path="/diary/:diaryId" element={<Diary />} />
               <Route path="/tourspot" element={<TourSpot />} />
               <Route path="/tourspot/:id" element={<TourSpot />} />
             </Route>
