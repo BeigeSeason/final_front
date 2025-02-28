@@ -44,7 +44,7 @@ export const TourList: React.FC = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [loading, setLoading] = useState<boolean>(true); // 로딩 상태
   const [error, setError] = useState<string | null>(null); // <- string | null로 타입 지정
-
+  const [isSortOpen, setIsSortOpen] = useState(true);
   const [isAreaOpen, setIsAreaOpen] = useState(true);
   const [isSubAreaOpen, setIsSubAreaOpen] = useState(true);
   const [isTopThemeOpen, setIsTopThemeOpen] = useState(true);
@@ -61,9 +61,7 @@ export const TourList: React.FC = () => {
       bottomTheme: queryParams.get("cat3") || "",
       category: queryParams.get("category") || "",
       searchQuery: queryParams.get("searchQuery") || "",
-      // ? decodeURIComponent(queryParams.get("searchQuery")!)
-      // : "",
-      sortBy: queryParams.get("sort") || "",
+      sortBy: queryParams.get("sortBy") || "",
       currentPage: parseInt(queryParams.get("currentPage") || "0", 10),
       pageSize: parseInt(queryParams.get("pageSize") || "10", 10),
     };
@@ -71,15 +69,24 @@ export const TourList: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState<string>(filters.searchQuery);
   const [isSelectOpen, setIsSelectOpen] = useState<boolean>(false);
   const selectRef = useRef<HTMLDivElement | null>(null);
+
+  const sortOptions = [
+    { value: "starRating", label: "별점순" },
+    { value: "reviewCount", label: "리뷰순" },
+    { value: "bookmarkCount", label: "북마크순" },
+    { value: "title", label: "제목순" },
+  ];
+
   const fetchTourSpots = async (page: number) => {
     try {
       setLoading(true);
-      const filters = {
+      const filtersForApi = {
         keyword: searchQuery || undefined,
         page: page,
         size: 10,
+        sort: filters.sortBy || undefined, // "field,direction" 형식으로 전달
       };
-      const data = await ItemApi.getTourSpotList(filters);
+      const data = await ItemApi.getTourSpotList(filtersForApi);
       setTourSpots(data.content || []);
       setTotalPages(data.totalPages);
       setTotalItems(data.totalElements);
@@ -101,6 +108,8 @@ export const TourList: React.FC = () => {
           queryParams.set("cat2", value);
         } else if (key === "searchQuery") {
           queryParams.set(key, value);
+        } else if (key === "sortBy") {
+          queryParams.set("sortBy", value); // sortBy 추가
         } else {
           queryParams.set(key, value.toString());
         }
@@ -120,7 +129,6 @@ export const TourList: React.FC = () => {
         ...prev,
         [key]: value,
         currentPage: key !== "currentPage" ? 0 : prev.currentPage,
-        sortBy: key !== "currentPage" ? "" : prev.sortBy,
       };
 
       if (key === "topTheme") {
@@ -214,7 +222,20 @@ export const TourList: React.FC = () => {
     const newCategory = filters.category === category ? "" : category;
     updateFilters("category", newCategory);
   };
+  // 정렬 필드 변경
+  const handleSortFieldChange = (field: string) => {
+    const [currentField, currentDirection] = filters.sortBy.split(",");
+    const newDirection = currentDirection || "ASC"; // 기본값 ASC
+    const newSortBy = currentField === field ? "" : `${field},${newDirection}`;
+    updateFilters("sortBy", newSortBy);
+  };
 
+  // 정렬 방향 변경
+  const handleSortDirectionChange = (direction: "ASC" | "DESC") => {
+    const [currentField] = filters.sortBy.split(",");
+    if (!currentField) return; // 필드가 없으면 무시
+    updateFilters("sortBy", `${currentField},${direction}`);
+  };
   const handleTopFilterChange = (key: keyof Filters, name: string) => {
     setFilters((prev) => {
       const newFilters: Filters = { ...prev };
@@ -291,7 +312,46 @@ export const TourList: React.FC = () => {
             onKeyDown={handleKeyDown}
             onSearch={handleSearch}
           />
-
+          <div className="sort">
+            <ToggleSection
+              title="정렬"
+              isopen={isSortOpen}
+              onToggle={() => setIsSortOpen(!isSortOpen)}
+            >
+              <div className="buttons">
+                {sortOptions.map((option) => (
+                  <Button
+                    key={option.value}
+                    onClick={() => handleSortFieldChange(option.value)}
+                    className={`sort-button ${
+                      filters.sortBy.startsWith(option.value) ? "selected" : ""
+                    }`}
+                  >
+                    # {option.label}
+                  </Button>
+                ))}
+                {/* 오름차순/내림차순 버튼 */}
+                <Button
+                  onClick={() => handleSortDirectionChange("ASC")}
+                  className={`sort-direction ${
+                    filters.sortBy.endsWith("ASC") ? "selected" : ""
+                  }`}
+                  disabled={!filters.sortBy.split(",")[0]} // 필드가 없으면 비활성화
+                >
+                  오름차순
+                </Button>
+                <Button
+                  onClick={() => handleSortDirectionChange("DESC")}
+                  className={`sort-direction ${
+                    filters.sortBy.endsWith("DESC") ? "selected" : ""
+                  }`}
+                  disabled={!filters.sortBy.split(",")[0]} // 필드가 없으면 비활성화
+                >
+                  내림차순
+                </Button>
+              </div>
+            </ToggleSection>
+          </div>
           <div className="mainarea">
             <ToggleSection
               title="지역"

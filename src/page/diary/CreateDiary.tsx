@@ -22,6 +22,7 @@ import {
 import React, { useEffect, useState } from "react";
 import { DiaryApi } from "../../api/DiaryApi";
 import { useNavigate } from "react-router-dom";
+import { FaCalendar } from "react-icons/fa";
 
 const CreateDiary = () => {
   const { userId, refreshToken } = useSelector(
@@ -85,7 +86,7 @@ const CreateDiary = () => {
     if (e.key === "Enter" || e.key === " ") {
       if (inputTag.trim() === "") return;
 
-      const formattedTag = `#${inputTag.trim()}`;
+      const formattedTag = `# ${inputTag.trim()}`;
 
       setTags((prevTags) => [...prevTags, formattedTag]);
       setInputTag("");
@@ -240,134 +241,152 @@ const CreateDiary = () => {
   }, [startDate]);
 
   return (
-    <CreateDiaryContainer>
-      <TourInfoContainer>
-        <Button
-          className="submit-button"
-          disabled={!isFormValid}
-          onClick={handleSubmit}
-        >
-          작성 완료
-        </Button>
-        <div className="select-container">
-          <SelectBox
-            value={selectedArea ?? ""}
-            onChange={handleAreaChange}
-            width="250px"
-          >
-            <option value="">지역 선택</option>
-            {areas.map((area) => (
-              <option key={area.name} value={area.name}>
-                {area.name}
-              </option>
-            ))}
-          </SelectBox>
-          <SelectBox
-            value={selectedSubArea ?? ""}
-            onChange={(e) => setSelectedSubArea(e.target.value)}
-            width="250px"
-          >
-            <option value="">세부 지역 선택</option>
-            {selectedArea &&
-              selectedAreaData?.subAreas.map((subArea) => (
-                <option key={subArea.code} value={subArea.name}>
-                  {subArea.name}
+    <>
+      <CreateDiaryContainer>
+        <TourInfoContainer>
+          <div className="select-container title-container">
+            <InputBox
+              className="title"
+              placeholder="제목 입력"
+              value={title}
+              onChange={handleTitleChange}
+            />
+            <span className="word-count">{title.length}/40</span>
+            <StyledWrapper>
+              <div className="toggle">
+                <label className="switch">
+                  <input
+                    type="checkbox"
+                    checked={!isPublic}
+                    onChange={(e) => setIsPublic(!e.target.checked)}
+                  />
+                  <span>
+                    <em />
+                    <strong />
+                  </span>
+                </label>
+              </div>
+            </StyledWrapper>
+          </div>
+          <div className="select-container">
+            <SelectBox
+              className="selectOption"
+              value={selectedArea ?? ""}
+              onChange={handleAreaChange}
+            >
+              <option value="">지역 선택</option>
+              {areas.map((area) => (
+                <option key={area.name} value={area.name}>
+                  {area.name}
                 </option>
               ))}
-          </SelectBox>
-        </div>
-        <div className="select-container">
-          <DatePicker
-            className="datepicker"
-            locale={ko}
-            dateFormat="yy.MM.dd"
-            dateFormatCalendar="yyyy년 MM월"
-            placeholderText="일정 선택"
-            selected={startDate}
-            onChange={onChangeDatepicker}
-            startDate={startDate}
-            endDate={endDate}
-            selectsRange
-            onFocus={(e) => e.target.blur()}
-          />
-        </div>
-        <div className="select-container">
-          <InputBox
-            value={inputTag}
-            onChange={handleInputTagOnChange}
-            onKeyDown={handleInputTagKeyDown}
-            placeholder="추가할 태그를 입력해주세요."
-            padding="8px 12px"
-            width="250px"
-          />
-          <div className="tags-container">
-            {tags.map((tag, index) => (
-              <span key={index} className="tag-box">
-                {tag}
-                <button
-                  className="tag-delete"
-                  onClick={() => handleDeleteTag(index)}
-                >
-                  X
-                </button>
-              </span>
-            ))}
+            </SelectBox>
+            <SelectBox
+              className="selectOption"
+              value={selectedSubArea ?? ""}
+              onChange={(e) => setSelectedSubArea(e.target.value)}
+            >
+              <option value="">세부 지역 선택</option>
+              {selectedArea &&
+                selectedAreaData?.subAreas.map((subArea) => (
+                  <option key={subArea.code} value={subArea.name}>
+                    {subArea.name}
+                  </option>
+                ))}
+            </SelectBox>
           </div>
-        </div>
-        <div className="select-container">
-          <InputBox
-            placeholder="여행 총 경비"
-            value={formatTravelCost(travelCost)}
-            onChange={handleTravelCostChange}
-            onKeyDown={handleTravelCostKeyDown}
-            width="250px"
-            padding="8px 12px"
-          />
-        </div>
-        <div className="select-container title-container">
-          <InputBox
-            className="title"
-            placeholder="제목 입력"
-            value={title}
-            onChange={handleTitleChange}
-          />
-          <span className="word-count">{title.length}/40</span>
-          <StyledWrapper>
-            <div className="toggle">
-              <label className="switch">
-                <input
-                  type="checkbox"
-                  checked={!isPublic}
-                  onChange={(e) => setIsPublic(!e.target.checked)}
-                />
-                <span>
-                  <em />
-                  <strong />
-                </span>
-              </label>
+          <div className="select-container">
+            <DatePicker
+              className="datepicker"
+              locale={ko}
+              dateFormat="yy.MM.dd"
+              dateFormatCalendar="yyyy년 MM월"
+              placeholderText="일정 선택"
+              selected={startDate}
+              onChange={onChangeDatepicker}
+              startDate={startDate}
+              endDate={endDate}
+              selectsRange
+              onFocus={(e) => e.target.blur()}
+            />
+            <FaCalendar
+              style={{
+                marginLeft: "-30px",
+                marginRight: "30px",
+                color: "gray",
+                zIndex: "10",
+              }}
+            />
+          </div>
+
+          <div className="select-container">
+            <InputBox
+              className="selectOption"
+              placeholder="여행 총 경비"
+              value={formatTravelCost(travelCost)}
+              onChange={handleTravelCostChange}
+              onKeyDown={handleTravelCostKeyDown}
+            />
+            원
+          </div>
+          <div className="select-container">
+            <InputBox
+              className="selectOption"
+              value={inputTag}
+              onChange={handleInputTagOnChange}
+              onKeyDown={handleInputTagKeyDown}
+              placeholder="태그 추가하기"
+            />
+          </div>
+          <div>
+            <div className="tags-container">
+              {tags.length > 0 ? (
+                tags.map((tag, index) => (
+                  <span key={index} className="tag-box">
+                    {tag}
+                    <button
+                      className="tag-delete"
+                      onClick={() => handleDeleteTag(index)}
+                    >
+                      X
+                    </button>
+                  </span>
+                ))
+              ) : (
+                <p className="tagInfo">enter로 태그를 추가해 주세요</p>
+              )}
             </div>
-          </StyledWrapper>
-        </div>
-      </TourInfoContainer>
-      <TourContentContainer>
-        {/* <TipTap /> */}
-        <ReactQuill
-          theme="snow"
-          modules={modules}
-          formats={formats}
-          value={content}
-          onChange={setContent}
-        />
-        <div>
-          현재 내용 길이: {new TextEncoder().encode(content).length} bytes
-        </div>
-      </TourContentContainer>
+          </div>
+        </TourInfoContainer>
+        <TourContentContainer>
+          {/* <TipTap /> */}
+          <ReactQuill
+            theme="snow"
+            modules={modules}
+            formats={formats}
+            value={content}
+            onChange={setContent}
+          />
+          <div className="diaryLast">
+            <p>
+              현재 내용 길이: {new TextEncoder().encode(content).length} bytes
+            </p>
+            <Button
+              className="submit-button"
+              disabled={!isFormValid}
+              onClick={handleSubmit}
+            >
+              게시하기
+            </Button>
+          </div>
+        </TourContentContainer>
+      </CreateDiaryContainer>
       {loading && (
         <Loading>
           <p>여행일지를 업로드 중입니다.</p>
         </Loading>
       )}
-    </CreateDiaryContainer>
+    </>
   );
 };
 

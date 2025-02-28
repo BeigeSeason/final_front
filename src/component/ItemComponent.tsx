@@ -214,6 +214,7 @@ interface SelectFilters {
   category?: string;
   themeList?: string;
   searchQuery?: string;
+  sortBy?: string;
 }
 
 // 선택한 필터를 포맷하는 함수
@@ -296,7 +297,21 @@ const formatSelectedFilters = (filters: SelectFilters) => {
       name: `검색어: ${filters.searchQuery}`,
     });
   }
-
+  if (filters.sortBy) {
+    const [field, direction] = filters.sortBy.split(",");
+    const sortLabels: { [key: string]: string } = {
+      starRating: "별점순",
+      reviewCount: "리뷰순",
+      bookmarkCount: "북마크순",
+      title: "제목순",
+    };
+    const directionLabel = direction === "ASC" ? "오름차순" : "내림차순";
+    const sortLabel = sortLabels[field] || field; // 필드 라벨 매핑
+    selectedFilters.push({
+      key: "sortBy",
+      name: `${sortLabel} (${directionLabel})`,
+    });
+  }
   return selectedFilters;
 };
 

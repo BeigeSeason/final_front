@@ -93,7 +93,7 @@ export const NavSt = styled.div`
       opacity: 0.7;
     }
     &.active {
-      color: ${colors.colorB};
+      opacity: 0.7;
     }
   }
 `;

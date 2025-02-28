@@ -1,11 +1,11 @@
 import styled from "styled-components";
 import { colors } from "./GlobalStyled";
+import { ScrollBar } from "../component/ButtonComponent";
 
 export const CreateDiaryContainer = styled.div`
   width: 60vw;
   margin: 0 auto;
   height: 1000px;
-  /* background-color: ${colors.colorC}; */
 `;
 
 export const TourInfoContainer = styled.div`
@@ -30,18 +30,32 @@ export const TourInfoContainer = styled.div`
   select {
     margin-right: 20px;
   }
+  .selectOption,
   .datepicker {
     width: 250px;
     padding: 8px;
     font-size: 15px;
-    text-align: center;
-    border: 1px solid #ccc;
-    border-radius: 30px;
+    border: none;
+    border-bottom: 2px solid #ccc;
+    border-radius: 0px;
     box-sizing: border-box;
     cursor: pointer;
   }
+  .selectOption option {
+    padding: 10px;
+    font-size: 13px;
+    background-color: #f4f6f8;
+  }
+  .datepicker {
+    text-align: center;
+  }
   .tags-container {
+    background-color: #f5f5f5;
+    padding: 5px;
+    border-radius: 10px;
     display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
     .tag-box {
       display: flex;
       align-items: center;
@@ -51,7 +65,8 @@ export const TourInfoContainer = styled.div`
       border-radius: 20px;
       font-size: 15px;
       color: white;
-      background-color: ${colors.colorB};
+      background-color: ${colors.colorC};
+      white-space: nowrap;
     }
     .tag-delete {
       font-size: 10px;
@@ -61,6 +76,11 @@ export const TourInfoContainer = styled.div`
       border: none;
       cursor: pointer;
     }
+    p {
+      margin: 0;
+      font-size: 15px;
+      color: gray;
+    }
   }
   .title-container {
     display: flex;
@@ -69,12 +89,12 @@ export const TourInfoContainer = styled.div`
     border-bottom: 1px solid #ccc;
     .title {
       border: none;
-      /* border-bottom: 1px solid #ccc; */
       border-radius: 0;
       padding: 8px 12px;
       margin-top: 20px;
       font-size: 16px;
       width: 45vw;
+      font-size: 30px;
     }
     .word-count {
       display: flex;
@@ -243,6 +263,19 @@ export const StyledWrapper = styled.div`
 
 export const TourContentContainer = styled.div`
   width: 100%;
+  .diaryLast {
+    margin-top: 10px;
+    p {
+      margin: 0;
+      color: gray;
+      font-size: 13px;
+    }
+    display: flex;
+    justify-content: space-between;
+    button {
+      font-size: 13px;
+    }
+  }
   .ql-editor {
     min-height: 400px;
   }

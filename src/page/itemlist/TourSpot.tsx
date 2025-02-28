@@ -212,23 +212,6 @@ export const TourSpot = () => {
         </SpotDetail>
 
         <CommentBox>
-          <StyledWrapper>
-            <div className="rating">
-              {[5, 4, 3, 2, 1].map((value) => (
-                <React.Fragment key={value}>
-                  <input
-                    type="radio"
-                    id={`star${value}`}
-                    name="rating"
-                    value={value}
-                    checked={rating === value}
-                    onChange={() => setRating(value)}
-                  />
-                  <label htmlFor={`star${value}`} />
-                </React.Fragment>
-              ))}
-            </div>
-          </StyledWrapper>
           <div className="commentCount">댓글 수 {comments.length}</div>
           <div className="commentInput">
             <InputBox
@@ -237,6 +220,23 @@ export const TourSpot = () => {
               onChange={(e) => setComment(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleAddComment()}
             />
+            <StyledWrapper>
+              <div className="rating">
+                {[5, 4, 3, 2, 1].map((value) => (
+                  <React.Fragment key={value}>
+                    <input
+                      type="radio"
+                      id={`star${value}`}
+                      name="rating"
+                      value={value}
+                      checked={rating === value}
+                      onChange={() => setRating(value)}
+                    />
+                    <label htmlFor={`star${value}`} />
+                  </React.Fragment>
+                ))}
+              </div>
+            </StyledWrapper>
             <Button onClick={handleAddComment}> 등록</Button>
           </div>
 
