@@ -34,7 +34,19 @@ interface Filters {
   pageSize: number;
   themeList?: string;
 }
-
+interface SelectFilters {
+  areaCode?: string;
+  subAreaCode?: string;
+  topTheme?: string;
+  middleTheme?: string;
+  bottomTheme?: string;
+  category?: string;
+  themeList?: string;
+  searchQuery?: string;
+  sortBy?: string;
+  minPrice?: number;
+  maxPrice?: number;
+}
 export const TourList: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -236,7 +248,7 @@ export const TourList: React.FC = () => {
     if (!currentField) return; // 필드가 없으면 무시
     updateFilters("sortBy", `${currentField},${direction}`);
   };
-  const handleTopFilterChange = (key: keyof Filters, name: string) => {
+  const handleTopFilterChange = (key: keyof SelectFilters, name: string) => {
     setFilters((prev) => {
       const newFilters: Filters = { ...prev };
 
@@ -251,7 +263,7 @@ export const TourList: React.FC = () => {
                 .split(",")
                 .filter((theme) => theme !== code)
                 .join(",")
-            : ""; // newFilters[key]가 undefined일 경우 기본값 설정
+            : "";
         }
       } else if (
         key === "areaCode" ||
@@ -263,9 +275,9 @@ export const TourList: React.FC = () => {
         key === "sortBy" ||
         key === "themeList"
       ) {
-        console.log(newFilters[key], key);
         newFilters[key] = "";
       }
+      // minPrice, maxPrice는 TourList에서 사용 안 하므로 무시
 
       return newFilters;
     });
@@ -507,7 +519,17 @@ export const TourList: React.FC = () => {
             총 {totalItems > 9999 ? "9,999+" : totalItems.toLocaleString()}건
           </div>
           <SelectedFilters
-            filters={filters}
+            filters={{
+              areaCode: filters.areaCode,
+              subAreaCode: filters.subAreaCode,
+              topTheme: filters.topTheme,
+              middleTheme: filters.middleTheme,
+              bottomTheme: filters.bottomTheme,
+              category: filters.category,
+              searchQuery: filters.searchQuery,
+              sortBy: filters.sortBy,
+              themeList: filters.themeList,
+            }}
             onRemoveFilter={handleTopFilterChange}
           />
           {loading && (

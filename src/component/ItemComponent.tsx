@@ -215,6 +215,8 @@ interface SelectFilters {
   themeList?: string;
   searchQuery?: string;
   sortBy?: string;
+  minPrice?: number;
+  maxPrice?: number;
 }
 
 // 선택한 필터를 포맷하는 함수
@@ -310,6 +312,12 @@ const formatSelectedFilters = (filters: SelectFilters) => {
     selectedFilters.push({
       key: "sortBy",
       name: `${sortLabel} (${directionLabel})`,
+    });
+  }
+  if (filters.minPrice !== undefined || filters.maxPrice !== undefined) {
+    selectedFilters.push({
+      key: "minPrice",
+      name: `가격: ${filters.minPrice ?? 0} - ${filters.maxPrice ?? 1000}`,
     });
   }
   return selectedFilters;
