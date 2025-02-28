@@ -220,17 +220,17 @@ const AxiosApi = {
     }
   },
   // 비밀번호 찾기
-  findMemberPw: async (id: string, email: string) => {
+  findMemberPw: async (userId: string, email: string) => {
     const memberInfo = {
-      userId: id,
+      userId: userId,
       email: email,
     };
     return await axios.post(`${API_BASE_URL}/member/find-pw`, memberInfo);
   },
   // 비밀번호 변경
-  changeMemberPw: async (id: string, password: string) => {
+  changeMemberPw: async (userId: string, password: string) => {
     const member = {
-      userId: id,
+      userId: userId,
       password: password,
     };
     return await axios.post(`${API_BASE_URL}/member/change-pw`, member);
