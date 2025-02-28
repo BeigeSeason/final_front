@@ -20,6 +20,11 @@ interface SignupRequest {
   sso?: string; // SSO 정보는 선택적 속성
 }
 
+interface MemberReqDto {
+  name: string;
+  email: string;
+}
+
 const AxiosApi = {
   // 로그인
   // 아직 잘 몰라서 AxiosResponse<any>로 설정함
@@ -89,7 +94,13 @@ const AxiosApi = {
     }
   },
   // 신고 조회 (전체)
-  reportList: async (page = 1, size = 10, reportType = "MEMBER", type = "WAIT", sort = "idAsc") => {
+  reportList: async (
+    page = 1,
+    size = 10,
+    reportType = "MEMBER",
+    type = "WAIT",
+    sort = "idAsc"
+  ) => {
     try {
       // const response = await JwtAxios.get(`/admin/report-list`, {
       //   params: { page, size, reportType },
@@ -158,6 +169,7 @@ const AxiosApi = {
       throw error;
     }
   },
+  // 아이디 중복 체크
   checkMemberIdExists: async (userId: string) => {
     try {
       const response = await axios.post(
@@ -169,6 +181,7 @@ const AxiosApi = {
       return true;
     }
   },
+  // 이메일 중복 체크
   checkMemberEmailExists: async (email: string) => {
     try {
       const response = await axios.post(
@@ -180,6 +193,7 @@ const AxiosApi = {
       return true;
     }
   },
+  // 닉네임 중복 체크
   checkMemberNicknameExists: async (nickname: string) => {
     try {
       const response = await axios.post(
@@ -191,8 +205,20 @@ const AxiosApi = {
       return true;
     }
   },
+  // 아이디 찾기
+  findMemberId: async (name: string, email: string): Promise<string | null> => {
+    try {
+      const requestData: MemberReqDto = { name, email };
+      const response: AxiosResponse<string> = await axios.post(
+        `${API_BASE_URL}/member/find-id`,
+        requestData
+      );
+      return response.data; // 성공 시 userId 반환
+    } catch (error) {
+      console.error("아이디 찾기 에러:", error);
+      return null;
+    }
+  },
 };
 
 export default AxiosApi;
-
-// 회원 닉네임 중복 확인

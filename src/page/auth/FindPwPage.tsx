@@ -14,28 +14,32 @@ export const FindPwPage = () => {
     setIsModalOpen(true);
   };
   return (
-    <AuthBox>
-      <h2>임시 비밀번호 발급</h2>
-      <FindBox>
-        <InputBox
-          type="text"
-          placeholder="아이디 입력"
-          value={id}
-          onChange={(e) => setId(e.target.value)}
-        />
-        <InputBox
-          type="email"
-          placeholder="이메일 입력"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-      </FindBox>
-      <Button onClick={handleSubmit} disabled={!isFormValid}>
-        비밀번호 찾기
-      </Button>
+    <>
+      <AuthBox>
+        <h2>임시 비밀번호 발급</h2>
+        <FindBox>
+          <InputBox
+            className="inputbox"
+            type="text"
+            placeholder="아이디 입력"
+            value={id}
+            onChange={(e) => setId(e.target.value)}
+          />
+          <InputBox
+            className="inputbox"
+            type="email"
+            placeholder="이메일 입력"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </FindBox>
+        <Button onClick={handleSubmit} disabled={!isFormValid}>
+          비밀번호 찾기
+        </Button>
+      </AuthBox>
       <CheckModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <ResultBox>{email}로 임시 비밀번호가 발급되었습니다.</ResultBox>
       </CheckModal>
-    </AuthBox>
+    </>
   );
 };

@@ -65,12 +65,15 @@ const LoginContainer = styled.div`
   flex-direction: column;
   align-items: center;
   padding: 10px;
-  h2 {
-    margin-bottom: 30px;
+  gap: 20px;
+  .inputbox {
+    height: 50px;
+    border-radius: 15px;
   }
-  input {
+  h2 {
     margin-bottom: 20px;
   }
+
   button {
     width: 100%;
   }
@@ -168,7 +171,7 @@ export const CheckModal: React.FC<CheckModalProps> = ({
   return (
     <ModalBackdrop>
       <ModalContent>
-        <p>{children}</p>
+        <div>{children}</div>
         <Button onClick={onClose} {...buttonProps}>
           확인
         </Button>
@@ -301,12 +304,14 @@ export const LoginModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
         {error && <p style={{ color: "red" }}>{error}</p>}{" "}
         {/* 에러 메시지 표시 */}
         <InputBox
+          className="inputbox"
           type="text"
           placeholder="아이디"
           value={userId}
           onChange={(e) => setUserId(e.target.value)}
         />
         <InputBox
+          className="inputbox"
           type="password"
           placeholder="비밀번호"
           value={password}

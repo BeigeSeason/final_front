@@ -77,19 +77,21 @@ export const MypageMenuContainer = styled.div`
   width: 100%;
   height: 50px;
   margin: 3vh 0 2vh;
-  /* background-color: #d8e1f3; */
-  background-color: ${colors.colorD};
+  /* background-color: ${colors.colorD}; */
   white-space: nowrap;
   button {
-    width: 22%;
-    height: 80%;
+    width: 25%;
     border: none;
+    border-bottom: 10px solid transparent;
     background-color: transparent;
     font-size: 16px;
     cursor: pointer;
-
+    transition: all 0.3s ease;
+    &:hover {
+      opacity: 0.7;
+    }
     &.selected {
-      font-weight: bold;
+      border-bottom: 10px solid ${colors.colorD};
     }
   }
   .write-diary-button {
