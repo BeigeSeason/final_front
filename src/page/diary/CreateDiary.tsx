@@ -65,6 +65,15 @@ const CreateDiary = () => {
     setStartDate(start);
     setEndDate(end);
   };
+  const formatDate = (date: Date | null) => {
+    if (date) {
+      const koreaTime = new Date(date.getTime() + 9 * 60 * 60 * 1000); // 9시간 추가
+      const formattedDate = koreaTime.toISOString();
+      return formattedDate;
+    } else {
+      return;
+    }
+  };
 
   // Tag
   const handleInputTagKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -153,8 +162,8 @@ const CreateDiary = () => {
         diaryId: diaryId,
         title: title,
         region: selectedArea + " " + selectedSubArea,
-        startDate: startDate ? startDate.toISOString() : null,
-        endDate: endDate ? endDate.toISOString() : null,
+        startDate: formatDate(startDate) ?? null,
+        endDate: formatDate(endDate ?? startDate) ?? null,
         tags: tags,
         totalCost: travelCost || 0,
         content: content,
@@ -203,15 +212,16 @@ const CreateDiary = () => {
       diaryId: diaryId,
       title: title,
       region: selectedArea + " " + selectedSubArea,
-      startDate: startDate ? startDate.toISOString() : null,
-      endDate: endDate ? endDate.toISOString() : null,
+      startDate: formatDate(startDate) ?? null,
+      endDate: formatDate(endDate ?? startDate) ?? null,
       tags: tags,
       totalCost: travelCost || 0,
-      content: content,
+      content: updatedContent,
       userId: userId as string,
       isPublic: isPublic,
     };
     console.log(diaryData);
+    console.log("이미지 넣은 content : ", updatedContent);
     const isDiarySaved = await DiaryApi.postDiary(diaryData);
     setLoading(false);
     if (isDiarySaved) {
@@ -220,6 +230,14 @@ const CreateDiary = () => {
       console.log("다이어리 생성 중 에러");
     }
   };
+
+  useEffect(() => {
+    if (startDate) {
+      const koreaTime = new Date(startDate.getTime() + 9 * 60 * 60 * 1000); // 9시간 추가
+      const formattedDate = koreaTime.toISOString();
+      console.log(formattedDate);
+    }
+  }, [startDate]);
 
   return (
     <CreateDiaryContainer>
