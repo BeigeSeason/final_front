@@ -5,6 +5,7 @@ import { Button } from "../../component/ButtonComponent";
 import { CheckModal } from "../../component/ModalComponent";
 import AxiosApi from "../../api/AxiosApi";
 import emailjs from "@emailjs/browser";
+import { Loading } from "../../component/Loading";
 
 export const FindPwPage = () => {
   const [id, setId] = useState("");
@@ -12,9 +13,11 @@ export const FindPwPage = () => {
   const [newPassword, setNewPassword] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const isFormValid = id.trim() !== "" && email.trim() !== "";
+  const [isLoading, setIsLoading] = useState(false);
 
   // 비밀번호 찾기
   const handleSubmit = async () => {
+    setIsLoading(true);
     try {
       const response = await AxiosApi.findMemberPw(id, email);
       if (response.data) {
@@ -55,6 +58,7 @@ export const FindPwPage = () => {
       )
       .then((response) => {
         setIsModalOpen(true);
+        setIsLoading(false);
       })
       .catch((error) => {
         alert("이메일 발송에 실패했습니다. 관리자에게 문의해주세요.");
@@ -85,9 +89,17 @@ export const FindPwPage = () => {
           비밀번호 찾기
         </Button>
       </AuthBox>
+
       <CheckModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <ResultBox>{email}로 임시 비밀번호가 발급되었습니다.</ResultBox>
       </CheckModal>
+
+      {/* 로딩 */}
+      {isLoading && (
+        <Loading>
+          <p>처리중...</p>
+        </Loading>
+      )}
     </>
   );
 };

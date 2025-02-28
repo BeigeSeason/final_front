@@ -15,6 +15,7 @@ import Profile5 from "../../img/profile/profile5.png";
 import Add from "../../img/profile/add.png";
 import AxiosApi from "../../api/AxiosApi";
 import emailjs from "@emailjs/browser";
+import { Loading } from "../../component/Loading";
 
 export const SignupPage = () => {
   const [isTermsAgreed, setIsTermsAgreed] = useState(false);
@@ -50,6 +51,8 @@ export const SignupPage = () => {
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
   const [isSignupSuccess, setIsSignupSuccess] = useState(false);
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -204,6 +207,7 @@ export const SignupPage = () => {
     setIsValid((prev) => ({ ...prev, email: !isEmailExists }));
     // 이메일 인증
     if (!isEmailExists) {
+      setIsLoading(true);
       const newCode = generateRandomCode();
       setNewEmailCode(newCode);
       // 메일 전송
@@ -225,6 +229,7 @@ export const SignupPage = () => {
             setErrors((prev) => ({ ...prev, email: message }));
             setEmailTimeLeft(300);
             setEmailChecked(true);
+            setIsLoading(false);
           })
           .catch((error) => {
             const message = "이메일 전송에 오류가 발생했습니다. 관리자에게 문의해주세요.";
@@ -578,6 +583,13 @@ export const SignupPage = () => {
             </ExitModal>
           )}
         </div>
+      )}
+
+      {/* 로딩 */}
+      {isLoading && (
+        <Loading>
+          <p>인증 메일 전송중...</p>
+        </Loading>
       )}
     </AuthBox>
   );
