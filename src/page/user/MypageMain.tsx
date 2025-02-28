@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 import { GlobalFont } from "../../style/GlobalStyled";
 import { ExitModal } from "../../component/ModalComponent";
 import { Button } from "../../component/ButtonComponent";
@@ -25,6 +27,7 @@ import { MdEdit } from "react-icons/md";
 const MypageMain = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { nickname } = useSelector((state: RootState) => state.auth);
   const queryParams = new URLSearchParams(location.search);
   const menuFromUrl = queryParams.get("menu") || "내 여행일지";
   const [selectedMenu, setSelectedMenu] = useState<string>(menuFromUrl);
@@ -87,16 +90,16 @@ const MypageMain = () => {
           </label>
         </div>
         <div className="user-info">
-          <p className="content-font1">사용자 닉네임</p>
+          <p className="content-font1">{nickname}</p>
         </div>
       </ProfileInfo>
       <MypageMenuContainer>
-        <Button
+        {/* <Button
           className="write-diary-button"
           onClick={() => navigate("/creatediary")}
         >
           여행일지 작성
-        </Button>
+        </Button> */}
         {menuItems.map((menu) => (
           <button
             key={menu}

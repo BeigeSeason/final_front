@@ -1,7 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 import { GlobalFont } from "../../style/GlobalStyled";
 import { Button } from "../../component/ButtonComponent";
 import { InputBox } from "../../component/InputComponent";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import AxiosApi from "../../api/AxiosApi";
 import { MyProfileContainer } from "../../style/MypageComponentStyled";
 
 interface InfoItem {
@@ -11,85 +15,98 @@ interface InfoItem {
 }
 
 const MyProfile = React.memo(() => {
+  const { userId, nickname, name, email } = useSelector(
+    (state: RootState) => state.auth
+  );
   const [confirmPw, setConfirmPw] = useState<boolean>(false);
   const [isEditable, setIsEditable] = useState<boolean>(false);
   const [isPwEditable, setIsPwEditable] = useState<boolean>(false);
   const [selectedMenu, setSelectedMenu] = useState<string>("내 정보 수정");
   const menuItems: string[] = ["내 정보 수정", "내가 작성한 댓글"];
-  const [infoItems, setInfoItems] = useState<InfoItem[]>([
-    { label: "이름", value: "박지숙", editable: isEditable },
-    { label: "닉네임", value: "그럴쑥도있지", editable: isEditable },
-    { label: "아이디", value: "jisuk0415", editable: isEditable },
-    { label: "이메일", value: "jisuk0415@naver.com", editable: false },
-  ]);
+
+  // 초기 infoItems는 Redux 상태로 설정
+  const initialInfoItems: InfoItem[] = [
+    { label: "이름", value: name ?? "", editable: true },
+    { label: "닉네임", value: nickname ?? "", editable: true },
+    { label: "아이디", value: userId ?? "", editable: true },
+    { label: "이메일", value: email ?? "", editable: false },
+  ];
 
   const EditInfo = () => {
-    const [editName, setEditName] = useState<string>(
-      infoItems.find((item) => item.label === "이름")?.value || "기본값"
-    );
-    const [editNickname, setEditNickname] = useState<string>(
-      infoItems.find((item) => item.label === "닉네임")?.value || "기본값"
-    );
-    const [editId, setEditId] = useState<string>(
-      infoItems.find((item) => item.label === "아이디")?.value || "기본값"
-    );
+    const [editName, setEditName] = useState<string>(name ?? "");
+    const [editNickname, setEditNickname] = useState<string>(nickname ?? "");
+    const [editId, setEditId] = useState<string>(userId ?? "");
+    const [newPw, setNewPw] = useState<string>("");
+    const [confirmPwValue, setConfirmPwValue] = useState<string>("");
+    const [showPassword, setShowPassword] = useState<boolean>(false);
+    const [showConfirmPassword, setShowConfirmPassword] =
+      useState<boolean>(false);
 
-    const [newPw, setNewPw] = useState<string | null>(null);
-    const [confirmPw, setConfirmPw] = useState<string | null>(null);
+    const [isValid, setIsValid] = useState({
+      id: false,
+      nickname: false,
+    });
+    const [idChecked, setIdChecked] = useState<boolean>(false);
+    const [nicknameChecked, setNicknameChecked] = useState<boolean>(false);
 
     const [nameError, setNameError] = useState<string>("");
     const [nicknameError, setNicknameError] = useState<string>("");
     const [idError, setIdError] = useState<string>("");
     const [pwError, setPwError] = useState<string>("");
-    const [pwConfirmError, setPwconfirmError] = useState<string>("");
+    const [pwConfirmError, setPwConfirmError] = useState<string>("");
 
-    const isFormValid = !nameError && !nicknameError && !idError;
+    const isFormValid = !nameError && nicknameChecked && idChecked;
     const isPwValid = !pwError && !pwConfirmError;
 
     const handleEditClick = () => {
       setIsEditable(!isEditable);
-      if (isEditable) {
-        // 수정 완료 시
-        setInfoItems([
-          { label: "이름", value: editName, editable: isEditable },
-          { label: "닉네임", value: editNickname, editable: isEditable },
-          { label: "아이디", value: editId, editable: isEditable },
-          { label: "이메일", value: "jisuk0415@naver.com", editable: false },
-        ]);
-      } else {
-        // 수정 모드로 전환할 때 비밀번호 변경 모드 해제
+      if (isEditable && isFormValid) {
+        // 수정 완료 시 서버로 데이터 전송 가능
+        console.log("수정된 데이터:", { editName, editNickname, editId });
+      }
+      if (!isEditable) {
         setIsPwEditable(false);
         setNewPw("");
-        setConfirmPw("");
+        setConfirmPwValue("");
         setPwError("");
-        setPwconfirmError("");
+        setPwConfirmError("");
       }
     };
 
     const handleChangePwClick = () => {
       setIsPwEditable(!isPwEditable);
-      if (isPwEditable) {
-        // 비밀번호 변경 완료 시 초기화
-        setNewPw("");
-        setConfirmPw("");
-        setPwError("");
-        setPwconfirmError("");
-      } else {
-        // 비밀번호 변경 모드로 진입할 때, 계정 정보 수정 모드 해제
-        setIsEditable(false);
-        setEditName(
-          infoItems.find((item) => item.label === "이름")?.value || ""
-        );
-        setEditNickname(
-          infoItems.find((item) => item.label === "닉네임")?.value || ""
-        );
-        setEditId(
-          infoItems.find((item) => item.label === "아이디")?.value || ""
-        );
-        setNameError("");
-        setNicknameError("");
-        setIdError("");
+      if (isPwEditable && isPwValid) {
+        // 비밀번호 변경 완료 시 서버로 데이터 전송 가능
+        console.log("새 비밀번호:", newPw);
       }
+      if (!isPwEditable) {
+        setIsEditable(false);
+        setNewPw("");
+        setConfirmPwValue("");
+      }
+    };
+
+    // 닉네임 중복 체크
+    const handleCheckNickname = async () => {
+      const isNicknameExists = await AxiosApi.checkMemberNicknameExists(
+        editNickname
+      );
+      const errorMessage = isNicknameExists
+        ? "이미 존재하는 닉네임입니다."
+        : "사용 가능한 닉네임입니다.";
+      setNicknameError(errorMessage);
+      setIsValid((prev) => ({ ...prev, nickname: !isNicknameExists }));
+      setNicknameChecked(isNicknameExists ? false : true);
+    };
+    // 아이디 중복 체크
+    const handleCheckId = async () => {
+      const isIdExists = await AxiosApi.checkMemberIdExists(editId);
+      const errorMessage = isIdExists
+        ? "이미 존재하는 아이디입니다."
+        : "사용 가능한 아이디입니다.";
+      setIdError(errorMessage);
+      setIsValid((prev) => ({ ...prev, id: !isIdExists }));
+      setIdChecked(isIdExists ? false : true);
     };
 
     const handleInputChange = (
@@ -97,50 +114,41 @@ const MyProfile = React.memo(() => {
       field: string
     ) => {
       const value = e.target.value;
-
       if (field === "name") {
         setEditName(value);
         setNameError(validateName(value));
       } else if (field === "nickname") {
         setEditNickname(value);
         setNicknameError(validateNickname(value));
+        setNicknameChecked(false);
       } else if (field === "id") {
         setEditId(value);
         setIdError(validateId(value));
+        setIdChecked(false);
       } else if (field === "newPw") {
         setNewPw(value);
-        setPwError(validatePassword(value)); // 비밀번호 유효성 검사
+        setPwError(validatePassword(value));
       } else if (field === "confirmPw") {
-        setConfirmPw(value);
-        setPwconfirmError(validateConfirmPassword(newPw, value)); // 비밀번호 확인 검사
+        setConfirmPwValue(value);
+        setPwConfirmError(validateConfirmPassword(newPw, value));
       }
     };
 
-    // 이름 유효성 검사 ------------------
     const validateName = (value: string) => {
-      if (value.length < 2) {
-        return "이름은 2글자 이상이어야 합니다.";
-      }
-      return "";
+      return value.length < 2 ? "이름은 2글자 이상이어야 합니다." : "";
     };
 
-    // 닉네임 유효성 검사 -------------------
     const validateNickname = (value: string) => {
-      if (value.length < 2) {
-        return "닉네임은 2글자 이상이어야 합니다.";
-      }
-      return "";
+      return value.length < 2 ? "닉네임은 2글자 이상이어야 합니다." : "";
     };
 
-    // 아이디 유효성 검사 ---------------
     const validateId = (value: string) => {
-      if (!/^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{5,}$/.test(value)) {
+      if (!/^[a-zA-Z\d]{5,}$/.test(value)) {
         return "아이디는 영어 또는 숫자를 사용한 5자 이상이어야 합니다.";
       }
       return "";
     };
 
-    // 비밀번호 유효성 검사 ------------------
     const validatePassword = (value: string) => {
       if (!/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*]).{8,}$/.test(value)) {
         return "비밀번호는 영어, 숫자, 특수문자를 포함해야 하며 8자 이상이어야 합니다.";
@@ -148,15 +156,16 @@ const MyProfile = React.memo(() => {
       return "";
     };
 
-    // 비밀번호 재확인 검사 ---------------------
-    const validateConfirmPassword = (
-      newPw: string | null,
-      confirmPassword: string
-    ) => {
-      if (newPw !== confirmPassword) {
-        return "비밀번호가 일치하지 않습니다.";
-      }
-      return "";
+    const validateConfirmPassword = (newPw: string, confirmPw: string) => {
+      return newPw === confirmPw ? "" : "비밀번호가 일치하지 않습니다.";
+    };
+
+    const eyeIconStyle = {
+      position: "absolute" as const,
+      right: "23%",
+      top: "50%",
+      transform: "translateY(-50%)",
+      cursor: "pointer",
     };
 
     return (
@@ -165,10 +174,9 @@ const MyProfile = React.memo(() => {
           계정 정보
           <Button
             $margin="0 20px"
-            onClick={() => handleEditClick()}
-            disabled={!isFormValid} // isFormValid가 true일 때만 버튼 활성화
+            onClick={handleEditClick}
+            disabled={isEditable ? !isFormValid : false}
           >
-            {" "}
             {isEditable ? "수정 완료" : "수정하기"}
           </Button>
         </div>
@@ -179,11 +187,7 @@ const MyProfile = React.memo(() => {
               className={`content content-font2 ${
                 isEditable ? "editable" : ""
               }`}
-              value={
-                isEditable
-                  ? editName
-                  : infoItems.find((item) => item.label === "이름")?.value
-              }
+              value={editName}
               readOnly={!isEditable}
               onChange={(e) => handleInputChange(e, "name")}
             />
@@ -195,16 +199,29 @@ const MyProfile = React.memo(() => {
               className={`content content-font2 ${
                 isEditable ? "editable" : ""
               }`}
-              value={
-                isEditable
-                  ? editNickname
-                  : infoItems.find((item) => item.label === "닉네임")?.value
-              }
+              value={editNickname}
               readOnly={!isEditable}
               onChange={(e) => handleInputChange(e, "nickname")}
             />
+            {isEditable && (
+              <Button onClick={handleCheckNickname} disabled={nicknameChecked}>
+                {nicknameChecked ? "사용 가능" : "중복 확인"}
+              </Button>
+            )}
             {nicknameError && (
-              <span className="error-message">{nicknameError}</span>
+              <>
+                <span
+                  className="error-message"
+                  style={{
+                    color:
+                      nicknameError === "사용 가능한 닉네임입니다."
+                        ? "blue"
+                        : "red",
+                  }}
+                >
+                  {nicknameError}
+                </span>
+              </>
             )}
           </div>
           <div className="info-item">
@@ -213,21 +230,32 @@ const MyProfile = React.memo(() => {
               className={`content content-font2 ${
                 isEditable ? "editable" : ""
               }`}
-              value={
-                isEditable
-                  ? editId
-                  : infoItems.find((item) => item.label === "아이디")?.value
-              }
+              value={editId}
               readOnly={!isEditable}
               onChange={(e) => handleInputChange(e, "id")}
             />
-            {idError && <span className="error-message">{idError}</span>}
+            {isEditable && (
+              <Button onClick={handleCheckId} disabled={idChecked}>
+                {idChecked ? "사용 가능" : "중복 확인"}
+              </Button>
+            )}
+            {idError && (
+              <span
+                className="error-message"
+                style={{
+                  color:
+                    idError === "사용 가능한 아이디입니다." ? "blue" : "red",
+                }}
+              >
+                {idError}
+              </span>
+            )}
           </div>
           <div className="info-item">
             <span className="title content-font1">이메일</span>
             <InputBox
               className="content content-font2"
-              value={infoItems.find((item) => item.label === "이메일")?.value}
+              value={email ?? ""}
               readOnly
             />
           </div>
@@ -236,7 +264,7 @@ const MyProfile = React.memo(() => {
           비밀 번호
           <Button
             $margin="0 10px 0 20px"
-            onClick={() => handleChangePwClick()}
+            onClick={handleChangePwClick}
             disabled={!isPwValid}
           >
             {isPwEditable ? "변경완료" : "변경하기"}
@@ -254,26 +282,46 @@ const MyProfile = React.memo(() => {
           <>
             <div className="info-item">
               <span className="title content-font1 pw">신규 비밀번호</span>
-              <InputBox
-                className={`content content-font2 editable`}
-                onChange={(e) => handleInputChange(e, "newPw")}
-              />
-              {pwError && <span className="error-message">{pwError}</span>}
+              <div className="new-pw-container">
+                <InputBox
+                  className="content-pw content-font2 editable"
+                  type={showPassword ? "text" : "password"}
+                  value={newPw}
+                  onChange={(e) => handleInputChange(e, "newPw")}
+                />
+                <span
+                  onClick={() => setShowPassword(!showPassword)}
+                  style={eyeIconStyle}
+                >
+                  {showPassword ? <FaEye /> : <FaEyeSlash />}
+                </span>
+                {pwError && <span className="error-message">{pwError}</span>}
+              </div>
             </div>
             <div className="info-item">
               <span className="title content-font1 pw">비밀번호 확인</span>
-              <InputBox
-                className={`content content-font2 editable`}
-                onChange={(e) => handleInputChange(e, "confirmPw")}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    handleConfirmPwChange();
-                  }
-                }}
-              />
-              {pwConfirmError && (
-                <span className="error-message">{pwConfirmError}</span>
-              )}
+              <div className="new-pw-container">
+                <InputBox
+                  className="content-pw content-font2 editable"
+                  type={showConfirmPassword ? "text" : "password"}
+                  value={confirmPwValue}
+                  onChange={(e) => handleInputChange(e, "confirmPw")}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && isPwValid) {
+                      handleChangePwClick();
+                    }
+                  }}
+                />
+                <span
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  style={eyeIconStyle}
+                >
+                  {showConfirmPassword ? <FaEye /> : <FaEyeSlash />}
+                </span>
+                {pwConfirmError && (
+                  <span className="error-message">{pwConfirmError}</span>
+                )}
+              </div>
             </div>
           </>
         )}
@@ -289,13 +337,8 @@ const MyProfile = React.memo(() => {
     );
   };
 
-  // 처음에 개인정보 보호를 위해 비번 입력 확인
   const handleConfirmPw = () => {
     setConfirmPw(true);
-  };
-
-  const handleConfirmPwChange = () => {
-    setIsPwEditable(!isPwEditable);
   };
 
   return (
@@ -317,12 +360,11 @@ const MyProfile = React.memo(() => {
               }}
             />
             <p className="validate">비밀번호가 일치하지 않습니다.</p>
-            <Button onClick={() => handleConfirmPw()}>확인</Button>
+            <Button onClick={handleConfirmPw}>확인</Button>
           </div>
         </>
       ) : (
         <>
-          <GlobalFont />
           <div className="sub-menu">
             {menuItems.map((menu, index) => (
               <div key={menu} style={{ display: "inline" }}>
@@ -334,9 +376,7 @@ const MyProfile = React.memo(() => {
                 >
                   {menu}
                 </button>
-                {index < menuItems.length - 1 && (
-                  <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
-                )}
+                {index < menuItems.length - 1 && <span> | </span>}
               </div>
             ))}
           </div>

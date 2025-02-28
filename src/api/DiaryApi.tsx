@@ -30,9 +30,6 @@ export interface DiaryInfo {
 }
 
 export const DiaryApi = {
-  // 수정해야되는 문제
-  // 1. diary 생성할 때 날짜만 들어가는 문제
-  // 2. 년월일만 들어가서 back에서 diary 조회할 때 오류남
   postDiary: async (data: DiaryData): Promise<boolean> => {
     try {
       return (await JwtAxios.post(`${API_BASE_URL}/diary/post-diary`, data))

@@ -80,6 +80,24 @@ export const MyProfileContainer = styled.div`
       width: 100px;
       font-size: 16px;
     }
+    .new-pw-container {
+      display: flex;
+      position: relative;
+      width: 80%;
+      box-sizing: border-box;
+      .content-pw {
+        border: 1px solid transparent;
+        outline: none;
+        height: 30px;
+        width: 80%;
+        margin-right: 7px;
+        padding: 2px 2px 2px 10px;
+        font-size: 16px;
+      }
+      .content-pw.editable {
+        border: 1px solid black;
+      }
+    }
     .pw {
       width: 120px;
     }
@@ -87,7 +105,8 @@ export const MyProfileContainer = styled.div`
       border: 1px solid transparent;
       outline: none;
       height: 30px;
-      width: 80%;
+      width: 70%;
+      margin-right: 7px;
       padding: 2px 2px 2px 10px;
       font-size: 16px;
     }
@@ -97,7 +116,7 @@ export const MyProfileContainer = styled.div`
     .error-message {
       display: flex;
       position: absolute;
-      right: 4vw;
+      left: 105px;
       bottom: -8px;
       font-size: 10px;
       color: red;

@@ -238,6 +238,7 @@ const CreateDiary = () => {
       const formattedDate = koreaTime.toISOString();
       console.log(formattedDate);
     }
+    setContent("<p>이게 될까요?</p>");
   }, [startDate]);
 
   return (

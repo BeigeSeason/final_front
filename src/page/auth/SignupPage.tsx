@@ -195,7 +195,7 @@ export const SignupPage = () => {
       : "사용 가능한 아이디입니다.";
     setErrors((prev) => ({ ...prev, userId: errorMessage }));
     setIsValid((prev) => ({ ...prev, id: !isIdExists }));
-    setIdChecked(true);
+    setIdChecked(isIdExists ? false : true);
   };
 
   const handleCheckEmail = async () => {
@@ -219,7 +219,7 @@ export const SignupPage = () => {
         };
         emailjs
           .send(
-            "service_a5sldli",  // service id
+            "service_a5sldli", // service id
             "template_9hjizwi", // template id
             templateParams,
             "26R74sBvTB5bxhbNn" // public-key
@@ -232,11 +232,12 @@ export const SignupPage = () => {
             setIsLoading(false);
           })
           .catch((error) => {
-            const message = "이메일 전송에 오류가 발생했습니다. 관리자에게 문의해주세요.";
+            const message =
+              "이메일 전송에 오류가 발생했습니다. 관리자에게 문의해주세요.";
             setErrors((prev) => ({ ...prev, email: message }));
             setEmailChecked(false);
-          })
-      }, 0)
+          });
+      }, 0);
     }
   };
   const generateRandomCode = () => {
@@ -259,7 +260,7 @@ export const SignupPage = () => {
       const message = "인증번호가 일치하지 않습니다.";
       setErrors((prev) => ({ ...prev, emailDupli: message }));
     }
-  }
+  };
   // 닉네임 체크
   const handleCheckNickname = async () => {
     const isNicknameExists = await AxiosApi.checkMemberNicknameExists(nickname);
@@ -268,7 +269,7 @@ export const SignupPage = () => {
       : "사용 가능한 닉네임입니다.";
     setErrors((prev) => ({ ...prev, nickname: errorMessage }));
     setIsValid((prev) => ({ ...prev, nickname: !isNicknameExists }));
-    setNicknameChecked(true);
+    setNicknameChecked(isNicknameExists ? false : true);
   };
 
   // 이벤트 핸들러
@@ -385,7 +386,15 @@ export const SignupPage = () => {
             </div>
             <div className="signupBox">
               {errors.userId && (
-                <p className="errmsg" style={{ color: "red" }}>
+                <p
+                  className="errmsg"
+                  style={{
+                    color:
+                      errors.userId === "사용 가능한 아이디입니다."
+                        ? "blue"
+                        : "red",
+                  }}
+                >
                   {errors.userId}
                 </p>
               )}
@@ -398,14 +407,26 @@ export const SignupPage = () => {
                   placeholder="아이디 입력"
                   required
                 />
-                <Button type="button" onClick={handleCheckId}>
-                  중복 확인
+                <Button
+                  type="button"
+                  onClick={handleCheckId}
+                  disabled={idChecked}
+                >
+                  {idChecked ? "사용 가능" : "중복 확인"}
                 </Button>
               </div>
             </div>
             <div className="signupBox">
               {errors.email && (
-                <p className="errmsg" style={{ color: "red" }}>
+                <p
+                  className="errmsg"
+                  style={{
+                    color:
+                      errors.email === "인증 메일이 발송되었습니다."
+                        ? "blue"
+                        : "red",
+                  }}
+                >
                   {errors.email}
                 </p>
               )}
@@ -419,36 +440,48 @@ export const SignupPage = () => {
                   placeholder="이메일 입력"
                   required
                 />
-                <Button type="button" onClick={handleCheckEmail}>
-                  중복 확인
+                <Button
+                  type="button"
+                  onClick={handleCheckEmail}
+                  disabled={emailChecked}
+                >
+                  {emailChecked ? "인증 발송" : "중복 확인"}
                 </Button>
               </div>
             </div>
             {/* 이메일 인증 영역 */}
             {emailChecked && (
-            <div className="signupBox">
-              {errors.email && (
-                <p className="errmsg" style={{ color: "red" }}>
-                  {errors.emailDupli}
-                </p>
-              )}
-              <div className="validBox">
-                <InputBox
-                  className="inputbox"
-                  id="emailDupli"
-                  type="email"
-                  value={emailDupli}
-                  onChange={(e) => handleChange("emailDupli", e.target.value)}
-                  placeholder="인증번호 입력"
-                  required
-                />
-                <Button type="button" onClick={handleCheckEmail2}>
-                  인증
-                </Button>
+              <div className="signupBox">
+                {errors.email && (
+                  <p
+                    className="errmsg"
+                    style={{
+                      color:
+                        errors.emailDupli === "인증번호가 일치합니다."
+                          ? "blue"
+                          : "red",
+                    }}
+                  >
+                    {errors.emailDupli}
+                  </p>
+                )}
+                <div className="validBox">
+                  <InputBox
+                    className="inputbox"
+                    id="emailDupli"
+                    type="email"
+                    value={emailDupli}
+                    onChange={(e) => handleChange("emailDupli", e.target.value)}
+                    placeholder="인증번호 입력"
+                    required
+                  />
+                  <Button type="button" onClick={handleCheckEmail2}>
+                    인증
+                  </Button>
+                </div>
               </div>
-            </div>
             )}
-            
+
             <div className="signupBox">
               {errors.password && (
                 <p className="errmsg" style={{ color: "red" }}>
@@ -513,7 +546,15 @@ export const SignupPage = () => {
             </div>
             <div className="signupBox">
               {errors.nickname && (
-                <p className="errmsg" style={{ color: "red" }}>
+                <p
+                  className="errmsg"
+                  style={{
+                    color:
+                      errors.nickname === "사용 가능한 닉네임입니다."
+                        ? "blue"
+                        : "red",
+                  }}
+                >
                   {errors.nickname}
                 </p>
               )}
@@ -526,8 +567,12 @@ export const SignupPage = () => {
                   placeholder="닉네임 입력"
                   required
                 />
-                <Button type="button" onClick={handleCheckNickname}>
-                  중복 확인
+                <Button
+                  type="button"
+                  onClick={handleCheckNickname}
+                  disabled={nicknameChecked}
+                >
+                  {nicknameChecked ? "사용 가능" : "중복 확인"}
                 </Button>
               </div>
             </div>
