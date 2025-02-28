@@ -233,7 +233,7 @@ const AxiosApi = {
       userId: userId,
       password: password,
     };
-    return await axios.post(`${API_BASE_URL}/member/change-pw`, member);
+    return await axios.put(`${API_BASE_URL}/member/change-pw`, member);
   },
 };
 
