@@ -38,7 +38,7 @@ const AdminReportUser = () => {
   const [reportId, setReportId] = useState<number | undefined>(undefined);
   const [reportState, setReportState] = useState(true);
   const [reportedId, setReportedId] = useState<number | undefined>(undefined);
-  const [reportedUserId, setReportedUserId] = useState<String | undefined>(undefined);
+  const [reportedUserId, setReportedUserId] = useState<string | undefined>(undefined);
   const [banDate, setBanDate] = useState(0);
   const [banReason, setBanReason] = useState("");
 
@@ -50,7 +50,7 @@ const AdminReportUser = () => {
   // 데이터 가져오기
   const reportList = async () => {
     try {
-      const data = await AxiosApi.reportList(page - 1, size, "MEMBER");
+      const data = await AxiosApi.reportList(page - 1, size, "MEMBER", type, sort);
       setReports(data.reports);
       setTotalElements(data.totalElements);
     } catch (error) {
@@ -59,7 +59,7 @@ const AdminReportUser = () => {
   };
   useEffect(() => {
     reportList();
-  }, [page]);
+  }, [page, type, sort]);
 
   // 페이지 번호 생성
   const pageNumbers = [];
@@ -78,7 +78,6 @@ const AdminReportUser = () => {
     setSortSelectOpen(false);
   }
   const handleSelectType = (select: string) => {
-    console.log("select:", select);
     setType(select);
     setTypeSelectOpen(false);
   }
@@ -86,11 +85,11 @@ const AdminReportUser = () => {
   // 데이터 정렬버튼
   const handleSort = () => {
     setSortSelectOpen((prev) => !prev);
+    setTypeSelectOpen(false);
   }
   const handleSelectSort = (select: string) => {
     setSort(select);
     setSortSelectOpen(false);
-    // setTotalPages = Math.ceil(totalReports / size);
   }
 
   // 신고 관리 모달
@@ -104,6 +103,7 @@ const AdminReportUser = () => {
     setIsModalOpen(false);
     setBanDate(0);
     setBanReason("");
+    setReportState(true);
   };
 
   // 신고 처리
@@ -116,6 +116,7 @@ const AdminReportUser = () => {
     }
     setBanDate(0);
     setBanReason("");
+    setReportState(true);
     reportList();
   };
 
@@ -150,7 +151,16 @@ const AdminReportUser = () => {
               <FaAngleDown />
             </div>
             <div className="sort-selected center">
-              {sort}
+            {(() => {
+                switch (sort) {
+                  case "idAsc":
+                    return "번호 낮은순";
+                  case "idDesc":
+                    return "번호 높은순";
+                  default:
+                    return "정렬"
+                }
+              })()}
             </div>
           </div>
         </div>
@@ -223,7 +233,21 @@ const AdminReportUser = () => {
                   <td>{report.reported.userId}</td>
                   <td>{report.reporter.userId}</td>
                   <td>{report.reason}</td>
-                  <td className="text-center">
+                  <td 
+                    className="text-center"
+                    style={{
+                      color: (() => {
+                        switch (report.state) {
+                          case 'ACCEPT':
+                            return 'green';
+                          case 'REJECT':
+                            return 'red';
+                          default:
+                            return 'black';
+                        }
+                      })()
+                    }}
+                  >
                     {(() => {
                         switch (report.state) {
                           case 'WAIT':

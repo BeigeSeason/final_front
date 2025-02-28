@@ -3,8 +3,8 @@ import { storage } from "../api/Firebase";
 interface UploadParams {
   pics: string[] | null;
   type: "profile" | "diary";
-  userId: string;
-  diaryId: number | null;
+  userId: string | null;
+  diaryId: string | null;
 }
 
 export const Upload = async ({
