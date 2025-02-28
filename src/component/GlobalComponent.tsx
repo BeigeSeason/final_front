@@ -225,20 +225,26 @@ export const Nav = () => {
         </Link>
       </div>
       <div className="rightMenu">
-        <Link
-          className={`tag content-font1 ${
-            isActive("/creatediary") ? "active" : ""
-          }`}
-          to="/creatediary"
-        >
-          여행일지 만들기
-        </Link>
-        <Link
-          className={`tag content-font1 ${isActive("/mypage") ? "active" : ""}`}
-          to="mypage"
-        >
-          마이페이지
-        </Link>
+        {accessToken && (
+          <>
+            <Link
+              className={`tag content-font1 ${
+                isActive("/creatediary") ? "active" : ""
+              }`}
+              to="/creatediary"
+            >
+              여행일지 만들기
+            </Link>
+            <Link
+              className={`tag content-font1 ${
+                isActive("/mypage") ? "active" : ""
+              }`}
+              to="/mypage"
+            >
+              마이페이지
+            </Link>
+          </>
+        )}
         <div>
           {accessToken ? (
             <p className="tag content-font1" onClick={handleLogoutClick}>

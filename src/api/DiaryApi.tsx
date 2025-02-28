@@ -15,6 +15,20 @@ interface DiaryData {
   isPublic: boolean;
 }
 
+export interface DiaryInfo {
+  diaryId: string;
+  title: string;
+  region: string;
+  createdTime: Date | null;
+  startDate: string | null;
+  endDate: string | null;
+  tags: string[];
+  totalCost: number;
+  content: string;
+  nickname: string;
+  isPublic: boolean;
+}
+
 export const DiaryApi = {
   // 수정해야되는 문제
   // 1. diary 생성할 때 날짜만 들어가는 문제
@@ -28,7 +42,7 @@ export const DiaryApi = {
       throw error;
     }
   },
-  diaryDetail: async (diaryId: string): Promise<DiaryData> => {
+  diaryDetail: async (diaryId: string): Promise<DiaryInfo> => {
     console.log(diaryId);
     try {
       return (await axios.get(`${API_BASE_URL}/diary/diary-detail/${diaryId}`))
