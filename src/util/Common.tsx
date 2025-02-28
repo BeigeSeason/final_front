@@ -38,7 +38,7 @@ const Common = {
     try {
       const response: AxiosResponse<Token> = await axios.post(
         // POST 요청으로 변경 (일반적인 refreshToken API 방식)
-        `${Common.FINAL_DOMAIN}/auth/token/refresh`, // refreshToken API 엔드포인트 (POST body로 refreshToken 전달)
+        `${Common.FINAL_DOMAIN}/auth//token-refreshing`, // refreshToken API 엔드포인트 (POST body로 refreshToken 전달)
         { refreshToken: refreshToken }, // 요청 body에 refreshToken 전달
         {
           headers: {
@@ -48,7 +48,7 @@ const Common = {
       );
       console.log("토큰 재발급 성공:", response.data);
       Common.setAccessToken(response.data.accessToken);
-      Common.setRefreshToken(response.data.refreshToken); // refreshToken 갱신 (backend에서 함께 갱신하여 응답한다고 가정)
+      //Common.setRefreshToken(response.data.refreshToken); // refreshToken 갱신 (backend에서 함께 갱신하여 응답한다고 가정)
       return response.data.accessToken;
     } catch (error) {
       console.error("토큰 재발급 실패:", error);

@@ -138,8 +138,8 @@ export const FindBox = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 60vw;
-  gap: 30px;
+  width: 50vw;
+  gap: 20px;
   margin-bottom: 30px;
 `;
 
@@ -149,9 +149,21 @@ export const ResultBox = styled.div`
   color: #333;
   text-align: center;
 
-  p {
+  h4 {
     margin: 0;
     font-size: 20px;
     font-weight: bold;
+  }
+  .findId {
+    margin: 20px 20px 10px 20px;
+    padding: 20px 100px;
+    border-radius: 10px;
+    background-color: #e9e9e9;
+    font-size: 18px;
+    p {
+      margin: 0;
+      font-weight: bold;
+      color: ${colors.colorA};
+    }
   }
 `;

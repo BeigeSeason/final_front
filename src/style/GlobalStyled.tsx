@@ -84,16 +84,16 @@ export const NavSt = styled.div`
   }
   .tag {
     text-decoration: none;
-    color: black;
+    color: ${colors.colorA};
     transition: all 0.3s ease;
+    font-weight: bold;
     cursor: pointer;
     white-space: nowrap;
     &:hover {
       opacity: 0.7;
     }
     &.active {
-      text-decoration: underline;
-      color: #585891;
+      color: ${colors.colorB};
     }
   }
 `;
