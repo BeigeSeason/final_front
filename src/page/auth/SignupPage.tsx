@@ -14,6 +14,7 @@ import Profile4 from "../../img/profile/profile4.png";
 import Profile5 from "../../img/profile/profile5.png";
 import Add from "../../img/profile/add.png";
 import AxiosApi from "../../api/AxiosApi";
+import emailjs from "@emailjs/browser";
 
 export const SignupPage = () => {
   const [isTermsAgreed, setIsTermsAgreed] = useState(false);
@@ -21,6 +22,9 @@ export const SignupPage = () => {
   const [showForm, setShowForm] = useState(false);
   const [userId, setuserId] = useState("");
   const [email, setEmail] = useState("");
+  const [emailDupli, setEmailDupli] = useState("");
+  const [newEmailCode, setNewEmailCode] = useState("");
+  const [emailTimeLeft, setEmailTimeLeft] = useState(-2);
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [nickname, setNickname] = useState("");
@@ -41,6 +45,7 @@ export const SignupPage = () => {
   });
   const [idChecked, setIdChecked] = useState(false);
   const [emailChecked, setEmailChecked] = useState(false);
+  const [emailDupliCheck, setEmailDupliCheck] = useState(false);
   const [nicknameChecked, setNicknameChecked] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
@@ -131,6 +136,10 @@ export const SignupPage = () => {
         setEmail(value);
         setEmailChecked(false);
         break;
+      case "emailDupli":
+        setEmailDupli(value);
+        setEmailDupliCheck(false);
+        break;
       case "password":
         setPassword(value);
         break;
@@ -193,9 +202,60 @@ export const SignupPage = () => {
       : "사용 가능한 이메일입니다.";
     setErrors((prev) => ({ ...prev, email: errorMessage }));
     setIsValid((prev) => ({ ...prev, email: !isEmailExists }));
-    setEmailChecked(true);
+    // 이메일 인증
+    if (!isEmailExists) {
+      const newCode = generateRandomCode();
+      setNewEmailCode(newCode);
+      // 메일 전송
+      setTimeout(() => {
+        const templateParams = {
+          to_email: email,
+          from_name: "kh_final",
+          message: newCode,
+        };
+        emailjs
+          .send(
+            "service_a5sldli",  // service id
+            "template_9hjizwi", // template id
+            templateParams,
+            "26R74sBvTB5bxhbNn" // public-key
+          )
+          .then((response) => {
+            const message = "인증 메일이 발송되었습니다.";
+            setErrors((prev) => ({ ...prev, email: message }));
+            setEmailTimeLeft(300);
+            setEmailChecked(true);
+          })
+          .catch((error) => {
+            const message = "이메일 전송에 오류가 발생했습니다. 관리자에게 문의해주세요.";
+            setErrors((prev) => ({ ...prev, email: message }));
+            setEmailChecked(false);
+          })
+      }, 0)
+    }
   };
-
+  const generateRandomCode = () => {
+    const characters = "abcdefghijklmnopqrstuvwxyz0123456789";
+    let result = "";
+    for (let i = 0; i < 4; i++) {
+      const randomIndex = Math.floor(Math.random() * characters.length);
+      result += characters[randomIndex];
+    }
+    return result;
+  };
+  // 이메일 인증번호 체크
+  const handleCheckEmail2 = () => {
+    if (newEmailCode === emailDupli) {
+      const message = "인증번호가 일치합니다.";
+      setErrors((prev) => ({ ...prev, emailDupli: message }));
+      setEmailDupliCheck(true);
+      setEmailTimeLeft(-2);
+    } else {
+      const message = "인증번호가 일치하지 않습니다.";
+      setErrors((prev) => ({ ...prev, emailDupli: message }));
+    }
+  }
+  // 닉네임 체크
   const handleCheckNickname = async () => {
     const isNicknameExists = await AxiosApi.checkMemberNicknameExists(nickname);
     const errorMessage = isNicknameExists
@@ -232,7 +292,7 @@ export const SignupPage = () => {
       setUpdatedProfile(fileURL);
     }
   };
-
+  // 회원가입 핸들러
   const handleSignup = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const signupRequest = { userId, password, name, email, nickname };
@@ -260,6 +320,7 @@ export const SignupPage = () => {
     Object.values(isValid).includes(false) ||
     !idChecked ||
     !emailChecked ||
+    !emailDupliCheck ||
     !nicknameChecked;
 
   return (
@@ -358,6 +419,31 @@ export const SignupPage = () => {
                 </Button>
               </div>
             </div>
+            {/* 이메일 인증 영역 */}
+            {emailChecked && (
+            <div className="signupBox">
+              {errors.email && (
+                <p className="errmsg" style={{ color: "red" }}>
+                  {errors.emailDupli}
+                </p>
+              )}
+              <div className="validBox">
+                <InputBox
+                  className="inputbox"
+                  id="emailDupli"
+                  type="email"
+                  value={emailDupli}
+                  onChange={(e) => handleChange("emailDupli", e.target.value)}
+                  placeholder="인증번호 입력"
+                  required
+                />
+                <Button type="button" onClick={handleCheckEmail2}>
+                  인증
+                </Button>
+              </div>
+            </div>
+            )}
+            
             <div className="signupBox">
               {errors.password && (
                 <p className="errmsg" style={{ color: "red" }}>
