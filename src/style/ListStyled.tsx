@@ -117,10 +117,8 @@ export const SelectSearchItem = styled.div`
       opacity: 1;
       transform: translateX(0);
     }
-
     position: absolute;
     z-index: 10;
-    background-color: white;
     top: 90px;
     left: 40px;
     padding: 10px;
@@ -128,7 +126,6 @@ export const SelectSearchItem = styled.div`
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
     .buttons {
       width: 80%;
-      grid-template-columns: repeat(3, 1fr);
     }
     button {
       font-size: 9px;
@@ -208,23 +205,27 @@ export const ItemList = styled.div`
   }
 `;
 export const PriceRange = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
   .slider {
     width: 100%;
     height: 10px;
     margin: 15px 0;
   }
-
   .track {
-    background: #ddd;
-    border-radius: 5px;
+    margin-top: 5px;
+    border: 5px solid #ddd;
   }
-
   .thumb {
     height: 20px;
     width: 20px;
-    background: #007bff;
+    background: ${colors.colorC};
     border-radius: 50%;
     cursor: grab;
+  }
+  button {
+    background-color: #ddd;
   }
 `;
 
