@@ -109,7 +109,7 @@ const AdminReportDiary = () => {
   };
 
   // 신고 처리
-  const manageUser = async () => {
+  const manageDiary = async () => {
     setIsModalOpen(false);
     try {
       await AxiosApi.reportProcess(reportId, reportState, (banDate === 0 ? null : reportedId), banDate, banReason, diaryId, null);
@@ -124,6 +124,7 @@ const AdminReportDiary = () => {
 
   return (
     <AdminContainer>
+      <h1>일지 신고</h1>
       {/* 데이터 박스 */}
       <div className="data-container">
         <div className="data-head">
@@ -196,10 +197,10 @@ const AdminReportDiary = () => {
         )}
         {sortSelectOpen && (
           <div className="selectBox sort">
-            <div className="selected" onClick={() => handleSelectSort("번호 낮은순")}>
+            <div className="selected" onClick={() => handleSelectSort("idAsc")}>
               번호 낮은순
             </div>
-            <div className="selected" onClick={() => handleSelectSort("번호 높은순")}>
+            <div className="selected" onClick={() => handleSelectSort("idDesc")}>
               번호 높은순
             </div>
           </div>
@@ -209,7 +210,7 @@ const AdminReportDiary = () => {
             <thead>
               <tr>
                 <th>번호</th>
-                <th>일기 번호</th>
+                <th>일지 번호</th>
                 <th>작성자</th>
                 <th>신고자</th>
                 <th>신고내역</th>
@@ -330,9 +331,9 @@ const AdminReportDiary = () => {
       </div>
 
       {/* 관리버튼 모달 */}
-      <Modal isOpen={isModalOpen} onConfirm={manageUser} onClose={closeModal}>
+      <Modal isOpen={isModalOpen} onConfirm={manageDiary} onClose={closeModal}>
         <span>신고 번호 : {reportId}</span><br />
-        <span>일기 번호 : {diaryId}</span><br />
+        <span>일지 번호 : {diaryId}</span><br />
         <span>대상자 번호 : {reportedId}</span><br />
         <span>대상자 아이디 : {reportedUserId}</span><br />
         <span>정지일 : </span>
@@ -369,7 +370,7 @@ const AdminReportDiary = () => {
           <option value="false">거절</option>
         </select>
         <br />
-        <span>일기 처리 : {reportState ? "삭제" : "보류"}</span>
+        <span>일지 처리 : {reportState ? "삭제" : "보류"}</span>
       </Modal>
     </AdminContainer>
   );

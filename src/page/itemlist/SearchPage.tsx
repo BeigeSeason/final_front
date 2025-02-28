@@ -103,7 +103,7 @@ export const SearchPage = () => {
           ))
         )}
         <div className="more">
-          <p className="title-font">여행일기</p>
+          <p className="title-font">여행일지</p>
           <Button onClick={handleDiaryMoreClick}>더보기 ›</Button>
         </div>
       </SearchResultBox>

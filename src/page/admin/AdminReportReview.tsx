@@ -42,7 +42,7 @@ const AdminReportReview = () => {
   const [reportedUserId, setReportedUserId] = useState<String | undefined>(undefined);
   const [banDate, setBanDate] = useState(0);
   const [banReason, setBanReason] = useState("");
-  const [reviewId, setreviewId] = useState(null);
+  const [reviewId, setReviewId] = useState<number | null>(null);
 
   const [typeSelectOpen, setTypeSelectOpen] = useState(false);
   const [sortSelectOpen, setSortSelectOpen] = useState(false);
@@ -94,8 +94,38 @@ const AdminReportReview = () => {
     setSortSelectOpen(false);
   }
 
+  // 신고 관리 모달
+  const openModal = (reportId: number, reportedId: number, reportedUserId: string, reviewId: string) => {
+    setIsModalOpen(true);
+    setReportId(reportId);
+    setReportedId(reportedId);
+    setReportedUserId(reportedUserId);
+    setReviewId(Number(reviewId));
+  };
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setBanDate(0);
+    setBanReason("");
+    setReportState(true);
+  };
+
+  // 신고 처리
+  const manageReview = async () => {
+    setIsModalOpen(false);
+    try {
+      await AxiosApi.reportProcess(reportId, reportState, (banDate === 0 ? null : reportedId), banDate, banReason, null, reviewId);
+    } catch (error) {
+      console.log("유저 정지 에러:", error);
+    }
+    setBanDate(0);
+    setBanReason("");
+    setReportState(true);
+    reportList();
+  };
+
   return (
     <AdminContainer>
+      <h1>댓글 신고</h1>
       {/* 데이터 박스 */}
       <div className="data-container">
         <div className="data-head">
@@ -168,10 +198,10 @@ const AdminReportReview = () => {
         )}
         {sortSelectOpen && (
           <div className="selectBox sort">
-            <div className="selected" onClick={() => handleSelectSort("번호 낮은순")}>
+            <div className="selected" onClick={() => handleSelectSort("idAsc")}>
               번호 낮은순
             </div>
-            <div className="selected" onClick={() => handleSelectSort("번호 높은순")}>
+            <div className="selected" onClick={() => handleSelectSort("idDesc")}>
               번호 높은순
             </div>
           </div>
@@ -228,7 +258,7 @@ const AdminReportReview = () => {
                       })()}
                   </td>
                   <td className="text-center">
-                    <button>
+                    <button onClick={() => openModal(report.id, report.reported.id, report.reported.userId, report.reportEntity)}>
                       관리
                     </button>
                   </td>
@@ -302,6 +332,48 @@ const AdminReportReview = () => {
           </button>
         </div>
       </div>
+      {/* 관리버튼 모달 */}
+      <Modal isOpen={isModalOpen} onConfirm={manageReview} onClose={closeModal}>
+        <span>신고 번호 : {reportId}</span><br />
+        <span>댓글 번호 : {reviewId}</span><br />
+        <span>대상자 번호 : {reportedId}</span><br />
+        <span>대상자 아이디 : {reportedUserId}</span><br />
+        <span>정지일 : </span>
+        <select 
+          name="ban-date" 
+          id="ban-date" 
+          value={banDate}
+          onChange={(e) => setBanDate(Number(e.target.value))}
+          className="text-center"
+        >
+          <option value={0}>보류</option>
+          <option value={1}>1일</option>
+          <option value={3}>3일</option>
+          <option value={7}>7일</option>
+          <option value={30}>30일</option>
+          <option value={36500}>영구 정지</option>
+        </select>
+        <br />
+        <span>정지 사유</span><br />
+        <input 
+          type="text" 
+          value={banReason} 
+          onChange={(e) => setBanReason(e.target.value)}
+        />
+        <br />
+        <span>신고 처리 : </span>
+        <select 
+          name="report-state" 
+          id="report-state"
+          value={reportState ? "true" : "false"}
+          onChange={(e) => setReportState(e.target.value === "true")}
+        >
+          <option value="true">승인</option>
+          <option value="false">거절</option>
+        </select>
+        <br />
+        <span>일지 처리 : {reportState ? "삭제" : "보류"}</span>
+      </Modal>
     </AdminContainer>
   );
 };

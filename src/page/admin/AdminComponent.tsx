@@ -22,7 +22,7 @@ export const AdminContainer = styled.div`
     width: 80%;
     height: 50px;
     padding: 10px;
-    margin-top: 50px;
+    margin-top: 30px;
     flex-direction: row;
     gap: 10px;
     justify-content: space-between;
@@ -80,7 +80,7 @@ export const AdminContainer = styled.div`
     display: flex;
     flex-direction: column;
     position: relative;
-    margin-top: 50px;
+    margin-top: 30px;
     .data-head {
       display: flex;
       justify-content: right;

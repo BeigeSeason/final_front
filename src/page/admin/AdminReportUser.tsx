@@ -122,6 +122,7 @@ const AdminReportUser = () => {
 
   return (
     <AdminContainer>
+      <h1>유저 신고</h1>
       {/* 데이터 박스 */}
       <div className="data-container">
         <div className="data-head">
