@@ -3,16 +3,64 @@ import { AuthBox, ResultBox, FindBox } from "../../style/AuthStyled";
 import { InputBox } from "../../component/InputComponent";
 import { Button } from "../../component/ButtonComponent";
 import { CheckModal } from "../../component/ModalComponent";
+import AxiosApi from "../../api/AxiosApi";
+import emailjs from "@emailjs/browser";
 
 export const FindPwPage = () => {
   const [id, setId] = useState("");
   const [email, setEmail] = useState("");
+  const [newPassword, setNewPassword] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const isFormValid = id.trim() !== "" && email.trim() !== "";
 
-  const handleSubmit = () => {
-    setIsModalOpen(true);
+  // 비밀번호 찾기
+  const handleSubmit = async () => {
+    try {
+      const response = await AxiosApi.findMemberPw(id, email);
+      if (response.data) {
+        changePassword(response.data);
+      }
+    } catch (error) {
+      alert("해당 회원이 존재하지 않습니다.");
+    }
   };
+
+  // 비밀번호 변경
+  const changePassword = async (newPassword: string) => {
+    const response = await AxiosApi.changeMemberPw(
+      id,
+      newPassword
+    );
+    if (response.data) {
+      sendEmail(newPassword);
+    } else {
+      alert("예기치 못한 오류가 발생했습니다. 관리자에게 문의해주세요.");
+    }
+  }
+
+  // 이메일 보내기
+  const sendEmail = (password: string) => {
+    const templateParams = {
+      to_email: email,
+      from_name: "kh_final",
+      message: `${password}`,
+    };
+
+    emailjs
+      .send(
+        "service_a5sldli",  // service id
+        "template_59cggwi", // template id
+        templateParams,
+        "26R74sBvTB5bxhbNn" // public-key
+      )
+      .then((response) => {
+        setIsModalOpen(true);
+      })
+      .catch((error) => {
+        alert("이메일 발송에 실패했습니다. 관리자에게 문의해주세요.");
+      });
+  };
+
   return (
     <>
       <AuthBox>
