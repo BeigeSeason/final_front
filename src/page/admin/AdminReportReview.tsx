@@ -168,10 +168,10 @@ const AdminReportReview = () => {
         )}
         {sortSelectOpen && (
           <div className="selectBox sort">
-            <div className="selected" onClick={() => handleSelectSort("번호 낮은순")}>
+            <div className="selected" onClick={() => handleSelectSort("idAsc")}>
               번호 낮은순
             </div>
-            <div className="selected" onClick={() => handleSelectSort("번호 높은순")}>
+            <div className="selected" onClick={() => handleSelectSort("idDesc")}>
               번호 높은순
             </div>
           </div>

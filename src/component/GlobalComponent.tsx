@@ -89,7 +89,7 @@ export const AdminHeader = () => {
     navigate("/admin/report/user");
   };
 
-  // 신고 - 여행 일기
+  // 신고 - 여행 일지
   const handleReport2 = () => {
     setIsBanShow(false);
     navigate("/admin/report/diary");
@@ -126,7 +126,7 @@ export const AdminHeader = () => {
                 유저
               </div>
               <div className="admin-selected" onClick={handleReport2}>
-                여행 일기
+                여행 일지
               </div>
               <div className="admin-selected" onClick={handleReport3}>
                 관광지 댓글
