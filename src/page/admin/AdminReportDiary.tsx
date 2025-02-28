@@ -109,7 +109,7 @@ const AdminReportDiary = () => {
   };
 
   // 신고 처리
-  const manageUser = async () => {
+  const manageDiary = async () => {
     setIsModalOpen(false);
     try {
       await AxiosApi.reportProcess(reportId, reportState, (banDate === 0 ? null : reportedId), banDate, banReason, diaryId, null);
@@ -124,6 +124,7 @@ const AdminReportDiary = () => {
 
   return (
     <AdminContainer>
+      <h1>일지 신고</h1>
       {/* 데이터 박스 */}
       <div className="data-container">
         <div className="data-head">
@@ -330,7 +331,7 @@ const AdminReportDiary = () => {
       </div>
 
       {/* 관리버튼 모달 */}
-      <Modal isOpen={isModalOpen} onConfirm={manageUser} onClose={closeModal}>
+      <Modal isOpen={isModalOpen} onConfirm={manageDiary} onClose={closeModal}>
         <span>신고 번호 : {reportId}</span><br />
         <span>일지 번호 : {diaryId}</span><br />
         <span>대상자 번호 : {reportedId}</span><br />

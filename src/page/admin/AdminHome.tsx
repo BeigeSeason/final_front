@@ -133,6 +133,7 @@ const AdminHome = () => {
   return (
     <AdminContainer>
       <GlobalFont />
+      <h1>유저 관리</h1>
       {/* 검색 박스 */}
       <div className="search-container center">
         <div className="search-category center" onClick={handleCategory}>
