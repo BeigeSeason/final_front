@@ -39,6 +39,7 @@ export const TourInfoContainer = styled.div`
     border-bottom: 2px solid #ccc;
     border-radius: 0px;
     box-sizing: border-box;
+    background-color: transparent;
     cursor: pointer;
   }
   .selectOption option {

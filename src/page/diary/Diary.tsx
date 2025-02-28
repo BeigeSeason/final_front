@@ -2,7 +2,11 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import parse from "html-react-parser";
 import { DiaryApi, DiaryInfo } from "../../api/DiaryApi";
-import { FaBookmark, FaRegBookmark, FaEllipsisV } from "react-icons/fa";
+import { FaBookmark, FaRegBookmark } from "react-icons/fa";
+import { BiLock, BiLockOpen, BiTrash } from "react-icons/bi";
+import { GoPencil } from "react-icons/go";
+import { RiAlarmWarningLine } from "react-icons/ri";
+import { HiEllipsisVertical } from "react-icons/hi2";
 import {
   DiaryContainer,
   DiaryHeader,
@@ -15,6 +19,8 @@ const Diary = () => {
   const { diaryId } = useParams<string>();
   const [diaryInfo, setDiaryInfo] = useState<DiaryInfo | null>();
   const [isBookmarked, setIsBookmarked] = useState<boolean>(false);
+  const [isPublic, setIsPublic] = useState<boolean>(false);
+  const [isMenuToggleOpen, setIsMenuToggleOpen] = useState<boolean>(false);
 
   const timeFormatting = (date: Date | null) => {
     if (date) {
@@ -30,6 +36,8 @@ const Diary = () => {
         if (diaryId) {
           const diary = await DiaryApi.diaryDetail(diaryId);
           setDiaryInfo(diary);
+          // setIsPublic(diary.public);
+          console.log("공개 여부 : ", diary.public);
           console.log("조회된 다이어리:", diary);
         }
       } catch (error) {
@@ -46,48 +54,83 @@ const Diary = () => {
           {isBookmarked ? (
             <>
               <FaBookmark
-                className="menu-icon"
+                className="icon"
                 title="북마크"
                 // onClick={() => handleBookmarked()}
                 onClick={() => setIsBookmarked(!isBookmarked)}
               />
-              <span>숫자</span>
+              <span className="bookmarked-count">10</span>
             </>
           ) : (
             <>
               <FaRegBookmark
-                className="menu-icon"
+                className="icon"
                 title="북마크"
                 // onClick={() => handleBookmarked()}
                 onClick={() => setIsBookmarked(!isBookmarked)}
               />
-              <span>숫자</span>
+              <span className="bookmarked-count">10</span>
             </>
           )}
-          <FaEllipsisV />
+          {isPublic ? (
+            <BiLockOpen
+              className="icon"
+              title="공개/비공개"
+              onClick={() => setIsPublic(!isPublic)}
+            />
+          ) : (
+            <BiLock
+              className="icon"
+              title="공개/비공개"
+              onClick={() => setIsPublic(!isPublic)}
+            />
+          )}
+          <HiEllipsisVertical
+            className="icon menu-icon"
+            onClick={() => setIsMenuToggleOpen(!isMenuToggleOpen)}
+          />
+          {isMenuToggleOpen && (
+            <div className="menu-toggle-container">
+              <div className="menu-item">
+                <GoPencil className="icon" />
+                <span>수정</span>
+              </div>
+              <hr />
+              <div className="menu-item">
+                <BiTrash className="icon" />
+                <span>삭제</span>
+              </div>
+              <hr />
+              <div className="menu-item">
+                <RiAlarmWarningLine className="icon" />
+                <span>신고</span>
+              </div>
+            </div>
+          )}
           {/* <button>북마크</button>
           <button>신고</button>
           <button>공개/비공개</button>
           <button>수정</button>
           <button>삭제</button> */}
-          <h1>{diaryInfo?.title ?? "제목 없음"}</h1>
-          <div className="profile">
-            <div className="profile-img">
-              <img src={Profile1} alt="프로필 이미지" />
-            </div>
-            <div className="profile-info">
-              <p className="nickname">
-                {diaryInfo?.nickname ?? "사용자 닉네임"}
-              </p>
-              <p className="create-time">
-                {timeFormatting(diaryInfo?.createdTime as Date) ?? "작성일"}
-              </p>
-            </div>
+        </div>
+        <h1>{diaryInfo?.title ?? "제목 없음"}</h1>
+        <div className="profile">
+          <div className="profile-img">
+            <img src={Profile1} alt="프로필 이미지" />
+          </div>
+          <div className="profile-info">
+            <p className="nickname">{diaryInfo?.nickname ?? "사용자 닉네임"}</p>
+            <p className="create-time">
+              {timeFormatting(diaryInfo?.createdTime as Date) ?? "작성일"}
+            </p>
           </div>
         </div>
       </DiaryHeader>
+      {/* <hr /> */}
       <DiaryBody>
-        <div>{parse(diaryInfo?.content ?? "내용 없음")}</div>
+        <div className="diary-content">
+          {parse(diaryInfo?.content ?? "내용 없음")}
+        </div>
       </DiaryBody>
     </DiaryContainer>
   );

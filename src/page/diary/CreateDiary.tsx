@@ -314,7 +314,7 @@ const CreateDiary = () => {
                 marginLeft: "-30px",
                 marginRight: "30px",
                 color: "gray",
-                zIndex: "10",
+                zIndex: "-1",
               }}
             />
           </div>

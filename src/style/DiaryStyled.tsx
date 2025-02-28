@@ -3,16 +3,80 @@ import styled from "styled-components";
 export const DiaryContainer = styled.div`
   display: flex;
   flex-direction: column;
-  margin: 0 auto;
-  width: 40vw;
+  /* 
+  hr {
+    min-width: 768px;
+    width: 60vw;
+    height: 2px;
+    border: none;
+    background-color: #ccc;
+  } */
 `;
 
 export const DiaryHeader = styled.div`
   display: flex;
-  width: 100%;
-  background-color: aquamarine;
-  padding-left: 4vw;
+  flex-direction: column;
+  position: relative;
+  width: 768px;
+  margin: auto;
+  padding: 20px 4vw;
   box-sizing: border-box;
+  border-bottom: 2px solid #ccc;
+
+  .menu-icons {
+    display: flex;
+    position: absolute;
+    align-items: center;
+    right: 0;
+    color: #666;
+    font-size: 25px;
+    .bookmarked-count {
+      font-size: 16px;
+      margin-right: 10px;
+    }
+    .icon {
+      cursor: pointer;
+    }
+    .menu-icon {
+      font-size: 30px;
+    }
+    .menu-toggle-container {
+      display: flex;
+      flex-direction: column;
+      position: absolute;
+      padding: 5px 3px 5px 7px;
+      width: 80px;
+      right: 10px;
+      top: 23px;
+      font-size: 18px;
+      border: 1px solid rgba(0, 0, 0, 0.12);
+      border-radius: 7px;
+      background-color: white;
+      .menu-item {
+        display: flex;
+        align-items: center;
+        padding: 5px 5px;
+        cursor: pointer;
+        span {
+          /* margin-left: 10px; */
+          font-size: 15px;
+          flex-grow: 1;
+          text-align: center;
+        }
+      }
+      hr {
+        // 토글 메뉴 hr
+        margin: 2px 0;
+        height: 1px;
+        border: none;
+        background-color: #ccc;
+      }
+    }
+  }
+
+  h1 {
+    margin: 40px 0;
+  }
 
   .profile {
     display: flex;
@@ -48,6 +112,7 @@ export const DiaryHeader = styled.div`
       .nickname {
         font-weight: bold;
         font-size: 17px;
+        cursor: pointer;
       }
       .create-time {
         font-size: 14px;
@@ -58,8 +123,43 @@ export const DiaryHeader = styled.div`
 
 export const DiaryBody = styled.div`
   display: flex;
-  width: 100%;
-  /* background-color: #e9fa9f; */
-  padding: 0 2vw;
+  width: 700px;
+  padding: 1vh 2vw;
+  margin: auto;
   box-sizing: border-box;
+
+  .diary-content {
+    width: 100%;
+    text-align: left;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    line-height: 1.8;
+    p {
+      margin: 3px 0;
+    }
+    .ql-size-small {
+      font-size: 0.75em;
+    }
+    .ql-size-large {
+      font-size: 1.5em;
+    }
+    .ql-size-huge {
+      font-size: 2.5em;
+    }
+    .ql-align-center {
+      text-align: center;
+    }
+    .ql-align-right {
+      text-align: right;
+    }
+    .ql-align-justify {
+      text-align: justify;
+    }
+    blockquote {
+      border-left: 4px solid #ccc;
+      margin-bottom: 5px;
+      margin-top: 5px;
+      padding-left: 16px;
+    }
+  }
 `;

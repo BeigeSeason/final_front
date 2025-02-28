@@ -26,7 +26,7 @@ export interface DiaryInfo {
   totalCost: number;
   content: string;
   nickname: string;
-  isPublic: boolean;
+  public: boolean;
 }
 
 export const DiaryApi = {
