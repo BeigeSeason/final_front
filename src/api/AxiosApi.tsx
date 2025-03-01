@@ -227,13 +227,34 @@ const AxiosApi = {
     };
     return await axios.post(`${API_BASE_URL}/member/find-pw`, memberInfo);
   },
+  // 비밀번호 확인
+  checkMemberPw: async (userId: string, password: string) => {
+    const member = {
+      userId: userId,
+      password: password,
+    };
+    return await JwtAxios.put(`${API_BASE_URL}/member/check-pw`, member);
+  },
   // 비밀번호 변경
   changeMemberPw: async (userId: string, password: string) => {
     const member = {
       userId: userId,
       password: password,
     };
-    return await axios.put(`${API_BASE_URL}/member/change-pw`, member);
+    return await JwtAxios.put(`${API_BASE_URL}/member/change-pw`, member);
+  },
+  // 회원정보 수정(이름, 닉네임)
+  updateMember: async (
+    userId: string,
+    editName: string,
+    editNickname: string
+  ) => {
+    const params = {
+      userId: userId,
+      name: editName,
+      nickname: editNickname,
+    };
+    return await JwtAxios.put(`${API_BASE_URL}/auth/update`, params);
   },
 };
 

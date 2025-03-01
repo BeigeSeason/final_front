@@ -9,8 +9,26 @@ export const MyProfileContainer = styled.div`
 
   .check-pw {
     width: 400px;
+    margin: 5vh auto 0;
+    text-align: center;
+    p {
+      margin: 6px;
+    }
+  }
+
+  .check-pw-container {
+    display: flex;
+    position: relative;
+    width: 400px;
     margin: 1vh auto 0;
     text-align: center;
+    .check-pw-eye {
+      display: flex;
+      position: absolute;
+      right: 10px;
+      top: 32%;
+      cursor: pointer;
+    }
   }
 
   .input-container {
@@ -34,6 +52,9 @@ export const MyProfileContainer = styled.div`
       font-size: 12px;
       color: red;
       display: none;
+    }
+    .validate.visible {
+      display: block;
     }
 
     button {
@@ -118,6 +139,14 @@ export const MyProfileContainer = styled.div`
       position: absolute;
       left: 105px;
       bottom: -8px;
+      font-size: 10px;
+      color: red;
+    }
+    .error-message-pw {
+      display: flex;
+      position: absolute;
+      left: 8px;
+      bottom: -15px;
       font-size: 10px;
       color: red;
     }

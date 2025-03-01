@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../redux/store";
 import { GlobalFont } from "../../style/GlobalStyled";
 import { Button } from "../../component/ButtonComponent";
@@ -7,6 +7,9 @@ import { InputBox } from "../../component/InputComponent";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import AxiosApi from "../../api/AxiosApi";
 import { MyProfileContainer } from "../../style/MypageComponentStyled";
+import { setUserInfo } from "../../redux/authSlice";
+import { profile } from "console";
+import { useNavigate } from "react-router-dom";
 
 interface InfoItem {
   label: string;
@@ -15,10 +18,13 @@ interface InfoItem {
 }
 
 const MyProfile = React.memo(() => {
-  const { userId, nickname, name, email } = useSelector(
+  const dispatch = useDispatch();
+  const { userId, nickname, name, email, profile } = useSelector(
     (state: RootState) => state.auth
   );
-  const [confirmPw, setConfirmPw] = useState<boolean>(false);
+  const [confirmPw, setConfirmPw] = useState<boolean | null>(null);
+  const [inputPw, setInputPw] = useState<string>("");
+  const [showInputPw, setShowInputPw] = useState<boolean>(false);
   const [isEditable, setIsEditable] = useState<boolean>(false);
   const [isPwEditable, setIsPwEditable] = useState<boolean>(false);
   const [selectedMenu, setSelectedMenu] = useState<string>("내 정보 수정");
@@ -35,7 +41,7 @@ const MyProfile = React.memo(() => {
   const EditInfo = () => {
     const [editName, setEditName] = useState<string>(name ?? "");
     const [editNickname, setEditNickname] = useState<string>(nickname ?? "");
-    const [editId, setEditId] = useState<string>(userId ?? "");
+    // const [editId, setEditId] = useState<string>(userId ?? "");
     const [newPw, setNewPw] = useState<string>("");
     const [confirmPwValue, setConfirmPwValue] = useState<string>("");
     const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -43,26 +49,50 @@ const MyProfile = React.memo(() => {
       useState<boolean>(false);
 
     const [isValid, setIsValid] = useState({
-      id: false,
+      // id: false,
       nickname: false,
     });
-    const [idChecked, setIdChecked] = useState<boolean>(false);
+    // const [idChecked, setIdChecked] = useState<boolean>(false);
     const [nicknameChecked, setNicknameChecked] = useState<boolean>(false);
 
     const [nameError, setNameError] = useState<string>("");
     const [nicknameError, setNicknameError] = useState<string>("");
-    const [idError, setIdError] = useState<string>("");
+    // const [idError, setIdError] = useState<string>("");
     const [pwError, setPwError] = useState<string>("");
     const [pwConfirmError, setPwConfirmError] = useState<string>("");
 
-    const isFormValid = !nameError && nicknameChecked && idChecked;
+    const isFormValid =
+      (!nameError && editNickname === nickname) ||
+      (!nameError && nicknameChecked);
     const isPwValid = !pwError && !pwConfirmError;
 
-    const handleEditClick = () => {
+    const handleEditClick = async () => {
       setIsEditable(!isEditable);
-      if (isEditable && isFormValid) {
+      if (
+        userId &&
+        isEditable &&
+        isFormValid &&
+        (name !== editName || nickname !== editNickname)
+      ) {
         // 수정 완료 시 서버로 데이터 전송 가능
-        console.log("수정된 데이터:", { editName, editNickname, editId });
+        console.log("수정된 데이터:", { editName, editNickname });
+        const response = await AxiosApi.updateMember(
+          userId,
+          editName,
+          editNickname
+        );
+        console.log(response.data);
+        if (response.data) {
+          dispatch(
+            setUserInfo({
+              userId: userId,
+              nickname: editNickname,
+              name: editName,
+              email: email,
+              profile: profile,
+            })
+          );
+        }
       }
       if (!isEditable) {
         setIsPwEditable(false);
@@ -73,11 +103,14 @@ const MyProfile = React.memo(() => {
       }
     };
 
-    const handleChangePwClick = () => {
+    const handleChangePwClick = async () => {
       setIsPwEditable(!isPwEditable);
       if (isPwEditable && isPwValid) {
         // 비밀번호 변경 완료 시 서버로 데이터 전송 가능
         console.log("새 비밀번호:", newPw);
+        if (userId) {
+          await AxiosApi.changeMemberPw(userId, newPw);
+        }
       }
       if (!isPwEditable) {
         setIsEditable(false);
@@ -99,15 +132,15 @@ const MyProfile = React.memo(() => {
       setNicknameChecked(isNicknameExists ? false : true);
     };
     // 아이디 중복 체크
-    const handleCheckId = async () => {
-      const isIdExists = await AxiosApi.checkMemberIdExists(editId);
-      const errorMessage = isIdExists
-        ? "이미 존재하는 아이디입니다."
-        : "사용 가능한 아이디입니다.";
-      setIdError(errorMessage);
-      setIsValid((prev) => ({ ...prev, id: !isIdExists }));
-      setIdChecked(isIdExists ? false : true);
-    };
+    // const handleCheckId = async () => {
+    //   const isIdExists = await AxiosApi.checkMemberIdExists(editId);
+    //   const errorMessage = isIdExists
+    //     ? "이미 존재하는 아이디입니다."
+    //     : "사용 가능한 아이디입니다.";
+    //   setIdError(errorMessage);
+    //   setIsValid((prev) => ({ ...prev, id: !isIdExists }));
+    //   setIdChecked(isIdExists ? false : true);
+    // };
 
     const handleInputChange = (
       e: React.ChangeEvent<HTMLInputElement>,
@@ -121,10 +154,6 @@ const MyProfile = React.memo(() => {
         setEditNickname(value);
         setNicknameError(validateNickname(value));
         setNicknameChecked(false);
-      } else if (field === "id") {
-        setEditId(value);
-        setIdError(validateId(value));
-        setIdChecked(false);
       } else if (field === "newPw") {
         setNewPw(value);
         setPwError(validatePassword(value));
@@ -142,12 +171,12 @@ const MyProfile = React.memo(() => {
       return value.length < 2 ? "닉네임은 2글자 이상이어야 합니다." : "";
     };
 
-    const validateId = (value: string) => {
-      if (!/^[a-zA-Z\d]{5,}$/.test(value)) {
-        return "아이디는 영어 또는 숫자를 사용한 5자 이상이어야 합니다.";
-      }
-      return "";
-    };
+    // const validateId = (value: string) => {
+    //   if (!/^[a-zA-Z\d]{5,}$/.test(value)) {
+    //     return "아이디는 영어 또는 숫자를 사용한 5자 이상이어야 합니다.";
+    //   }
+    //   return "";
+    // };
 
     const validatePassword = (value: string) => {
       if (!/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*]).{8,}$/.test(value)) {
@@ -227,14 +256,12 @@ const MyProfile = React.memo(() => {
           <div className="info-item">
             <span className="title content-font1">아이디</span>
             <InputBox
-              className={`content content-font2 ${
-                isEditable ? "editable" : ""
-              }`}
-              value={editId}
+              className={`content content-font2`}
+              value={userId ?? ""}
               readOnly={!isEditable}
               onChange={(e) => handleInputChange(e, "id")}
             />
-            {isEditable && (
+            {/* {isEditable && (
               <Button onClick={handleCheckId} disabled={idChecked}>
                 {idChecked ? "사용 가능" : "중복 확인"}
               </Button>
@@ -249,7 +276,7 @@ const MyProfile = React.memo(() => {
               >
                 {idError}
               </span>
-            )}
+            )} */}
           </div>
           <div className="info-item">
             <span className="title content-font1">이메일</span>
@@ -295,7 +322,7 @@ const MyProfile = React.memo(() => {
                 >
                   {showPassword ? <FaEye /> : <FaEyeSlash />}
                 </span>
-                {pwError && <span className="error-message">{pwError}</span>}
+                {pwError && <span className="error-message-pw">{pwError}</span>}
               </div>
             </div>
             <div className="info-item">
@@ -319,7 +346,7 @@ const MyProfile = React.memo(() => {
                   {showConfirmPassword ? <FaEye /> : <FaEyeSlash />}
                 </span>
                 {pwConfirmError && (
-                  <span className="error-message">{pwConfirmError}</span>
+                  <span className="error-message-pw">{pwConfirmError}</span>
                 )}
               </div>
             </div>
@@ -337,8 +364,16 @@ const MyProfile = React.memo(() => {
     );
   };
 
-  const handleConfirmPw = () => {
-    setConfirmPw(true);
+  const handleConfirmPw = async () => {
+    console.log(inputPw);
+    if (userId) {
+      const response = await AxiosApi.checkMemberPw(userId, inputPw);
+      if (response.data) {
+        setConfirmPw(true);
+      } else {
+        setConfirmPw(false);
+      }
+    }
   };
 
   return (
@@ -346,20 +381,36 @@ const MyProfile = React.memo(() => {
       <GlobalFont />
       {!confirmPw ? (
         <>
-          <p className="check-pw content-font1">개인정보 보호를 위해</p>
-          <p className="check-pw content-font1">
-            비밀번호를 다시 입력해주세요.
-          </p>
-          <div className="input-container check-pw">
+          <div className="check-pw">
+            <p className="content-font1">개인정보 보호를 위해</p>
+            <p className="content-font1">비밀번호를 다시 입력해주세요.</p>
+          </div>
+          <div className="input-container check-pw-container">
             <InputBox
+              type={showInputPw ? "text" : "password"}
               placeholder="비밀번호 입력"
+              value={inputPw}
+              onChange={(e) => setInputPw(e.target.value)}
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
                   handleConfirmPw();
                 }
               }}
             />
-            <p className="validate">비밀번호가 일치하지 않습니다.</p>
+            <span
+              className="check-pw-eye"
+              onClick={() => setShowInputPw(!showInputPw)}
+            >
+              {showInputPw ? <FaEye /> : <FaEyeSlash />}
+            </span>
+            <p
+              className={`validate ${
+                confirmPw === null || confirmPw ? "" : "visible"
+              }`}
+            >
+              {confirmPw ? "" : "비밀번호가 일치하지 않습니다."}
+              {/* 비밀번호가 일치하지 않습니다. */}
+            </p>
             <Button onClick={handleConfirmPw}>확인</Button>
           </div>
         </>
