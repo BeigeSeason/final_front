@@ -1,26 +1,34 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 import parse from "html-react-parser";
 import { DiaryApi, DiaryInfo } from "../../api/DiaryApi";
+import { GetProfileImageSrc } from "../../component/ProfileComponent";
 import { FaBookmark, FaRegBookmark } from "react-icons/fa";
 import { BiLock, BiLockOpen, BiTrash } from "react-icons/bi";
 import { GoPencil } from "react-icons/go";
 import { RiAlarmWarningLine } from "react-icons/ri";
 import { HiEllipsisVertical } from "react-icons/hi2";
+import { Modal } from "../../component/ModalComponent";
 import {
   DiaryContainer,
   DiaryHeader,
   DiaryBody,
 } from "../../style/DiaryStyled";
 
-import Profile1 from "../../img/profile/profile1.png";
-
 const Diary = () => {
+  const navigate = useNavigate();
+  const { nickname } = useSelector((state: RootState) => state.auth);
   const { diaryId } = useParams<string>();
   const [diaryInfo, setDiaryInfo] = useState<DiaryInfo | null>();
   const [isBookmarked, setIsBookmarked] = useState<boolean>(false);
   const [isPublic, setIsPublic] = useState<boolean>(false);
   const [isMenuToggleOpen, setIsMenuToggleOpen] = useState<boolean>(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  const [isPublicModal, setIsPublicModal] = useState<boolean>(false);
+  const [isDeleteModal, setIsDeleteModal] = useState<boolean>(false);
 
   const timeFormatting = (date: Date | null) => {
     if (date) {
@@ -36,7 +44,7 @@ const Diary = () => {
         if (diaryId) {
           const diary = await DiaryApi.diaryDetail(diaryId);
           setDiaryInfo(diary);
-          // setIsPublic(diary.public);
+          setIsPublic(diary.public);
           console.log("공개 여부 : ", diary.public);
           console.log("조회된 다이어리:", diary);
         }
@@ -47,10 +55,52 @@ const Diary = () => {
     fetchDiary(diaryId);
   }, []);
 
+  // 토글 메뉴 외부 클릭 시 닫기
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        isMenuToggleOpen &&
+        menuRef.current &&
+        !menuRef.current.contains(event.target as Node)
+      ) {
+        setIsMenuToggleOpen(false); // 메뉴 외부 클릭 시 닫기
+      }
+    };
+
+    // 이벤트 리스너 등록
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      // 컴포넌트 언마운트 시 이벤트 리스너 제거
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isMenuToggleOpen]);
+
+  // 공개/비공개 전환
+  const onClickIsPublic = async () => {
+    if (diaryId) {
+      const response = await DiaryApi.changeIsPublic(diaryId, !isPublic);
+      console.log(response);
+      if (response) {
+        setIsPublic(!isPublic);
+      }
+      setIsPublicModal(false);
+    }
+  };
+
+  // 다이어리 삭제
+  const onClickDelete = async () => {
+    if (diaryId) {
+      const response = await DiaryApi.deleteDiary(diaryId);
+      if (response) {
+        navigate("/");
+      }
+    }
+  };
+
   return (
     <DiaryContainer>
       <DiaryHeader>
-        <div className="menu-icons">
+        <div className="menu-icons" ref={menuRef}>
           {isBookmarked ? (
             <>
               <FaBookmark
@@ -76,13 +126,13 @@ const Diary = () => {
             <BiLockOpen
               className="icon"
               title="공개/비공개"
-              onClick={() => setIsPublic(!isPublic)}
+              onClick={() => setIsPublicModal(true)}
             />
           ) : (
             <BiLock
               className="icon"
               title="공개/비공개"
-              onClick={() => setIsPublic(!isPublic)}
+              onClick={() => setIsPublicModal(true)}
             />
           )}
           <HiEllipsisVertical
@@ -91,32 +141,40 @@ const Diary = () => {
           />
           {isMenuToggleOpen && (
             <div className="menu-toggle-container">
-              <div className="menu-item">
-                <GoPencil className="icon" />
-                <span>수정</span>
-              </div>
-              <hr />
-              <div className="menu-item">
-                <BiTrash className="icon" />
-                <span>삭제</span>
-              </div>
-              <hr />
+              {nickname === diaryInfo?.nickname && (
+                <>
+                  <div className="menu-item">
+                    <GoPencil className="icon" />
+                    <span>수정</span>
+                  </div>
+                  <hr />
+
+                  <div
+                    className="menu-item"
+                    onClick={() => setIsDeleteModal(true)}
+                  >
+                    <BiTrash className="icon" />
+                    <span>삭제</span>
+                  </div>
+                  <hr />
+                </>
+              )}
               <div className="menu-item">
                 <RiAlarmWarningLine className="icon" />
                 <span>신고</span>
               </div>
             </div>
           )}
-          {/* <button>북마크</button>
-          <button>신고</button>
-          <button>공개/비공개</button>
-          <button>수정</button>
-          <button>삭제</button> */}
         </div>
-        <h1>{diaryInfo?.title ?? "제목 없음"}</h1>
+        <h1 onClick={() => setIsMenuToggleOpen(false)}>
+          {diaryInfo?.title ?? "제목 없음"}
+        </h1>
         <div className="profile">
           <div className="profile-img">
-            <img src={Profile1} alt="프로필 이미지" />
+            <img
+              src={GetProfileImageSrc(diaryInfo?.profileImgPath ?? null)}
+              alt="프로필 이미지"
+            />
           </div>
           <div className="profile-info">
             <p className="nickname">{diaryInfo?.nickname ?? "사용자 닉네임"}</p>
@@ -132,6 +190,25 @@ const Diary = () => {
           {parse(diaryInfo?.content ?? "내용 없음")}
         </div>
       </DiaryBody>
+      {isPublicModal && (
+        <Modal
+          isOpen={isPublicModal}
+          onConfirm={onClickIsPublic}
+          onClose={() => setIsPublicModal(false)}
+        >
+          {isPublic ? "비공개" : "공개"}로 전환하시겠습니까?
+        </Modal>
+      )}
+      {isDeleteModal && (
+        <Modal
+          isOpen={isDeleteModal}
+          onConfirm={onClickDelete}
+          onClose={() => setIsDeleteModal(false)}
+        >
+          <p>정말 삭제하시겠습니까?</p>
+          <p>삭제 후엔 복구가 불가능합니다.</p>
+        </Modal>
+      )}
     </DiaryContainer>
   );
 };

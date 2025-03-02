@@ -22,7 +22,9 @@ import { GetProfileImageSrc } from "./ProfileComponent";
 export const Header = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
-  const { profile } = useSelector((state: RootState) => state.auth);
+  const { profile, accessToken } = useSelector(
+    (state: RootState) => state.auth
+  );
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
@@ -61,9 +63,11 @@ export const Header = () => {
           />
         </div>
 
-        <Link to="/mypage" className="usericon">
-          <img src={GetProfileImageSrc(profile)} alt="사용자 아이콘" />
-        </Link>
+        {accessToken && (
+          <Link to="/mypage" className="usericon">
+            <img src={GetProfileImageSrc(profile)} alt="사용자 아이콘" />
+          </Link>
+        )}
       </HeaderSt>
     </>
   );
