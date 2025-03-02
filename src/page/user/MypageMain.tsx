@@ -4,12 +4,11 @@ import { RootState } from "../../redux/store";
 import { setUserInfo } from "../../redux/authSlice";
 import { GlobalFont } from "../../style/GlobalStyled";
 import { ExitModal } from "../../component/ModalComponent";
-import { Button } from "../../component/ButtonComponent";
 import MyDiary from "./MyDiary";
 import MyBMDiary from "./MyBMDiary";
 import MyBMTourList from "./MyBMTourList";
 import MyProfile from "./MyProfile";
-import { getProfileImageSrc } from "../../component/ProfileComponent";
+import { GetProfileImageSrc } from "../../component/ProfileComponent";
 import Profile1 from "../../img/profile/profile1.png";
 import Profile2 from "../../img/profile/profile2.png";
 import Profile3 from "../../img/profile/profile3.png";
@@ -87,7 +86,7 @@ const MypageMain = () => {
       <ProfileInfo>
         <div className="profile-img">
           <img
-            src={getProfileImageSrc(profile)}
+            src={GetProfileImageSrc(profile)}
             alt="프로필"
             onClick={() => setOpenEditProfileImgModal(true)}
           />

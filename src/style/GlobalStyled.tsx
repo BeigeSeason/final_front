@@ -60,6 +60,9 @@ export const HeaderSt = styled.div`
     overflow: hidden;
     cursor: pointer;
     border: 1px solid black;
+    /* border: none; */
+    background-color: #fff;
+    /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
     img {
       width: 100%;
       height: 100%;

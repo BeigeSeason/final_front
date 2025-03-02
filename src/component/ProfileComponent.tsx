@@ -12,7 +12,7 @@ const profileImageMap: { [key: string]: string } = {
   profile5: Profile5,
 };
 
-export const getProfileImageSrc = (profileValue: string | null) => {
+export const GetProfileImageSrc = (profileValue: string | null) => {
   if (!profileValue) return profileImageMap["profile1"]; // 기본값
   if (profileValue.startsWith("http")) return profileValue; // Firebase URL
   return profileImageMap[profileValue] || profileImageMap["profile1"]; // 매핑된 정적 이미지

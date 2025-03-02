@@ -19,6 +19,7 @@ export const MypageMainContainer = styled.div`
       height: 100px;
       border-radius: 50%;
       margin: 10px;
+      cursor: pointer;
     }
   }
 `;
@@ -63,9 +64,6 @@ export const ProfileInfo = styled.div`
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       cursor: pointer;
     }
-  }
-
-  .user-info {
   }
 `;
 

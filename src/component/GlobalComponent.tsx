@@ -16,11 +16,13 @@ import { useSelector, useDispatch } from "react-redux";
 // import { logout } from "../redux/axtions";
 import { clearTokens } from "../redux/authSlice";
 import { RootState } from "../redux/store";
+import { GetProfileImageSrc } from "./ProfileComponent";
 
 // 헤더---------------------------------------------------------------------------------
 export const Header = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
+  const { profile } = useSelector((state: RootState) => state.auth);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
@@ -60,7 +62,7 @@ export const Header = () => {
         </div>
 
         <Link to="/mypage" className="usericon">
-          <img alt="사용자 아이콘" />
+          <img src={GetProfileImageSrc(profile)} alt="사용자 아이콘" />
         </Link>
       </HeaderSt>
     </>
