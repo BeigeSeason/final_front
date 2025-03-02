@@ -15,7 +15,7 @@ interface SignupRequest {
   name: string;
   email: string;
   nickname: string;
-  profileImg?: string; // 프로필 이미지 URL은 선택적 속성
+  imgPath?: string;
   socialId?: string; // 소셜 ID는 선택적 속성
   sso?: string; // SSO 정보는 선택적 속성
 }
@@ -50,7 +50,7 @@ const AxiosApi = {
         name: signupRequest.name,
         email: signupRequest.email,
         nickname: signupRequest.nickname,
-        profileImg: signupRequest.profileImg,
+        imgPath: signupRequest.imgPath,
         socialId: signupRequest.socialId,
         sso: signupRequest.sso,
       };
@@ -255,6 +255,13 @@ const AxiosApi = {
       nickname: editNickname,
     };
     return await JwtAxios.put(`${API_BASE_URL}/auth/update`, params);
+  },
+  changeMemberProfile: async (userId: string, profileName: string) => {
+    const params = {
+      userId: userId,
+      imgPath: profileName,
+    };
+    return await JwtAxios.put(`${API_BASE_URL}/member/change-profile`, params);
   },
 };
 

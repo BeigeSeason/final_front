@@ -1,5 +1,5 @@
 // src/redux/authSlice.ts
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface AuthState {
   accessToken: string | null;
@@ -31,12 +31,11 @@ const authSlice = createSlice({
       localStorage.setItem("accessToken", action.payload.accessToken);
       localStorage.setItem("refreshToken", action.payload.refreshToken);
     },
-    setUserInfo: (state, action) => {
-      state.userId = action.payload.userId;
-      state.nickname = action.payload.nickname;
-      state.name = action.payload.name;
-      state.email = action.payload.email;
-      state.profile = action.payload.profile;
+    setUserInfo: (state, action: PayloadAction<Partial<AuthState>>) => {
+      return {
+        ...state,
+        ...action.payload, // 기존 상태를 유지하면서 전달된 필드만 덮어씀
+      };
     },
     clearTokens: (state) => {
       state.accessToken = null;

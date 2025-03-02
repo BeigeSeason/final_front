@@ -13,6 +13,7 @@ import Profile3 from "../../img/profile/profile3.png";
 import Profile4 from "../../img/profile/profile4.png";
 import Profile5 from "../../img/profile/profile5.png";
 import Add from "../../img/profile/add.png";
+import { Upload } from "../../component/FirebaseComponent";
 import AxiosApi from "../../api/AxiosApi";
 import emailjs from "@emailjs/browser";
 import { Loading } from "../../component/Loading";
@@ -34,6 +35,7 @@ export const SignupPage = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [selectedProfile, setSelectedProfile] = useState<string | null>(null);
   const [updatedProfile, setUpdatedProfile] = useState<string | null>(null);
+  const [profile, setProfile] = useState<string | null>(null);
   const [openEditProfileImgModal, setOpenEditProfileImgModal] = useState(false);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isValid, setIsValid] = useState({
@@ -44,24 +46,25 @@ export const SignupPage = () => {
     name: false,
     nickname: false,
   });
-  const [idChecked, setIdChecked] = useState(false);
-  const [emailChecked, setEmailChecked] = useState(false);
-  const [emailDupliCheck, setEmailDupliCheck] = useState(false);
-  const [nicknameChecked, setNicknameChecked] = useState(false);
-  const [showModal, setShowModal] = useState(false);
-  const [modalMessage, setModalMessage] = useState("");
-  const [isSignupSuccess, setIsSignupSuccess] = useState(false);
+  const [idChecked, setIdChecked] = useState<boolean>(false);
+  const [emailChecked, setEmailChecked] = useState<boolean>(false);
+  const [emailDupliCheck, setEmailDupliCheck] = useState<boolean>(false);
+  const [nicknameChecked, setNicknameChecked] = useState<boolean>(false);
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [modalMessage, setModalMessage] = useState<string>("");
+  const [isSignupSuccess, setIsSignupSuccess] = useState<boolean>(false);
 
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [submitLoading, setSubmitLoading] = useState<boolean>(false);
 
   const navigate = useNavigate();
 
   const profileImgs = [
-    { name: Profile1, alt: "기본1" },
-    { name: Profile2, alt: "기본2" },
-    { name: Profile3, alt: "기본3" },
-    { name: Profile4, alt: "기본4" },
-    { name: Profile5, alt: "기본5" },
+    { name: Profile1, alt: "기본1", keyName: "profile1" },
+    { name: Profile2, alt: "기본2", keyName: "profile2" },
+    { name: Profile3, alt: "기본3", keyName: "profile3" },
+    { name: Profile4, alt: "기본4", keyName: "profile4" },
+    { name: Profile5, alt: "기본5", keyName: "profile5" },
   ];
 
   const isFormFilled =
@@ -286,8 +289,12 @@ export const SignupPage = () => {
   const toggleConfirmPasswordVisibility = () =>
     setShowConfirmPassword(!showConfirmPassword);
 
-  const handleProfileSelect = (profileName: string) => {
-    setSelectedProfile(profileName);
+  const handleProfileSelect = (profileName: string, profile: string) => {
+    // if (profileImgs.some((profile) => profile.keyName === profileName)) {
+    //   setProfile(profileName);
+    // }
+    setProfile(profileName);
+    setSelectedProfile(profile);
     setOpenEditProfileImgModal(false);
     setUpdatedProfile(null);
   };
@@ -301,13 +308,33 @@ export const SignupPage = () => {
   // 회원가입 핸들러
   const handleSignup = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const signupRequest = { userId, password, name, email, nickname };
+    let url = null;
+    console.log(profile);
+    setSubmitLoading(true);
+    if (profile?.startsWith("blob")) {
+      const uploadParams = {
+        pics: profile ? [profile] : [], // base64 데이터 배열
+        type: "profile" as const, // 타입 설정 (필요에 따라 수정)
+        userId: userId, // 실제 userId로 교체
+        diaryId: null,
+      };
+      url = await Upload(uploadParams);
+    }
+    const signupRequest = {
+      userId,
+      password,
+      name,
+      email,
+      nickname,
+      imgPath: url?.[0] ?? profile ?? undefined,
+    };
     try {
       const response = await AxiosApi.signup(signupRequest);
-      console.log("회원가입 성공:", response);
+      setSubmitLoading(false);
       setModalMessage("회원가입이 완료되었습니다!");
       setIsSignupSuccess(true);
     } catch (error) {
+      setSubmitLoading(false);
       setModalMessage("회원가입에 실패했습니다. 다시 시도해주세요.");
       setIsSignupSuccess(false);
       setErrors((prev) => ({ ...prev, general: "회원가입에 실패했습니다." }));
@@ -469,7 +496,7 @@ export const SignupPage = () => {
                   <InputBox
                     className="inputbox"
                     id="emailDupli"
-                    type="email"
+                    type="text"
                     value={emailDupli}
                     onChange={(e) => handleChange("emailDupli", e.target.value)}
                     placeholder="인증번호 입력"
@@ -585,7 +612,7 @@ export const SignupPage = () => {
             </Button>
           </form>
           <CheckModal isOpen={showModal} onClose={handleCloseModal}>
-            {modalMessage}
+            <p>{modalMessage}</p>
           </CheckModal>
           {openEditProfileImgModal && (
             <ExitModal
@@ -602,7 +629,9 @@ export const SignupPage = () => {
                     className="profile-img-basic"
                     src={profileImg.name}
                     alt={profileImg.alt}
-                    onClick={() => handleProfileSelect(profileImg.name)}
+                    onClick={() =>
+                      handleProfileSelect(profileImg.keyName, profileImg.name)
+                    }
                   />
                 ))}
                 <label htmlFor="file-upload">
@@ -611,7 +640,9 @@ export const SignupPage = () => {
                       className="profile-img-basic"
                       src={updatedProfile}
                       alt="선택된 이미지"
-                      onClick={() => handleProfileSelect(updatedProfile)}
+                      onClick={() =>
+                        handleProfileSelect(updatedProfile, updatedProfile)
+                      }
                     />
                   ) : (
                     <img className="profile-img-basic" src={Add} alt="추가" />
@@ -634,6 +665,11 @@ export const SignupPage = () => {
       {isLoading && (
         <Loading>
           <p>인증 메일 전송중...</p>
+        </Loading>
+      )}
+      {submitLoading && (
+        <Loading>
+          <p>이미지 업로드중...</p>
         </Loading>
       )}
     </AuthBox>

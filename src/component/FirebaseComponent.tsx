@@ -13,6 +13,7 @@ export const Upload = async ({
   userId,
   diaryId,
 }: UploadParams): Promise<string[] | null> => {
+  console.log("upload가 호출은 되는거지??");
   const imgFolder =
     type === "profile"
       ? `/UserProfilePic/${userId}`
@@ -35,7 +36,8 @@ export const Upload = async ({
     // 모든 이미지 업로드를 병렬로 처리
     const uploadPromises = picsArray.map(async (pic, index) => {
       // if (pic && pic.startsWith("blob:")) {
-      if (pic.startsWith("data:image/")) {
+      if (pic.startsWith("data:image/") || pic.startsWith("blob")) {
+        console.log("여기 blob으로 바꾸는 곳으로 옴???");
         // Blob URL을 실제 Blob으로 변환
         const response = await fetch(pic);
         const blob = await response.blob();

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../redux/store";
+import { setUserInfo } from "../../redux/authSlice";
 import { GlobalFont } from "../../style/GlobalStyled";
 import { ExitModal } from "../../component/ModalComponent";
 import { Button } from "../../component/ButtonComponent";
@@ -8,7 +9,7 @@ import MyDiary from "./MyDiary";
 import MyBMDiary from "./MyBMDiary";
 import MyBMTourList from "./MyBMTourList";
 import MyProfile from "./MyProfile";
-import Sample from "../../img/sample.png";
+import { getProfileImageSrc } from "../../component/ProfileComponent";
 import Profile1 from "../../img/profile/profile1.png";
 import Profile2 from "../../img/profile/profile2.png";
 import Profile3 from "../../img/profile/profile3.png";
@@ -23,11 +24,15 @@ import {
 } from "../../style/MypageMainStyled";
 import { useLocation, useNavigate } from "react-router-dom";
 import { MdEdit } from "react-icons/md";
+import AxiosApi from "../../api/AxiosApi";
 
 const MypageMain = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { nickname } = useSelector((state: RootState) => state.auth);
+  const dispatch = useDispatch();
+  const { userId, nickname, profile } = useSelector(
+    (state: RootState) => state.auth
+  );
   const queryParams = new URLSearchParams(location.search);
   const menuFromUrl = queryParams.get("menu") || "내 여행일지";
   const [selectedMenu, setSelectedMenu] = useState<string>(menuFromUrl);
@@ -42,18 +47,23 @@ const MypageMain = () => {
     "북마크 관광지",
     "내 정보",
   ];
-  const profileImgs: { name: string; alt: string }[] = [
-    { name: Profile1, alt: "기본1" },
-    { name: Profile2, alt: "기본2" },
-    { name: Profile3, alt: "기본3" },
-    { name: Profile4, alt: "기본4" },
-    { name: Profile5, alt: "기본5" },
+  const profileImgs: { name: string; alt: string; keyName: string }[] = [
+    { name: Profile1, alt: "기본1", keyName: "profile1" },
+    { name: Profile2, alt: "기본2", keyName: "profile2" },
+    { name: Profile3, alt: "기본3", keyName: "profile3" },
+    { name: Profile4, alt: "기본4", keyName: "profile4" },
+    { name: Profile5, alt: "기본5", keyName: "profile5" },
   ];
 
-  const handleProfileSelect = (profileName: string) => {
-    if (profileImgs.some((profile) => profile.name === selectedProfile)) {
-      console.log("기본 이미지 선택된거임");
+  const handleProfileSelect = async (profileName: string) => {
+    if (profileImgs.some((profile) => profile.keyName === profileName)) {
+      if (userId) {
+        await AxiosApi.changeMemberProfile(userId, profileName);
+        dispatch(setUserInfo({ profile: profileName }));
+      }
     } else {
+      console.log(profileName);
+      console.log(selectedProfile);
       console.log("firebase에 선택한 이미지 업로드 해야됨");
     }
     // 그리고 DB에 프로필 이미지 경로 수정해서 넣어줘야되고, 토큰이든 localstorage든 imgPath 변경해줘야됨.
@@ -77,7 +87,7 @@ const MypageMain = () => {
       <ProfileInfo>
         <div className="profile-img">
           <img
-            src={Sample}
+            src={getProfileImageSrc(profile)}
             alt="프로필"
             onClick={() => setOpenEditProfileImgModal(true)}
           />
@@ -133,7 +143,10 @@ const MypageMain = () => {
                 className="profile-img-basic"
                 src={profileImg.name}
                 alt={profileImg.alt}
-                onClick={() => handleProfileSelect(profileImg.name)}
+                onClick={() => {
+                  // setSelectedProfile(profileImg.keyName);
+                  handleProfileSelect(profileImg.keyName);
+                }}
               />
             ))}
             <label htmlFor="file-upload">

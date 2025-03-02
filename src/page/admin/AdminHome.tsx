@@ -43,7 +43,14 @@ const AdminHome = () => {
   // 데이터 가져오기
   const memberList = async () => {
     try {
-      const data = await AxiosApi.memberList(page - 1, size, searchType, searchValue, type, sort);
+      const data = await AxiosApi.memberList(
+        page - 1,
+        size,
+        searchType,
+        searchValue,
+        type,
+        sort
+      );
       setMembers(data.members);
       setTotalElements(data.totalElements);
     } catch (error) {
@@ -80,21 +87,21 @@ const AdminHome = () => {
     setPage(1);
   };
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
+    if (e.key === "") {
       handleSearch();
     }
-  }
+  };
 
   // 데이터 분류버튼
   const handleType = () => {
     setTypeSelectOpen((prev) => !prev);
     setSortSelectOpen(false);
-  }
+  };
   const handleSelectType = (select: boolean | null) => {
     console.log("select:", select);
     setType(select);
     setTypeSelectOpen(false);
-  }
+  };
   // 데이터 정렬버튼
   const handleSort = () => {
     setSortSelectOpen((prev) => !prev);
@@ -148,9 +155,10 @@ const AdminHome = () => {
               case "EMAIL":
                 return "이메일";
               default:
-                return "아이디"
+                return "아이디";
             }
-          })()} <FaSortDown />
+          })()}{" "}
+          <FaSortDown />
         </div>
         {searchSelectOpen && (
           <div className="search-selectBox">
@@ -181,10 +189,10 @@ const AdminHome = () => {
           </div>
         )}
         <div className="search-input center">
-          <input 
-            type="text" 
-            value={searchValue} 
-            onChange={(e) => setSearchValue(e.target.value)} 
+          <input
+            type="text"
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.target.value)}
             onKeyDown={handleKeyDown}
           />
         </div>
@@ -209,7 +217,7 @@ const AdminHome = () => {
                   case true:
                     return "정지";
                   default:
-                    return "분류"
+                    return "분류";
                 }
               })()}
             </div>
@@ -231,7 +239,7 @@ const AdminHome = () => {
                   case "userIdDesc":
                     return "아이디 내림차순";
                   default:
-                    return "정렬"
+                    return "정렬";
                 }
               })()}
             </div>
@@ -239,22 +247,13 @@ const AdminHome = () => {
         </div>
         {typeSelectOpen && (
           <div className="selectBox type">
-            <div
-              className="selected"
-              onClick={() => handleSelectType(null)}
-            >
+            <div className="selected" onClick={() => handleSelectType(null)}>
               분류
             </div>
-            <div
-              className="selected"
-              onClick={() => handleSelectType(false)}
-            >
+            <div className="selected" onClick={() => handleSelectType(false)}>
               정상
             </div>
-            <div
-              className="selected"
-              onClick={() => handleSelectType(true)}
-            >
+            <div className="selected" onClick={() => handleSelectType(true)}>
               정지
             </div>
           </div>
@@ -311,32 +310,37 @@ const AdminHome = () => {
               </tr>
             </thead>
             <tbody>
-              {members && members.length > 0 ? (members.map((member) => (
-                <tr key={member.id}>
-                  <td className="text-center">{member.id}</td>
-                  <td></td>
-                  <td>{member.userId}</td>
-                  <td>{member.email}</td>
-                  <td>{member.name}</td>
-                  <td>{member.nickname}</td>
-                  <td>{member.regDate}</td>
-                  <td></td>
-                  <td></td>
-                  <td className={member.banned ? "text-red" : "text-green"}>
-                    {member.banned ? "정지" : "정상"}
-                  </td>
-                  <td className="center">
-                    <button onClick={() => openModal(member.id, member.userId)}>
-                      관리
-                    </button>
+              {members && members.length > 0 ? (
+                members.map((member) => (
+                  <tr key={member.id}>
+                    <td className="text-center">{member.id}</td>
+                    <td></td>
+                    <td>{member.userId}</td>
+                    <td>{member.email}</td>
+                    <td>{member.name}</td>
+                    <td>{member.nickname}</td>
+                    <td>{member.regDate}</td>
+                    <td></td>
+                    <td></td>
+                    <td className={member.banned ? "text-red" : "text-green"}>
+                      {member.banned ? "정지" : "정상"}
+                    </td>
+                    <td className="center">
+                      <button
+                        onClick={() => openModal(member.id, member.userId)}
+                      >
+                        관리
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={10} className="text-center">
+                    데이터가 없습니다.
                   </td>
                 </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan={10} className="text-center">데이터가 없습니다.</td>
-              </tr>
-            )}
+              )}
             </tbody>
           </table>
         </div>
@@ -358,36 +362,39 @@ const AdminHome = () => {
           </button>
 
           {/* 페이지 번호 표시 */}
-          {Array.from({ length: Math.min(pageNumbers.length, 9) }).map((_, index) => {
-            let pageNumber: number; // 타입을 명시적으로 지정
+          {Array.from({ length: Math.min(pageNumbers.length, 9) }).map(
+            (_, index) => {
+              let pageNumber: number; // 타입을 명시적으로 지정
 
-            if (page <= 4) {
-              // 1~4 페이지일 때는 1~9까지 페이지를 표시
-              pageNumber = index + 1;
-            } else if (pageNumbers.length - page <= 4) {
-              // 마지막 4페이지 근처일 때는 뒤쪽으로 9개 페이지를 표시
-              pageNumber = pageNumbers.length - (8 - index);
-            } else {
-              // 그 외에는 현재 페이지 기준으로 앞 4개, 뒤 4개 표시
-              pageNumber = page - 4 + index;
+              if (page <= 4) {
+                // 1~4 페이지일 때는 1~9까지 페이지를 표시
+                pageNumber = index + 1;
+              } else if (pageNumbers.length - page <= 4) {
+                // 마지막 4페이지 근처일 때는 뒤쪽으로 9개 페이지를 표시
+                pageNumber = pageNumbers.length - (8 - index);
+              } else {
+                // 그 외에는 현재 페이지 기준으로 앞 4개, 뒤 4개 표시
+                pageNumber = page - 4 + index;
+              }
+
+              // 페이지 번호가 1 이상, 마지막 페이지 이하로 보정
+              pageNumber = Math.max(pageNumber, 1);
+              pageNumber = Math.min(pageNumber, pageNumbers.length);
+
+              return (
+                pageNumber >= 1 &&
+                pageNumber <= pageNumbers.length && (
+                  <button
+                    key={pageNumber}
+                    className={page === pageNumber ? "activePage" : ""}
+                    onClick={() => handlePageClick(pageNumber)}
+                  >
+                    {pageNumber}
+                  </button>
+                )
+              );
             }
-
-            // 페이지 번호가 1 이상, 마지막 페이지 이하로 보정
-            pageNumber = Math.max(pageNumber, 1);
-            pageNumber = Math.min(pageNumber, pageNumbers.length);
-
-            return (
-              pageNumber >= 1 && pageNumber <= pageNumbers.length && (
-                <button
-                  key={pageNumber}
-                  className={page === pageNumber ? "activePage" : ""}
-                  onClick={() => handlePageClick(pageNumber)}
-                >
-                  {pageNumber}
-                </button>
-              )
-            );
-          })}
+          )}
 
           <button
             className="page-btn"
@@ -411,9 +418,9 @@ const AdminHome = () => {
         <span>번호 : {banId}</span>
         <p>아이디 : {banUserId}</p>
         <span>정지일 : </span>
-        <select 
-          name="ban-date" 
-          id="ban-date" 
+        <select
+          name="ban-date"
+          id="ban-date"
           value={banDate}
           onChange={(e) => setBanDate(Number(e.target.value))}
           className="text-center"
@@ -425,9 +432,9 @@ const AdminHome = () => {
           <option value={36500}>영구 정지</option>
         </select>
         <p>정지 사유</p>
-        <input 
-          type="text" 
-          value={banReason} 
+        <input
+          type="text"
+          value={banReason}
           onChange={(e) => setBanReason(e.target.value)}
         />
       </Modal>
