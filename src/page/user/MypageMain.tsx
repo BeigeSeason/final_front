@@ -15,6 +15,8 @@ import Profile3 from "../../img/profile/profile3.png";
 import Profile4 from "../../img/profile/profile4.png";
 import Profile5 from "../../img/profile/profile5.png";
 import Add from "../../img/profile/add.png";
+import { Upload } from "../../component/FirebaseComponent";
+import { Loading } from "../../component/Loading";
 import {
   MypageMainContainer,
   ProfileInfo,
@@ -40,6 +42,8 @@ const MypageMain = () => {
   const fileInputRef = useRef(null);
   const [selectedProfile, setSelectedProfile] = useState<string | null>(null);
 
+  const [uploadLoading, setUploadLoading] = useState<boolean>(false);
+
   const menuItems: string[] = [
     "내 여행일지",
     "북마크 여행일지",
@@ -61,13 +65,27 @@ const MypageMain = () => {
         dispatch(setUserInfo({ profile: profileName }));
       }
     } else {
+      setUploadLoading(true);
       console.log(profileName);
       console.log(selectedProfile);
       console.log("firebase에 선택한 이미지 업로드 해야됨");
+      const uploadParams = {
+        pics: profileName ? [profileName] : [], // base64 데이터 배열
+        type: "profile" as const, // 타입 설정 (필요에 따라 수정)
+        userId: userId, // 실제 userId로 교체
+        diaryId: null,
+      };
+      const url = await Upload(uploadParams);
+      if (userId && url) {
+        await AxiosApi.changeMemberProfile(userId, url[0]);
+        dispatch(setUserInfo({ profile: url[0] }));
+      }
+      setUploadLoading(false);
     }
     // 그리고 DB에 프로필 이미지 경로 수정해서 넣어줘야되고, 토큰이든 localstorage든 imgPath 변경해줘야됨.
     setOpenEditProfileImgModal(false);
     setSelectedProfile(null);
+    setUploadLoading(false);
   };
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
@@ -148,18 +166,18 @@ const MypageMain = () => {
                 }}
               />
             ))}
-            <label htmlFor="file-upload">
-              {selectedProfile === null ? (
+            {selectedProfile === null ? (
+              <label htmlFor="file-upload">
                 <img className="profile-img-basic" src={Add} alt="추가" />
-              ) : (
-                <img
-                  className="profile-img-basic"
-                  src={selectedProfile}
-                  alt="선택된 이미지"
-                  onClick={() => handleProfileSelect(selectedProfile)}
-                />
-              )}
-            </label>
+              </label>
+            ) : (
+              <img
+                className="profile-img-basic"
+                src={selectedProfile}
+                alt="선택된 이미지"
+                onClick={() => handleProfileSelect(selectedProfile)}
+              />
+            )}
             <input
               id="file-upload"
               type="file"
@@ -169,6 +187,11 @@ const MypageMain = () => {
             />
           </div>
         </ExitModal>
+      )}
+      {uploadLoading && (
+        <Loading>
+          <p>이미지 업로드중...</p>
+        </Loading>
       )}
     </MypageMainContainer>
   );
