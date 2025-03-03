@@ -47,10 +47,16 @@ interface SelectFilters {
   minPrice?: number;
   maxPrice?: number;
 }
+interface TourSpot {
+  spotId: string;
+  title: string;
+  addr: string;
+  thumbnail: string;
+}
 export const TourList: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const [tourSpots, setTourSpots] = useState<any[]>([]); // 여행지 데이터 (타입 지정 필요시 인터페이스 정의)
+  const [tourSpots, setTourSpots] = useState<TourSpot[]>([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [totalItems, setTotalItems] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
@@ -83,20 +89,23 @@ export const TourList: React.FC = () => {
   const selectRef = useRef<HTMLDivElement | null>(null);
 
   const sortOptions = [
-    { value: "starRating", label: "별점순" },
-    { value: "reviewCount", label: "리뷰순" },
-    { value: "bookmarkCount", label: "북마크순" },
-    { value: "title", label: "제목순" },
+    { value: "rating", label: "별점순" },
+    { value: "review_count", label: "리뷰순" },
+    { value: "bookmark_count", label: "북마크순" },
+    { value: "title.keyword", label: "제목순" },
   ];
 
   const fetchTourSpots = async (page: number) => {
     try {
       setLoading(true);
       const filtersForApi = {
-        keyword: searchQuery || undefined,
+        keyword: filters.searchQuery || undefined,
         page: page,
-        size: 10,
-        sort: filters.sortBy || undefined, // "field,direction" 형식으로 전달
+        size: filters.pageSize,
+        sort: filters.sortBy || undefined,
+        areaCode: filters.areaCode || undefined,
+        sigunguCode: filters.subAreaCode || undefined,
+        contentTypeId: filters.category || undefined,
       };
       const data = await ItemApi.getTourSpotList(filtersForApi);
       setTourSpots(data.content || []);
@@ -108,6 +117,7 @@ export const TourList: React.FC = () => {
       setLoading(false);
     }
   };
+
   useEffect(() => {
     const queryParams = new URLSearchParams();
     Object.entries(filters).forEach(([key, value]) => {
@@ -121,7 +131,7 @@ export const TourList: React.FC = () => {
         } else if (key === "searchQuery") {
           queryParams.set(key, value);
         } else if (key === "sortBy") {
-          queryParams.set("sortBy", value); // sortBy 추가
+          queryParams.set("sortBy", value);
         } else {
           queryParams.set(key, value.toString());
         }
@@ -171,7 +181,7 @@ export const TourList: React.FC = () => {
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
-    fetchTourSpots(page); // 페이지 변경 시 데이터를 다시 가져옵니다.
+    fetchTourSpots(page);
     updateFilters("currentPage", page);
   };
 
@@ -277,8 +287,6 @@ export const TourList: React.FC = () => {
       ) {
         newFilters[key] = "";
       }
-      // minPrice, maxPrice는 TourList에서 사용 안 하므로 무시
-
       return newFilters;
     });
   };

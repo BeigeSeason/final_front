@@ -1,4 +1,4 @@
-// import { TourItem } from "../../component/ItemComponent";
+import { DiaryItem } from "../../component/ItemComponent";
 import { ToggleSection, SelectedFilters } from "../../component/ItemComponent";
 import { areas } from "../../util/TourCodes";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -15,8 +15,8 @@ import { Button } from "../../component/ButtonComponent";
 import { SearchBox } from "../../component/InputComponent";
 import ReactSlider from "react-slider";
 import { FaBars } from "react-icons/fa";
+import { ItemApi } from "../../api/ItemApi";
 import { Loading } from "../../component/Loading";
-
 import { Paginating } from "../../component/PaginationComponent";
 
 interface Filters {
@@ -42,7 +42,22 @@ interface SelectFilters {
   minPrice?: number;
   maxPrice?: number;
 }
+interface Diary {
+  diaryId: string;
+  title: string;
+  contentSummary: string;
+  thumbnail: string | null;
+  writer: string;
+  writerImg: string | null;
+  createdAt: string;
+}
 export const DiaryList: React.FC = () => {
+  const [diaries, setDiaries] = useState<Diary[]>([]);
+  const [totalPages, setTotalPages] = useState<number>(0);
+  const [currentPage, setCurrentPage] = useState<number>(0);
+  const [totalElements, setTotalElements] = useState<number>(0);
+  const [numberOfElements, setNumberOfElements] = useState<number>(0);
+  const [error, setError] = useState<string | null>(null);
   const location = useLocation();
   const navigate = useNavigate();
   const [loading, setLoading] = useState<boolean>(true);
@@ -52,8 +67,10 @@ export const DiaryList: React.FC = () => {
   const [maxPrice, setMaxPrice] = useState<number>(1000);
   const [isSortOpen, setIsSortOpen] = useState(true);
   const sortOptions = [
-    { value: "bookmarkCount", label: "북마크순" },
-    { value: "title", label: "제목순" },
+    { value: "bookmark_count", label: "북마크순" },
+    { value: "title.keyword", label: "제목순" },
+    { value: "created_time", label: "작성일순" },
+    { value: "start_date", label: "여행시작일순" },
   ];
   const [filters, setFilters] = useState<Filters>(() => {
     const queryParams = new URLSearchParams(location.search);
@@ -62,7 +79,7 @@ export const DiaryList: React.FC = () => {
       subAreaCode: queryParams.get("subAreaCode") || "",
       searchQuery: queryParams.get("searchQuery") || "",
       sortBy: queryParams.get("sort") || "",
-      currentPage: parseInt(queryParams.get("currentPage") || "0", 10),
+      currentPage: parseInt(queryParams.get("page") || "0", 10),
       pageSize: parseInt(queryParams.get("pageSize") || "10", 10),
       minPrice: queryParams.has("minPrice")
         ? parseInt(queryParams.get("minPrice") || "0", 10)
@@ -87,12 +104,33 @@ export const DiaryList: React.FC = () => {
         }
       }
     });
-
+    queryParams.set("page", currentPage.toString());
     navigate(
       `/diarylist${queryParams.toString() ? `?${queryParams.toString()}` : ""}`,
       { replace: true }
     );
-  }, [filters, navigate]);
+    fetchDiaries(currentPage);
+  }, [filters, navigate, currentPage]);
+
+  const fetchDiaries = async (page: number) => {
+    setLoading(true);
+    try {
+      const data = await ItemApi.getDiaryList({
+        keyword: filters.searchQuery || undefined,
+        page: page,
+        size: filters.pageSize,
+      });
+      setDiaries(data.content);
+      setTotalPages(data.totalPages);
+      setTotalElements(data.totalElements);
+      setNumberOfElements(data.numberOfElements);
+      // console.log(data);
+    } catch (err) {
+      setError("데이터를 불러오는데 실패했습니다.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const updateFilters = (key: keyof Filters, value: string | number) => {
     setFilters((prev) => {
@@ -133,8 +171,9 @@ export const DiaryList: React.FC = () => {
     setMaxPrice(1000);
   };
 
-  const handlePageChange = (newPage: number) => {
-    updateFilters("currentPage", newPage);
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    updateFilters("currentPage", page);
   };
 
   const handleSearch = () => {
@@ -344,13 +383,31 @@ export const DiaryList: React.FC = () => {
             }}
             onRemoveFilter={handleTopFilterChange}
           />
-          <p>투어리스트 참고해서 여기에 뿌리면 됨</p>
+          {diaries.map((diary, index) => (
+            <DiaryItem
+              key={index}
+              id={diary.diaryId}
+              thumbnail={diary.thumbnail}
+              description={[
+                diary.title,
+                diary.contentSummary,
+                `${diary.writer} (${new Date(
+                  diary.createdAt
+                ).toLocaleString()})`,
+              ]}
+            />
+          ))}
+          <Paginating
+            currentPage={currentPage}
+            totalPages={totalPages}
+            handlePageChange={handlePageChange}
+          />
         </ItemList>
-        {/* {loading && (
+        {loading && (
           <Loading>
             <p>목록을 불러오는 중 입니다.</p>
           </Loading>
-        )} */}
+        )}
       </List>
     </>
   );

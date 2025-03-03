@@ -62,7 +62,31 @@ export const TourItem: React.FC<TourItemProps> = ({
     </SpotContainer>
   );
 };
-
+// 다이어리 목록 컴포넌트 ------------------------------------------------------------------------
+interface DiaryItemProps {
+  id?: string; // 다이어리에 고유 ID가 있다면 사용, 없으면 생략 가능
+  thumbnail: string | null;
+  description: React.ReactNode[];
+}
+export const DiaryItem: React.FC<DiaryItemProps> = ({
+  id,
+  thumbnail,
+  description,
+}) => {
+  return (
+    <SpotContainer to={`/diary/${id}`}>
+      <SpotImage src={thumbnail || basicImg} alt="다이어리 썸네일" />
+      <SpotDescription>
+        <div className="title">{description[0]}</div>
+        <div
+          className="summary"
+          dangerouslySetInnerHTML={{ __html: description[1] as string }}
+        />
+        <div className="writer">{description[2]}</div>
+      </SpotDescription>
+    </SpotContainer>
+  );
+};
 // 관광지 검색 토글 컴포넌트 -------------------------------------------------------------------------------------
 interface StyledToggleButtonProps {
   isopen: boolean;
@@ -302,10 +326,12 @@ const formatSelectedFilters = (filters: SelectFilters) => {
   if (filters.sortBy) {
     const [field, direction] = filters.sortBy.split(",");
     const sortLabels: { [key: string]: string } = {
-      starRating: "별점순",
-      reviewCount: "리뷰순",
-      bookmarkCount: "북마크순",
-      title: "제목순",
+      rating: "별점순",
+      review_count: "리뷰순",
+      bookmark_count: "북마크순",
+      "title.keyword": "제목순",
+      created_time: "작성일순",
+      start_date: "여행시작일순",
     };
     const directionLabel = direction === "ASC" ? "오름차순" : "내림차순";
     const sortLabel = sortLabels[field] || field; // 필드 라벨 매핑
