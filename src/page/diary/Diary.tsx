@@ -15,6 +15,7 @@ import {
   DiaryContainer,
   DiaryHeader,
   DiaryBody,
+  DiaryFooter,
 } from "../../style/DiaryStyled";
 
 const Diary = () => {
@@ -190,6 +191,15 @@ const Diary = () => {
           {parse(diaryInfo?.content ?? "내용 없음")}
         </div>
       </DiaryBody>
+      <DiaryFooter>
+        <div className="tag-container">
+          {diaryInfo?.tags.map((tag, index) => (
+            <span className="tag content-font1" key={index}>
+              {tag}
+            </span>
+          ))}
+        </div>
+      </DiaryFooter>
       {isPublicModal && (
         <Modal
           isOpen={isPublicModal}
@@ -205,8 +215,10 @@ const Diary = () => {
           onConfirm={onClickDelete}
           onClose={() => setIsDeleteModal(false)}
         >
-          <p>정말 삭제하시겠습니까?</p>
-          <p>삭제 후엔 복구가 불가능합니다.</p>
+          <div>
+            <p>정말 삭제하시겠습니까?</p>
+            <p>삭제 후엔 복구가 불가능합니다.</p>
+          </div>
         </Modal>
       )}
     </DiaryContainer>

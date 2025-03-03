@@ -163,3 +163,21 @@ export const DiaryBody = styled.div`
     }
   }
 `;
+
+export const DiaryFooter = styled.div`
+  width: 768px;
+  margin: 0 auto;
+  height: 120px;
+  border-top: 2px solid #ccc;
+  .tag-container {
+    display: flex;
+    padding: 7px 20px;
+    gap: 10px;
+
+    .tag {
+      background-color: #ccc;
+      padding: 2px 8px;
+      border-radius: 5px;
+    }
+  }
+`;

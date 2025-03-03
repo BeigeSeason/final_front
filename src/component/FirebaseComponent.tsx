@@ -37,13 +37,12 @@ export const Upload = async ({
     const uploadPromises = picsArray.map(async (pic, index) => {
       // if (pic && pic.startsWith("blob:")) {
       if (pic.startsWith("data:image/") || pic.startsWith("blob")) {
-        console.log("여기 blob으로 바꾸는 곳으로 옴???");
         // Blob URL을 실제 Blob으로 변환
         const response = await fetch(pic);
         const blob = await response.blob();
 
         // 파일 이름 생성: 0.png, 1.png, ...
-        const imgName = `${index}.png`;
+        const imgName = type === "profile" ? "profile.png" : `${index}.png`;
 
         // Firebase Storage 참조
         const storageRef = storage.ref(`${imgFolder}`);

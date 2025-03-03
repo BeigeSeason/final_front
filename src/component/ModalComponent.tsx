@@ -142,7 +142,7 @@ export const Modal: React.FC<ModalProps> = ({
   return (
     <ModalBackdrop>
       <ModalContent>
-        <p>{children}</p>
+        {typeof children === "string" ? <p>{children}</p> : children}
         <div className="buttons">
           <Button onClick={onConfirm}>{confirmText}</Button>
           <CancelButton onClick={onClose}>{cancelText}</CancelButton>

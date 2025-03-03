@@ -2,7 +2,7 @@ import axios from "axios";
 import { API_BASE_URL } from "../util/Common";
 import JwtAxios from "./JwtAxios";
 
-interface DiaryData {
+export interface DiaryData {
   diaryId: string;
   title: string;
   region: string;
