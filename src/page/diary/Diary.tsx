@@ -16,20 +16,25 @@ import {
   DiaryHeader,
   DiaryBody,
   DiaryFooter,
+  ReportContent,
 } from "../../style/DiaryStyled";
+import { DeleteFolder } from "../../component/FirebaseComponent";
 
 const Diary = () => {
   const navigate = useNavigate();
-  const { nickname } = useSelector((state: RootState) => state.auth);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  const { nickname, userId } = useSelector((state: RootState) => state.auth);
   const { diaryId } = useParams<string>();
   const [diaryInfo, setDiaryInfo] = useState<DiaryInfo | null>();
   const [isBookmarked, setIsBookmarked] = useState<boolean>(false);
   const [isPublic, setIsPublic] = useState<boolean>(false);
   const [isMenuToggleOpen, setIsMenuToggleOpen] = useState<boolean>(false);
-  const menuRef = useRef<HTMLDivElement>(null);
+  const [reportContent, setReportContent] = useState("");
 
   const [isPublicModal, setIsPublicModal] = useState<boolean>(false);
   const [isDeleteModal, setIsDeleteModal] = useState<boolean>(false);
+  const [reportModal, setReportModal] = useState<boolean>(false);
 
   const timeFormatting = (date: Date | null) => {
     if (date) {
@@ -92,8 +97,32 @@ const Diary = () => {
   const onClickDelete = async () => {
     if (diaryId) {
       const response = await DiaryApi.deleteDiary(diaryId);
-      if (response) {
+      const deleteParams = {
+        type: "diary" as const,
+        userId,
+        diaryId: diaryId,
+      };
+      const fbrsp = await DeleteFolder(deleteParams);
+      if (response && fbrsp) {
         navigate("/");
+      }
+    }
+  };
+
+  // 다이어리 신고
+  const onClickReport = async () => {
+    if (userId && diaryInfo && diaryId) {
+      const reportData = {
+        reportType: "DIARY",
+        reporter: userId,
+        reported: diaryInfo?.ownerId,
+        reportEntity: diaryId,
+        reason: reportContent.trim(),
+      };
+      const response = await DiaryApi.ReportDiary(reportData);
+      if (response) {
+        setReportContent("");
+        setReportModal(false);
       }
     }
   };
@@ -144,7 +173,10 @@ const Diary = () => {
             <div className="menu-toggle-container">
               {nickname === diaryInfo?.nickname && (
                 <>
-                  <div className="menu-item">
+                  <div
+                    className="menu-item"
+                    onClick={() => navigate(`/diary/${diaryId}/edit`)}
+                  >
                     <GoPencil className="icon" />
                     <span>수정</span>
                   </div>
@@ -160,7 +192,7 @@ const Diary = () => {
                   <hr />
                 </>
               )}
-              <div className="menu-item">
+              <div className="menu-item" onClick={() => setReportModal(true)}>
                 <RiAlarmWarningLine className="icon" />
                 <span>신고</span>
               </div>
@@ -206,7 +238,7 @@ const Diary = () => {
           onConfirm={onClickIsPublic}
           onClose={() => setIsPublicModal(false)}
         >
-          {isPublic ? "비공개" : "공개"}로 전환하시겠습니까?
+          <p>{isPublic ? "비공개" : "공개"}로 전환하시겠습니까?</p>
         </Modal>
       )}
       {isDeleteModal && (
@@ -219,6 +251,25 @@ const Diary = () => {
             <p>정말 삭제하시겠습니까?</p>
             <p>삭제 후엔 복구가 불가능합니다.</p>
           </div>
+        </Modal>
+      )}
+      {reportModal && (
+        <Modal
+          isOpen={reportModal}
+          onConfirm={onClickReport}
+          onClose={() => setReportModal(false)}
+          disabled={reportContent.trim().length < 1}
+        >
+          <ReportContent>
+            <h3>신고 내용을 입력해주세요</h3>
+            <textarea
+              value={reportContent}
+              onChange={(e) => setReportContent(e.target.value)}
+              placeholder={
+                "신고 내용을 입력해 주세요.\n허위 신고의 경우 신고자에게 불이익이 생길 수 있습니다."
+              }
+            />
+          </ReportContent>
         </Modal>
       )}
     </DiaryContainer>

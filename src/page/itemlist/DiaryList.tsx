@@ -124,6 +124,7 @@ export const DiaryList: React.FC = () => {
       setTotalPages(data.totalPages);
       setTotalElements(data.totalElements);
       setNumberOfElements(data.numberOfElements);
+      console.log(data.content);
     } catch (err) {
       setError("데이터를 불러오는데 실패했습니다.");
     } finally {
@@ -386,7 +387,7 @@ export const DiaryList: React.FC = () => {
             <DiaryItem
               key={index}
               id={diary.diaryId}
-              thumbnail={diary.writerImg}
+              thumbnail={diary.thumbnail}
               description={[
                 diary.title,
                 diary.contentSummary,

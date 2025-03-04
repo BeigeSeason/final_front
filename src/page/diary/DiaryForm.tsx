@@ -47,6 +47,7 @@ export const DiaryForm = ({ mode, initialData, onSubmit }: DiaryFormProps) => {
 
   useEffect(() => {
     if (initialData) {
+      console.log(initialData);
       const [area, subArea] = initialData.region.split(" ");
       setSelectedArea(area);
       setSelectedSubArea(subArea);
@@ -108,7 +109,15 @@ export const DiaryForm = ({ mode, initialData, onSubmit }: DiaryFormProps) => {
 
       const formattedTag = `# ${inputTag.trim()}`;
 
-      setTags((prevTags) => [...prevTags, formattedTag]);
+      setTags((prevTags) => {
+        if (prevTags.length >= 10) {
+          return prevTags; // 10개 이상이면 추가 안 함
+        }
+        if (prevTags.includes(formattedTag)) {
+          return prevTags;
+        }
+        return [...prevTags, formattedTag];
+      });
       setInputTag("");
     }
   };
@@ -159,17 +168,6 @@ export const DiaryForm = ({ mode, initialData, onSubmit }: DiaryFormProps) => {
     }
   };
 
-  // 작성 내용
-  // base64 이미지 추출 함수
-  // const extractBase64Images = (htmlContent: string): string[] => {
-  //   const parser = new DOMParser();
-  //   const doc = parser.parseFromString(htmlContent, "text/html");
-  //   const images = Array.from(doc.getElementsByTagName("img"));
-  //   return images
-  //     .map((img) => img.src)
-  //     .filter((src) => src.startsWith("data:image/")); // base64 데이터만 필터링
-  // };
-
   const handleFormSubmit = () => {
     const diaryData: DiaryData = {
       diaryId,
@@ -185,87 +183,6 @@ export const DiaryForm = ({ mode, initialData, onSubmit }: DiaryFormProps) => {
     };
     onSubmit(diaryData);
   };
-
-  // // 작성 완료 버튼 클릭 시 실행되는 함수
-  // const handleSubmit = async () => {
-  //   setLoading(true);
-  //   // 1. content에서 base64 이미지 추출
-  //   const base64Images = extractBase64Images(content);
-  //   if (base64Images.length === 0) {
-  //     console.log("업로드할 이미지가 없습니다.");
-  //     // 이미지가 없으면 바로 제출 로직 실행 (필요 시)
-  //     const diaryData = {
-  //       diaryId: diaryId,
-  //       title: title,
-  //       region: selectedArea + " " + selectedSubArea,
-  //       startDate: formatDate(startDate) ?? null,
-  //       endDate: formatDate(endDate ?? startDate) ?? null,
-  //       tags: tags,
-  //       totalCost: travelCost || 0,
-  //       content: content,
-  //       userId: userId as string,
-  //       isPublic: isPublic,
-  //     };
-  //     console.log(diaryData);
-  //     const isDiarySaved = await DiaryApi.postDiary(diaryData);
-  //     setLoading(false);
-  //     if (isDiarySaved) {
-  //       navigate(`/diary/${diaryId}`);
-  //     } else {
-  //       console.log("다이어리 생성 중 에러");
-  //     }
-  //     setLoading(false);
-  //     return;
-  //   }
-
-  //   // 2. Firebase에 이미지 업로드
-  //   const uploadParams = {
-  //     pics: base64Images, // base64 데이터 배열
-  //     type: "diary" as const, // 타입 설정 (필요에 따라 수정)
-  //     userId: userId, // 실제 userId로 교체
-  //     diaryId: diaryId, // 예시 diaryId, 실제 값으로 교체
-  //   };
-
-  //   const uploadedUrls = await Upload(uploadParams);
-  //   if (!uploadedUrls) {
-  //     console.log("이미지 업로드 실패");
-  //     setLoading(false);
-  //     return;
-  //   }
-
-  //   // 3. base64를 Firebase URL로 교체
-  //   let updatedContent = content;
-  //   base64Images.forEach((base64, index) => {
-  //     updatedContent = updatedContent.replace(base64, uploadedUrls[index]);
-  //   });
-
-  //   // 4. 상태 업데이트
-  //   setContent(updatedContent);
-  //   // console.log("업로드 및 URL 교체 완료:", updatedContent);
-
-  //   // 5. 이후 제출 로직 추가 (예: 서버에 저장 등)
-  //   const diaryData = {
-  //     diaryId: diaryId,
-  //     title: title,
-  //     region: selectedArea + " " + selectedSubArea,
-  //     startDate: formatDate(startDate) ?? null,
-  //     endDate: formatDate(endDate ?? startDate) ?? null,
-  //     tags: tags,
-  //     totalCost: travelCost || 0,
-  //     content: updatedContent,
-  //     userId: userId as string,
-  //     isPublic: isPublic,
-  //   };
-  //   console.log(diaryData);
-  //   console.log("이미지 넣은 content : ", updatedContent);
-  //   const isDiarySaved = await DiaryApi.postDiary(diaryData);
-  //   setLoading(false);
-  //   if (isDiarySaved) {
-  //     navigate(`/diary/${diaryId}`);
-  //   } else {
-  //     console.log("다이어리 생성 중 에러");
-  //   }
-  // };
 
   useEffect(() => {
     if (startDate) {
@@ -370,7 +287,8 @@ export const DiaryForm = ({ mode, initialData, onSubmit }: DiaryFormProps) => {
               value={inputTag}
               onChange={handleInputTagOnChange}
               onKeyDown={handleInputTagKeyDown}
-              placeholder="태그 추가하기"
+              placeholder="태그 입력(10자 이하, 10개 이하)"
+              disabled={tags.length >= 10}
             />
           </div>
           <div>
@@ -388,7 +306,7 @@ export const DiaryForm = ({ mode, initialData, onSubmit }: DiaryFormProps) => {
                   </span>
                 ))
               ) : (
-                <p className="tagInfo">enter로 태그를 추가해 주세요</p>
+                <p className="tagInfo">추가된 태그 목록</p>
               )}
             </div>
           </div>

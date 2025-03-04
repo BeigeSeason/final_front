@@ -1,4 +1,6 @@
 import styled from "styled-components";
+import { colors } from "./GlobalStyled";
+import { ScrollBar } from "../component/ButtonComponent";
 
 export const DiaryContainer = styled.div`
   display: flex;
@@ -168,7 +170,7 @@ export const DiaryFooter = styled.div`
   width: 768px;
   margin: 0 auto;
   height: 120px;
-  border-top: 2px solid #ccc;
+  border-top: 1px solid #ccc;
   .tag-container {
     display: flex;
     padding: 7px 20px;
@@ -179,5 +181,26 @@ export const DiaryFooter = styled.div`
       padding: 2px 8px;
       border-radius: 5px;
     }
+  }
+`;
+
+export const ReportContent = styled.div`
+  /* height: 500px; */
+  width: 300px;
+  h3 {
+    color: ${colors.colorA};
+  }
+  textarea {
+    width: 100%;
+    height: 140px;
+    resize: none;
+    overflow-y: scroll;
+    margin-bottom: 15px;
+    padding: 4px 6px;
+    box-sizing: border-box;
+    border: 1px solid ${colors.colorA};
+    border-radius: 5px;
+    white-space: "pre-line";
+    ${ScrollBar};
   }
 `;

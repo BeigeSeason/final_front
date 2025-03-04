@@ -127,6 +127,7 @@ interface ModalProps {
   children: React.ReactNode; // 모달의 자식 요소
   confirmText?: string; // 확인 버튼 텍스트 (기본값: "확인")
   cancelText?: string; // 취소 버튼 텍스트 (기본값: "취소")
+  disabled?: boolean;
 }
 
 export const Modal: React.FC<ModalProps> = ({
@@ -136,6 +137,7 @@ export const Modal: React.FC<ModalProps> = ({
   children,
   confirmText = "확인",
   cancelText = "취소",
+  disabled,
 }) => {
   if (!isOpen) return null;
 
@@ -144,7 +146,9 @@ export const Modal: React.FC<ModalProps> = ({
       <ModalContent>
         {typeof children === "string" ? <p>{children}</p> : children}
         <div className="buttons">
-          <Button onClick={onConfirm}>{confirmText}</Button>
+          <Button onClick={onConfirm} disabled={disabled}>
+            {confirmText}
+          </Button>
           <CancelButton onClick={onClose}>{cancelText}</CancelButton>
         </div>
       </ModalContent>

@@ -26,8 +26,17 @@ export interface DiaryInfo {
   totalCost: number;
   content: string;
   nickname: string;
+  ownerId: string;
   profileImgPath: string | null;
   public: boolean;
+}
+
+export interface ReportData {
+  reportType: string; // "DIARY"
+  reporter: string; // 신고자 id
+  reported: string; // 신고 대상 id
+  reportEntity: string; // 다이어리 id
+  reason: string;
 }
 
 export const DiaryApi = {
@@ -37,7 +46,17 @@ export const DiaryApi = {
         .data;
     } catch (error) {
       console.log("다이어리 생성중 api 오류");
-      throw error;
+      return false;
+    }
+  },
+  editDiary: async (data: DiaryData): Promise<boolean> => {
+    console.log(data);
+    try {
+      return (await JwtAxios.put(`${API_BASE_URL}/diary/edit-diary`, data))
+        .data;
+    } catch (error) {
+      console.log("다이어리 수정중 api 오류");
+      return false;
     }
   },
   deleteDiary: async (diaryId: string): Promise<boolean> => {
@@ -47,7 +66,7 @@ export const DiaryApi = {
         .data;
     } catch (error) {
       console.log("다이어리 삭제 중 api 오류");
-      throw error;
+      return false;
     }
   },
   diaryDetail: async (diaryId: string): Promise<DiaryInfo> => {
@@ -72,7 +91,15 @@ export const DiaryApi = {
       ).data;
     } catch (error) {
       console.log("다이어리 공개/비공개 전환 중 api 오류");
-      throw error;
+      return false;
+    }
+  },
+  ReportDiary: async (data: ReportData): Promise<boolean> => {
+    try {
+      return (await JwtAxios.post(`${API_BASE_URL}/report`, data)).data;
+    } catch (error) {
+      console.log("다이어리 신고 중 오류");
+      return false;
     }
   },
 };

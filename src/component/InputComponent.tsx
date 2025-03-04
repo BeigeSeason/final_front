@@ -20,6 +20,7 @@ interface InputBoxProps {
   readOnly?: boolean;
   id?: string;
   required?: boolean;
+  disabled?: boolean;
 }
 
 const StyledInput = styled.input<InputBoxProps>`
@@ -51,6 +52,7 @@ export const InputBox: React.FC<InputBoxProps> = ({
   readOnly,
   id,
   required,
+  disabled,
 }) => {
   return (
     <StyledInput
@@ -68,6 +70,7 @@ export const InputBox: React.FC<InputBoxProps> = ({
       readOnly={readOnly}
       id={id}
       required={required}
+      disabled={disabled}
     />
   );
 };

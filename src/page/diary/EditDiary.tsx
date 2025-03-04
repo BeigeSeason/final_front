@@ -5,6 +5,7 @@ import { DiaryForm } from "./DiaryForm";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { Upload } from "../../component/FirebaseComponent";
+import { Loading } from "../../component/Loading";
 
 const mapDiaryInfoToDiaryData = (
   info: DiaryInfo,
@@ -27,23 +28,37 @@ const EditDiary = () => {
   const { userId } = useSelector((state: RootState) => state.auth);
   const { diaryId } = useParams<{ diaryId: string }>();
   const [initialData, setInitialData] = useState<DiaryData | null>(null);
+  const [initialLoading, setInitialLoading] = useState<boolean>(true);
   const [loading, setLoading] = useState<boolean>(false);
 
-  useEffect(() => {
-    const fetchDiary = async (diaryId?: string) => {
-      try {
-        if (diaryId && userId) {
-          const diary = await DiaryApi.diaryDetail(diaryId);
-          const mappedData = mapDiaryInfoToDiaryData(diary, userId);
-          setInitialData(mappedData);
-        }
-      } catch (error) {
-        console.error("다이어리 조회 실패:", error);
-      }
-    };
-    fetchDiary(diaryId);
-  }, [userId]);
+  const urlToBase64 = async (url: string): Promise<string> => {
+    const response = await fetch(url);
+    const blob = await response.blob();
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result as string);
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
+    });
+  };
+  const convertContentImagesToBase64 = async (
+    content: string
+  ): Promise<string> => {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(content, "text/html");
+    const images = Array.from(doc.getElementsByTagName("img"));
 
+    let updatedContent = content;
+    for (const img of images) {
+      const url = img.src;
+      if (!url.startsWith("data:image/")) {
+        // base64가 아닌 경우만 변환
+        const base64 = await urlToBase64(url);
+        updatedContent = updatedContent.replace(url, base64);
+      }
+    }
+    return updatedContent;
+  };
   const extractBase64Images = (htmlContent: string): string[] => {
     const parser = new DOMParser();
     const doc = parser.parseFromString(htmlContent, "text/html");
@@ -52,6 +67,31 @@ const EditDiary = () => {
       .map((img) => img.src)
       .filter((src) => src.startsWith("data:image/"));
   };
+
+  useEffect(() => {
+    const fetchDiary = async (diaryId?: string) => {
+      console.log(diaryId);
+      console.log(userId);
+      try {
+        if (diaryId && userId) {
+          console.log("디테일 가져오는중?");
+          const diary = await DiaryApi.diaryDetail(diaryId);
+          const updatedContent = await convertContentImagesToBase64(
+            diary.content
+          );
+          const mappedData = mapDiaryInfoToDiaryData(
+            { ...diary, content: updatedContent },
+            userId
+          );
+          setInitialData(mappedData);
+          setInitialLoading(false);
+        }
+      } catch (error) {
+        console.error("다이어리 조회 실패:", error);
+      }
+    };
+    fetchDiary(diaryId);
+  }, [userId]);
 
   const handleSubmit = async (data: DiaryData) => {
     setLoading(true);
@@ -85,7 +125,7 @@ const EditDiary = () => {
     }
 
     const diaryData = { ...data, content: updatedContent, userId };
-    const isDiaryUpdated = await DiaryApi.postDiary(diaryData); // 수정 API가 필요하면 별도로 추가
+    const isDiaryUpdated = await DiaryApi.editDiary(diaryData); // 수정 API가 필요하면 별도로 추가
     setLoading(false);
     if (isDiaryUpdated) navigate(`/diary/${data.diaryId}`);
     else {
@@ -95,7 +135,23 @@ const EditDiary = () => {
   };
 
   return (
-    <DiaryForm mode="edit" initialData={initialData} onSubmit={handleSubmit} />
+    <>
+      <DiaryForm
+        mode="edit"
+        initialData={initialData}
+        onSubmit={handleSubmit}
+      />
+      {initialLoading && (
+        <Loading>
+          <p>여행일지를 불러오는 중입니다...</p>
+        </Loading>
+      )}
+      {loading && (
+        <Loading>
+          <p>여행일지를 업로드 중입니다...</p>
+        </Loading>
+      )}
+    </>
   );
 };
 
