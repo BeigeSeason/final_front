@@ -11,8 +11,8 @@ import basicImg from "../img/item/type_200.png";
 const SpotContainer = styled(Link)`
   display: flex;
   align-items: center;
-  padding: 10px;
-  margin: 10px auto;
+  padding: 10px 10px 20px;
+  margin: 10px auto 0;
   width: 100%;
   text-decoration: none;
   color: inherit;
@@ -329,7 +329,7 @@ const formatSelectedFilters = (filters: SelectFilters) => {
       rating: "별점순",
       review_count: "리뷰순",
       bookmark_count: "북마크순",
-      "title.keyword": "제목순",
+      "title.keyword": "가나다순",
       created_time: "작성일순",
       start_date: "여행시작일순",
     };

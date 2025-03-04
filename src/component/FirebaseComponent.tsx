@@ -88,8 +88,6 @@ export const DeleteFolder = async ({
       ? `/UserProfilePic/${userId}`
       : `/DiaryPic/${userId}/${diaryId}`;
   const folderRef = storage.ref(`${imgFolder}`);
-  // const imgFolder = type === "profile" ? "UserProfilePic" : "PlannerPic";
-  // const folderRef = storage.ref(`/${imgFolder}/${userId}/`);
 
   try {
     const fileList = await folderRef.listAll(); // 폴더 내 모든 파일 목록 가져오기

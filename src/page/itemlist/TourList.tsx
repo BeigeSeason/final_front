@@ -92,7 +92,7 @@ export const TourList: React.FC = () => {
     { value: "rating", label: "별점순" },
     { value: "review_count", label: "리뷰순" },
     { value: "bookmark_count", label: "북마크순" },
-    { value: "title.keyword", label: "제목순" },
+    { value: "title.keyword", label: "가나다순" },
   ];
 
   const fetchTourSpots = async (page: number) => {

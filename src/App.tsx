@@ -1,5 +1,10 @@
 import "./App.css";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useNavigate,
+} from "react-router-dom";
 import { Provider, useDispatch, useSelector } from "react-redux";
 import { setUserInfo, clearTokens } from "./redux/authSlice";
 import { RootState } from "./redux/store";
@@ -70,6 +75,7 @@ function App() {
 
 const AuthInitializer = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { accessToken, userId } = useSelector((state: RootState) => state.auth);
 
   useEffect(() => {
@@ -90,8 +96,10 @@ const AuthInitializer = () => {
           );
         } catch (error) {
           console.error("사용자 정보 복원 실패:", error);
-          dispatch(clearTokens());
         }
+      } else if (!accessToken) {
+        dispatch(clearTokens());
+        navigate("/");
       }
     };
     fetchUserInfo();

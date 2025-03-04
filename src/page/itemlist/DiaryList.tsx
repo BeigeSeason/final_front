@@ -42,7 +42,7 @@ interface SelectFilters {
   minPrice?: number;
   maxPrice?: number;
 }
-interface Diary {
+export interface Diary {
   diaryId: string;
   title: string;
   contentSummary: string;
@@ -404,7 +404,7 @@ export const DiaryList: React.FC = () => {
           />
         </ItemList>
         {loading && (
-          <Loading>
+          <Loading istransparent={"true"}>
             <p>목록을 불러오는 중 입니다.</p>
           </Loading>
         )}
