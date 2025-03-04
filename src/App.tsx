@@ -20,6 +20,7 @@ import AdminHome from "./page/admin/AdminHome";
 import AdminReportUser from "./page/admin/AdminReportUser";
 import AdminReportDiary from "./page/admin/AdminReportDiary";
 import AdminReportReview from "./page/admin/AdminReportReview";
+import AdminChartUser from "./page/admin/AdminChartUser";
 import MypageMain from "./page/user/MypageMain";
 import { SearchPage } from "./page/itemlist/SearchPage";
 import { TourList } from "./page/itemlist/TourList";
@@ -65,6 +66,7 @@ function App() {
                 path="/admin/report/review"
                 element={<AdminReportReview />}
               />
+              <Route path="/admin/chart/user" element={<AdminChartUser />} />
             </Route>
           </Routes>
         </Router>

@@ -415,28 +415,30 @@ const AdminHome = () => {
 
       {/* 관리버튼 모달 */}
       <Modal isOpen={isModalOpen} onConfirm={manageUser} onClose={closeModal}>
-        <span>번호 : {banId}</span>
-        <p>아이디 : {banUserId}</p>
-        <span>정지일 : </span>
-        <select
-          name="ban-date"
-          id="ban-date"
-          value={banDate}
-          onChange={(e) => setBanDate(Number(e.target.value))}
-          className="text-center"
-        >
-          <option value={1}>1일</option>
-          <option value={3}>3일</option>
-          <option value={7}>7일</option>
-          <option value={30}>30일</option>
-          <option value={36500}>영구 정지</option>
-        </select>
-        <p>정지 사유</p>
-        <input
-          type="text"
-          value={banReason}
-          onChange={(e) => setBanReason(e.target.value)}
-        />
+        <div className="gap-10">
+          <span>번호 : {banId}</span>
+          <span>아이디 : {banUserId}</span>
+          <span>정지일 : </span>
+          <select
+            name="ban-date"
+            id="ban-date"
+            value={banDate}
+            onChange={(e) => setBanDate(Number(e.target.value))}
+            className="text-center"
+          >
+            <option value={1}>1일</option>
+            <option value={3}>3일</option>
+            <option value={7}>7일</option>
+            <option value={30}>30일</option>
+            <option value={36500}>영구 정지</option>
+          </select>
+          <span>정지 사유</span>
+          <input
+            type="text"
+            value={banReason}
+            onChange={(e) => setBanReason(e.target.value)}
+          />
+        </div>
       </Modal>
     </AdminContainer>
   );

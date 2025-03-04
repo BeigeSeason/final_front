@@ -76,38 +76,44 @@ export const Header = () => {
 // 관리자 헤더 -----------------------------------------------------------------------------
 export const AdminHeader = () => {
   const navigate = useNavigate();
-  const [isBanShow, setIsBanShow] = useState(false);
-  const [isStatsShow, setIsStatsShow] = useState(false);
+  const [isReportShow, setIsReportShow] = useState(false);
+  const [isChartShow, setIsChartShow] = useState(false);
+
+  const handleLogout = () => {};
 
   const handleBan = () => {
-    setIsStatsShow(false);
-    setIsBanShow((prev) => !prev);
+    setIsChartShow(false);
+    setIsReportShow((prev) => !prev);
   };
 
   const handleStats = () => {
-    setIsBanShow(false);
-    setIsStatsShow((prev) => !prev);
+    setIsReportShow(false);
+    setIsChartShow((prev) => !prev);
   };
 
   // 신고 - 유저
   const handleReport1 = () => {
-    setIsBanShow(false);
+    setIsReportShow(false);
     navigate("/admin/report/user");
   };
 
   // 신고 - 여행 일지
   const handleReport2 = () => {
-    setIsBanShow(false);
+    setIsReportShow(false);
     navigate("/admin/report/diary");
   };
 
   // 신고 - 관광지 댓글
   const handleReport3 = () => {
-    setIsBanShow(false);
+    setIsReportShow(false);
     navigate("/admin/report/review");
   };
 
-  const handleLogout = () => {};
+  // 차트 - 유저
+  const handleChart1 = () => {
+    setIsChartShow(false);
+    navigate("/admin/chart/user");
+  };
 
   return (
     <AdminHeaderSt>
@@ -126,7 +132,7 @@ export const AdminHeader = () => {
           <p className="tag content-font1 click headerBan" onClick={handleBan}>
             신고
           </p>
-          {isBanShow && (
+          {isReportShow && (
             <div className="admin-selectBox-ban">
               <div className="admin-selected" onClick={handleReport1}>
                 유저
@@ -142,9 +148,9 @@ export const AdminHeader = () => {
           <p className="tag content-font1 click" onClick={handleStats}>
             통계
           </p>
-          {isStatsShow && (
+          {isChartShow && (
             <div className="admin-selectBox-stats">
-              <div className="admin-selected" onClick={() => navigate("")}>
+              <div className="admin-selected" onClick={handleChart1}>
                 통계1
               </div>
               <div className="admin-selected" onClick={() => navigate("")}>

@@ -103,7 +103,7 @@ export const AdminContainer = styled.div`
       display: flex;
       flex-direction: column;
       position: absolute;
-      
+
       background-color: #999;
       border-radius: 5px;
       z-index: 1;
@@ -117,7 +117,7 @@ export const AdminContainer = styled.div`
     }
     .type {
       top: 37px;
-      right:156px;
+      right: 156px;
     }
     .sort {
       top: 37px;
@@ -153,6 +153,23 @@ export const AdminContainer = styled.div`
   }
   .text-green {
     color: green;
+  }
+  .chartTitle {
+    font-size: 32px;
+    font-weight: 700;
+    margin: 30px 0;
+    gap: 10px;
+    .icon,
+    .title {
+      cursor: pointer;
+    }
+  }
+
+  .gap-10 {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 10px 0;
   }
 `;
 
