@@ -74,7 +74,6 @@ const AdminChartUser = () => {
         </div>
         <BarChart title1={title1} chartData1={chartData1} />
       </div>
-      
 
       {/* year 모달 */}
       <Modal
