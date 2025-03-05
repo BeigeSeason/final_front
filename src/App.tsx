@@ -105,6 +105,16 @@ const AuthInitializer = () => {
     fetchUserInfo();
   }, [accessToken, userId]);
 
+  useEffect(() => {
+    const token = (localStorage.getItem("accessToken")) || ""
+    const decodedToken = jwtDecode(token) as { auth: string };
+    const auth = decodedToken.auth;
+
+    if (auth && !auth.includes("ROLE_ADMIN") && window.location.pathname.startsWith("/admin")) {
+      navigate("/");
+    }
+  }, [navigate]);
+
   return null;
 };
 

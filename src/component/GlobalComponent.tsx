@@ -79,7 +79,9 @@ export const AdminHeader = () => {
   const [isReportShow, setIsReportShow] = useState(false);
   const [isChartShow, setIsChartShow] = useState(false);
 
-  const handleLogout = () => {};
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+  const accessToken = useSelector((state: RootState) => state.auth.accessToken);
+  const dispatch = useDispatch();
 
   const handleBan = () => {
     setIsChartShow(false);
@@ -101,6 +103,21 @@ export const AdminHeader = () => {
   const handleChart = (type: string) => {
     setIsChartShow(false);
     navigate("/admin/chart/" + type);
+  };
+
+  // 로그아웃
+  const handleLogout = () => {
+    setIsLogoutModalOpen(true);
+  };
+  const handleCloseModal = () => {
+    setIsLogoutModalOpen(false);
+  };
+  const handleConfirmLogout = () => {
+    dispatch(clearTokens());
+    // localStorage.removeItem("accessToken");
+    // localStorage.removeItem("refreshToken");
+    handleCloseModal();
+    navigate("/");
   };
 
   return (
@@ -155,6 +172,15 @@ export const AdminHeader = () => {
             로그아웃
           </p>
         </div>
+
+        {/* 로그아웃 모달 */}
+        <Modal
+          isOpen={isLogoutModalOpen}
+          onClose={handleCloseModal}
+          onConfirm={handleConfirmLogout}
+        >
+          로그아웃 하시겠습니까?
+        </Modal>
       </HeaderSt>
     </AdminHeaderSt>
   );
