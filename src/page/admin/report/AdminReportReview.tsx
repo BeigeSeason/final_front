@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
-import { AdminContainer } from "./AdminComponent";
-import AxiosApi from "../../api/AxiosApi";
-import { Modal } from "../../component/ModalComponent";
+import { AdminContainer } from "../AdminComponent";
+import AxiosApi from "../../../api/AxiosApi";
+import { Modal } from "../../../component/ModalComponent";
 
 // icon
 import { FaAngleUp, FaAngleDown } from "react-icons/fa";
 
-const AdminReportDiary = () => {
+const AdminReportReview = () => {
   interface Member {
     id: number;
     userId: string;
@@ -27,6 +27,7 @@ const AdminReportDiary = () => {
     createdAt: Date;
     checkedAt: Date;
     state: string;
+    reviewContent: string;
   }
   const [reports, setReports] = useState<Report[]>([]);
   const [type, setType] = useState("");
@@ -43,7 +44,7 @@ const AdminReportDiary = () => {
   );
   const [banDate, setBanDate] = useState(0);
   const [banReason, setBanReason] = useState("");
-  const [diaryId, setDiaryId] = useState<string | null>(null);
+  const [reviewId, setReviewId] = useState<number | null>(null);
 
   const [typeSelectOpen, setTypeSelectOpen] = useState(false);
   const [sortSelectOpen, setSortSelectOpen] = useState(false);
@@ -56,7 +57,7 @@ const AdminReportDiary = () => {
       const data = await AxiosApi.reportList(
         page - 1,
         size,
-        "DIARY",
+        "REVIEW",
         type,
         sort
       );
@@ -106,13 +107,13 @@ const AdminReportDiary = () => {
     reportId: number,
     reportedId: number,
     reportedUserId: string,
-    diaryId: string
+    reviewId: string
   ) => {
     setIsModalOpen(true);
     setReportId(reportId);
     setReportedId(reportedId);
     setReportedUserId(reportedUserId);
-    setDiaryId(diaryId);
+    setReviewId(Number(reviewId));
   };
   const closeModal = () => {
     setIsModalOpen(false);
@@ -122,7 +123,7 @@ const AdminReportDiary = () => {
   };
 
   // 신고 처리
-  const manageDiary = async () => {
+  const manageReview = async () => {
     setIsModalOpen(false);
     try {
       await AxiosApi.reportProcess(
@@ -131,8 +132,8 @@ const AdminReportDiary = () => {
         banDate === 0 ? null : reportedId,
         banDate,
         banReason,
-        diaryId,
-        null
+        null,
+        reviewId
       );
     } catch (error) {
       console.log("유저 정지 에러:", error);
@@ -145,7 +146,7 @@ const AdminReportDiary = () => {
 
   return (
     <AdminContainer>
-      <h1>일지 신고</h1>
+      <h1>댓글 신고</h1>
       {/* 데이터 박스 */}
       <div className="data-container">
         <div className="data-head">
@@ -228,8 +229,9 @@ const AdminReportDiary = () => {
             <thead>
               <tr>
                 <th>번호</th>
-                <th>일지 번호</th>
+                <th>댓글 번호</th>
                 <th>작성자</th>
+                <th>댓글 내용</th>
                 <th>신고자</th>
                 <th>신고내역</th>
                 <th>상태</th>
@@ -242,6 +244,7 @@ const AdminReportDiary = () => {
                   <td>{report.id}</td>
                   <td>{report.reportEntity}</td>
                   <td>{report.reported.userId}</td>
+                  <td>{report.reviewContent}</td>
                   <td>{report.reporter.userId}</td>
                   <td>{report.reason}</td>
                   <td
@@ -359,12 +362,11 @@ const AdminReportDiary = () => {
           </button>
         </div>
       </div>
-
       {/* 관리버튼 모달 */}
-      <Modal isOpen={isModalOpen} onConfirm={manageDiary} onClose={closeModal}>
+      <Modal isOpen={isModalOpen} onConfirm={manageReview} onClose={closeModal}>
         <div className="gap-10">
           <span>신고 번호 : {reportId}</span>
-          <span>일지 번호 : {diaryId}</span>
+          <span>댓글 번호 : {reviewId}</span>
           <span>대상자 번호 : {reportedId}</span>
           <span>대상자 아이디 : {reportedUserId}</span>
           <span>정지일 : </span>
@@ -405,4 +407,4 @@ const AdminReportDiary = () => {
     </AdminContainer>
   );
 };
-export default AdminReportDiary;
+export default AdminReportReview;

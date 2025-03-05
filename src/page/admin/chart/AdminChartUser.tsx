@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import { AdminContainer } from "./AdminComponent";
-import { GlobalFont } from "../../style/GlobalStyled";
-import AxiosApi from "../../api/AxiosApi";
+import { AdminContainer } from "../AdminComponent";
+import { GlobalFont } from "../../../style/GlobalStyled";
+import AxiosApi from "../../../api/AxiosApi";
 import BarChart from "./UserChartComponent";
-import { Modal } from "../../component/ModalComponent";
+import { Modal } from "../../../component/ModalComponent";
 
 // icon
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";

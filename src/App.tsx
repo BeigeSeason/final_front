@@ -17,10 +17,12 @@ import { Main } from "./page/MainPage";
 import { Layout } from "./component/GlobalComponent";
 import { AdminLayout } from "./component/GlobalComponent";
 import AdminHome from "./page/admin/AdminHome";
-import AdminReportUser from "./page/admin/AdminReportUser";
-import AdminReportDiary from "./page/admin/AdminReportDiary";
-import AdminReportReview from "./page/admin/AdminReportReview";
-import AdminChartUser from "./page/admin/AdminChartUser";
+import AdminReportUser from "./page/admin/report/AdminReportUser";
+import AdminReportDiary from "./page/admin/report/AdminReportDiary";
+import AdminReportReview from "./page/admin/report/AdminReportReview";
+import AdminChartUser from "./page/admin/chart/AdminChartUser";
+import AdminChartDiary from "./page/admin/chart/AdminChartDiary";
+import AdminChartReport from "./page/admin/chart/AdminChartReport";
 import MypageMain from "./page/user/MypageMain";
 import { SearchPage } from "./page/itemlist/SearchPage";
 import { TourList } from "./page/itemlist/TourList";
@@ -61,6 +63,8 @@ function App() {
               <Route path="/admin/report/diary" element={<AdminReportDiary />} />
               <Route path="/admin/report/review" element={<AdminReportReview />} />
               <Route path="/admin/chart/user" element={<AdminChartUser />} />
+              <Route path="/admin/chart/diary" element={<AdminChartDiary />} />
+              <Route path="/admin/chart/report" element={<AdminChartReport />} />
             </Route>
           </Routes>
         </Router>

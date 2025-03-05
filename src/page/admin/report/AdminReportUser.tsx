@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import { AdminContainer } from "./AdminComponent";
-import AxiosApi from "../../api/AxiosApi";
-import { Modal } from "../../component/ModalComponent";
+import { AdminContainer } from "../AdminComponent";
+import AxiosApi from "../../../api/AxiosApi";
+import { Modal } from "../../../component/ModalComponent";
 
 // icon
 import { FaAngleUp, FaAngleDown } from "react-icons/fa";
