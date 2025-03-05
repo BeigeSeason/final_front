@@ -88,21 +88,49 @@ export const TourList: React.FC = () => {
   const [isSelectOpen, setIsSelectOpen] = useState<boolean>(false);
   const selectRef = useRef<HTMLDivElement | null>(null);
 
+  // const sortOptions = [
+  //   { value: "rating", label: "별점순", newSortBy: "rating," },
+  //   { value: "review_count", label: "리뷰순" },
+  //   { value: "bookmark_count", label: "북마크순" },
+  //   { value: "title.korean_sorted", label: "가나다순" },
+  // ];
   const sortOptions = [
-    { value: "rating", label: "별점순" },
-    { value: "review_count", label: "리뷰순" },
-    { value: "bookmark_count", label: "북마크순" },
-    { value: "title.keyword", label: "가나다순" },
+    {
+      value: "title.korean_sorted-asc",
+      label: "가나다순",
+      newSortBy: "title.korean_sorted,ASC",
+    },
+    { value: "rating-desc", label: "별점 높은 순", newSortBy: "rating,DESC" },
+    { value: "rating-asc", label: "별점 낮은 순", newSortBy: "rating,ASC" },
+    {
+      value: "review_count-desc",
+      label: "리뷰 많은 순",
+      newSortBy: "review_count,DESC",
+    },
+    {
+      value: "review_count-asc",
+      label: "리뷰 적은 순",
+      newSortBy: "review_count,ASC",
+    },
+    {
+      value: "bookmark_count-desc",
+      label: "북마크 순",
+      newSortBy: "bookmark_count,DESC",
+    },
   ];
 
   const fetchTourSpots = async (page: number) => {
     try {
       setLoading(true);
+      console.log(
+        "filters.sortBy : ",
+        filters.sortBy.replace(/-(?=[^-]*$)/, ",")
+      );
       const filtersForApi = {
         keyword: filters.searchQuery || undefined,
         page: page,
         size: filters.pageSize,
-        sort: filters.sortBy || undefined,
+        sort: filters.sortBy.replace(/-(?=[^-]*$)/, ",") || undefined,
         areaCode: filters.areaCode || undefined,
         sigunguCode: filters.subAreaCode || undefined,
         contentTypeId: filters.category || undefined,
@@ -132,6 +160,7 @@ export const TourList: React.FC = () => {
           queryParams.set(key, value);
         } else if (key === "sortBy") {
           queryParams.set("sortBy", value);
+          console.log("value : ", value);
         } else {
           queryParams.set(key, value.toString());
         }
@@ -245,19 +274,20 @@ export const TourList: React.FC = () => {
     updateFilters("category", newCategory);
   };
   // 정렬 필드 변경
-  const handleSortFieldChange = (field: string) => {
-    const [currentField, currentDirection] = filters.sortBy.split(",");
-    const newDirection = currentDirection || "ASC"; // 기본값 ASC
-    const newSortBy = currentField === field ? "" : `${field},${newDirection}`;
-    updateFilters("sortBy", newSortBy);
-  };
+  // const handleSortFieldChange = (field: string) => {
+  //   const [currentField, currentDirection] = filters.sortBy.split(",");
+  //   const newDirection = currentDirection || "ASC"; // 기본값 ASC
+  //   const newSortBy = currentField === field ? "" : `${field},${newDirection}`;
+  //   console.log("newSortBy : ", newSortBy);
+  //   updateFilters("sortBy", newSortBy);
+  // };
 
   // 정렬 방향 변경
-  const handleSortDirectionChange = (direction: "ASC" | "DESC") => {
-    const [currentField] = filters.sortBy.split(",");
-    if (!currentField) return; // 필드가 없으면 무시
-    updateFilters("sortBy", `${currentField},${direction}`);
-  };
+  // const handleSortDirectionChange = (direction: "ASC" | "DESC") => {
+  //   const [currentField] = filters.sortBy.split(",");
+  //   if (!currentField) return; // 필드가 없으면 무시
+  //   updateFilters("sortBy", `${currentField},${direction}`);
+  // };
   const handleTopFilterChange = (key: keyof SelectFilters, name: string) => {
     setFilters((prev) => {
       const newFilters: Filters = { ...prev };
@@ -342,7 +372,8 @@ export const TourList: React.FC = () => {
                 {sortOptions.map((option) => (
                   <Button
                     key={option.value}
-                    onClick={() => handleSortFieldChange(option.value)}
+                    // onClick={() => handleSortFieldChange(option.value)}
+                    onClick={() => updateFilters("sortBy", option.value)}
                     className={`sort-button ${
                       filters.sortBy.startsWith(option.value) ? "selected" : ""
                     }`}
@@ -351,7 +382,7 @@ export const TourList: React.FC = () => {
                   </Button>
                 ))}
                 {/* 오름차순/내림차순 버튼 */}
-                <Button
+                {/* <Button
                   onClick={() => handleSortDirectionChange("ASC")}
                   className={`sort-direction ${
                     filters.sortBy.endsWith("ASC") ? "selected" : ""
@@ -368,7 +399,7 @@ export const TourList: React.FC = () => {
                   disabled={!filters.sortBy.split(",")[0]} // 필드가 없으면 비활성화
                 >
                   내림차순
-                </Button>
+                </Button> */}
               </div>
             </ToggleSection>
           </div>

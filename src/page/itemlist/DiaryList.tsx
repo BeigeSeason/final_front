@@ -67,10 +67,26 @@ export const DiaryList: React.FC = () => {
   const [maxPrice, setMaxPrice] = useState<number>(1000);
   const [isSortOpen, setIsSortOpen] = useState(true);
   const sortOptions = [
-    { value: "bookmark_count", label: "북마크순" },
-    { value: "title.keyword", label: "제목순" },
-    { value: "created_time", label: "작성일순" },
-    { value: "start_date", label: "여행시작일순" },
+    {
+      value: "title.korean_sorted-asc",
+      label: "가나다순",
+      newSortBy: "title.korean_sorted,ASC",
+    },
+    {
+      value: "bookmark_count-desc",
+      label: "북마크 순",
+      newSortBy: "bookmark_count,DESC",
+    },
+    {
+      value: "created_time-desc",
+      label: "최근 작성 순",
+      newSortBy: "created_time,DESC",
+    },
+    {
+      value: "start_date-desc",
+      label: "최근 여행 순",
+      newSortBy: "start_date, DESC",
+    },
   ];
   const [filters, setFilters] = useState<Filters>(() => {
     const queryParams = new URLSearchParams(location.search);
@@ -304,7 +320,7 @@ export const DiaryList: React.FC = () => {
                     # {option.label}
                   </Button>
                 ))}
-                <Button
+                {/* <Button
                   onClick={() => handleSortDirectionChange("ASC")}
                   className={`sort-direction ${
                     filters.sortBy.endsWith("ASC") ? "selected" : ""
@@ -321,7 +337,7 @@ export const DiaryList: React.FC = () => {
                   disabled={!filters.sortBy.split(",")[0]}
                 >
                   내림차순
-                </Button>
+                </Button> */}
               </div>
             </ToggleSection>
           </div>
