@@ -14,6 +14,7 @@ import "swiper/css/pagination";
 import "swiper/css/autoplay";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import { ComposableMap, Geographies, Geography } from "react-simple-maps";
+import { geoCentroid } from "d3-geo";
 import koreaGeoJson from "../util/korea.geojson.json";
 import { areas } from "../util/TourCodes";
 import { useNavigate } from "react-router-dom";
@@ -21,6 +22,12 @@ import { useNavigate } from "react-router-dom";
 export const Main = () => {
   const navigate = useNavigate();
   const [hoveredArea, setHoveredArea] = useState<string | null>(null);
+  const [tooltip, setTooltip] = useState({
+    visible: false,
+    x: 0,
+    y: 0,
+    name: "",
+  });
   const places = [
     { id: 1, name: "장소 1", imgSrc: "path/to/image1.jpg" },
     { id: 2, name: "장소 2", imgSrc: "path/to/image2.jpg" },
@@ -71,17 +78,21 @@ export const Main = () => {
         </BestSpot>
         <PolygonMap>
           <ComposableMap
-            width={800}
-            height={1000}
+            width={500}
+            height={730}
             projection="geoMercator"
             projectionConfig={{
-              scale: 9000,
+              scale: 6000,
               center: [127.5, 36],
             }}
           >
             <Geographies geography={koreaGeoJson}>
-              {({ geographies }) => {
+              {({ geographies, projection }) => {
                 return geographies.map((geo) => {
+                  const centroid = geoCentroid(geo) || [0, 0];
+                  const projected = projection(centroid); // 화면 좌표로 변환
+                  if (!projected) return null;
+                  const [x, y] = projected;
                   const areaCode = geo.properties.areaCode;
                   const area = areas.find((a) => a.code === areaCode);
                   const areaName = area ? area.name : geo.properties.NAME_1;
@@ -91,15 +102,40 @@ export const Main = () => {
                       key={geo.rsmKey}
                       geography={geo}
                       onClick={() => areaCode && handleClick(areaCode)}
-                      onMouseEnter={() => handleMouseEnter(areaName)}
-                      onMouseLeave={handleMouseLeave}
+                      // onMouseEnter={() => handleMouseEnter(areaName)}
+                      // onMouseLeave={handleMouseLeave}
+                      onMouseEnter={() =>
+                        setTooltip({ visible: true, x, y, name: areaName })
+                      }
+                      onMouseLeave={() =>
+                        setTooltip({ ...tooltip, visible: false })
+                      }
                     />
                   );
                 });
               }}
             </Geographies>
           </ComposableMap>
+
           {hoveredArea && <div className="tooltip">{hoveredArea}</div>}
+          {tooltip.visible && (
+            <div
+              style={{
+                position: "absolute",
+                left: `${tooltip.x}px`,
+                top: `${tooltip.y}px`,
+                background: "rgba(0, 0, 0, 0.75)",
+                color: "#fff",
+                padding: "5px 10px",
+                borderRadius: "5px",
+                pointerEvents: "none",
+                transform: "translate(-50%, -100%)", // 중앙 정렬
+                whiteSpace: "nowrap",
+              }}
+            >
+              {tooltip.name}
+            </div>
+          )}
         </PolygonMap>
         <BestDiary className="GridItem">
           <Swiper

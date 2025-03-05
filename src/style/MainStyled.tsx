@@ -6,12 +6,13 @@ export const MainBox = styled.div`
   width: 90vw;
   display: grid;
   grid-template-columns: repeat(5, 1fr);
+  /* grid-template-columns: minmax(0, 3fr) minmax(0, 2fr) minmax(0, 3fr); */
   margin: 20px auto;
   flex-direction: column;
   gap: 20px;
 `;
 export const GridItem = styled.div`
-  min-height: 500px;
+  /* min-height: 500px; */
 `;
 // 인기 관광지 ----------------------------------------------------------------------
 export const BestSpot = styled(GridItem)`
@@ -73,8 +74,23 @@ export const PolygonMap = styled(GridItem)`
   grid-column: span 2;
   border: 1px solid black;
   display: flex;
+  position: relative;
   align-items: center;
   justify-content: center;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 5 / 7.3;
+  /* @media (max-width: 980px) {
+    max-width: 400px;
+    max-height: 400px;
+  } */
+
+  /* 큰 화면 */
+  @media (min-width: 1200px) {
+    max-width: 700px;
+    max-height: 600px;
+  }
+
   & svg {
     width: 100%;
     height: 100%;
@@ -86,6 +102,7 @@ export const PolygonMap = styled(GridItem)`
     stroke-width: 0.5px; /* 경계선 두께 */
     outline: none; /* 기본 상태 outline 제거 */
     transition: all 0.3s ease;
+    cursor: pointer;
 
     &:hover {
       fill: ${colors.colorC}; /* 호버 시 색상 */
@@ -96,12 +113,20 @@ export const PolygonMap = styled(GridItem)`
     }
   }
   .tooltip {
+    /* display: flex;
     position: absolute;
+    right: 10px;
+    bottom: 10px;
+    width: 20%;
+    height: 10%;
+    max-width: 100px;
+    justify-content: center;
+    align-items: center; */
     background: rgba(0, 0, 0, 0.8);
     color: white;
-    padding: 5px 10px;
+    /* padding: 5px 10px; */
     border-radius: 3px;
-    font-size: 14px;
+    /* font-size: 20px; */
     pointer-events: none; /* 툴팁 클릭 방지 */
     z-index: 10;
     transition: opacity 0.2s ease;
