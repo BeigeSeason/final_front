@@ -58,14 +58,8 @@ function App() {
             <Route element={<AdminLayout />}>
               <Route path="/admin" element={<AdminHome />} />
               <Route path="/admin/report/user" element={<AdminReportUser />} />
-              <Route
-                path="/admin/report/diary"
-                element={<AdminReportDiary />}
-              />
-              <Route
-                path="/admin/report/review"
-                element={<AdminReportReview />}
-              />
+              <Route path="/admin/report/diary" element={<AdminReportDiary />} />
+              <Route path="/admin/report/review" element={<AdminReportReview />} />
               <Route path="/admin/chart/user" element={<AdminChartUser />} />
             </Route>
           </Routes>
