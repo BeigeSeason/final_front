@@ -93,28 +93,16 @@ export const AdminHeader = () => {
     setIsChartShow((prev) => !prev);
   };
 
-  // 신고 - 유저
-  const handleReport1 = () => {
+  // 신고
+  const handleReport = (type: string) => {
     setIsReportShow(false);
-    navigate("/admin/report/user");
+    navigate("/admin/report/" + type);
   };
 
-  // 신고 - 여행 일지
-  const handleReport2 = () => {
-    setIsReportShow(false);
-    navigate("/admin/report/diary");
-  };
-
-  // 신고 - 관광지 댓글
-  const handleReport3 = () => {
-    setIsReportShow(false);
-    navigate("/admin/report/review");
-  };
-
-  // 차트 - 유저
-  const handleChart1 = () => {
+  // 차트
+  const handleChart = (type: string) => {
     setIsChartShow(false);
-    navigate("/admin/chart/user");
+    navigate("/admin/chart/" + type);
   };
 
   return (
@@ -136,13 +124,13 @@ export const AdminHeader = () => {
           </p>
           {isReportShow && (
             <div className="admin-selectBox-ban">
-              <div className="admin-selected" onClick={handleReport1}>
+              <div className="admin-selected" onClick={() => handleReport("user")}>
                 유저
               </div>
-              <div className="admin-selected" onClick={handleReport2}>
+              <div className="admin-selected" onClick={() => handleReport("diary")}>
                 여행 일지
               </div>
-              <div className="admin-selected" onClick={handleReport3}>
+              <div className="admin-selected" onClick={() => handleReport("review")}>
                 관광지 댓글
               </div>
             </div>
@@ -152,14 +140,14 @@ export const AdminHeader = () => {
           </p>
           {isChartShow && (
             <div className="admin-selectBox-stats">
-              <div className="admin-selected" onClick={handleChart1}>
-                통계1
+              <div className="admin-selected" onClick={() => handleChart("user")}>
+                유저
               </div>
-              <div className="admin-selected" onClick={() => navigate("")}>
-                통계2
+              <div className="admin-selected" onClick={() => handleChart("diary")}>
+                일지
               </div>
-              <div className="admin-selected" onClick={() => navigate("")}>
-                통계3
+              <div className="admin-selected" onClick={() => handleChart("report")}>
+                신고
               </div>
             </div>
           )}

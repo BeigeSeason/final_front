@@ -263,6 +263,10 @@ const AxiosApi = {
     };
     return await JwtAxios.put(`${API_BASE_URL}/member/change-profile`, params);
   },
+  // 월별 가입자수
+  monthlyStats: async (type: string, year: number) => {
+    return await axios.get(`${Common.FINAL_DOMAIN}/admin/chart/${type}/${year}`);
+  }
 };
 
 export default AxiosApi;
