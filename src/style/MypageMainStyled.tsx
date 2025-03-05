@@ -1,11 +1,12 @@
 import styled from "styled-components";
 import { colors } from "./GlobalStyled";
+import { ScrollBar } from "../component/ButtonComponent";
 
 export const MypageMainContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 60%;
-  height: 800px;
+  /* min-height: 800px; */
   margin: 5vh auto 0;
 
   .modal-container {
@@ -82,7 +83,8 @@ export const MypageMenuContainer = styled.div`
     border: none;
     border-bottom: 10px solid transparent;
     background-color: transparent;
-    font-size: 16px;
+    font-size: 17px;
+    font-weight: bold;
     cursor: pointer;
     transition: all 0.3s ease;
     &:hover {
@@ -105,7 +107,8 @@ export const MypageMenuContainer = styled.div`
 
 export const MyContentContainer = styled.div`
   width: 90%;
-  height: 100%;
+  height: 600px;
   margin: 0 auto 7vh;
-  border: 1px solid black;
+  overflow-y: auto;
+  ${ScrollBar}/* border: 1px solid black; */
 `;

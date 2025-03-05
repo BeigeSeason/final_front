@@ -9,10 +9,12 @@ export const MyProfileContainer = styled.div`
 
   .check-pw {
     width: 400px;
-    margin: 5vh auto 0;
+    margin: 6vh auto 0;
     text-align: center;
     p {
       margin: 6px;
+      font-size: 17px;
+      /* font-weight: bold; */
     }
   }
 

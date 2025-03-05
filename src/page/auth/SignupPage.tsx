@@ -203,7 +203,7 @@ export const SignupPage = () => {
 
   const handleCheckEmail = async () => {
     const isEmailExists = await AxiosApi.checkMemberEmailExists(email);
-    const errorMessage = isEmailExists
+    let errorMessage = isEmailExists
       ? "이미 존재하는 이메일입니다."
       : "사용 가능한 이메일입니다.";
     setErrors((prev) => ({ ...prev, email: errorMessage }));
@@ -228,8 +228,8 @@ export const SignupPage = () => {
             "26R74sBvTB5bxhbNn" // public-key
           )
           .then((response) => {
-            const message = "인증 메일이 발송되었습니다.";
-            setErrors((prev) => ({ ...prev, email: message }));
+            errorMessage = "인증 메일이 발송되었습니다.";
+            setErrors((prev) => ({ ...prev, email: errorMessage }));
             setEmailTimeLeft(300);
             setEmailChecked(true);
             setIsLoading(false);
@@ -451,6 +451,8 @@ export const SignupPage = () => {
                     color:
                       errors.email === "인증 메일이 발송되었습니다."
                         ? "blue"
+                        : errors.email === "사용 가능한 이메일입니다."
+                        ? "blue"
                         : "red",
                   }}
                 >
@@ -470,9 +472,11 @@ export const SignupPage = () => {
                 <Button
                   type="button"
                   onClick={handleCheckEmail}
-                  disabled={emailChecked}
+                  // disabled={emailChecked}
                 >
-                  {emailChecked ? "인증 발송" : "중복 확인"}
+                  {errors.email === "인증 메일이 발송되었습니다."
+                    ? "재발송"
+                    : "인증 발송"}
                 </Button>
               </div>
             </div>

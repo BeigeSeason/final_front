@@ -66,9 +66,6 @@ const MypageMain = () => {
       }
     } else {
       setUploadLoading(true);
-      console.log(profileName);
-      console.log(selectedProfile);
-      console.log("firebase에 선택한 이미지 업로드 해야됨");
       const uploadParams = {
         pics: profileName ? [profileName] : [], // base64 데이터 배열
         type: "profile" as const, // 타입 설정 (필요에 따라 수정)
@@ -82,7 +79,6 @@ const MypageMain = () => {
       }
       setUploadLoading(false);
     }
-    // 그리고 DB에 프로필 이미지 경로 수정해서 넣어줘야되고, 토큰이든 localstorage든 imgPath 변경해줘야됨.
     setOpenEditProfileImgModal(false);
     setSelectedProfile(null);
     setUploadLoading(false);
@@ -95,7 +91,13 @@ const MypageMain = () => {
   };
 
   useEffect(() => {
-    navigate(`?menu=${selectedMenu}`, { replace: true });
+    const queryParams = new URLSearchParams();
+    queryParams.set("menu", selectedMenu);
+    if (selectedMenu === "내 여행일지") {
+      queryParams.set("page", "0");
+      queryParams.set("size", "10");
+    }
+    navigate(`?${queryParams.toString()}`, { replace: true });
   }, [selectedMenu, navigate]);
 
   return (
