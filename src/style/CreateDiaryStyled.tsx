@@ -5,7 +5,8 @@ import { ScrollBar } from "../component/ButtonComponent";
 export const CreateDiaryContainer = styled.div`
   width: 60vw;
   margin: 0 auto;
-  height: 1000px;
+  margin-bottom: 20px;
+  height: 100%;
 `;
 
 export const TourInfoContainer = styled.div`

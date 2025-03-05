@@ -9,7 +9,7 @@ import {
 import { AdminHeaderSt } from "../page/admin/AdminComponent";
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import logoImg from "../img/sample.png";
+import logoImg from "../img/gotgamlogo.png";
 import { SearchBox } from "./InputComponent";
 import { Modal, LoginModal } from "./ModalComponent";
 import { useSelector, useDispatch } from "react-redux";
@@ -141,13 +141,22 @@ export const AdminHeader = () => {
           </p>
           {isReportShow && (
             <div className="admin-selectBox-ban">
-              <div className="admin-selected" onClick={() => handleReport("user")}>
+              <div
+                className="admin-selected"
+                onClick={() => handleReport("user")}
+              >
                 유저
               </div>
-              <div className="admin-selected" onClick={() => handleReport("diary")}>
+              <div
+                className="admin-selected"
+                onClick={() => handleReport("diary")}
+              >
                 여행 일지
               </div>
-              <div className="admin-selected" onClick={() => handleReport("review")}>
+              <div
+                className="admin-selected"
+                onClick={() => handleReport("review")}
+              >
                 관광지 댓글
               </div>
             </div>
@@ -157,13 +166,22 @@ export const AdminHeader = () => {
           </p>
           {isChartShow && (
             <div className="admin-selectBox-stats">
-              <div className="admin-selected" onClick={() => handleChart("user")}>
+              <div
+                className="admin-selected"
+                onClick={() => handleChart("user")}
+              >
                 유저
               </div>
-              <div className="admin-selected" onClick={() => handleChart("diary")}>
+              <div
+                className="admin-selected"
+                onClick={() => handleChart("diary")}
+              >
                 일지
               </div>
-              <div className="admin-selected" onClick={() => handleChart("report")}>
+              <div
+                className="admin-selected"
+                onClick={() => handleChart("report")}
+              >
                 신고
               </div>
             </div>

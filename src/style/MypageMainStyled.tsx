@@ -107,8 +107,8 @@ export const MypageMenuContainer = styled.div`
 
 export const MyContentContainer = styled.div`
   width: 90%;
-  height: 600px;
+  height: 100%;
   margin: 0 auto 7vh;
-  overflow-y: auto;
-  ${ScrollBar}/* border: 1px solid black; */
+  /* overflow-y: auto; */
+  /* ${ScrollBar} */
 `;

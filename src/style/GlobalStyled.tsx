@@ -22,10 +22,10 @@ export const GlobalFont = createGlobalStyle`
 `;
 // 글로벌 색상 -------------------------------------------------------------------------------------
 export const colors = {
-  colorA: "rgb(31, 62, 87)",
-  colorB: "rgb(24, 97, 126)",
-  colorC: "rgb(96, 179, 214)",
-  colorD: "rgb(211, 237, 242)",
+  colorA: "rgb(70, 34, 17)",
+  colorB: "rgb(126, 73, 24)",
+  colorC: "rgb(179, 145, 95)",
+  colorD: "rgb(229, 214, 182)",
 };
 
 // 헤더 스타일 -------------------------------------------------------------------------------------
@@ -37,11 +37,9 @@ export const HeaderSt = styled.div`
   padding: 0 10%;
   justify-content: space-between;
   gap: 50px;
-
   .logo {
-    border: 1px solid black;
-    height: 80px;
-    width: 120px;
+    height: 100px;
+    width: 200px;
     overflow: hidden;
     img {
       height: 100%;

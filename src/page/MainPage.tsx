@@ -18,6 +18,7 @@ import { geoCentroid } from "d3-geo";
 import koreaGeoJson from "../util/korea.geojson.json";
 import { areas } from "../util/TourCodes";
 import { useNavigate } from "react-router-dom";
+import FontSize from "@tiptap/extension-font-size";
 
 export const Main = () => {
   const navigate = useNavigate();
@@ -122,14 +123,16 @@ export const Main = () => {
             <div
               style={{
                 position: "absolute",
-                left: `${tooltip.x}px`,
-                top: `${tooltip.y}px`,
-                background: "rgba(0, 0, 0, 0.75)",
-                color: "#fff",
-                padding: "5px 10px",
+                left: `${tooltip.x * 0.8}px`,
+                top: `${tooltip.y * 0.8}px`,
+                background: "rgba(255, 255, 255, 0.8)",
+                color: "black",
+                fontWeight: "bold",
+                fontSize: "17px",
+                padding: "8px 12px",
                 borderRadius: "5px",
                 pointerEvents: "none",
-                transform: "translate(-50%, -100%)", // 중앙 정렬
+                // transform: "translate(-50%, -100%)",
                 whiteSpace: "nowrap",
               }}
             >
