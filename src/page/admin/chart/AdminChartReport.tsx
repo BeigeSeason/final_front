@@ -9,7 +9,7 @@ import { Modal } from "../../../component/ModalComponent";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
 
 const AdminChartReport = () => {
-  const [title1, setTitle1] = useState("신고 수");
+  const [title1, setTitle1] = useState("신고 접수 수");
   const currentYear = new Date().getFullYear();
   const [year, setYear] = useState(currentYear);
   const [inputYear, setInputYear] = useState<number>(0);
