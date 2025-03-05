@@ -55,6 +55,12 @@ interface DiaryFilters {
   keyword?: string;
 }
 
+interface UserDiary {
+  page?: number;
+  size?: number;
+  userId?: string;
+}
+
 // 응답 데이터 타입 정의
 interface Diary {
   diaryId: string;
@@ -155,5 +161,13 @@ export const ItemApi = {
       console.error("다이어리 데이터 조회 오류:", error);
       throw error;
     }
+  },
+  // 특정 유저 다이어리 목록 조회
+  getMyDiaryList: async (params: UserDiary): Promise<DiaryResponse> => {
+    return (
+      await axios.get<DiaryResponse>(`${API_BASE_URL}/search/my-diary-list`, {
+        params,
+      })
+    ).data;
   },
 };

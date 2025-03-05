@@ -13,7 +13,7 @@ const SpotContainer = styled(Link)`
   align-items: center;
   padding: 10px 10px 20px;
   margin: 10px auto 0;
-  width: 100%;
+  width: 95%;
   text-decoration: none;
   color: inherit;
   border-bottom: 1px solid #ddd;

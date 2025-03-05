@@ -34,6 +34,7 @@ export const Header = () => {
     if (e.key === "Enter" && searchTerm.trim() !== "") {
       const params = new URLSearchParams();
       params.set("searchQuery", searchTerm.trim());
+      setSearchTerm("");
       navigate(`/searchpage?${params.toString()}`);
     }
   };
@@ -42,6 +43,7 @@ export const Header = () => {
     if (searchTerm.trim() !== "") {
       const params = new URLSearchParams();
       params.set("searchQuery", searchTerm.trim());
+      setSearchTerm("");
       navigate(`/searchpage?${params.toString()}`);
     }
   };
