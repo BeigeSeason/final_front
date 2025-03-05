@@ -323,21 +323,25 @@ const formatSelectedFilters = (filters: SelectFilters) => {
       name: `검색어: ${filters.searchQuery}`,
     });
   }
+
   if (filters.sortBy) {
     const [field, direction] = filters.sortBy.split(",");
     const sortLabels: { [key: string]: string } = {
-      rating: "별점순",
-      review_count: "리뷰순",
-      bookmark_count: "북마크순",
-      "title.keyword": "가나다순",
-      created_time: "작성일순",
-      start_date: "여행시작일순",
+      "title.korean_sorted-asc": "가나다순",
+      "rating-desc": "별점 높은 순",
+      "rating-asc": "별점 낮은 순",
+      "review_count-desc": "리뷰 많은 순",
+      "review_count-asc": "리뷰 적은 순",
+      "bookmark_count-desc": "북마크순",
+      "created_time-desc": "최근 작성 순",
+      "start_date-desc": "최근 여행 순",
     };
-    const directionLabel = direction === "ASC" ? "오름차순" : "내림차순";
+    // const directionLabel = direction === "ASC" ? "오름차순" : "내림차순";
     const sortLabel = sortLabels[field] || field; // 필드 라벨 매핑
     selectedFilters.push({
       key: "sortBy",
-      name: `${sortLabel} (${directionLabel})`,
+      // name: `${sortLabel} (${directionLabel})`,
+      name: `${sortLabel}`,
     });
   }
   if (filters.minPrice !== undefined || filters.maxPrice !== undefined) {

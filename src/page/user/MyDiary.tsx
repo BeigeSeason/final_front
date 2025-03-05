@@ -25,7 +25,7 @@ const MyDiary = React.memo(() => {
       const data = await ItemApi.getDiaryList({
         // keyword: filters.searchQuery || undefined,
         page: page,
-        size: parseInt(queryParams.get("pageSize") || "10", 10),
+        size: parseInt(queryParams.get("pageSize") || "5", 10),
       });
       setDiaries(data.content);
       setTotalPages(data.totalPages);
