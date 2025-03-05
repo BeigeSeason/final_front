@@ -17,7 +17,19 @@ const AdminChartDiary = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-
+  // 데이터 가져오기
+  const statsData = async (year: number) => {
+    try {
+      const response = await AxiosApi.monthlyStats("diary", year);
+      console.log(response.data);
+      setChartData1(response.data);
+    } catch (error) {
+      console.log("Error fetching data:", error);
+    }
+  }
+  useEffect(() => {
+    statsData(year);
+  }, [year]);
 
   // year 버튼
   const handleYearMinus = () => {

@@ -264,8 +264,8 @@ const AxiosApi = {
     return await JwtAxios.put(`${API_BASE_URL}/member/change-profile`, params);
   },
   // 월별 가입자수
-  monthlySignups: async (year: number) => {
-    return await axios.get(`${Common.FINAL_DOMAIN}/admin/chart/signups/${year}`);
+  monthlyStats: async (type: string, year: number) => {
+    return await axios.get(`${Common.FINAL_DOMAIN}/admin/chart/${type}/${year}`);
   }
 };
 

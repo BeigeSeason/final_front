@@ -18,9 +18,9 @@ const AdminChartUser = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // 데이터 가져오기
-  const signups = async (year: number) => {
+  const statsData = async (year: number) => {
     try {
-      const response = await AxiosApi.monthlySignups(year);
+      const response = await AxiosApi.monthlyStats("user", year);
       console.log(response.data);
       setChartData1(response.data);
     } catch (error) {
@@ -28,7 +28,7 @@ const AdminChartUser = () => {
     }
   }
   useEffect(() => {
-    signups(year);
+    statsData(year);
   }, [year]);
 
   // year 버튼
