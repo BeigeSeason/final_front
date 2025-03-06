@@ -7,10 +7,14 @@ import { RootState } from "../../redux/store";
 import { Upload } from "../../component/FirebaseComponent";
 import { Loading } from "../../component/Loading";
 
+export interface EditDiaryData extends DiaryData {
+  ownerId: string; // EditDiary에서만 필요한 필드
+}
+
 const mapDiaryInfoToDiaryData = (
   info: DiaryInfo,
   userId: string
-): DiaryData => ({
+): EditDiaryData => ({
   diaryId: info.diaryId,
   title: info.title,
   region: info.region,
@@ -21,13 +25,14 @@ const mapDiaryInfoToDiaryData = (
   content: info.content,
   userId, // EditDiary에서 제공
   isPublic: info.public, // DiaryInfo의 public을 isPublic으로 매핑
+  ownerId: info.ownerId,
 });
 
 const EditDiary = () => {
   const navigate = useNavigate();
   const { userId } = useSelector((state: RootState) => state.auth);
   const { diaryId } = useParams<{ diaryId: string }>();
-  const [initialData, setInitialData] = useState<DiaryData | null>(null);
+  const [initialData, setInitialData] = useState<EditDiaryData | null>(null);
   const [initialLoading, setInitialLoading] = useState<boolean>(true);
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -74,7 +79,6 @@ const EditDiary = () => {
       console.log(userId);
       try {
         if (diaryId && userId) {
-          console.log("디테일 가져오는중?");
           const diary = await DiaryApi.diaryDetail(diaryId);
           const updatedContent = await convertContentImagesToBase64(
             diary.content

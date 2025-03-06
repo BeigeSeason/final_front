@@ -10,7 +10,7 @@ import { BiLock, BiLockOpen, BiTrash } from "react-icons/bi";
 import { GoPencil } from "react-icons/go";
 import { RiAlarmWarningLine } from "react-icons/ri";
 import { HiEllipsisVertical } from "react-icons/hi2";
-import { Modal } from "../../component/ModalComponent";
+import { Modal, CheckModal } from "../../component/ModalComponent";
 import {
   DiaryContainer,
   DiaryHeader,
@@ -28,13 +28,14 @@ const Diary = () => {
   const { diaryId } = useParams<string>();
   const [diaryInfo, setDiaryInfo] = useState<DiaryInfo | null>();
   const [isBookmarked, setIsBookmarked] = useState<boolean>(false);
-  const [isPublic, setIsPublic] = useState<boolean>(false);
+  const [isPublic, setIsPublic] = useState<boolean | null>(null);
   const [isMenuToggleOpen, setIsMenuToggleOpen] = useState<boolean>(false);
   const [reportContent, setReportContent] = useState("");
 
   const [isPublicModal, setIsPublicModal] = useState<boolean>(false);
   const [isDeleteModal, setIsDeleteModal] = useState<boolean>(false);
   const [reportModal, setReportModal] = useState<boolean>(false);
+  const [needLoginModal, setNeedLoginModal] = useState<boolean>(false);
 
   const timeFormatting = (date: Date | null) => {
     if (date) {
@@ -60,6 +61,14 @@ const Diary = () => {
     };
     fetchDiary(diaryId);
   }, []);
+  useEffect(() => {
+    console.log(`userId : ${userId}, isPublic: ${isPublic}`);
+    if (isPublic === null) return;
+    if (userId === null && !isPublic) {
+      console.log(`userId22 : ${userId}, isPublic22: ${isPublic}`);
+      navigate("/");
+    }
+  }, [isPublic, userId]);
 
   // 토글 메뉴 외부 클릭 시 닫기
   useEffect(() => {
@@ -137,7 +146,13 @@ const Diary = () => {
                 className="icon"
                 title="북마크"
                 // onClick={() => handleBookmarked()}
-                onClick={() => setIsBookmarked(!isBookmarked)}
+                onClick={() => {
+                  if (!userId) {
+                    setNeedLoginModal(true);
+                    return;
+                  }
+                  setIsBookmarked(!isBookmarked);
+                }}
               />
               <span className="bookmarked-count">10</span>
             </>
@@ -147,24 +162,31 @@ const Diary = () => {
                 className="icon"
                 title="북마크"
                 // onClick={() => handleBookmarked()}
-                onClick={() => setIsBookmarked(!isBookmarked)}
+                onClick={() => {
+                  if (!userId) {
+                    setNeedLoginModal(true);
+                    return;
+                  }
+                  setIsBookmarked(!isBookmarked);
+                }}
               />
               <span className="bookmarked-count">10</span>
             </>
           )}
-          {isPublic ? (
-            <BiLockOpen
-              className="icon"
-              title="공개/비공개"
-              onClick={() => setIsPublicModal(true)}
-            />
-          ) : (
-            <BiLock
-              className="icon"
-              title="공개/비공개"
-              onClick={() => setIsPublicModal(true)}
-            />
-          )}
+          {userId === diaryInfo?.ownerId &&
+            (isPublic ? (
+              <BiLockOpen
+                className="icon"
+                title="공개/비공개"
+                onClick={() => setIsPublicModal(true)}
+              />
+            ) : (
+              <BiLock
+                className="icon"
+                title="공개/비공개"
+                onClick={() => setIsPublicModal(true)}
+              />
+            ))}
           <HiEllipsisVertical
             className="icon menu-icon"
             onClick={() => setIsMenuToggleOpen(!isMenuToggleOpen)}
@@ -271,6 +293,14 @@ const Diary = () => {
             />
           </ReportContent>
         </Modal>
+      )}
+      {needLoginModal && (
+        <CheckModal
+          isOpen={needLoginModal}
+          onClose={() => setNeedLoginModal(false)}
+        >
+          <p>로그인이 필요한 서비스입니다.</p>
+        </CheckModal>
       )}
     </DiaryContainer>
   );

@@ -21,16 +21,18 @@ import {
 } from "../../style/CreateDiaryStyled";
 import React, { useEffect, useState } from "react";
 import { DiaryApi, DiaryData } from "../../api/DiaryApi";
-import { useNavigate } from "react-router-dom";
+import { EditDiaryData } from "./EditDiary";
+import { Navigate, useNavigate } from "react-router-dom";
 import { FaCalendar } from "react-icons/fa";
 
 interface DiaryFormProps {
   mode: "create" | "edit";
-  initialData?: DiaryData | null;
+  initialData?: EditDiaryData | null;
   onSubmit: (data: DiaryData) => Promise<void>;
 }
 
 export const DiaryForm = ({ mode, initialData, onSubmit }: DiaryFormProps) => {
+  const navigate = useNavigate();
   const { userId } = useSelector((state: RootState) => state.auth);
   const diaryId = initialData?.diaryId || uuidv4();
   const [selectedArea, setSelectedArea] = useState<string | null>(null);
@@ -46,7 +48,7 @@ export const DiaryForm = ({ mode, initialData, onSubmit }: DiaryFormProps) => {
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    if (initialData) {
+    if (initialData && userId === initialData.ownerId) {
       console.log(initialData);
       const [area, subArea] = initialData.region.split(" ");
       setSelectedArea(area);
@@ -60,6 +62,8 @@ export const DiaryForm = ({ mode, initialData, onSubmit }: DiaryFormProps) => {
       setTitle(initialData.title);
       setIsPublic(initialData.isPublic);
       setContent(initialData.content);
+    } else if (initialData && userId !== initialData.ownerId) {
+      navigate("/creatediary");
     }
   }, [initialData]);
 

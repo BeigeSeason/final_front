@@ -5,6 +5,7 @@ import {
   Route,
   useNavigate,
 } from "react-router-dom";
+import ProtectedRoute from "./util/ProtectedRoute";
 import { Provider, useDispatch, useSelector } from "react-redux";
 import { setUserInfo, clearTokens } from "./redux/authSlice";
 import { RootState } from "./redux/store";
@@ -44,16 +45,37 @@ function App() {
           <Routes>
             <Route element={<Layout />}>
               <Route path="/" element={<Main />} />
-              <Route path="/mypage" element={<MypageMain />} />
+              <Route
+                path="/mypage"
+                element={
+                  <ProtectedRoute>
+                    <MypageMain />
+                  </ProtectedRoute>
+                }
+              />
               <Route path="/searchpage" element={<SearchPage />} />
               <Route path="/tourlist" element={<TourList />} />
               <Route path="/diarylist" element={<DiaryList />} />
               <Route path="/findid" element={<FindIdPage />} />
               <Route path="/findpw" element={<FindPwPage />} />
               <Route path="/signup" element={<SignupPage />} />
-              <Route path="/creatediary" element={<CreateDiary />} />
+              <Route
+                path="/creatediary"
+                element={
+                  <ProtectedRoute>
+                    <CreateDiary />
+                  </ProtectedRoute>
+                }
+              />
               <Route path="/diary/:diaryId" element={<Diary />} />
-              <Route path="/diary/:diaryId/edit" element={<EditDiary />} />
+              <Route
+                path="/diary/:diaryId/edit"
+                element={
+                  <ProtectedRoute>
+                    <EditDiary />
+                  </ProtectedRoute>
+                }
+              />
               <Route path="/tourspot" element={<TourSpot />} />
               <Route path="/tourspot/:id" element={<TourSpot />} />
             </Route>
@@ -108,7 +130,7 @@ const AuthInitializer = () => {
         }
       } else if (!accessToken) {
         dispatch(clearTokens());
-        navigate("/");
+        // navigate("/");
       }
     };
     fetchUserInfo();
