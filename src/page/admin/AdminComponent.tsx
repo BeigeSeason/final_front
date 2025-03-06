@@ -1,4 +1,7 @@
 import styled from "styled-components";
+import { NavSt } from "../../style/GlobalStyled";
+import { useNavigate, useLocation, Link } from "react-router-dom";
+import { colors } from "../../style/GlobalStyled";
 
 export const AdminContainer = styled.div`
   display: flex;
@@ -183,38 +186,84 @@ export const AdminHeaderSt = styled.div`
     .tag {
     }
   }
-
   .click {
     cursor: pointer;
   }
-
-  .admin-selectBox-ban {
-    position: absolute;
-    background-color: #aaa;
-    padding: 5px;
-    border-radius: 5px;
-    top: 58px;
-    left: 220px;
-    z-index: 1;
-  }
-
-  .admin-selectBox-stats {
-    width: 62px;
-    position: absolute;
-    background-color: #aaa;
-    padding: 5px;
-    border-radius: 5px;
-    top: 58px;
-    left: 315px;
-    z-index: 1;
-  }
-
-  .admin-selected {
-    padding: 7.5px 10px;
-    &:hover {
-      padding: 7.5px 10px;
-      border-radius: 5px;
-      background-color: #777;
-    }
+  .active {
+    font-weight: 600;
   }
 `;
+
+export const AdminNav = () => {
+  const location = useLocation();
+
+  const isActive = (path: string): boolean => {
+    return location.pathname === path;
+  };
+
+  const isActiveRouteReport = location.pathname.startsWith("/admin/report");
+  const isActiveRouteChart = location.pathname.startsWith("/admin/chart");
+  
+  return (
+    <NavSt>
+      {isActiveRouteReport && (
+        <div className="leftMenu">
+          <Link
+            className={`tag content-font1 ${
+              isActive("/admin/report/user") ? "active" : ""
+            }`}
+            to="/admin/report/user"
+          >
+            유저
+          </Link>
+          <Link
+            className={`tag content-font1 ${
+              isActive("/admin/report/diary") ? "active" : ""
+            }`}
+            to="/admin/report/diary"
+          >
+            여행 일지
+          </Link>
+          <Link
+            className={`tag content-font1 ${
+              isActive("/admin/report/review") ? "active" : ""
+            }`}
+            to="/admin/report/review"
+          >
+            관광지 댓글
+          </Link>
+        </div>
+      )}
+      {isActiveRouteChart && (
+        <div className="leftMenu">
+          <Link
+            className={`tag content-font1 ${
+              isActive("/admin/chart/user") ? "active" : ""
+            }`}
+            to="/admin/chart/user"
+          >
+            유저
+          </Link>
+          <Link
+            className={`tag content-font1 ${
+              isActive("/admin/chart/diary") ? "active" : ""
+            }`}
+            to="/admin/chart/diary"
+          >
+            일지
+          </Link>
+          <Link
+            className={`tag content-font1 ${
+              isActive("/admin/chart/review") ? "active" : ""
+            }`}
+            to="/admin/chart/review"
+          >
+            신고
+          </Link>
+        </div>
+      )}
+      <div className="rightMenu">
+      </div>
+    </NavSt>
+  )
+}
