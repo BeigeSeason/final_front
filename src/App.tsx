@@ -60,11 +60,20 @@ function App() {
             <Route element={<AdminLayout />}>
               <Route path="/admin" element={<AdminHome />} />
               <Route path="/admin/report/user" element={<AdminReportUser />} />
-              <Route path="/admin/report/diary" element={<AdminReportDiary />} />
-              <Route path="/admin/report/review" element={<AdminReportReview />} />
+              <Route
+                path="/admin/report/diary"
+                element={<AdminReportDiary />}
+              />
+              <Route
+                path="/admin/report/review"
+                element={<AdminReportReview />}
+              />
               <Route path="/admin/chart/user" element={<AdminChartUser />} />
               <Route path="/admin/chart/diary" element={<AdminChartDiary />} />
-              <Route path="/admin/chart/report" element={<AdminChartReport />} />
+              <Route
+                path="/admin/chart/report"
+                element={<AdminChartReport />}
+              />
             </Route>
           </Routes>
         </Router>
@@ -106,12 +115,18 @@ const AuthInitializer = () => {
   }, [accessToken, userId]);
 
   useEffect(() => {
-    const token = (localStorage.getItem("accessToken")) || ""
-    const decodedToken = jwtDecode(token) as { auth: string };
-    const auth = decodedToken.auth;
+    const token = localStorage.getItem("accessToken") || "";
+    if (token) {
+      const decodedToken = jwtDecode(token) as { auth: string };
+      const auth = decodedToken.auth;
 
-    if (auth && !auth.includes("ROLE_ADMIN") && window.location.pathname.startsWith("/admin")) {
-      navigate("/");
+      if (
+        auth &&
+        !auth.includes("ROLE_ADMIN") &&
+        window.location.pathname.startsWith("/admin")
+      ) {
+        navigate("/");
+      }
     }
   }, [navigate]);
 
