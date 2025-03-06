@@ -94,6 +94,14 @@ export const SpotDetail = styled.div`
     margin: 30px 5% 50px;
     line-height: 2;
   }
+  .MapSpot {
+    display: flex;
+    margin: 20px auto;
+    width: 100%;
+    height: 200px;
+    gap: 10px;
+    background-color: #aaa;
+  }
 `;
 export const StyledWrapper = styled.div`
   .rating {

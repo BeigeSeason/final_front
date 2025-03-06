@@ -23,6 +23,7 @@ import { Paginating } from "../../component/PaginationComponent";
 import { FaBookmark, FaRegBookmark } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
+import { KakaoMapSpot } from "../../component/KakaoMapComponent";
 
 // 데이터 타입 정의
 interface TourSpotDetail {
@@ -245,11 +246,12 @@ export const TourSpot = () => {
           </div>
         </SpotBasic>
         <SpotDetail>
+
           <div className="spotDetail">{tourSpotDetail?.overview}</div>
           <div className="MapSpot">
-            <p>여기에 지도</p>
-            <p>{tourSpotDetail?.mapX || "정보없음"}</p>
-            <p>{tourSpotDetail?.mapY || "정보없음"}</p>
+            <KakaoMapSpot mapX={tourSpotDetail.mapX} mapY={tourSpotDetail.mapY} />
+            <div>{tourSpotDetail.mapX}</div>
+            <div>{tourSpotDetail.mapY}</div>
           </div>
           <div className="nearbySpot">
             <p>여기에 주변 관광지 목록</p>
