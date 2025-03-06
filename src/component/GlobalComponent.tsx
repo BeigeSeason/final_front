@@ -6,7 +6,7 @@ import {
   Body,
   GlobalFont,
 } from "../style/GlobalStyled";
-import { AdminHeaderSt } from "../page/admin/AdminComponent";
+import { AdminHeaderSt, AdminNav } from "../page/admin/AdminComponent";
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import logoImg from "../img/gotgamlogo.png";
@@ -78,34 +78,17 @@ export const Header = () => {
 // 관리자 헤더 -----------------------------------------------------------------------------
 export const AdminHeader = () => {
   const navigate = useNavigate();
-  const [isReportShow, setIsReportShow] = useState(false);
-  const [isChartShow, setIsChartShow] = useState(false);
+  const location = useLocation();
 
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const accessToken = useSelector((state: RootState) => state.auth.accessToken);
   const dispatch = useDispatch();
 
-  const handleBan = () => {
-    setIsChartShow(false);
-    setIsReportShow((prev) => !prev);
+  const isActive = (path: string): boolean => {
+    return location.pathname === path;
   };
-
-  const handleStats = () => {
-    setIsReportShow(false);
-    setIsChartShow((prev) => !prev);
-  };
-
-  // 신고
-  const handleReport = (type: string) => {
-    setIsReportShow(false);
-    navigate("/admin/report/" + type);
-  };
-
-  // 차트
-  const handleChart = (type: string) => {
-    setIsChartShow(false);
-    navigate("/admin/chart/" + type);
-  };
+  const isActiveRouteReport = location.pathname.startsWith("/admin/report");
+  const isActiveRouteChart = location.pathname.startsWith("/admin/chart");
 
   // 로그아웃
   const handleLogout = () => {
@@ -131,61 +114,29 @@ export const AdminHeader = () => {
             <img src={logoImg} alt="로고" />
           </Link>
           <p
-            className="tag content-font1 click"
+            className={`tag content-font1 click ${
+              isActive("/admin") ? "active" : ""
+            }`}
             onClick={() => navigate("/admin")}
           >
             유저
           </p>
-          <p className="tag content-font1 click headerBan" onClick={handleBan}>
+          <p
+            className={`tag content-font1 click ${
+              isActiveRouteReport ? "active" : ""
+            }`}
+            onClick={() => navigate("/admin/report/user")}
+          >
             신고
           </p>
-          {isReportShow && (
-            <div className="admin-selectBox-ban">
-              <div
-                className="admin-selected"
-                onClick={() => handleReport("user")}
-              >
-                유저
-              </div>
-              <div
-                className="admin-selected"
-                onClick={() => handleReport("diary")}
-              >
-                여행 일지
-              </div>
-              <div
-                className="admin-selected"
-                onClick={() => handleReport("review")}
-              >
-                관광지 댓글
-              </div>
-            </div>
-          )}
-          <p className="tag content-font1 click" onClick={handleStats}>
+          <p
+            className={`tag content-font1 click ${
+              isActiveRouteChart ? "active" : ""
+            }`}
+            onClick={() => navigate("/admin/chart/user")}
+          >
             통계
           </p>
-          {isChartShow && (
-            <div className="admin-selectBox-stats">
-              <div
-                className="admin-selected"
-                onClick={() => handleChart("user")}
-              >
-                유저
-              </div>
-              <div
-                className="admin-selected"
-                onClick={() => handleChart("diary")}
-              >
-                일지
-              </div>
-              <div
-                className="admin-selected"
-                onClick={() => handleChart("report")}
-              >
-                신고
-              </div>
-            </div>
-          )}
         </div>
         <div className="rightMenu">
           <p className="tag content-font1 click" onClick={handleLogout}>
@@ -336,9 +287,17 @@ export const Layout = () => {
 
 // 관리자 레이아웃 씌우기-------------------------------------------------------------
 export const AdminLayout = () => {
+  const location = useLocation();
+
+  const isActiveRouteReport = location.pathname.startsWith("/admin/report");
+  const isActiveRouteChart = location.pathname.startsWith("/admin/chart");
+
   return (
     <div>
       <AdminHeader />
+      { (isActiveRouteReport || isActiveRouteChart) && (
+        <AdminNav />
+      )}
       <Body>
         <Outlet />
       </Body>
