@@ -30,7 +30,7 @@ const Diary = () => {
   const [isBookmarked, setIsBookmarked] = useState<boolean>(false);
   const [isPublic, setIsPublic] = useState<boolean | null>(null);
   const [isMenuToggleOpen, setIsMenuToggleOpen] = useState<boolean>(false);
-  const [reportContent, setReportContent] = useState("");
+  const [reportContent, setReportContent] = useState<string>("");
 
   const [isPublicModal, setIsPublicModal] = useState<boolean>(false);
   const [isDeleteModal, setIsDeleteModal] = useState<boolean>(false);

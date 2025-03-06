@@ -27,6 +27,7 @@ export const MypageMainContainer = styled.div`
 
 export const ProfileInfo = styled.div`
   display: flex;
+  position: relative;
   align-items: center;
   justify-content: center;
   width: 100%;
@@ -65,6 +66,12 @@ export const ProfileInfo = styled.div`
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       cursor: pointer;
     }
+  }
+  .report-button {
+    display: flex;
+    position: absolute;
+    right: 5%;
+    bottom: 15px;
   }
 `;
 

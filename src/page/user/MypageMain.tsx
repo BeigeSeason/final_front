@@ -148,7 +148,9 @@ const MypageMain = () => {
         ))}
       </MypageMenuContainer>
       <MyContentContainer>
-        {selectedMenu === "내 여행일지" && <MyDiary userId={userId ?? ""} />}
+        {selectedMenu === "내 여행일지" && (
+          <MyDiary type={"/mypage"} userId={userId as string} />
+        )}
         {selectedMenu === "북마크 여행일지" && <MyBMDiary />}
         {selectedMenu === "북마크 관광지" && <MyBMTourList />}
         {selectedMenu === "내 정보" && <MyProfile />}

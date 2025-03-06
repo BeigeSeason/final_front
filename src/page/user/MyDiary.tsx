@@ -9,11 +9,12 @@ import { Loading } from "../../component/Loading";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 
-interface MyDiaryProps {
+export interface MyDiaryProps {
+  type: string;
   userId: string;
 }
 
-const MyDiary: React.FC<MyDiaryProps> = React.memo(({ userId }) => {
+const MyDiary: React.FC<MyDiaryProps> = React.memo(({ type, userId }) => {
   const navigate = useNavigate();
   const location = useLocation();
   // const { userId } = useSelector((state: RootState) => state.auth);
@@ -31,18 +32,25 @@ const MyDiary: React.FC<MyDiaryProps> = React.memo(({ userId }) => {
   const [numberOfElements, setNumberOfElements] = useState<number>(0);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const queryParams = new URLSearchParams(location.search);
 
   const fetchDiaries = async (page: number) => {
     setLoading(true);
     try {
       if (userId) {
-        const data = await ItemApi.getMyDiaryList({
-          userId: userId,
-          page: page,
-          size: filters.size,
-          // size: parseInt("10", 10),
-        });
+        let data = null;
+        if (type === "/mypage") {
+          data = await ItemApi.getMyDiaryList({
+            userId: userId,
+            page: page,
+            size: filters.size,
+          });
+        } else {
+          data = await ItemApi.getOtherUserDiaryList({
+            userId: userId,
+            page: page,
+            size: filters.size,
+          });
+        }
         console.log(data);
         setDiaries(data.content);
         setTotalPages(data.totalPages);
@@ -69,7 +77,7 @@ const MyDiary: React.FC<MyDiaryProps> = React.memo(({ userId }) => {
     queryParams.set("menu", "내 여행일지");
     queryParams.set("page", filters.page.toString());
     queryParams.set("size", filters.size.toString());
-    navigate(`/mypage?${queryParams.toString()}`, { replace: true });
+    navigate(`${type}?${queryParams.toString()}`, { replace: true });
     fetchDiaries(filters.page);
   }, [navigate, filters.page, filters.size, userId]);
 
