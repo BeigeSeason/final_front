@@ -14,12 +14,34 @@ export const TourItemInfoBox = styled.div`
   }
 `;
 
+export const SpotTitle = styled.div`
+  display: flex;
+  position: relative;
+  width: 100%;
+  .icon-container {
+    display: flex;
+    position: absolute;
+    justify-content: center;
+    align-items: center;
+    right: 0;
+    bottom: 7px;
+    font-size: 27px;
+    color: #666;
+    cursor: pointer;
+    .bookmarked-count {
+      font-size: 18px;
+      margin-left: 3px;
+    }
+  }
+`;
+
 export const SpotBasic = styled.div`
   display: flex;
   margin: 50px auto;
   gap: 20px;
   .tourThumb {
     width: 60%;
+    aspect-ratio: 3 / 2;
     text-align: center;
     display: flex;
     .tour-image {
@@ -64,12 +86,13 @@ export const SpotBasic = styled.div`
 `;
 
 export const SpotDetail = styled.div`
-  border-top: 10px solid #ddd;
+  border-top: 5px solid #ddd;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   .spotDetail {
     grid-column: span 2;
-    margin: 30px 10px;
+    margin: 30px 5% 50px;
+    line-height: 2;
   }
 `;
 export const StyledWrapper = styled.div`

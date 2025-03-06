@@ -20,7 +20,8 @@
         "CC_1": "NA",
         "HASC_1": "KR.PU",
         "ISO_1": "KR-26",
-        "areaCode": "6"
+        "areaCode": "6",
+        "tooltip": [129.0756, 35.1796]
       },
       "geometry": {
         "type": "MultiPolygon",
