@@ -1,3 +1,4 @@
+import React from "react";
 import { DiaryItem } from "../../component/ItemComponent";
 import { ToggleSection, SelectedFilters } from "../../component/ItemComponent";
 import { areas } from "../../util/TourCodes";
