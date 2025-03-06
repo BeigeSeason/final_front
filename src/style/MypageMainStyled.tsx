@@ -81,7 +81,7 @@ export const MypageMenuContainer = styled.div`
   button {
     width: 25%;
     border: none;
-    border-bottom: 10px solid transparent;
+    /* border-bottom: 5px solid transparent; */
     background-color: transparent;
     font-size: 17px;
     font-weight: bold;
@@ -90,9 +90,19 @@ export const MypageMenuContainer = styled.div`
     &:hover {
       opacity: 0.7;
     }
-    &.selected {
-      border-bottom: 10px solid ${colors.colorD};
+    span {
+      display: inline-block;
+      width: 180px;
+      max-width: 100%;
+      padding-bottom: 3px;
+      border-bottom: 5px solid transparent;
+      &.selected {
+        border-bottom: 5px solid ${colors.colorD};
+      }
     }
+    /* &.selected {
+      border-bottom: 5px solid ${colors.colorD};
+    } */
   }
   .write-diary-button {
     display: flex;

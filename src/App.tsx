@@ -25,6 +25,7 @@ import AdminChartUser from "./page/admin/chart/AdminChartUser";
 import AdminChartDiary from "./page/admin/chart/AdminChartDiary";
 import AdminChartReport from "./page/admin/chart/AdminChartReport";
 import MypageMain from "./page/user/MypageMain";
+import { OtherUserMain } from "./page/user/OtherUserMain";
 import { SearchPage } from "./page/itemlist/SearchPage";
 import { TourList } from "./page/itemlist/TourList";
 import { DiaryList } from "./page/itemlist/DiaryList";
@@ -53,6 +54,7 @@ function App() {
                   </ProtectedRoute>
                 }
               />
+              <Route path="/otheruser/:userId" element={<OtherUserMain />} />
               <Route path="/searchpage" element={<SearchPage />} />
               <Route path="/tourlist" element={<TourList />} />
               <Route path="/diarylist" element={<DiaryList />} />

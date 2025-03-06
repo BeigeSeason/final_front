@@ -39,7 +39,7 @@ const MypageMain = () => {
   const [selectedMenu, setSelectedMenu] = useState<string>(menuFromUrl);
   const [openEditProfileImgModal, setOpenEditProfileImgModal] =
     useState<boolean>(false);
-  const fileInputRef = useRef(null);
+  // const fileInputRef = useRef(null);
   const [selectedProfile, setSelectedProfile] = useState<string | null>(null);
 
   const [uploadLoading, setUploadLoading] = useState<boolean>(false);
@@ -137,12 +137,18 @@ const MypageMain = () => {
             }`}
             onClick={() => setSelectedMenu(menu)}
           >
-            {menu}
+            <span
+              className={`content-font1 ${
+                selectedMenu === menu ? "selected" : ""
+              }`}
+            >
+              {menu}
+            </span>
           </button>
         ))}
       </MypageMenuContainer>
       <MyContentContainer>
-        {selectedMenu === "내 여행일지" && <MyDiary />}
+        {selectedMenu === "내 여행일지" && <MyDiary userId={userId ?? ""} />}
         {selectedMenu === "북마크 여행일지" && <MyBMDiary />}
         {selectedMenu === "북마크 관광지" && <MyBMTourList />}
         {selectedMenu === "내 정보" && <MyProfile />}

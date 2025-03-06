@@ -9,10 +9,14 @@ import { Loading } from "../../component/Loading";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 
-const MyDiary = React.memo(() => {
+interface MyDiaryProps {
+  userId: string;
+}
+
+const MyDiary: React.FC<MyDiaryProps> = React.memo(({ userId }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { userId } = useSelector((state: RootState) => state.auth);
+  // const { userId } = useSelector((state: RootState) => state.auth);
   const [filters, setFilters] = useState(() => {
     const queryParams = new URLSearchParams(location.search);
     return {
@@ -31,7 +35,6 @@ const MyDiary = React.memo(() => {
 
   const fetchDiaries = async (page: number) => {
     setLoading(true);
-    console.log("이건 호출 됨?");
     try {
       if (userId) {
         const data = await ItemApi.getMyDiaryList({
@@ -106,6 +109,11 @@ const MyDiary = React.memo(() => {
         totalPages={totalPages}
         handlePageChange={handlePageChange}
       />
+      {loading && (
+        <Loading istransparent={"true"}>
+          <p>다이어리 불러오는중...</p>
+        </Loading>
+      )}
     </ItemList>
   );
 });
