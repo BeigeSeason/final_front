@@ -14,8 +14,8 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 
 export const OtherUserMain = () => {
-  const { accessToken } = useSelector((state: RootState) => state.auth);
-  const { userId } = useParams();
+  const { accessToken, userId } = useSelector((state: RootState) => state.auth);
+  const { otherUserId } = useParams();
   const [nickname, setNickname] = useState<string>("");
   const [profile, setProfile] = useState<string>("");
   const [reportContent, setReportContent] = useState<string>("");
@@ -23,21 +23,24 @@ export const OtherUserMain = () => {
   const [reportModal, setReportModal] = useState<boolean>(false);
   const [needLoginModal, setNeedLoginModal] = useState<boolean>(false);
 
-  useEffect(() => {
-    const getMemberInfo = async () => {
-      const memberInfo = (await AxiosApi.memberInfo(userId)).data;
-      setNickname(memberInfo.nickname);
-      setProfile(memberInfo.imgPath);
-    };
-    getMemberInfo();
-  }, []);
+  // userId, otherUserId 구분 필요
+  // 사용자 본인이면 마이페이지로 이동 or 사용자 본인이면 신고하기 버튼 안보이기
+  // 신고하기 구현하기
+
+  // useEffect(() => {
+  //   const getMemberInfo = async () => {
+  //     console.log(otherUserId);
+  //     const memberInfo = (await AxiosApi.memberInfo(otherUserId)).data;
+  //     setNickname(memberInfo.nickname);
+  //     setProfile(memberInfo.imgPath);
+  //   };
+  //   getMemberInfo();
+  // }, []);
 
   const onClickReportButton = () => {
-    console.log("여기 오는거 아니야?");
     if (accessToken) {
       setReportModal(true);
     } else {
-      console.log("여기 오는거 아니야?");
       setNeedLoginModal(true);
     }
   };
@@ -59,6 +62,21 @@ export const OtherUserMain = () => {
   //     }
   //   }
   // };
+  // 유저 신고
+  // const onClickReport = async() => {
+  //         const reportData = {
+  //       reportType: "MEMBER",
+  //       reporter: userId,
+  //       reported: diaryInfo?.ownerId,
+  //       reportEntity: diaryId,
+  //       reason: reportContent.trim(),
+  //     };
+  //     const response = await DiaryApi.ReportDiary(reportData);
+  //     if (response) {
+  //       setReportContent("");
+  //       setReportModal(false);
+  //     }
+  // }
 
   return (
     <MypageMainContainer>
@@ -78,7 +96,7 @@ export const OtherUserMain = () => {
         </Button>
       </ProfileInfo>
       <MyContentContainer>
-        <MyDiary type={`/otheruser/${userId}`} userId={userId as string} />
+        <MyDiary type={`/otheruser/${userId}`} userId={otherUserId as string} />
       </MyContentContainer>
       {/* {reportModal && (
               <Modal
