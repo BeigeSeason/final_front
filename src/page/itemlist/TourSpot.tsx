@@ -8,6 +8,7 @@ import "swiper/css/pagination";
 import { Navigation, Pagination } from "swiper/modules";
 import {
   TourItemInfoBox,
+  SpotTitle,
   SpotBasic,
   SpotDetail,
   StyledWrapper,
@@ -15,9 +16,13 @@ import {
 } from "../../style/TourSpotStyled";
 import basicImg from "../../img/item/type_200.png";
 import { Loading } from "../../component/Loading";
+import { CheckModal } from "../../component/ModalComponent";
 import { InputBox } from "../../component/InputComponent";
 import { Button } from "../../component/ButtonComponent";
 import { Paginating } from "../../component/PaginationComponent";
+import { FaBookmark, FaRegBookmark } from "react-icons/fa";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
 // 데이터 타입 정의
 interface TourSpotDetail {
@@ -41,6 +46,8 @@ interface Comment {
 
 export const TourSpot = () => {
   const { id } = useParams<{ id: string }>(); // id 값을 URL에서 받아옵니다.
+  const { userId } = useSelector((state: RootState) => state.auth);
+  const [isBookmarked, setIsBookmarked] = useState<boolean | null>(null);
   const [tourSpotDetail, setTourSpotDetail] = useState<TourSpotDetail | null>(
     null
   );
@@ -49,6 +56,7 @@ export const TourSpot = () => {
   const [comments, setComments] = useState<
     { text: string; rating: number | null; date: Date }[]
   >([]);
+  const [needLoginModal, setNeedLoginModal] = useState<boolean>(false);
 
   const [currentPage, setCurrentPage] = useState(0); // 현재 페이지 상태 추가
   const commentsPerPage = 10;
@@ -143,7 +151,44 @@ export const TourSpot = () => {
   return (
     <>
       <TourItemInfoBox>
-        <h1 className="tour-title">{tourSpotDetail?.title}</h1>
+        <SpotTitle>
+          <h1 className="tour-title">{tourSpotDetail?.title}</h1>
+          <div className="icon-container">
+            {isBookmarked ? (
+              <>
+                <FaBookmark
+                  className="icon"
+                  title="북마크"
+                  // onClick={() => handleBookmarked()}
+                  onClick={() => {
+                    if (!userId) {
+                      setNeedLoginModal(true);
+                      return;
+                    }
+                    setIsBookmarked(!isBookmarked);
+                  }}
+                />
+                <span className="bookmarked-count">10</span>
+              </>
+            ) : (
+              <>
+                <FaRegBookmark
+                  className="icon"
+                  title="북마크"
+                  // onClick={() => handleBookmarked()}
+                  onClick={() => {
+                    if (!userId) {
+                      setNeedLoginModal(true);
+                      return;
+                    }
+                    setIsBookmarked(!isBookmarked);
+                  }}
+                />
+                <span className="bookmarked-count">10</span>
+              </>
+            )}
+          </div>
+        </SpotTitle>
         <SpotBasic>
           <div className="tourThumb">
             {tourSpotDetail.images?.length > 1 ? (
@@ -259,6 +304,14 @@ export const TourSpot = () => {
             />
           )}
         </CommentBox>
+        {needLoginModal && (
+          <CheckModal
+            isOpen={needLoginModal}
+            onClose={() => setNeedLoginModal(false)}
+          >
+            <p>로그인이 필요한 서비스입니다.</p>
+          </CheckModal>
+        )}
       </TourItemInfoBox>
     </>
   );

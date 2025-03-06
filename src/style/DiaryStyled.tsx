@@ -168,11 +168,13 @@ export const DiaryBody = styled.div`
 
 export const DiaryFooter = styled.div`
   width: 768px;
-  margin: 0 auto;
-  height: 120px;
+  margin: 0 auto 30px;
+  height: 100%;
   border-top: 1px solid #ccc;
   .tag-container {
     display: flex;
+    flex-wrap: wrap; /* 자동 줄바꿈 */
+    width: 100%;
     padding: 7px 20px;
     gap: 10px;
 
@@ -180,6 +182,7 @@ export const DiaryFooter = styled.div`
       background-color: #ccc;
       padding: 2px 8px;
       border-radius: 5px;
+      white-space: nowrap;
     }
   }
 `;
