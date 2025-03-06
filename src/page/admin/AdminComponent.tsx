@@ -256,7 +256,7 @@ export const AdminNav = () => {
             className={`tag content-font1 ${
               isActive("/admin/chart/review") ? "active" : ""
             }`}
-            to="/admin/chart/review"
+            to="/admin/chart/report"
           >
             신고
           </Link>
