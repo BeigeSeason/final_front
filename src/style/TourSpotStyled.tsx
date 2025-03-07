@@ -98,7 +98,8 @@ export const SpotDetail = styled.div`
     display: flex;
     margin: 20px auto;
     width: 100%;
-    height: 200px;
+    /* height: 200px; */
+    aspect-ratio: 10 / 8;
     gap: 10px;
     background-color: #aaa;
   }
