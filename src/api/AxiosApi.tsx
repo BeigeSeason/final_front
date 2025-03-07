@@ -3,7 +3,7 @@ import { AxiosResponse } from "axios";
 import axios from "axios";
 import Common from "../util/Common";
 import { API_BASE_URL } from "../util/Common";
-import { ReportData } from "../types/CommonTypes";
+import { ReportData, Review } from "../types/CommonTypes";
 
 interface LoginRequest {
   userId: string;
@@ -282,6 +282,15 @@ const AxiosApi = {
       return false;
     }
   },
+  // 리뷰 작성
+  postReview: async  (data: Review) => {
+    try {
+      return await JwtAxios.post(`${API_BASE_URL}/review-bookmark/add-review`, data);
+    } catch (error) {
+      console.log("댓글 작성 오류");
+      return false;
+    }
+  }
 };
 
 export default AxiosApi;
