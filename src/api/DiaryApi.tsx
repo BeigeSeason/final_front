@@ -67,5 +67,4 @@ export const DiaryApi = {
       return false;
     }
   },
-  bookmarkDiary: async () => {},
 };

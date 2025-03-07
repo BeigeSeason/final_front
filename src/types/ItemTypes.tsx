@@ -159,3 +159,9 @@ export interface SelectFilters {
   minPrice?: number;
   maxPrice?: number;
 }
+
+export interface AddBookmarkData {
+  target?: string;
+  userId: string;
+  type: "DIARY" | "TOURSPOT";
+}

@@ -7,7 +7,9 @@ import {
   UserDiary,
   DiaryResponse,
   TourSpotDetailDto,
+  AddBookmarkData,
 } from "../types/ItemTypes";
+import JwtAxios from "./JwtAxios";
 
 export const ItemApi = {
   getTourSpotList: async (
@@ -74,5 +76,30 @@ export const ItemApi = {
         }
       )
     ).data;
+  },
+  addBookmark: async (data: AddBookmarkData): Promise<boolean> => {
+    try {
+      return (
+        await JwtAxios.post(
+          `${API_BASE_URL}/review-bookmark/add-bookmark`,
+          data
+        )
+      ).data;
+    } catch (error) {
+      console.log("북마크 추가 중 오류");
+      return false;
+    }
+  },
+  deleteBookmark: async (reviewId: number): Promise<boolean> => {
+    try {
+      return (
+        await JwtAxios.post(`${API_BASE_URL}/review-bookmark/delete-bookmark`, {
+          reviewId,
+        })
+      ).data;
+    } catch (error) {
+      console.log("북마크 삭제 중 오류");
+      return false;
+    }
   },
 };

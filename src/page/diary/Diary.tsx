@@ -4,8 +4,10 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import parse from "html-react-parser";
 import { DiaryApi } from "../../api/DiaryApi";
+import { ItemApi } from "../../api/ItemApi";
 import { DiaryInfo } from "../../types/DiaryTypes";
 import { ReportData } from "../../types/CommonTypes";
+import { AddBookmarkData } from "../../types/ItemTypes";
 import { GetProfileImageSrc } from "../../component/ProfileComponent";
 import { FaBookmark, FaRegBookmark } from "react-icons/fa";
 import { BiLock, BiLockOpen, BiTrash } from "react-icons/bi";
@@ -107,6 +109,14 @@ const Diary = () => {
     if (!userId) {
       setNeedLoginModal(true);
       return;
+    } else if (isBookmarked) {
+      // 북마크
+      const data: AddBookmarkData = {
+        target: diaryId,
+        userId: userId,
+        type: "DIARY",
+      };
+      await ItemApi.addBookmark(data);
     }
     setIsBookmarked(!isBookmarked);
   };
