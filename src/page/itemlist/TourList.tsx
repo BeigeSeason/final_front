@@ -92,13 +92,13 @@ export const TourList: React.FC = () => {
   //   { value: "rating", label: "별점순", newSortBy: "rating," },
   //   { value: "review_count", label: "리뷰순" },
   //   { value: "bookmark_count", label: "북마크순" },
-  //   { value: "title.korean_sorted", label: "가나다순" },
+  //   { value: "title_sort", label: "가나다순" },
   // ];
   const sortOptions = [
     {
-      value: "title.korean_sorted-asc",
+      value: "title_sort-asc",
       label: "가나다순",
-      newSortBy: "title.korean_sorted,ASC",
+      newSortBy: "title_sort,ASC",
     },
     { value: "rating-desc", label: "별점 높은 순", newSortBy: "rating,DESC" },
     { value: "rating-asc", label: "별점 낮은 순", newSortBy: "rating,ASC" },

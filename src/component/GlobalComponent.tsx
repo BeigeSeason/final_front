@@ -65,11 +65,9 @@ export const Header = () => {
           />
         </div>
 
-        {accessToken && (
-          <Link to="/mypage" className="usericon">
-            <img src={GetProfileImageSrc(profile)} alt="사용자 아이콘" />
-          </Link>
-        )}
+        <Link to="/mypage" className={`usericon ${accessToken ? "show" : ""}`}>
+          <img src={GetProfileImageSrc(profile)} alt="사용자 아이콘" />
+        </Link>
       </HeaderSt>
     </>
   );
@@ -295,9 +293,7 @@ export const AdminLayout = () => {
   return (
     <div>
       <AdminHeader />
-      { (isActiveRouteReport || isActiveRouteChart) && (
-        <AdminNav />
-      )}
+      {(isActiveRouteReport || isActiveRouteChart) && <AdminNav />}
       <Body>
         <Outlet />
       </Body>

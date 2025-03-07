@@ -61,11 +61,15 @@ export const HeaderSt = styled.div`
     /* border: none; */
     background-color: #fff;
     /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
+    visibility: hidden;
     img {
       width: 100%;
       height: 100%;
       object-fit: cover;
     }
+  }
+  .show {
+    visibility: visible;
   }
 `;
 

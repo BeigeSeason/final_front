@@ -69,9 +69,9 @@ export const DiaryList: React.FC = () => {
   const [isSortOpen, setIsSortOpen] = useState(true);
   const sortOptions = [
     {
-      value: "title.korean_sorted-asc",
+      value: "title_sort-asc",
       label: "가나다순",
-      newSortBy: "title.korean_sorted,ASC",
+      newSortBy: "title_sort,ASC",
     },
     {
       value: "bookmark_count-desc",
