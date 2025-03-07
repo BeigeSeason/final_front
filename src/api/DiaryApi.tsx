@@ -1,43 +1,8 @@
 import axios from "axios";
 import { API_BASE_URL } from "../util/Common";
+import { ReportData } from "../types/CommonTypes";
+import { DiaryData, DiaryInfo } from "../types/DiaryTypes";
 import JwtAxios from "./JwtAxios";
-
-export interface DiaryData {
-  diaryId: string;
-  title: string;
-  region: string;
-  startDate: string | null;
-  endDate: string | null;
-  tags: string[];
-  totalCost: number;
-  content: string;
-  userId: string;
-  isPublic: boolean;
-}
-
-export interface DiaryInfo {
-  diaryId: string;
-  title: string;
-  region: string;
-  createdTime: Date | null;
-  startDate: string | null;
-  endDate: string | null;
-  tags: string[];
-  totalCost: number;
-  content: string;
-  nickname: string;
-  ownerId: string;
-  profileImgPath: string | null;
-  public: boolean;
-}
-
-export interface ReportData {
-  reportType: string; // "DIARY"
-  reporter: string; // 신고자 id
-  reported: string; // 신고 대상 id
-  reportEntity: string; // 다이어리 id
-  reason: string;
-}
 
 export const DiaryApi = {
   postDiary: async (data: DiaryData): Promise<boolean> => {
@@ -94,7 +59,7 @@ export const DiaryApi = {
       return false;
     }
   },
-  ReportDiary: async (data: ReportData): Promise<boolean> => {
+  reportDiary: async (data: ReportData): Promise<boolean> => {
     try {
       return (await JwtAxios.post(`${API_BASE_URL}/report`, data)).data;
     } catch (error) {
@@ -102,4 +67,5 @@ export const DiaryApi = {
       return false;
     }
   },
+  bookmarkDiary: async () => {},
 };

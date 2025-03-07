@@ -1,15 +1,12 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { DiaryApi, DiaryInfo, DiaryData } from "../../api/DiaryApi";
+import { DiaryApi } from "../../api/DiaryApi";
+import { DiaryData, DiaryInfo, EditDiaryData } from "../../types/DiaryTypes";
 import { useEffect, useState } from "react";
 import { DiaryForm } from "./DiaryForm";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { Upload } from "../../component/FirebaseComponent";
 import { Loading } from "../../component/Loading";
-
-export interface EditDiaryData extends DiaryData {
-  ownerId: string; // EditDiary에서만 필요한 필드
-}
 
 const mapDiaryInfoToDiaryData = (
   info: DiaryInfo,

@@ -8,7 +8,6 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import AxiosApi from "../../api/AxiosApi";
 import { MyProfileContainer } from "../../style/MypageComponentStyled";
 import { setUserInfo } from "../../redux/authSlice";
-import { profile } from "console";
 import { useNavigate } from "react-router-dom";
 
 interface InfoItem {

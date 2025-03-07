@@ -3,22 +3,13 @@ import { AdminContainer } from "./AdminComponent";
 import { GlobalFont } from "../../style/GlobalStyled";
 import { Modal } from "../../component/ModalComponent";
 import AxiosApi from "../../api/AxiosApi";
+import { Member } from "../../types/AdminTypes";
 
 // icon
 import { FaSortDown, FaAngleUp, FaAngleDown } from "react-icons/fa";
 import { IoSearch } from "react-icons/io5";
 
 const AdminHome = () => {
-  interface Member {
-    id: number;
-    userId: string;
-    email: string;
-    name: string;
-    nickname: string;
-    imgPath: string;
-    regDate: string;
-    banned: Boolean;
-  }
   const [members, setMembers] = useState<Member[]>([]);
   const [page, setPage] = useState(1);
   const [size] = useState(10);

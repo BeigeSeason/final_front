@@ -171,6 +171,7 @@ export const ItemApi = {
     ).data;
   },
   getOtherUserDiaryList: async (params: UserDiary): Promise<DiaryResponse> => {
+    console.log("params : ", params);
     return (
       await axios.get<DiaryResponse>(
         `${API_BASE_URL}/search/otheruser-diary-list`,

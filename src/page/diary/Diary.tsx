@@ -3,7 +3,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import parse from "html-react-parser";
-import { DiaryApi, DiaryInfo } from "../../api/DiaryApi";
+import { DiaryApi } from "../../api/DiaryApi";
+import { DiaryInfo } from "../../types/DiaryTypes";
+import { ReportData } from "../../types/CommonTypes";
 import { GetProfileImageSrc } from "../../component/ProfileComponent";
 import { FaBookmark, FaRegBookmark } from "react-icons/fa";
 import { BiLock, BiLockOpen, BiTrash } from "react-icons/bi";
@@ -102,6 +104,15 @@ const Diary = () => {
     }
   };
 
+  // 다이어리 북마크
+  const onClickBookmark = async () => {
+    if (!userId) {
+      setNeedLoginModal(true);
+      return;
+    }
+    setIsBookmarked(!isBookmarked);
+  };
+
   // 다이어리 삭제
   const onClickDelete = async () => {
     if (diaryId) {
@@ -121,14 +132,14 @@ const Diary = () => {
   // 다이어리 신고
   const onClickReport = async () => {
     if (userId && diaryInfo && diaryId) {
-      const reportData = {
+      const reportData: ReportData = {
         reportType: "DIARY",
         reporter: userId,
         reported: diaryInfo?.ownerId,
         reportEntity: diaryId,
         reason: reportContent.trim(),
       };
-      const response = await DiaryApi.ReportDiary(reportData);
+      const response = await DiaryApi.reportDiary(reportData);
       if (response) {
         setReportContent("");
         setReportModal(false);
@@ -154,7 +165,9 @@ const Diary = () => {
                   setIsBookmarked(!isBookmarked);
                 }}
               />
-              <span className="bookmarked-count">10</span>
+              <span className="bookmarked-count">
+                {diaryInfo?.bookmarkCount}
+              </span>
             </>
           ) : (
             <>
@@ -170,7 +183,9 @@ const Diary = () => {
                   setIsBookmarked(!isBookmarked);
                 }}
               />
-              <span className="bookmarked-count">10</span>
+              <span className="bookmarked-count">
+                {diaryInfo?.bookmarkCount}
+              </span>
             </>
           )}
           {userId === diaryInfo?.ownerId &&

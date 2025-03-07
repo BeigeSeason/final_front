@@ -3,6 +3,7 @@ import { GetProfileImageSrc } from "../../component/ProfileComponent";
 import { Button } from "../../component/ButtonComponent";
 import { Modal, CheckModal } from "../../component/ModalComponent";
 import MyDiary from "./MyDiary";
+import { ReportContent } from "../../style/DiaryStyled";
 import {
   MypageMainContainer,
   ProfileInfo,
@@ -12,10 +13,11 @@ import { useEffect, useState } from "react";
 import AxiosApi from "../../api/AxiosApi";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
+import { ReportData } from "../../types/CommonTypes";
 
 export const OtherUserMain = () => {
   const { accessToken, userId } = useSelector((state: RootState) => state.auth);
-  const { otherUserId } = useParams();
+  const { otheruserId } = useParams();
   const [nickname, setNickname] = useState<string>("");
   const [profile, setProfile] = useState<string>("");
   const [reportContent, setReportContent] = useState<string>("");
@@ -25,17 +27,16 @@ export const OtherUserMain = () => {
 
   // userId, otherUserId 구분 필요
   // 사용자 본인이면 마이페이지로 이동 or 사용자 본인이면 신고하기 버튼 안보이기
-  // 신고하기 구현하기
 
-  // useEffect(() => {
-  //   const getMemberInfo = async () => {
-  //     console.log(otherUserId);
-  //     const memberInfo = (await AxiosApi.memberInfo(otherUserId)).data;
-  //     setNickname(memberInfo.nickname);
-  //     setProfile(memberInfo.imgPath);
-  //   };
-  //   getMemberInfo();
-  // }, []);
+  useEffect(() => {
+    const getMemberInfo = async () => {
+      console.log(otheruserId);
+      const memberInfo = (await AxiosApi.memberInfo(otheruserId)).data;
+      setNickname(memberInfo.nickname);
+      setProfile(memberInfo.imgPath);
+    };
+    getMemberInfo();
+  }, []);
 
   const onClickReportButton = () => {
     if (accessToken) {
@@ -46,37 +47,21 @@ export const OtherUserMain = () => {
   };
 
   // 유저 신고
-  // const onClickReport = async () => {
-  //   if (userId && diaryInfo && diaryId) {
-  //     const reportData = {
-  //       reportType: "DIARY",
-  //       reporter: userId,
-  //       reported: diaryInfo?.ownerId,
-  //       reportEntity: diaryId,
-  //       reason: reportContent.trim(),
-  //     };
-  //     const response = await DiaryApi.ReportDiary(reportData);
-  //     if (response) {
-  //       setReportContent("");
-  //       setReportModal(false);
-  //     }
-  //   }
-  // };
-  // 유저 신고
-  // const onClickReport = async() => {
-  //         const reportData = {
-  //       reportType: "MEMBER",
-  //       reporter: userId,
-  //       reported: diaryInfo?.ownerId,
-  //       reportEntity: diaryId,
-  //       reason: reportContent.trim(),
-  //     };
-  //     const response = await DiaryApi.ReportDiary(reportData);
-  //     if (response) {
-  //       setReportContent("");
-  //       setReportModal(false);
-  //     }
-  // }
+  const onClickReport = async () => {
+    if (userId && otheruserId) {
+      const reportData: ReportData = {
+        reportType: "MEMBER",
+        reporter: userId, // 신고하는 사람 아이디
+        reported: otheruserId, // 신고 당한 사람
+        reason: reportContent.trim(),
+      };
+      const response = await AxiosApi.reportMember(reportData);
+      if (response) {
+        setReportContent("");
+        setReportModal(false);
+      }
+    }
+  };
 
   return (
     <MypageMainContainer>
@@ -96,27 +81,30 @@ export const OtherUserMain = () => {
         </Button>
       </ProfileInfo>
       <MyContentContainer>
-        <MyDiary type={`/otheruser/${userId}`} userId={otherUserId as string} />
+        <MyDiary
+          type={`/otheruser/${otheruserId}`}
+          userId={otheruserId as string}
+        />
       </MyContentContainer>
-      {/* {reportModal && (
-              <Modal
-                isOpen={reportModal}
-                onConfirm={onClickReport}
-                onClose={() => setReportModal(false)}
-                disabled={reportContent.trim().length < 1}
-              >
-                <ReportContent>
-                  <h3>신고 내용을 입력해주세요</h3>
-                  <textarea
-                    value={reportContent}
-                    onChange={(e) => setReportContent(e.target.value)}
-                    placeholder={
-                      "신고 내용을 입력해 주세요.\n허위 신고의 경우 신고자에게 불이익이 생길 수 있습니다."
-                    }
-                  />
-                </ReportContent>
-              </Modal>
-            )} */}
+      {reportModal && (
+        <Modal
+          isOpen={reportModal}
+          onConfirm={onClickReport}
+          onClose={() => setReportModal(false)}
+          disabled={reportContent.trim().length < 1}
+        >
+          <ReportContent>
+            <h3>신고 내용을 입력해주세요</h3>
+            <textarea
+              value={reportContent}
+              onChange={(e) => setReportContent(e.target.value)}
+              placeholder={
+                "신고 내용을 입력해 주세요.\n허위 신고의 경우 신고자에게 불이익이 생길 수 있습니다."
+              }
+            />
+          </ReportContent>
+        </Modal>
+      )}
       {needLoginModal && (
         <CheckModal
           isOpen={needLoginModal}

@@ -3,6 +3,7 @@ import { AxiosResponse } from "axios";
 import axios from "axios";
 import Common from "../util/Common";
 import { API_BASE_URL } from "../util/Common";
+import { ReportData } from "../types/CommonTypes";
 
 interface LoginRequest {
   userId: string;
@@ -26,47 +27,7 @@ interface MemberReqDto {
 }
 
 const AxiosApi = {
-  // 로그인
-  // 아직 잘 몰라서 AxiosResponse<any>로 설정함
-  login: async (
-    userId: string,
-    password: string
-  ): Promise<AxiosResponse<any>> => {
-    const loginRequest: LoginRequest = {
-      userId: userId,
-      password: password,
-    };
-    console.log("로그인 요청:", loginRequest); // 로그인 요청 정보 출력
-
-    return await JwtAxios.post("/auth/login", loginRequest);
-  },
-  // 회원가입
-  signup: async (signupRequest: SignupRequest): Promise<AxiosResponse<any>> => {
-    try {
-      const member: SignupRequest = {
-        // Use SignupRequest interface
-        userId: signupRequest.userId,
-        password: signupRequest.password,
-        name: signupRequest.name,
-        email: signupRequest.email,
-        nickname: signupRequest.nickname,
-        imgPath: signupRequest.imgPath,
-        socialId: signupRequest.socialId,
-        sso: signupRequest.sso,
-      };
-      console.log("AxiosApi - 회원가입 요청 데이터:", signupRequest); // 추가 확인
-
-      return await JwtAxios.post("/auth/signup", signupRequest);
-    } catch (error: any) {
-      console.error("Signup Error: ", error);
-      throw error;
-    }
-  },
-  // 멤버 정보 조회
-  memberInfo: async (userId?: string) => {
-    console.log(JwtAxios.get(`/member/get-info/${userId}`));
-    return JwtAxios.get(`/member/get-info/${userId}`);
-  },
+  ////////////////////////////////////////// 관리자
   // 멤버 조회 (전체)
   memberList: async (
     page = 1,
@@ -169,6 +130,54 @@ const AxiosApi = {
       throw error;
     }
   },
+  // 월별 가입자수
+  monthlyStats: async (type: string, year: number) => {
+    return await axios.get(
+      `${Common.FINAL_DOMAIN}/admin/chart/${type}/${year}`
+    );
+  },
+  // 로그인
+  // 아직 잘 몰라서 AxiosResponse<any>로 설정함
+  login: async (
+    userId: string,
+    password: string
+  ): Promise<AxiosResponse<any>> => {
+    const loginRequest: LoginRequest = {
+      userId: userId,
+      password: password,
+    };
+    console.log("로그인 요청:", loginRequest); // 로그인 요청 정보 출력
+
+    return await JwtAxios.post("/auth/login", loginRequest);
+  },
+  ////////////////////////////////////////// 일반
+  // 회원가입
+  signup: async (signupRequest: SignupRequest): Promise<AxiosResponse<any>> => {
+    try {
+      const member: SignupRequest = {
+        // Use SignupRequest interface
+        userId: signupRequest.userId,
+        password: signupRequest.password,
+        name: signupRequest.name,
+        email: signupRequest.email,
+        nickname: signupRequest.nickname,
+        imgPath: signupRequest.imgPath,
+        socialId: signupRequest.socialId,
+        sso: signupRequest.sso,
+      };
+      console.log("AxiosApi - 회원가입 요청 데이터:", signupRequest); // 추가 확인
+
+      return await JwtAxios.post("/auth/signup", signupRequest);
+    } catch (error: any) {
+      console.error("Signup Error: ", error);
+      throw error;
+    }
+  },
+  // 멤버 정보 조회
+  memberInfo: async (userId?: string) => {
+    console.log(JwtAxios.get(`/member/get-info/${userId}`));
+    return JwtAxios.get(`/member/get-info/${userId}`);
+  },
   // 아이디 중복 체크
   checkMemberIdExists: async (userId: string) => {
     try {
@@ -256,6 +265,7 @@ const AxiosApi = {
     };
     return await JwtAxios.put(`${API_BASE_URL}/auth/update`, params);
   },
+  // 프로필 이미지 변경
   changeMemberProfile: async (userId: string, profileName: string) => {
     const params = {
       userId: userId,
@@ -263,10 +273,15 @@ const AxiosApi = {
     };
     return await JwtAxios.put(`${API_BASE_URL}/member/change-profile`, params);
   },
-  // 월별 가입자수
-  monthlyStats: async (type: string, year: number) => {
-    return await axios.get(`${Common.FINAL_DOMAIN}/admin/chart/${type}/${year}`);
-  }
+  // 유저 신고
+  reportMember: async (data: ReportData): Promise<boolean> => {
+    try {
+      return (await JwtAxios.post(`${API_BASE_URL}/report`, data)).data;
+    } catch (error) {
+      console.log("멤버 신고 중 오류");
+      return false;
+    }
+  },
 };
 
 export default AxiosApi;

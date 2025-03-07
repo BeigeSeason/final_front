@@ -54,7 +54,10 @@ function App() {
                   </ProtectedRoute>
                 }
               />
-              <Route path="/otheruser/:userId" element={<OtherUserMain />} />
+              <Route
+                path="/otheruser/:otheruserId"
+                element={<OtherUserMain />}
+              />
               <Route path="/searchpage" element={<SearchPage />} />
               <Route path="/tourlist" element={<TourList />} />
               <Route path="/diarylist" element={<DiaryList />} />

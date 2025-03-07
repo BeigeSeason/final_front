@@ -8,8 +8,6 @@ import { modules, formats } from "./ReactQuillModule";
 import { areas } from "../../util/TourCodes";
 import { SelectBox, InputBox } from "../../component/InputComponent";
 import { Button } from "../../component/ButtonComponent";
-import { Upload } from "../../component/FirebaseComponent";
-import { Loading } from "../../component/Loading";
 import { TipTap } from "./TipTap";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
@@ -20,9 +18,8 @@ import {
   TourContentContainer,
 } from "../../style/CreateDiaryStyled";
 import React, { useEffect, useState } from "react";
-import { DiaryApi, DiaryData } from "../../api/DiaryApi";
-import { EditDiaryData } from "./EditDiary";
-import { Navigate, useNavigate } from "react-router-dom";
+import { DiaryData, EditDiaryData } from "../../types/DiaryTypes";
+import { useNavigate } from "react-router-dom";
 import { FaCalendar } from "react-icons/fa";
 
 interface DiaryFormProps {
@@ -45,7 +42,6 @@ export const DiaryForm = ({ mode, initialData, onSubmit }: DiaryFormProps) => {
   const [title, setTitle] = useState<string>("");
   const [isPublic, setIsPublic] = useState(true);
   const [content, setContent] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     if (initialData && userId === initialData.ownerId) {

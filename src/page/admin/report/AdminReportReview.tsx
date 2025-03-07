@@ -1,34 +1,13 @@
 import { useState, useEffect } from "react";
 import { AdminContainer } from "../AdminComponent";
 import AxiosApi from "../../../api/AxiosApi";
+import { Report } from "../../../types/AdminTypes";
 import { Modal } from "../../../component/ModalComponent";
 
 // icon
 import { FaAngleUp, FaAngleDown } from "react-icons/fa";
 
 const AdminReportReview = () => {
-  interface Member {
-    id: number;
-    userId: string;
-    email: string;
-    name: string;
-    nickname: string;
-    imgPath: string;
-    regDate: string;
-    banned: Boolean;
-  }
-  interface Report {
-    id: number;
-    reportType: string;
-    reporter: Member;
-    reported: Member;
-    reportEntity: string;
-    reason: string;
-    createdAt: Date;
-    checkedAt: Date;
-    state: string;
-    reviewContent: string;
-  }
   const [reports, setReports] = useState<Report[]>([]);
   const [type, setType] = useState("");
   const [sort, setSort] = useState("정렬");
