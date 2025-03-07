@@ -173,6 +173,10 @@ export const DiaryForm = ({ mode, initialData, onSubmit }: DiaryFormProps) => {
       diaryId,
       title,
       region: `${selectedArea} ${selectedSubArea}`,
+      areaCode: areas.find((area) => area.name === selectedArea)?.code,
+      sigunguCode: areas
+        .find((area) => area.name === selectedArea)
+        ?.subAreas.find((subArea) => subArea.name === selectedSubArea)?.code,
       startDate: formatDate(startDate),
       endDate: formatDate(endDate ?? startDate),
       tags,

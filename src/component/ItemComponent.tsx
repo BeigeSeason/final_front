@@ -6,6 +6,7 @@ import { areas, types } from "../util/TourCodes";
 import { ServiceCode } from "../util/ServiceCode";
 import { useMemo } from "react";
 import basicImg from "../img/item/type_200.png";
+import { GetProfileImageSrc } from "./ProfileComponent";
 
 // 관광지 목록 아이템 컴포넌트 -------------------------------------------------------------------
 const SpotContainer = styled(Link)`
@@ -21,9 +22,9 @@ const SpotContainer = styled(Link)`
 
 const SpotImage = styled.img`
   min-width: 150px;
-  min-height: 90px;
+  min-height: 110px;
   max-width: 150px;
-  max-height: 90px;
+  max-height: 110px;
   margin-right: 10px;
   object-fit: cover;
 `;
@@ -31,13 +32,61 @@ const SpotImage = styled.img`
 const SpotDescription = styled.div`
   display: flex;
   flex-direction: column;
+  height: 110px;
+  justify-content: center;
+  width: 100%;
+  overflow: hidden;
   .title {
     font-size: 17px;
     font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .addr {
     font-size: 13px;
     color: gray;
+  }
+  .summary {
+    font-size: 13px;
+    color: #222;
+    margin: 3px 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .writer {
+    display: flex;
+    align-items: center;
+    padding-top: 7px;
+    .profile {
+      min-width: 40px;
+      min-height: 40px;
+      max-width: 40px;
+      max-height: 40px;
+      margin-right: 10px;
+      border-radius: 50%;
+      overflow: hidden;
+      object-fit: cover;
+      img {
+        width: 40px;
+        height: 40px;
+      }
+    }
+    .info {
+      p {
+        margin: 0;
+      }
+      .nickname {
+        font-size: 13px;
+      }
+      .date {
+        font-size: 10px;
+        color: #666;
+      }
+    }
   }
 `;
 
@@ -66,11 +115,13 @@ export const TourItem: React.FC<TourItemProps> = ({
 interface DiaryItemProps {
   id?: string; // 다이어리에 고유 ID가 있다면 사용, 없으면 생략 가능
   thumbnail: string | null;
+  profile?: string | null;
   description: React.ReactNode[];
 }
 export const DiaryItem: React.FC<DiaryItemProps> = ({
   id,
   thumbnail,
+  profile,
   description,
 }) => {
   return (
@@ -78,11 +129,16 @@ export const DiaryItem: React.FC<DiaryItemProps> = ({
       <SpotImage src={thumbnail || basicImg} alt="다이어리 썸네일" />
       <SpotDescription>
         <div className="title">{description[0]}</div>
-        <div
-          className="summary"
-          dangerouslySetInnerHTML={{ __html: description[1] as string }}
-        />
-        <div className="writer">{description[2]}</div>
+        <div className="summary">{description[1]}</div>
+        <div className="writer">
+          <div className="profile">
+            <img src={GetProfileImageSrc(profile ?? null)} alt="프로필" />
+          </div>
+          <div className="info">
+            <p className="nickname">{description[2]}</p>
+            <p className="date">{description[3]}.</p>
+          </div>
+        </div>
       </SpotDescription>
     </SpotContainer>
   );

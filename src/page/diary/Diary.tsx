@@ -54,7 +54,6 @@ const Diary = () => {
           const diary = await DiaryApi.diaryDetail(diaryId);
           setDiaryInfo(diary);
           setIsPublic(diary.public);
-          console.log("공개 여부 : ", diary.public);
           console.log("조회된 다이어리:", diary);
         }
       } catch (error) {
@@ -67,7 +66,6 @@ const Diary = () => {
     console.log(`userId : ${userId}, isPublic: ${isPublic}`);
     if (isPublic === null) return;
     if (userId === null && !isPublic) {
-      console.log(`userId22 : ${userId}, isPublic22: ${isPublic}`);
       navigate("/");
     }
   }, [isPublic, userId]);

@@ -2,6 +2,8 @@ export interface DiaryData {
   diaryId: string;
   title: string;
   region: string;
+  areaCode?: string;
+  sigunguCode?: string;
   startDate: string | null;
   endDate: string | null;
   tags: string[];
@@ -21,6 +23,8 @@ export interface DiaryInfo {
   diaryId: string;
   title: string;
   region: string;
+  areaCode: string;
+  sigunguCode: string;
   createdTime: Date | null;
   startDate: string | null;
   endDate: string | null;

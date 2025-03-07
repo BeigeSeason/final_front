@@ -548,7 +548,7 @@ export const TourList: React.FC = () => {
             onRemoveFilter={handleTopFilterChange}
           />
           {loading && (
-            <Loading>
+            <Loading istransparent={"true"}>
               <p>목록을 불러오는 중 입니다.</p>
             </Loading>
           )}

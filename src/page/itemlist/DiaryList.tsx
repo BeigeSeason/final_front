@@ -283,7 +283,7 @@ export const DiaryList: React.FC = () => {
                 {sortOptions.map((option) => (
                   <Button
                     key={option.value}
-                    onClick={() => handleSortFieldChange(option.value)}
+                    onClick={() => updateFilters("sortBy", option.value)}
                     className={`sort-button ${
                       filters.sortBy.startsWith(option.value) ? "selected" : ""
                     }`}
@@ -375,9 +375,13 @@ export const DiaryList: React.FC = () => {
               key={index}
               id={diary.diaryId}
               thumbnail={diary.thumbnail}
+              profile={diary.writerImg}
               description={[
                 diary.title,
                 diary.contentSummary,
+                diary.writer,
+                diary.createdAt.slice(0, 10).replaceAll("-", ". "),
+                new Date(diary.createdAt).toLocaleString(),
                 `${diary.writer} (${new Date(
                   diary.createdAt
                 ).toLocaleString()})`,
