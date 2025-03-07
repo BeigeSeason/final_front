@@ -250,8 +250,6 @@ export const TourSpot = () => {
           <div className="spotDetail">{tourSpotDetail?.overview}</div>
           <div className="MapSpot">
             <KakaoMapSpot mapX={tourSpotDetail.mapX} mapY={tourSpotDetail.mapY} />
-            <div>{tourSpotDetail.mapX}</div>
-            <div>{tourSpotDetail.mapY}</div>
           </div>
           <div className="nearbySpot">
             <p>여기에 주변 관광지 목록</p>
