@@ -26,6 +26,8 @@ import { FaBookmark, FaRegBookmark } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { KakaoMapSpot } from "../../component/KakaoMapComponent";
+import AxiosApi from "../../api/AxiosApi";
+import { Review } from "../../types/CommonTypes";
 
 export const TourSpot = () => {
   const { id } = useParams<{ id: string }>(); // id 값을 URL에서 받아옵니다.
@@ -45,12 +47,22 @@ export const TourSpot = () => {
   const commentsPerPage = 10;
   const totalPages = Math.ceil(comments.length / commentsPerPage);
 
-  const handleAddComment = () => {
+  // 댓글 입력
+  const handleAddComment = async () => {
     if (!comment.trim() || rating === null) {
       alert("별점과 댓글을 모두 입력해주세요!"); // ⭐ 별점과 댓글이 없으면 등록 불가
       return;
     }
 
+    if (userId) {
+      const reviewData: Review = {
+        memberId: userId,
+        rating: rating,
+        tourSpotId: tourSpotDetail?.contentId,
+        content: comment,
+      };
+      await AxiosApi.postReview(reviewData);
+    }
     setComments([{ text: comment, rating, date: new Date() }, ...comments]);
     setComment(""); // 입력 필드 초기화
     setRating(null); // ⭐ 별점 초기화

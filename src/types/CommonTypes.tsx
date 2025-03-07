@@ -12,3 +12,9 @@ export interface Comment {
   date: Date;
   text: string;
 }
+export interface Review {
+  memberId: string;
+  rating: number;
+  tourSpotId: string | undefined;
+  content: string;
+}
