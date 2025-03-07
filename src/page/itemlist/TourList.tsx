@@ -17,42 +17,15 @@ import { FaUndo } from "react-icons/fa";
 import { Button } from "../../component/ButtonComponent";
 import { SearchBox } from "../../component/InputComponent";
 import { ItemApi } from "../../api/ItemApi";
+import {
+  TourSpot,
+  TourSpotFilters,
+  SelectFilters,
+} from "../../types/ItemTypes";
 import { Paginating } from "../../component/PaginationComponent";
 import { Loading } from "../../component/Loading";
 import { FaBars } from "react-icons/fa";
 
-interface Filters {
-  areaCode: string;
-  subAreaCode: string;
-  topTheme: string;
-  middleTheme: string;
-  bottomTheme: string;
-  category: string;
-  searchQuery: string;
-  sortBy: string;
-  currentPage: number;
-  pageSize: number;
-  themeList?: string;
-}
-interface SelectFilters {
-  areaCode?: string;
-  subAreaCode?: string;
-  topTheme?: string;
-  middleTheme?: string;
-  bottomTheme?: string;
-  category?: string;
-  themeList?: string;
-  searchQuery?: string;
-  sortBy?: string;
-  minPrice?: number;
-  maxPrice?: number;
-}
-interface TourSpot {
-  spotId: string;
-  title: string;
-  addr: string;
-  thumbnail: string;
-}
 export const TourList: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -69,7 +42,7 @@ export const TourList: React.FC = () => {
   const [isMiddleThemeOpen, setIsMiddleThemeOpen] = useState(true);
   const [isBottomThemeOpen, setIsBottomThemeOpen] = useState(true);
   const [isCategoryOpen, setIsCategoryOpen] = useState(true);
-  const [filters, setFilters] = useState<Filters>(() => {
+  const [filters, setFilters] = useState<TourSpotFilters>(() => {
     const queryParams = new URLSearchParams(location.search);
     return {
       areaCode: queryParams.get("areaCode") || "",
@@ -92,13 +65,13 @@ export const TourList: React.FC = () => {
   //   { value: "rating", label: "별점순", newSortBy: "rating," },
   //   { value: "review_count", label: "리뷰순" },
   //   { value: "bookmark_count", label: "북마크순" },
-  //   { value: "title_sort", label: "가나다순" },
+  //   { value: "title", label: "가나다순" },
   // ];
   const sortOptions = [
     {
-      value: "title_sort-asc",
+      value: "title-asc",
       label: "가나다순",
-      newSortBy: "title_sort,ASC",
+      newSortBy: "title,ASC",
     },
     { value: "rating-desc", label: "별점 높은 순", newSortBy: "rating,DESC" },
     { value: "rating-asc", label: "별점 낮은 순", newSortBy: "rating,ASC" },
@@ -174,9 +147,12 @@ export const TourList: React.FC = () => {
     fetchTourSpots(currentPage);
   }, [filters, navigate, currentPage]);
 
-  const updateFilters = (key: keyof Filters, value: string | number) => {
+  const updateFilters = (
+    key: keyof TourSpotFilters,
+    value: string | number
+  ) => {
     setFilters((prev) => {
-      const newFilters: Filters = {
+      const newFilters: TourSpotFilters = {
         ...prev,
         [key]: value,
         currentPage: key !== "currentPage" ? 0 : prev.currentPage,
@@ -290,7 +266,7 @@ export const TourList: React.FC = () => {
   // };
   const handleTopFilterChange = (key: keyof SelectFilters, name: string) => {
     setFilters((prev) => {
-      const newFilters: Filters = { ...prev };
+      const newFilters: TourSpotFilters = { ...prev };
 
       if (key === "bottomTheme") {
         const code = ServiceCode.flatMap((cat) =>

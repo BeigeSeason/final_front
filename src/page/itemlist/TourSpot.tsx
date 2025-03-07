@@ -1,5 +1,7 @@
 import { useParams } from "react-router-dom";
 import { ItemApi } from "../../api/ItemApi";
+import { TourSpotDetail } from "../../types/TourSpotTypes";
+import { Comment } from "html-react-parser";
 import React, { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -24,26 +26,6 @@ import { FaBookmark, FaRegBookmark } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { KakaoMapSpot } from "../../component/KakaoMapComponent";
-
-// 데이터 타입 정의
-interface TourSpotDetail {
-  contentId: string;
-  title: string;
-  addr1: string;
-  contact: string;
-  mapX: number;
-  mapY: number;
-  images: string[];
-  overview: string;
-  homepage: string;
-  useTime: string;
-  parking: string;
-}
-// 댓글
-interface Comment {
-  date: Date;
-  text: string;
-}
 
 export const TourSpot = () => {
   const { id } = useParams<{ id: string }>(); // id 값을 URL에서 받아옵니다.
@@ -246,10 +228,12 @@ export const TourSpot = () => {
           </div>
         </SpotBasic>
         <SpotDetail>
-
           <div className="spotDetail">{tourSpotDetail?.overview}</div>
           <div className="MapSpot">
-            <KakaoMapSpot mapX={tourSpotDetail.mapX} mapY={tourSpotDetail.mapY} />
+            <KakaoMapSpot
+              mapX={tourSpotDetail.mapX}
+              mapY={tourSpotDetail.mapY}
+            />
           </div>
           <div className="nearbySpot">
             <p>여기에 주변 관광지 목록</p>

@@ -3,16 +3,10 @@ import { ItemList } from "../../style/ListStyled";
 import { DiaryItem } from "../../component/ItemComponent";
 import { Paginating } from "../../component/PaginationComponent";
 import { ItemApi } from "../../api/ItemApi";
-import { Diary } from "../itemlist/DiaryList";
+import { Diary } from "../../types/ItemTypes";
+import { MyDiaryProps } from "../../types/DiaryTypes";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Loading } from "../../component/Loading";
-import { useSelector } from "react-redux";
-import { RootState } from "../../redux/store";
-
-export interface MyDiaryProps {
-  type: string;
-  userId: string;
-}
 
 const MyDiary: React.FC<MyDiaryProps> = React.memo(({ type, userId }) => {
   const navigate = useNavigate();

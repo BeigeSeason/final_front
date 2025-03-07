@@ -1,5 +1,7 @@
 import React from "react";
 import { DiaryItem } from "../../component/ItemComponent";
+import { Diary } from "../../types/ItemTypes";
+import { SelectFilters, DiaryFilters } from "../../types/ItemTypes";
 import { ToggleSection, SelectedFilters } from "../../component/ItemComponent";
 import { areas } from "../../util/TourCodes";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -20,38 +22,6 @@ import { ItemApi } from "../../api/ItemApi";
 import { Loading } from "../../component/Loading";
 import { Paginating } from "../../component/PaginationComponent";
 
-interface Filters {
-  areaCode: string;
-  subAreaCode: string;
-  searchQuery: string;
-  sortBy: string;
-  currentPage: number;
-  pageSize: number;
-  minPrice?: number;
-  maxPrice?: number;
-}
-interface SelectFilters {
-  areaCode?: string;
-  subAreaCode?: string;
-  topTheme?: string;
-  middleTheme?: string;
-  bottomTheme?: string;
-  category?: string;
-  themeList?: string;
-  searchQuery?: string;
-  sortBy?: string;
-  minPrice?: number;
-  maxPrice?: number;
-}
-export interface Diary {
-  diaryId: string;
-  title: string;
-  contentSummary: string;
-  thumbnail: string | null;
-  writer: string;
-  writerImg: string | null;
-  createdAt: string;
-}
 export const DiaryList: React.FC = () => {
   const [diaries, setDiaries] = useState<Diary[]>([]);
   const [totalPages, setTotalPages] = useState<number>(0);
@@ -69,9 +39,9 @@ export const DiaryList: React.FC = () => {
   const [isSortOpen, setIsSortOpen] = useState(true);
   const sortOptions = [
     {
-      value: "title_sort-asc",
+      value: "title-asc",
       label: "가나다순",
-      newSortBy: "title_sort,ASC",
+      newSortBy: "title,ASC",
     },
     {
       value: "bookmark_count-desc",
@@ -89,7 +59,7 @@ export const DiaryList: React.FC = () => {
       newSortBy: "start_date, DESC",
     },
   ];
-  const [filters, setFilters] = useState<Filters>(() => {
+  const [filters, setFilters] = useState<DiaryFilters>(() => {
     const queryParams = new URLSearchParams(location.search);
     return {
       areaCode: queryParams.get("areaCode") || "",
@@ -149,9 +119,9 @@ export const DiaryList: React.FC = () => {
     }
   };
 
-  const updateFilters = (key: keyof Filters, value: string | number) => {
+  const updateFilters = (key: keyof DiaryFilters, value: string | number) => {
     setFilters((prev) => {
-      const newFilters: Filters = {
+      const newFilters: DiaryFilters = {
         ...prev,
         [key]: value,
         currentPage: key !== "currentPage" ? 0 : prev.currentPage,
@@ -217,7 +187,7 @@ export const DiaryList: React.FC = () => {
 
   const handleTopFilterChange = (key: keyof SelectFilters, name: string) => {
     setFilters((prev) => {
-      const newFilters: Filters = { ...prev };
+      const newFilters: DiaryFilters = { ...prev };
 
       if (
         key === "areaCode" ||

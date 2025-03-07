@@ -240,14 +240,34 @@ const Diary = () => {
           {diaryInfo?.title ?? "제목 없음"}
         </h1>
         <div className="profile">
-          <div className="profile-img">
+          <div
+            className="profile-img"
+            onClick={() => {
+              if (userId === diaryInfo?.ownerId) {
+                navigate(`/mypage`);
+              } else {
+                navigate(`/otheruser/${diaryInfo?.ownerId}`);
+              }
+            }}
+          >
             <img
               src={GetProfileImageSrc(diaryInfo?.profileImgPath ?? null)}
               alt="프로필 이미지"
             />
           </div>
           <div className="profile-info">
-            <p className="nickname">{diaryInfo?.nickname ?? "사용자 닉네임"}</p>
+            <p
+              className="nickname"
+              onClick={() => {
+                if (userId === diaryInfo?.ownerId) {
+                  navigate(`/mypage`);
+                } else {
+                  navigate(`/otheruser/${diaryInfo?.ownerId}`);
+                }
+              }}
+            >
+              {diaryInfo?.nickname ?? "사용자 닉네임"}
+            </p>
             <p className="create-time">
               {timeFormatting(diaryInfo?.createdTime as Date) ?? "작성일"}
             </p>

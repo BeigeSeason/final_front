@@ -15,6 +15,8 @@ export interface EditDiaryData extends DiaryData {
   ownerId: string; // EditDiary에서만 필요한 필드
 }
 
+// export type EditDiaryDataTest = DiaryData & { ownerId: string };
+
 export interface DiaryInfo {
   diaryId: string;
   title: string;
@@ -30,4 +32,9 @@ export interface DiaryInfo {
   profileImgPath: string | null;
   public: boolean;
   bookmarkCount: number;
+}
+
+export interface MyDiaryProps {
+  type: string;
+  userId: string;
 }

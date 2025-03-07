@@ -6,3 +6,9 @@ export interface ReportData {
   reportEntity?: string;
   reason: string;
 }
+
+// 댓글
+export interface Comment {
+  date: Date;
+  text: string;
+}

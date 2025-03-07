@@ -1,125 +1,17 @@
 import axios from "axios";
 import { API_BASE_URL } from "../util/Common";
-
-// 필터 파라미터 타입 정의
-interface TourSpotFilters {
-  keyword?: string;
-  page?: number;
-  size?: number;
-  sort?: string;
-  areaCode?: string;
-  sigunguCode?: string;
-  contentTypeId?: string;
-}
-
-// API 응답 데이터 타입 정의
-interface TourSpot {
-  spotId: string;
-  title: string;
-  addr: string;
-  thumbnail: string;
-}
-
-interface TourSpotResponse {
-  content: TourSpot[];
-  pageable: {
-    sort: {
-      empty: boolean;
-      unsorted: boolean;
-      sorted: boolean;
-    };
-    offset: number;
-    pageNumber: number;
-    pageSize: number;
-    paged: boolean;
-    unpaged: boolean;
-  };
-  last: boolean;
-  totalElements: number;
-  totalPages: number;
-  first: boolean;
-  size: number;
-  number: number;
-  sort: {
-    empty: boolean;
-    unsorted: boolean;
-    sorted: boolean;
-  };
-  numberOfElements: number;
-  empty: boolean;
-}
-
-interface DiaryFilters {
-  page?: number;
-  size?: number;
-  keyword?: string;
-}
-
-interface UserDiary {
-  page?: number;
-  size?: number;
-  userId?: string;
-}
-
-// 응답 데이터 타입 정의
-interface Diary {
-  diaryId: string;
-  title: string;
-  contentSummary: string;
-  thumbnail: string | null;
-  writer: string;
-  writerImg: string | null;
-  createdAt: string;
-}
-
-interface Pageable {
-  sort: {
-    empty: boolean;
-    sorted: boolean;
-    unsorted: boolean;
-  };
-  offset: number;
-  pageSize: number;
-  pageNumber: number;
-  paged: boolean;
-  unpaged: boolean;
-}
-
-interface DiaryResponse {
-  content: Diary[];
-  pageable: Pageable;
-  last: boolean;
-  totalPages: number;
-  totalElements: number;
-  first: boolean;
-  size: number;
-  number: number;
-  sort: {
-    empty: boolean;
-    sorted: boolean;
-    unsorted: boolean;
-  };
-  numberOfElements: number;
-  empty: boolean;
-}
-
-interface TourSpotDetailDto {
-  contentId: string;
-  title: string;
-  addr1: string;
-  contact: string;
-  mapX: number;
-  mapY: number;
-  images: string[];
-  overview: string;
-  homepage: string;
-  useTime: string;
-  parking: string;
-}
+import {
+  TourSpotApiFilters,
+  TourSpotResponse,
+  DiaryApiFilters,
+  UserDiary,
+  DiaryResponse,
+  TourSpotDetailDto,
+} from "../types/ItemTypes";
 
 export const ItemApi = {
   getTourSpotList: async (
-    filters: TourSpotFilters = {}
+    filters: TourSpotApiFilters = {}
   ): Promise<TourSpotResponse> => {
     try {
       const response = await axios.get<TourSpotResponse>(
@@ -148,7 +40,9 @@ export const ItemApi = {
       throw error;
     }
   },
-  getDiaryList: async (filters: DiaryFilters = {}): Promise<DiaryResponse> => {
+  getDiaryList: async (
+    filters: DiaryApiFilters = {}
+  ): Promise<DiaryResponse> => {
     try {
       const response = await axios.get<DiaryResponse>(
         `${API_BASE_URL}/search/diary-list`,

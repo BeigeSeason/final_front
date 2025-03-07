@@ -3,19 +3,13 @@ import { Button } from "../../component/ButtonComponent";
 import { ItemApi } from "../../api/ItemApi";
 import { useState, useEffect } from "react";
 import { TourItem, DiaryItem } from "../../component/ItemComponent";
+import { SearchFilters } from "../../types/ItemTypes";
 import { SearchResultBox } from "../../style/ListStyled";
 import { GlobalFont } from "../../style/GlobalStyled";
 
-interface Filters {
-  searchQuery: string;
-  sortBy: string;
-  currentPage: number;
-  pageSize: number;
-}
-
 export const SearchPage = () => {
   const location = useLocation();
-  const [filters, setFilters] = useState<Filters>({
+  const [filters, setFilters] = useState<SearchFilters>({
     searchQuery: "",
     sortBy: "",
     currentPage: 0,
