@@ -95,10 +95,6 @@ export const TourList: React.FC = () => {
   const fetchTourSpots = async (page: number) => {
     try {
       setLoading(true);
-      console.log(
-        "filters.sortBy : ",
-        filters.sortBy.replace(/-(?=[^-]*$)/, ",")
-      );
       const filtersForApi = {
         keyword: filters.searchQuery || undefined,
         page: page,
@@ -109,6 +105,7 @@ export const TourList: React.FC = () => {
         contentTypeId: filters.category || undefined,
       };
       const data = await ItemApi.getTourSpotList(filtersForApi);
+      console.log("data : ", data);
       setTourSpots(data.content || []);
       setTotalPages(data.totalPages);
       setTotalItems(data.totalElements);
@@ -133,7 +130,6 @@ export const TourList: React.FC = () => {
           queryParams.set(key, value);
         } else if (key === "sortBy") {
           queryParams.set("sortBy", value);
-          console.log("value : ", value);
         } else {
           queryParams.set(key, value.toString());
         }

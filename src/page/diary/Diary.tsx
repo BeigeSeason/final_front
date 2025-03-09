@@ -7,7 +7,7 @@ import { DiaryApi } from "../../api/DiaryApi";
 import { ItemApi } from "../../api/ItemApi";
 import { DiaryInfo } from "../../types/DiaryTypes";
 import { ReportData } from "../../types/CommonTypes";
-import { AddBookmarkData } from "../../types/ItemTypes";
+import { BookmarkData } from "../../types/ItemTypes";
 import { GetProfileImageSrc } from "../../component/ProfileComponent";
 import { FaBookmark, FaRegBookmark } from "react-icons/fa";
 import { BiLock, BiLockOpen, BiTrash } from "react-icons/bi";
@@ -32,6 +32,7 @@ const Diary = () => {
   const { diaryId } = useParams<string>();
   const [diaryInfo, setDiaryInfo] = useState<DiaryInfo | null>();
   const [isBookmarked, setIsBookmarked] = useState<boolean>(false);
+  const [bookmarkCount, setBookmarkCount] = useState<number>(0);
   const [isPublic, setIsPublic] = useState<boolean | null>(null);
   const [isMenuToggleOpen, setIsMenuToggleOpen] = useState<boolean>(false);
   const [reportContent, setReportContent] = useState<string>("");
@@ -50,11 +51,12 @@ const Diary = () => {
   };
 
   useEffect(() => {
-    const fetchDiary = async (diaryId?: string) => {
+    const fetchDiary = async () => {
       try {
         if (diaryId) {
           const diary = await DiaryApi.diaryDetail(diaryId);
           setDiaryInfo(diary);
+          setBookmarkCount(diary.bookmarkCount);
           setIsPublic(diary.public);
           console.log("조회된 다이어리:", diary);
         }
@@ -62,8 +64,8 @@ const Diary = () => {
         console.error("다이어리 조회 실패:", error);
       }
     };
-    fetchDiary(diaryId);
-  }, []);
+    fetchDiary();
+  }, [userId]);
   useEffect(() => {
     console.log(`userId : ${userId}, isPublic: ${isPublic}`);
     if (isPublic === null) return;
@@ -71,6 +73,19 @@ const Diary = () => {
       navigate("/");
     }
   }, [isPublic, userId]);
+  useEffect(() => {
+    const fetchIsBookmarked = async () => {
+      if (userId) {
+        const data: BookmarkData = {
+          targetId: diaryId,
+          userId: userId,
+        };
+        const rsp = await ItemApi.isBookmarked(data);
+        setIsBookmarked(rsp);
+      }
+    };
+    fetchIsBookmarked();
+  }, [userId]);
 
   // 토글 메뉴 외부 클릭 시 닫기
   useEffect(() => {
@@ -109,14 +124,22 @@ const Diary = () => {
     if (!userId) {
       setNeedLoginModal(true);
       return;
-    } else if (isBookmarked) {
+    } else if (!isBookmarked) {
       // 북마크
-      const data: AddBookmarkData = {
-        target: diaryId,
+      const data: BookmarkData = {
+        targetId: diaryId,
         userId: userId,
         type: "DIARY",
       };
       await ItemApi.addBookmark(data);
+      setBookmarkCount(bookmarkCount + 1);
+    } else {
+      const data: BookmarkData = {
+        targetId: diaryId,
+        userId: userId,
+      };
+      await ItemApi.deleteBookmark(data);
+      setBookmarkCount(bookmarkCount - 1);
     }
     setIsBookmarked(!isBookmarked);
   };
@@ -164,36 +187,18 @@ const Diary = () => {
               <FaBookmark
                 className="icon"
                 title="북마크"
-                // onClick={() => handleBookmarked()}
-                onClick={() => {
-                  if (!userId) {
-                    setNeedLoginModal(true);
-                    return;
-                  }
-                  setIsBookmarked(!isBookmarked);
-                }}
+                onClick={() => onClickBookmark()}
               />
-              <span className="bookmarked-count">
-                {diaryInfo?.bookmarkCount}
-              </span>
+              <span className="bookmarked-count">{bookmarkCount}</span>
             </>
           ) : (
             <>
               <FaRegBookmark
                 className="icon"
                 title="북마크"
-                // onClick={() => handleBookmarked()}
-                onClick={() => {
-                  if (!userId) {
-                    setNeedLoginModal(true);
-                    return;
-                  }
-                  setIsBookmarked(!isBookmarked);
-                }}
+                onClick={() => onClickBookmark()}
               />
-              <span className="bookmarked-count">
-                {diaryInfo?.bookmarkCount}
-              </span>
+              <span className="bookmarked-count">{bookmarkCount}</span>
             </>
           )}
           {userId === diaryInfo?.ownerId &&

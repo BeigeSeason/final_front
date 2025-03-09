@@ -384,6 +384,7 @@ const formatSelectedFilters = (filters: SelectFilters) => {
     const [field, direction] = filters.sortBy.split(",");
     const sortLabels: { [key: string]: string } = {
       "title-asc": "가나다순",
+      "title.korean_sorted-asc": "가나다순",
       "rating-desc": "별점 높은 순",
       "rating-asc": "별점 낮은 순",
       "review_count-desc": "리뷰 많은 순",

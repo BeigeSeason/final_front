@@ -50,6 +50,9 @@ export interface DiaryApiFilters {
   page?: number;
   size?: number;
   keyword?: string;
+  sort?: string;
+  areaCode?: string;
+  sigunguCode?: string;
 }
 
 export interface UserDiary {
@@ -112,6 +115,7 @@ export interface TourSpotDetailDto {
   homepage: string;
   useTime: string;
   parking: string;
+  bookmarkCount: number;
 }
 
 export interface SearchFilters {
@@ -160,8 +164,14 @@ export interface SelectFilters {
   maxPrice?: number;
 }
 
-export interface AddBookmarkData {
-  target?: string;
+export interface BookmarkData {
+  targetId?: string;
   userId: string;
-  type: "DIARY" | "TOURSPOT";
+  type?: "DIARY" | "TOURSPOT";
+}
+
+export interface BookmarkedItem {
+  userId: string;
+  page?: number;
+  size?: number;
 }

@@ -7,7 +7,8 @@ import {
   UserDiary,
   DiaryResponse,
   TourSpotDetailDto,
-  AddBookmarkData,
+  BookmarkData,
+  BookmarkedItem,
 } from "../types/ItemTypes";
 import JwtAxios from "./JwtAxios";
 
@@ -77,12 +78,13 @@ export const ItemApi = {
       )
     ).data;
   },
-  addBookmark: async (data: AddBookmarkData): Promise<boolean> => {
+  addBookmark: async (data: BookmarkData): Promise<boolean> => {
+    console.log("북마크 추가");
+    console.log(data);
     try {
       return (
         await JwtAxios.post(
-          `${API_BASE_URL}/review-bookmark/add-bookmark`,
-          data
+          `${API_BASE_URL}/review-bookmark/add-bookmark?targetId=${data.targetId}&userId=${data.userId}&type=${data.type}`
         )
       ).data;
     } catch (error) {
@@ -90,16 +92,66 @@ export const ItemApi = {
       return false;
     }
   },
-  deleteBookmark: async (reviewId: number): Promise<boolean> => {
+  deleteBookmark: async (data: BookmarkData): Promise<boolean> => {
     try {
       return (
-        await JwtAxios.post(`${API_BASE_URL}/review-bookmark/delete-bookmark`, {
-          reviewId,
-        })
+        await JwtAxios.post(
+          `${API_BASE_URL}/review-bookmark/delete-bookmark?targetId=${data.targetId}&userId=${data.userId}`
+        )
       ).data;
     } catch (error) {
       console.log("북마크 삭제 중 오류");
       return false;
+    }
+  },
+  isBookmarked: async (data: BookmarkData): Promise<boolean> => {
+    try {
+      return (
+        await JwtAxios.get(
+          `${API_BASE_URL}/review-bookmark/my-bookmark?targetId=${data.targetId}&userId=${data.userId}`
+        )
+      ).data;
+    } catch (error) {
+      console.log("북마크 여부 조회 중 오류");
+      return false;
+    }
+  },
+  myBookmarkedDiaries: async (
+    params: BookmarkedItem
+  ): Promise<DiaryResponse> => {
+    try {
+      return (
+        await JwtAxios.get(
+          `${API_BASE_URL}/search/my-bookmarked-diaries?userId=${params.userId}&page=${params.page}&size=${params.size}`
+        )
+      ).data;
+    } catch (error) {
+      console.log("내가 북마크한 다이어리 목록 조회 중 오류");
+      throw error;
+    }
+  },
+  myBookmarkedTourspots: async (
+    params: BookmarkedItem
+  ): Promise<TourSpotResponse> => {
+    try {
+      return (
+        await JwtAxios.get(
+          `${API_BASE_URL}/search/my-bookmarked-tourspots?userId=${params.userId}&page=${params.page}&size=${params.size}`
+        )
+      ).data;
+    } catch (error) {
+      console.log("내가 북마크한 관광지 목록 조회 중 오류");
+      throw error;
+    }
+  },
+  nearbySpots: async (contentId: string): Promise<TourSpotResponse> => {
+    try {
+      return (
+        await axios.get(`${API_BASE_URL}/search/nearby-spots/${contentId}`)
+      ).data;
+    } catch (error) {
+      console.log("근처 10개 관광지 조회 중 오류");
+      throw error;
     }
   },
 };

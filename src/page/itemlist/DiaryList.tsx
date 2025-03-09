@@ -39,9 +39,9 @@ export const DiaryList: React.FC = () => {
   const [isSortOpen, setIsSortOpen] = useState(true);
   const sortOptions = [
     {
-      value: "title-asc",
+      value: "title.korean_sorted-asc",
       label: "가나다순",
-      newSortBy: "title,ASC",
+      newSortBy: "title.korean_sorted,ASC",
     },
     {
       value: "bookmark_count-desc",
@@ -65,7 +65,7 @@ export const DiaryList: React.FC = () => {
       areaCode: queryParams.get("areaCode") || "",
       subAreaCode: queryParams.get("subAreaCode") || "",
       searchQuery: queryParams.get("searchQuery") || "",
-      sortBy: queryParams.get("sort") || "",
+      sortBy: queryParams.get("sortBy") || "",
       currentPage: parseInt(queryParams.get("page") || "0", 10),
       pageSize: parseInt(queryParams.get("pageSize") || "10", 10),
       minPrice: queryParams.has("minPrice")
@@ -106,6 +106,9 @@ export const DiaryList: React.FC = () => {
         keyword: filters.searchQuery || undefined,
         page: page,
         size: filters.pageSize,
+        sort: filters.sortBy.replace(/-(?=[^-]*$)/, ",") || undefined,
+        areaCode: filters.areaCode || undefined,
+        sigunguCode: filters.subAreaCode || undefined,
       });
       setDiaries(data.content);
       setTotalPages(data.totalPages);
@@ -291,24 +294,6 @@ export const DiaryList: React.FC = () => {
                     # {option.label}
                   </Button>
                 ))}
-                {/* <Button
-                  onClick={() => handleSortDirectionChange("ASC")}
-                  className={`sort-direction ${
-                    filters.sortBy.endsWith("ASC") ? "selected" : ""
-                  }`}
-                  disabled={!filters.sortBy.split(",")[0]}
-                >
-                  오름차순
-                </Button>
-                <Button
-                  onClick={() => handleSortDirectionChange("DESC")}
-                  className={`sort-direction ${
-                    filters.sortBy.endsWith("DESC") ? "selected" : ""
-                  }`}
-                  disabled={!filters.sortBy.split(",")[0]}
-                >
-                  내림차순
-                </Button> */}
               </div>
             </ToggleSection>
           </div>

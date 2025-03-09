@@ -87,9 +87,13 @@ const MyDiary: React.FC<MyDiaryProps> = React.memo(({ type, userId }) => {
             key={index}
             id={diary.diaryId}
             thumbnail={diary.thumbnail}
+            profile={diary.writerImg}
             description={[
               diary.title,
               diary.contentSummary,
+              diary.writer,
+              diary.createdAt.slice(0, 10).replaceAll("-", ". "),
+              new Date(diary.createdAt).toLocaleString(),
               `${diary.writer} (${new Date(diary.createdAt).toLocaleString()})`,
             ]}
           />

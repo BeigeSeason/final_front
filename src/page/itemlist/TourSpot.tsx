@@ -28,11 +28,13 @@ import { RootState } from "../../redux/store";
 import { KakaoMapSpot } from "../../component/KakaoMapComponent";
 import AxiosApi from "../../api/AxiosApi";
 import { Review } from "../../types/CommonTypes";
+import { BookmarkData } from "../../types/ItemTypes";
 
 export const TourSpot = () => {
   const { id } = useParams<{ id: string }>(); // id 값을 URL에서 받아옵니다.
   const { userId } = useSelector((state: RootState) => state.auth);
   const [isBookmarked, setIsBookmarked] = useState<boolean | null>(null);
+  const [bookmarkCount, setBookmarkCount] = useState<number>(0);
   const [tourSpotDetail, setTourSpotDetail] = useState<TourSpotDetail | null>(
     null
   );
@@ -127,16 +129,54 @@ export const TourSpot = () => {
       fetchTourSpotDetail(id);
     }
   }, [id]);
+  useEffect(() => {
+    const fetchIsBookmarked = async () => {
+      if (userId) {
+        const data: BookmarkData = {
+          targetId: id,
+          userId: userId,
+        };
+        const rsp = await ItemApi.isBookmarked(data);
+        setIsBookmarked(rsp);
+      }
+    };
+    fetchIsBookmarked();
+  }, [userId]);
 
   // 상세 정보를 가져오는 함수
   const fetchTourSpotDetail = async (id: string) => {
     try {
       const response = await ItemApi.getTourSpotDetail(id);
       setTourSpotDetail(response);
+      setBookmarkCount(response.bookmarkCount);
       console.log(response);
     } catch (error) {
       console.error("관광지 상세 정보 불러오기 실패:", error);
     }
+  };
+  // 북마크
+  const onClickBookmark = async () => {
+    if (!userId) {
+      setNeedLoginModal(true);
+      return;
+    } else if (!isBookmarked) {
+      // 북마크
+      const data: BookmarkData = {
+        targetId: id,
+        userId: userId,
+        type: "TOURSPOT",
+      };
+      await ItemApi.addBookmark(data);
+      setBookmarkCount(bookmarkCount + 1);
+    } else {
+      const data: BookmarkData = {
+        targetId: id,
+        userId: userId,
+      };
+      await ItemApi.deleteBookmark(data);
+      setBookmarkCount(bookmarkCount - 1);
+    }
+    setIsBookmarked(!isBookmarked);
   };
 
   if (!tourSpotDetail) {
@@ -154,32 +194,18 @@ export const TourSpot = () => {
                 <FaBookmark
                   className="icon"
                   title="북마크"
-                  // onClick={() => handleBookmarked()}
-                  onClick={() => {
-                    if (!userId) {
-                      setNeedLoginModal(true);
-                      return;
-                    }
-                    setIsBookmarked(!isBookmarked);
-                  }}
+                  onClick={() => onClickBookmark()}
                 />
-                <span className="bookmarked-count">10</span>
+                <span className="bookmarked-count">{bookmarkCount}</span>
               </>
             ) : (
               <>
                 <FaRegBookmark
                   className="icon"
                   title="북마크"
-                  // onClick={() => handleBookmarked()}
-                  onClick={() => {
-                    if (!userId) {
-                      setNeedLoginModal(true);
-                      return;
-                    }
-                    setIsBookmarked(!isBookmarked);
-                  }}
+                  onClick={() => onClickBookmark()}
                 />
-                <span className="bookmarked-count">10</span>
+                <span className="bookmarked-count">{bookmarkCount}</span>
               </>
             )}
           </div>
