@@ -97,54 +97,58 @@ export const SearchPage = () => {
   return (
     <div>
       <GlobalFont />
-      <h1>"{filters.searchQuery}" 검색 결과</h1>
       <SearchResultBox>
+        <h3>"{filters.searchQuery}" 검색 결과</h3>
         <div className="more">
           <p className="title-font">관광지</p>
           <Button onClick={handleTourMoreClick}>더보기 › </Button>
         </div>
-        {loading ? (
-          <p>로딩 중...</p>
-        ) : error ? (
-          <p>{error}</p>
-        ) : tourSpots.length > 0 ? (
-          tourSpots.map((spot) => (
-            <TourItem
-              key={spot.spotId}
-              id={spot.spotId}
-              image={spot.thumbnail}
-              description={[spot.title, spot.addr]}
-            />
-          ))
-        ) : (
-          <p>관광지 검색 결과가 없습니다.</p>
-        )}
+        <div className="result-content">
+          {loading ? (
+            <p>로딩 중...</p>
+          ) : error ? (
+            <p>{error}</p>
+          ) : tourSpots.length > 0 ? (
+            tourSpots.map((spot) => (
+              <TourItem
+                key={spot.spotId}
+                id={spot.spotId}
+                image={spot.thumbnail}
+                description={[spot.title, spot.addr]}
+              />
+            ))
+          ) : (
+            <p>관광지 검색 결과가 없습니다.</p>
+          )}
+        </div>
         <div className="more">
           <p className="title-font">여행일지</p>
           <Button onClick={handleDiaryMoreClick}>더보기 ›</Button>
         </div>
-        {loading ? (
-          <p>로딩 중...</p>
-        ) : error ? (
-          <p>{error}</p>
-        ) : diaries.length > 0 ? (
-          diaries.map((diary) => (
-            <DiaryItem
-              key={diary.diaryId}
-              id={diary.diaryId}
-              thumbnail={diary.thumbnail}
-              description={[
-                diary.title,
-                diary.contentSummary,
-                `${diary.writer} (${new Date(
-                  diary.createdAt
-                ).toLocaleString()})`,
-              ]}
-            />
-          ))
-        ) : (
-          <p>여행일지 검색 결과가 없습니다.</p>
-        )}
+        <div className="result-content">
+          {loading ? (
+            <p>로딩 중...</p>
+          ) : error ? (
+            <p>{error}</p>
+          ) : diaries.length > 0 ? (
+            diaries.map((diary) => (
+              <DiaryItem
+                key={diary.diaryId}
+                id={diary.diaryId}
+                thumbnail={diary.thumbnail}
+                description={[
+                  diary.title,
+                  diary.contentSummary,
+                  `${diary.writer} (${new Date(
+                    diary.createdAt
+                  ).toLocaleString()})`,
+                ]}
+              />
+            ))
+          ) : (
+            <p>여행일지 검색 결과가 없습니다.</p>
+          )}
+        </div>
       </SearchResultBox>
     </div>
   );

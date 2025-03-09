@@ -233,7 +233,14 @@ export const PriceRange = styled.div`
 export const SearchResultBox = styled.div`
   width: 80vw;
   margin: auto;
-
+  h3 {
+    font-size: 30px;
+    margin: 50px 0px;
+  }
+  .result-content {
+    margin: 20px 0;
+    min-height: 500px;
+  }
   .more {
     display: flex;
     justify-content: space-between;
