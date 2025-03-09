@@ -36,6 +36,7 @@ import CreateDiary from "./page/diary/CreateDiary";
 import EditDiary from "./page/diary/EditDiary";
 import Diary from "./page/diary/Diary";
 import { TourSpot } from "./page/itemlist/TourSpot";
+import GuestRoute from "./util/GuestRoute";
 
 function App() {
   return (
@@ -61,9 +62,30 @@ function App() {
               <Route path="/searchpage" element={<SearchPage />} />
               <Route path="/tourlist" element={<TourList />} />
               <Route path="/diarylist" element={<DiaryList />} />
-              <Route path="/findid" element={<FindIdPage />} />
-              <Route path="/findpw" element={<FindPwPage />} />
-              <Route path="/signup" element={<SignupPage />} />
+              <Route
+                path="/findid"
+                element={
+                  <GuestRoute>
+                    <FindIdPage />
+                  </GuestRoute>
+                }
+              />
+              <Route
+                path="/findpw"
+                element={
+                  <GuestRoute>
+                    <FindPwPage />
+                  </GuestRoute>
+                }
+              />
+              <Route
+                path="/signup"
+                element={
+                  <GuestRoute>
+                    <SignupPage />
+                  </GuestRoute>
+                }
+              />
               <Route
                 path="/creatediary"
                 element={
