@@ -83,7 +83,7 @@ export const TourSpot = () => {
   const parseLinks = (htmlString: string): React.ReactNode[] => {
     // <a> 태그와 <br/> 태그를 모두 매칭하는 정규식
     const regex =
-      /<a href="([^"]+)"(?: target="_blank")?(?: title="([^"]+)")?>([^<]+)<\/a>|<br\s*\/?>/g;
+      /<a href="([^"]+)"(?:\s*target="_blank")?(?:\s*title="([^"]+)")?>([^<]+)<\/a>|<br\s*\/?>/g;
     const parts: React.ReactNode[] = [];
     let lastIndex = 0;
     let match: RegExpExecArray | null;
@@ -116,9 +116,35 @@ export const TourSpot = () => {
       lastIndex = regex.lastIndex;
     }
 
-    // 남은 텍스트 추가
+    // 남은 텍스트 처리 (www.으로 시작하는 링크 변환)
     if (lastIndex < htmlString.length) {
-      parts.push(htmlString.slice(lastIndex));
+      const remainingText = htmlString.slice(lastIndex);
+      console.log("remainingText : ", remainingText);
+      if (remainingText.startsWith("www.")) {
+        parts.push(
+          <a
+            key={lastIndex}
+            href={`http://${remainingText}`}
+            className="info-content"
+          >
+            {`http://${remainingText}`}
+          </a>
+        );
+      } else if (remainingText.startsWith("<a")) {
+        const hrefMatch = remainingText.match(/href="([^"]+)"/);
+        const hrefValue = hrefMatch ? hrefMatch[1] : "";
+
+        const textMatch = remainingText.match(/>([^<]+)<\/a>/);
+        const textContent = textMatch ? textMatch[1] : "";
+
+        parts.push(
+          <a key={lastIndex} href={`${hrefValue}`} className="info-content">
+            {`${textContent}`}
+          </a>
+        );
+      } else {
+        parts.push(remainingText);
+      }
     }
 
     return parts;
@@ -241,15 +267,21 @@ export const TourSpot = () => {
           <div className="spotInfo">
             <div className="itemInfo">
               <p>주소</p>
-              {tourSpotDetail?.addr1 || "주소 정보 없음"}
+              {tourSpotDetail?.addr1
+                ? parseLinks(tourSpotDetail.addr1)
+                : "주소 정보 없음"}
             </div>
             <div className="itemInfo">
               <p>연락처</p>
-              {tourSpotDetail?.contact || "연락처 정보 없음"}
+              {tourSpotDetail?.contact
+                ? parseLinks(tourSpotDetail.contact)
+                : "연락처 정보 없음"}
             </div>
             <div className="itemInfo">
               <p>운영 시간</p>
-              {tourSpotDetail?.useTime || "운영 시간 정보 없음"}
+              {tourSpotDetail?.useTime
+                ? parseLinks(tourSpotDetail.useTime)
+                : "운영 시간 정보 없음"}
             </div>
             <div className="itemInfo">
               <p>홈페이지</p>
@@ -261,7 +293,9 @@ export const TourSpot = () => {
             </div>
             <div className="itemInfo">
               <p>주차</p>
-              {tourSpotDetail?.parking || "주차 정보 없음"}
+              {tourSpotDetail?.parking
+                ? parseLinks(tourSpotDetail.parking)
+                : "주차 정보 없음"}
             </div>
           </div>
         </SpotBasic>

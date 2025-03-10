@@ -169,10 +169,28 @@ export const DiaryForm = ({ mode, initialData, onSubmit }: DiaryFormProps) => {
   };
 
   const handleFormSubmit = () => {
+    const convertAreaName = (area: string) => {
+      switch (area) {
+        case "충북":
+          return "충청북도";
+        case "충남":
+          return "충청남도";
+        case "전북":
+          return "전라북도";
+        case "전남":
+          return "전라남도";
+        case "경북":
+          return "경상북도";
+        case "경남":
+          return "경상남도";
+        default:
+          return area;
+      }
+    };
     const diaryData: DiaryData = {
       diaryId,
       title,
-      region: `${selectedArea} ${selectedSubArea}`,
+      region: `${convertAreaName(selectedArea as string)} ${selectedSubArea}`,
       areaCode: areas.find((area) => area.name === selectedArea)?.code,
       sigunguCode: areas
         .find((area) => area.name === selectedArea)
