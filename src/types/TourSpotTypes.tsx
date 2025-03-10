@@ -1,3 +1,5 @@
+import { NearSpots } from "./ItemTypes";
+
 export interface TourSpotDetail {
   contentId: string;
   title: string;
@@ -6,6 +8,7 @@ export interface TourSpotDetail {
   mapX: number;
   mapY: number;
   images: string[];
+  nearSpots: NearSpots;
   overview: string;
   homepage: string;
   useTime: string;

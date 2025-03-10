@@ -85,25 +85,153 @@ export const SpotBasic = styled.div`
   }
 `;
 
+// export const SpotDetail = styled.div`
+//   border-top: 5px solid #ddd;
+//   display: grid;
+//   grid-template-columns: repeat(2, 1fr);
+//   .spotDetail {
+//     grid-column: span 2;
+//     margin: 30px 5% 50px;
+//     line-height: 2;
+//   }
+//   .MapSpot {
+//     display: flex;
+//     margin: 20px auto;
+//     width: 80%;
+//     height: 80%;
+//     /* height: 200px; */
+//     aspect-ratio: 10 / 8;
+//     gap: 10px;
+//     background-color: #aaa;
+//   }
+// `;
+// export const NearTravelList = styled.div`
+//   width: 70%;
+//   margin-left: 10%;
+//   h3 {
+//     margin: 3px 0 8px 0;
+//   }
+//   .nearby-travelspot {
+//     width: 95%;
+//     height: 90%;
+//     padding: 5px 15px 5px 15px;
+//     overflow-y: scroll;
+//     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+//     ${ScrollBar}
+//     .nearbyspot {
+//       text-decoration: none;
+//       color: black;
+//       h4 {
+//         color: ${colors.colorA};
+//       }
+//     }
+//     .nearbyspot:visited,
+//     .nearbyspot:hover,
+//     .nearbyspot:active {
+//       color: inherit;
+//     }
+//   }
+//   .nearbybox {
+//     border-bottom: 1px solid #ddd;
+//     h4,
+//     p {
+//       margin: 10px 0;
+//       display: -webkit-box;
+//       -webkit-line-clamp: 1;
+//       -webkit-box-orient: vertical;
+//       overflow: hidden;
+//     }
+//     p {
+//       margin-bottom: 10px;
+//     }
+//   }
+//   @media (max-width: 1024px) {
+//     height: 50%;
+//     width: 100%;
+//   }
+// `;
+
 export const SpotDetail = styled.div`
   border-top: 5px solid #ddd;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  display: flex;
+  flex-direction: column;
   .spotDetail {
-    grid-column: span 2;
     margin: 30px 5% 50px;
     line-height: 2;
   }
+  .map-near-container {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+  }
   .MapSpot {
     display: flex;
-    margin: 20px auto;
-    width: 100%;
-    /* height: 200px; */
-    aspect-ratio: 10 / 8;
+    /* margin: 20px auto; */
+    min-width: 300px;
+    max-width: 700px;
+    width: 60%;
     gap: 10px;
     background-color: #aaa;
+    justify-content: center; /* 가운데 정렬 */
+    flex-grow: 1; /* MapSpot이 여유 공간을 차지하도록 */
+    flex-shrink: 0; /* MapSpot은 크기가 줄어들지 않도록 설정 */
   }
 `;
+export const NearTravelList = styled.div`
+  width: 40%;
+  max-width: 400px;
+  margin-left: 20px;
+  flex-shrink: 1; /* NearTravelList가 먼저 줄어듬 */
+  h3 {
+    margin: 3px 0 8px 0;
+  }
+  .nearby-travelspot {
+    display: flex;
+    flex-direction: column; /* 세로로 나열 */
+    width: 100%;
+    height: 450px;
+    padding: 5px 15px 5px 15px;
+    overflow-y: scroll;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+    ${ScrollBar}
+    .nearbyspot {
+      text-decoration: none;
+      color: black;
+      h4 {
+        color: ${colors.colorA};
+      }
+    }
+    .nearbyspot:visited,
+    .nearbyspot:hover,
+    .nearbyspot:active {
+      color: inherit;
+    }
+  }
+  .nearbybox {
+    display: flex;
+    flex-direction: column; /* 세로로 나열 */
+    border-bottom: 1px solid #ddd;
+    h4,
+    p {
+      margin: 10px 0;
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    p {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin-bottom: 10px;
+    }
+  }
+  @media (max-width: 1024px) {
+    height: 50%;
+    width: 100%;
+  }
+`;
+
 export const StyledWrapper = styled.div`
   .rating {
     display: flex;
