@@ -37,6 +37,44 @@ export const SelectSearchItem = styled.div`
       margin-left: 10px;
     }
   }
+  .price-input-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+  }
+  .price-wrapper {
+    display: flex;
+    align-items: center;
+    width: 43%;
+    margin-bottom: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    color: #444;
+  }
+  .price-input {
+    border: none;
+    outline: none;
+    width: 76%;
+    text-align: right;
+    padding: 3px 0;
+    font-size: 14px;
+    line-height: 1;
+    background-color: transparent;
+  }
+  .unit {
+    margin-left: 5px;
+    font-size: 14px;
+    line-height: 1;
+  }
+  .confirm-button {
+    display: flex;
+    width: 80px;
+    height: 25px;
+    margin-left: auto;
+    background-color: #ddd;
+  }
   .buttons {
     display: flex;
     flex-wrap: wrap;

@@ -32,11 +32,12 @@ export const DiaryList: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [loading, setLoading] = useState<boolean>(true);
+  const [isPriceOpen, setIsPriceOpen] = useState<boolean>(true);
+  const [isSortOpen, setIsSortOpen] = useState(true);
   const [isAreaOpen, setIsAreaOpen] = useState(true);
   const [isSubAreaOpen, setIsSubAreaOpen] = useState(true);
-  const [minPrice, setMinPrice] = useState<number>(0);
-  const [maxPrice, setMaxPrice] = useState<number>(1000);
-  const [isSortOpen, setIsSortOpen] = useState(true);
+  const [minPrice, setMinPrice] = useState<string>("");
+  const [maxPrice, setMaxPrice] = useState<string>("");
   const sortOptions = [
     {
       value: "title.korean_sorted-asc",
@@ -72,7 +73,7 @@ export const DiaryList: React.FC = () => {
         ? parseInt(queryParams.get("minPrice") || "0", 10)
         : undefined,
       maxPrice: queryParams.has("maxPrice")
-        ? parseInt(queryParams.get("maxPrice") || "1000", 10)
+        ? parseInt(queryParams.get("maxPrice") || "", 10)
         : undefined,
     };
   });
@@ -109,6 +110,8 @@ export const DiaryList: React.FC = () => {
         sort: filters.sortBy.replace(/-(?=[^-]*$)/, ",") || undefined,
         areaCode: filters.areaCode || undefined,
         sigunguCode: filters.subAreaCode || undefined,
+        minPrice: parseInt(minPrice) || 0,
+        maxPrice: parseInt(maxPrice) || 0,
       });
       setDiaries(data.content);
       setTotalPages(data.totalPages);
@@ -132,19 +135,19 @@ export const DiaryList: React.FC = () => {
       return newFilters;
     });
   };
-  const handleSortFieldChange = (field: string) => {
-    const [currentField, currentDirection] = filters.sortBy.split(",");
-    const newDirection = currentDirection || "ASC"; // 기본값 ASC
-    const newSortBy = currentField === field ? "" : `${field},${newDirection}`;
-    updateFilters("sortBy", newSortBy);
-  };
+  // const handleSortFieldChange = (field: string) => {
+  //   const [currentField, currentDirection] = filters.sortBy.split(",");
+  //   const newDirection = currentDirection || "ASC"; // 기본값 ASC
+  //   const newSortBy = currentField === field ? "" : `${field},${newDirection}`;
+  //   updateFilters("sortBy", newSortBy);
+  // };
 
-  // 정렬 방향 변경
-  const handleSortDirectionChange = (direction: "ASC" | "DESC") => {
-    const [currentField] = filters.sortBy.split(",");
-    if (!currentField) return; // 필드가 없으면 무시
-    updateFilters("sortBy", `${currentField},${direction}`);
-  };
+  // // 정렬 방향 변경
+  // const handleSortDirectionChange = (direction: "ASC" | "DESC") => {
+  //   const [currentField] = filters.sortBy.split(",");
+  //   if (!currentField) return; // 필드가 없으면 무시
+  //   updateFilters("sortBy", `${currentField},${direction}`);
+  // };
   const handleResetSelections = () => {
     setFilters({
       areaCode: "",
@@ -157,8 +160,8 @@ export const DiaryList: React.FC = () => {
       maxPrice: undefined,
     });
     setSearchQuery("");
-    setMinPrice(0);
-    setMaxPrice(1000);
+    setMinPrice("");
+    setMaxPrice("");
   };
 
   const handlePageChange = (page: number) => {
@@ -202,8 +205,8 @@ export const DiaryList: React.FC = () => {
       } else if (key === "minPrice") {
         newFilters.minPrice = undefined;
         newFilters.maxPrice = undefined;
-        setMinPrice(0);
-        setMaxPrice(1000);
+        setMinPrice("");
+        setMaxPrice("");
       }
 
       return newFilters;
@@ -223,8 +226,22 @@ export const DiaryList: React.FC = () => {
     }
   };
   const updatePriceRange = () => {
-    updateFilters("minPrice", minPrice);
-    updateFilters("maxPrice", maxPrice);
+    const min =
+      minPrice === ""
+        ? ""
+        : Math.min(Number(minPrice) || 0, Number(maxPrice) || 9999999999999);
+    const max =
+      maxPrice === ""
+        ? ""
+        : Math.max(Number(minPrice) || 0, Number(maxPrice) || 9999999999999);
+
+    // minPrice와 maxPrice를 상태로 업데이트
+    setMinPrice(String(min));
+    setMaxPrice(String(max));
+
+    // 필터에 적용
+    updateFilters("minPrice", min);
+    updateFilters("maxPrice", max);
   };
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
@@ -234,7 +251,10 @@ export const DiaryList: React.FC = () => {
   }, []);
 
   const selectedAreaData = areas.find((area) => area.code === filters.areaCode);
-
+  const formatPrice = (value: string) => {
+    const numericValue = value.replace(/\D/g, ""); // 숫자만 남기기
+    return numericValue.replace(/\B(?=(\d{3})+(?!\d))/g, ","); // 1000 단위 콤마 추가
+  };
   return (
     <>
       <FilterButton onClick={handleToggleSelect}>
@@ -255,7 +275,7 @@ export const DiaryList: React.FC = () => {
             onKeyDown={handleKeyDown}
             onSearch={handleSearch}
           />
-          <PriceRange>
+          {/* <PriceRange>
             <div>
               <ReactSlider
                 className="slider"
@@ -275,7 +295,71 @@ export const DiaryList: React.FC = () => {
               최소 금액: {minPrice} / 최대 금액: {maxPrice}
             </div>
             <Button onClick={updatePriceRange}>확인</Button>
-          </PriceRange>
+          </PriceRange> */}
+          <div className="price">
+            <ToggleSection
+              title="금액"
+              isopen={isPriceOpen}
+              onToggle={() => setIsPriceOpen(!isPriceOpen)}
+            >
+              <div className="price-input-container">
+                <div
+                  className="price-wrapper"
+                  onClick={() =>
+                    document.getElementById("minPriceInput")?.focus()
+                  }
+                >
+                  <input
+                    id="minPriceInput"
+                    className="price-input"
+                    type="text"
+                    value={formatPrice(minPrice)}
+                    onChange={(e) => {
+                      let value = e.target.value.replace(/\D/g, ""); // 숫자만 허용
+                      if (value !== "" && Number(value) >= 1_0000_0000_0000)
+                        return; // 1조 이상 입력 방지
+                      setMinPrice(value); // 빈 값도 허용
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        updatePriceRange();
+                      }
+                    }}
+                  />
+                  <span className="unit">원</span>
+                </div>
+                ~
+                <div
+                  className="price-wrapper"
+                  onClick={() =>
+                    document.getElementById("maxPriceInput")?.focus()
+                  }
+                >
+                  <input
+                    id="maxPriceInput"
+                    className="price-input"
+                    type="text"
+                    value={formatPrice(maxPrice)}
+                    onChange={(e) => {
+                      let value = e.target.value.replace(/\D/g, ""); // 숫자만 허용
+                      if (value !== "" && Number(value) >= 1_0000_0000_0000)
+                        return; // 1조 이상 입력 방지
+                      setMaxPrice(value); // 빈 값도 허용
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        updatePriceRange();
+                      }
+                    }}
+                  />
+                  <span className="unit">원</span>
+                </div>
+              </div>
+              <Button className="confirm-button" onClick={updatePriceRange}>
+                적용
+              </Button>
+            </ToggleSection>
+          </div>
           <div className="sort">
             <ToggleSection
               title="정렬"

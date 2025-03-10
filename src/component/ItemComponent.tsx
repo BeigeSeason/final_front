@@ -404,7 +404,15 @@ const formatSelectedFilters = (filters: SelectFilters) => {
   if (filters.minPrice !== undefined || filters.maxPrice !== undefined) {
     selectedFilters.push({
       key: "minPrice",
-      name: `가격: ${filters.minPrice ?? 0} - ${filters.maxPrice ?? 1000}`,
+      name: `가격: ${
+        String(filters.minPrice).length > 0
+          ? String(filters.minPrice).replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+          : 0
+      } ~ ${
+        String(filters.maxPrice).length > 0
+          ? String(filters.maxPrice).replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+          : ""
+      }`,
     });
   }
   return selectedFilters;

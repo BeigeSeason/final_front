@@ -67,7 +67,6 @@ const Diary = () => {
     fetchDiary();
   }, [userId]);
   useEffect(() => {
-    console.log(`userId : ${userId}, isPublic: ${isPublic}`);
     if (isPublic === null) return;
     if (userId === null && !isPublic) {
       navigate("/");

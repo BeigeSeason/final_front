@@ -53,6 +53,8 @@ export interface DiaryApiFilters {
   sort?: string;
   areaCode?: string;
   sigunguCode?: string;
+  minPrice?: number;
+  maxPrice?: number;
 }
 
 export interface UserDiary {
