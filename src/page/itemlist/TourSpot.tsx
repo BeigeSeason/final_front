@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import { ItemApi } from "../../api/ItemApi";
 import { TourSpotDetail } from "../../types/TourSpotTypes";
 import { Comment } from "html-react-parser";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
@@ -30,6 +30,9 @@ import AxiosApi from "../../api/AxiosApi";
 import { Review } from "../../types/CommonTypes";
 import { BookmarkData } from "../../types/ItemTypes";
 
+// icon
+import { FaRegStar, FaRegStarHalfStroke, FaStar } from "react-icons/fa6";
+
 export const TourSpot = () => {
   const { id } = useParams<{ id: string }>(); // id 값을 URL에서 받아옵니다.
   const { userId } = useSelector((state: RootState) => state.auth);
@@ -38,7 +41,10 @@ export const TourSpot = () => {
   const [tourSpotDetail, setTourSpotDetail] = useState<TourSpotDetail | null>(
     null
   );
-  const [rating, setRating] = useState<number | null>(null); // ⭐ 별점 상태 추가
+  const [rating, setRating] = useState(0); // ⭐ 별점 상태 추가
+  const [ratingHover, setRatingHover] = useState(0); // 마우스 오버 별점
+  const starRef = useRef<HTMLDivElement>(null);
+
   const [comment, setComment] = useState("");
   const [comments, setComments] = useState<
     { text: string; rating: number | null; date: Date }[]
@@ -48,6 +54,18 @@ export const TourSpot = () => {
   const [currentPage, setCurrentPage] = useState(0); // 현재 페이지 상태 추가
   const commentsPerPage = 10;
   const totalPages = Math.ceil(comments.length / commentsPerPage);
+
+  // 별점
+  const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (!starRef.current) return;
+
+    const { left, width } = starRef.current.getBoundingClientRect();
+    const relativeX = event.clientX - left; // 부모 div 내 상대적 X 좌표
+    const starWidth = width / 5; // 별 하나의 너비 (간격 포함)
+    const position = relativeX / starWidth; // 몇 번째 별인지 계산
+
+    setRatingHover(Math.ceil(position * 2) / 2); // 0.5 단위로 반올림
+  };
 
   // 댓글 입력
   const handleAddComment = async () => {
@@ -67,7 +85,7 @@ export const TourSpot = () => {
     }
     setComments([{ text: comment, rating, date: new Date() }, ...comments]);
     setComment(""); // 입력 필드 초기화
-    setRating(null); // ⭐ 별점 초기화
+    setRating(0); // ⭐ 별점 초기화
   };
 
   const getPaginatedComments = () => {
@@ -322,20 +340,34 @@ export const TourSpot = () => {
               onKeyDown={(e) => e.key === "Enter" && handleAddComment()}
             />
             <StyledWrapper>
-              <div className="rating">
-                {[5, 4, 3, 2, 1].map((value) => (
-                  <React.Fragment key={value}>
-                    <input
-                      type="radio"
-                      id={`star${value}`}
-                      name="rating"
-                      value={value}
-                      checked={rating === value}
-                      onChange={() => setRating(value)}
-                    />
-                    <label htmlFor={`star${value}`} />
-                  </React.Fragment>
-                ))}
+              <div
+                ref={starRef}
+                onMouseMove={handleMouseMove}
+                onClick={() => setRating(ratingHover)}
+                style={{
+                  display: "flex",
+                  gap: 5,
+                  cursor: "pointer",
+                  width: "140px",
+                }}
+              >
+                {[...Array(5)].map((_, i) => {
+                  const score = ratingHover || rating; // 마우스 오버 or 확정된 값
+                  const full = score >= i + 1;
+                  const half = score >= i + 0.5 && score < i + 1;
+
+                  return (
+                    <div key={i} style={{ width: 24 }}>
+                      {full ? (
+                        <FaStar size={24} color="gold" />
+                      ) : half ? (
+                        <FaRegStarHalfStroke size={24} color="gold" />
+                      ) : (
+                        <FaRegStar size={24} color="gold" />
+                      )}
+                    </div>
+                  );
+                })}
               </div>
             </StyledWrapper>
             <Button onClick={handleAddComment}> 등록</Button>

@@ -141,6 +141,7 @@ export const CommentBox = styled.div`
   }
   .commentCount {
     color: #8d8d8d;
+    margin-bottom: 5px;
   }
   .commentList {
     border-bottom: 1px solid #ddd;
