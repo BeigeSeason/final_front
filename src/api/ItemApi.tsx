@@ -144,14 +144,4 @@ export const ItemApi = {
       throw error;
     }
   },
-  nearbySpots: async (contentId: string): Promise<TourSpotResponse> => {
-    try {
-      return (
-        await axios.get(`${API_BASE_URL}/search/nearby-spots/${contentId}`)
-      ).data;
-    } catch (error) {
-      console.log("근처 10개 관광지 조회 중 오류");
-      throw error;
-    }
-  },
 };

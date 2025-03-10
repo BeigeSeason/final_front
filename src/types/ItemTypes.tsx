@@ -104,7 +104,45 @@ export interface DiaryResponse {
   numberOfElements: number;
   empty: boolean;
 }
+export interface NearSpot {
+  spotId: string;
+  title: string;
+  addr: string | null;
+  thumbnail: string;
+  reviewCount: number;
+  avgRating: number;
+  bookmarkCount: number;
+}
 
+// nearSpots의 전체 구조를 반영한 타입
+export interface NearSpots {
+  content: NearSpot[];
+  pageable: {
+    sort: {
+      empty: boolean;
+      sorted: boolean;
+      unsorted: boolean;
+    };
+    offset: number;
+    pageNumber: number;
+    pageSize: number;
+    unpaged: boolean;
+    paged: boolean;
+  };
+  last: boolean;
+  totalPages: number;
+  totalElements: number;
+  size: number;
+  number: number;
+  sort: {
+    empty: boolean;
+    sorted: boolean;
+    unsorted: boolean;
+  };
+  first: boolean;
+  numberOfElements: number;
+  empty: boolean;
+}
 export interface TourSpotDetailDto {
   contentId: string;
   title: string;
@@ -113,6 +151,7 @@ export interface TourSpotDetailDto {
   mapX: number;
   mapY: number;
   images: string[];
+  nearSpots: NearSpots;
   overview: string;
   homepage: string;
   useTime: string;

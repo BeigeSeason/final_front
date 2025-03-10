@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { ItemApi } from "../../api/ItemApi";
 import { TourSpotDetail } from "../../types/TourSpotTypes";
 import { Comment } from "html-react-parser";
@@ -13,6 +13,7 @@ import {
   SpotTitle,
   SpotBasic,
   SpotDetail,
+  NearTravelList,
   StyledWrapper,
   CommentBox,
 } from "../../style/TourSpotStyled";
@@ -29,6 +30,7 @@ import { KakaoMapSpot } from "../../component/KakaoMapComponent";
 import AxiosApi from "../../api/AxiosApi";
 import { Review } from "../../types/CommonTypes";
 import { BookmarkData } from "../../types/ItemTypes";
+import { GoStarFill } from "react-icons/go";
 
 export const TourSpot = () => {
   const { id } = useParams<{ id: string }>(); // id 값을 URL에서 받아옵니다.
@@ -119,7 +121,6 @@ export const TourSpot = () => {
     // 남은 텍스트 처리 (www.으로 시작하는 링크 변환)
     if (lastIndex < htmlString.length) {
       const remainingText = htmlString.slice(lastIndex);
-      console.log("remainingText : ", remainingText);
       if (remainingText.startsWith("www.")) {
         parts.push(
           <a
@@ -301,14 +302,47 @@ export const TourSpot = () => {
         </SpotBasic>
         <SpotDetail>
           <div className="spotDetail">{tourSpotDetail?.overview}</div>
-          <div className="MapSpot">
-            <KakaoMapSpot
-              mapX={tourSpotDetail.mapX}
-              mapY={tourSpotDetail.mapY}
-            />
-          </div>
-          <div className="nearbySpot">
+          <div className="map-near-container">
+            <div className="MapSpot">
+              <KakaoMapSpot
+                mapX={tourSpotDetail.mapX}
+                mapY={tourSpotDetail.mapY}
+              />
+            </div>
+            {/* <div className="nearbySpot">
             <p>여기에 주변 관광지 목록</p>
+          </div> */}
+            <NearTravelList>
+              <h3>주변 관광지</h3>
+              {tourSpotDetail.nearSpots.content.length > 0 && (
+                <div className="nearby-travelspot">
+                  {tourSpotDetail.nearSpots.content.map((spot) => {
+                    // const categoryPath = getCategoryName(
+                    //   spot.cat1,
+                    //   spot.cat2,
+                    //   spot.cat3
+                    // );
+                    return (
+                      <div key={spot.spotId}>
+                        <div className="nearbybox">
+                          <Link
+                            to={`/tourspot/${spot.spotId}`}
+                            className="nearbyspot"
+                          >
+                            <h4>{spot.title}</h4>
+                            {/* <p>{categoryPath}</p> */}
+                            <p>
+                              <GoStarFill style={{ color: "#FFD700" }} />{" "}
+                              {spot.avgRating}점
+                            </p>
+                          </Link>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </NearTravelList>
           </div>
         </SpotDetail>
 
@@ -347,7 +381,9 @@ export const TourSpot = () => {
                 <p className="comment">{c.text}</p>
                 <div className="commentInfo">
                   <p className="date">{c.date.toLocaleString()}</p>
-                  <p className="rate">⭐ {c.rating}점</p>
+                  <p className="rate">
+                    <GoStarFill style={{ color: "#FFD700" }} /> {c.rating}점
+                  </p>
                 </div>
               </div>
             </div>
