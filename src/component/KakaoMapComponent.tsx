@@ -16,21 +16,35 @@ export const KakaoMapSpot: React.FC<KakaoMapProps> = ({ mapX, mapY }) => {
   const [toggle, setToggle] = useState<"map" | "roadview">("map");
   const [hasRoadview, setHasRoadview] = useState<boolean | null>(null);
 
+  const [isKakaoLoaded, setIsKakaoLoaded] = useState(false);
   const placePosition = {
     lat: mapY,
     lng: mapX,
   };
 
   useEffect(() => {
-    const roadviewService = new kakao.maps.RoadviewClient();
+    if (window.kakao && window.kakao.maps) {
+      window.kakao.maps.load(() => {
+        setIsKakaoLoaded(true);
+      });
+    } else {
+      console.error("Kakao Maps API가 로드되지 않았습니다.");
+    }
+  }, []);
+
+  // 로드뷰 가능 여부 체크
+  useEffect(() => {
+    if (!isKakaoLoaded) return;
+
+    const roadviewService = new window.kakao.maps.RoadviewClient();
     roadviewService.getNearestPanoId(
-      new kakao.maps.LatLng(mapY, mapX),
+      new window.kakao.maps.LatLng(mapY, mapX),
       50, // 반경 50m 이내 검색
       (panoId) => {
         setHasRoadview(panoId !== null);
       }
     );
-  }, [mapX, mapY]);
+  }, [mapX, mapY, isKakaoLoaded]);
 
   return (
     <div style={{ width: "100%", height: "100%", position: "relative" }}>
