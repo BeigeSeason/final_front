@@ -98,20 +98,38 @@ export const KakaoMapSpot: React.FC<KakaoMapProps> = ({ mapX, mapY }) => {
 
       {/* 로드뷰가 없을 때 메시지 표시 */}
       {toggle === "roadview" && hasRoadview === false && (
-        <div
-          style={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            backgroundColor: "rgba(0,0,0,0.7)",
-            color: "white",
-            padding: "10px 20px",
-            borderRadius: "5px",
-          }}
-        >
-          해당 위치에서는 로드뷰를 사용할 수 없습니다.
-        </div>
+        <>
+          <input
+            style={{
+              position: "absolute",
+              width: "55px",
+              top: "5px",
+              left: "5px",
+              zIndex: 10,
+              border: "none",
+              borderRadius: "5px",
+              cursor: "pointer",
+            }}
+            type="button"
+            onClick={() => setToggle("map")}
+            title="지도 보기"
+            value="지도"
+          />
+          <div
+            style={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              backgroundColor: "rgba(0,0,0,0.7)",
+              color: "white",
+              padding: "10px 20px",
+              borderRadius: "5px",
+            }}
+          >
+            해당 위치에서는 로드뷰를 사용할 수 없습니다.
+          </div>
+        </>
       )}
     </div>
   );
