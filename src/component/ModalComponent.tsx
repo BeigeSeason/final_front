@@ -245,8 +245,6 @@ export const LoginModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
 
       // ✅ 백엔드가 정상적으로 토큰을 보내는지 확인
       if (response.status === 200 && response.data.accessToken) {
-        console.log("로그인 성공:", response.data);
-
         // Redux에 토큰 저장
         dispatch(
           setTokens({
@@ -261,7 +259,6 @@ export const LoginModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
         console.log("userId : ", userId);
 
         const userResponse = await AxiosApi.memberInfo(decodedUserId);
-        console.log(userResponse.data);
         dispatch(
           setUserInfo({
             userId: userResponse.data.userId,
@@ -271,14 +268,8 @@ export const LoginModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
             profile: userResponse.data.imgPath,
           })
         );
-        // 로컬 스토리지에 토큰 저장
-        // localStorage.setItem("accessToken", response.data.accessToken);
-        // localStorage.setItem("refreshToken", response.data.refreshToken);
-
-        // console.log("현재 Redux 상태:", store.getState()); // Redux 상태 확인
         onClose(); // 로그인 후 모달 닫기
       } else {
-        console.error("로그인 실패: 응답 데이터 없음 또는 토큰 없음");
         setError("아이디 또는 비밀번호가 올바르지 않습니다.");
       }
     } catch (error: any) {
@@ -293,7 +284,6 @@ export const LoginModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
         );
         setError("아이디 또는 비밀번호가 올바르지 않습니다.");
       } else {
-        console.error("네트워크 오류 또는 요청 실패");
         setError("로그인 요청을 처리할 수 없습니다.");
       }
     } finally {
@@ -305,7 +295,6 @@ export const LoginModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
     <ExitModal isOpen={isOpen} onClose={onClose}>
       <LoginContainer>
         <h2>로그인</h2>
-        {error && <p style={{ color: "red" }}>{error}</p>}{" "}
         {/* 에러 메시지 표시 */}
         <InputBox
           className="inputbox"
@@ -327,6 +316,7 @@ export const LoginModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
           }}
         />
         <Button onClick={handleLogin}>로그인</Button>
+        {error && <p style={{ color: "red", margin: "0" }}>{error}</p>}{" "}
         <AuthMenu>
           <div className="find">
             <Link to="/findid">아이디 찾기</Link>
