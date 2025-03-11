@@ -283,14 +283,33 @@ const AxiosApi = {
     }
   },
   // 리뷰 작성
-  postReview: async  (data: Review) => {
+  postReview: async (data: Review) => {
     try {
-      return await JwtAxios.post(`${API_BASE_URL}/review-bookmark/add-review`, data);
+      return await JwtAxios.post(
+        `${API_BASE_URL}/review-bookmark/add-review`,
+        data
+      );
     } catch (error) {
       console.log("댓글 작성 오류");
       return false;
     }
-  }
+  },
+  // 리뷰 리스트 조회
+  reviewList: async (page = 0, size = 10, tourSpotId = "1") => {
+    try {
+      const response = await JwtAxios.get(
+        `${API_BASE_URL}/review-bookmark/review-list`,
+        {
+          params: { page, size, tourSpotId },
+        }
+      );
+      console.log("axios: " + JSON.stringify(response.data.content));
+      return response.data;
+    } catch (error) {
+      console.error("댓글 리스트 조회 중 오류 발생:", error);
+      throw error;
+    }
+  },
 };
 
 export default AxiosApi;

@@ -84,17 +84,27 @@ export const TourSpot = () => {
         content: comment,
       };
       await AxiosApi.postReview(reviewData);
+      getPaginatedComments();
     }
-    setComments([{ text: comment, rating, date: new Date() }, ...comments]);
     setComment(""); // 입력 필드 초기화
     setRating(0); // ⭐ 별점 초기화
   };
 
-  const getPaginatedComments = () => {
-    const startIndex = currentPage * commentsPerPage;
-    const endIndex = startIndex + commentsPerPage;
-    return comments.slice(startIndex, endIndex);
+  // 댓글 리스트
+  const getPaginatedComments = async () => {
+    const response = await AxiosApi.reviewList(
+      currentPage,
+      commentsPerPage,
+      tourSpotDetail?.contentId
+    );
+
+    console.log("data: ", JSON.stringify(response.content));
+    setComments(response.content);
+    console.log("comments: ", comments);
   };
+  useEffect(() => {
+    getPaginatedComments();
+  }, [currentPage]);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -407,7 +417,7 @@ export const TourSpot = () => {
             <Button onClick={handleAddComment}> 등록</Button>
           </div>
 
-          {getPaginatedComments().map((c, index) => (
+          {/* {getPaginatedComments().map((c, index) => (
             <div key={index}>
               <div className="commentList">
                 <p className="comment">{c.text}</p>
@@ -419,7 +429,7 @@ export const TourSpot = () => {
                 </div>
               </div>
             </div>
-          ))}
+          ))} */}
           {comments.length > commentsPerPage && (
             <Paginating
               currentPage={currentPage}
