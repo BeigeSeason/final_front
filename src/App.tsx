@@ -38,6 +38,8 @@ import Diary from "./page/diary/Diary";
 import { TourSpot } from "./page/itemlist/TourSpot";
 import GuestRoute from "./util/GuestRoute";
 
+import Test from "./page/test";
+
 function App() {
   return (
     <>
@@ -46,6 +48,7 @@ function App() {
           <AuthInitializer />
           <Routes>
             <Route element={<Layout />}>
+              <Route path="/test" element={<Test />} />
               <Route path="/" element={<Main />} />
               <Route
                 path="/mypage"
