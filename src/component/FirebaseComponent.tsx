@@ -7,9 +7,9 @@ interface UploadParams {
   diaryId: string | null;
 }
 interface DeleteFolderParams {
-  type: "profile" | "diary";
+  type: "profile" | "diary" | "all";
   userId: string | null;
-  diaryId: string | null;
+  diaryId?: string;
 }
 
 export const Upload = async ({
@@ -22,14 +22,10 @@ export const Upload = async ({
     type === "profile"
       ? `/UserProfilePic/${userId}`
       : `/DiaryPic/${userId}/${diaryId}`;
-  // const imgName = type === "profile" ? "profile.png" : `${diaryId}.png`;
-  // console.log(imgFolder);
-  // console.log(imgName);
 
   const uploadedUrls: string[] = [];
   // currentPics가 없거나 빈 경우
   if (!pics || (Array.isArray(pics) && pics.length === 0)) {
-    console.log("업로드할 이미지가 없습니다.");
     return null;
   }
 
@@ -59,8 +55,6 @@ export const Upload = async ({
         const downloadUrl = await fileRef.getDownloadURL();
         // uploadedUrls.push(downloadUrl);
         uploadedUrls[index] = downloadUrl;
-
-        console.log(`이미지 업로드 성공 (${imgName}):`, downloadUrl);
       } else {
         // base64가 아닌 경우 (기존 URL 등)
         uploadedUrls[index] = pic;
@@ -70,7 +64,6 @@ export const Upload = async ({
     // 모든 업로드가 완료될 때까지 기다림
     await Promise.all(uploadPromises);
 
-    console.log("모든 이미지 업로드 완료:", uploadedUrls);
     return uploadedUrls;
   } catch (error) {
     console.error("이미지 업로드 실패:", error);
@@ -83,20 +76,47 @@ export const DeleteFolder = async ({
   userId,
   diaryId,
 }: DeleteFolderParams) => {
-  const imgFolder =
-    type === "profile"
-      ? `/UserProfilePic/${userId}`
-      : `/DiaryPic/${userId}/${diaryId}`;
-  const folderRef = storage.ref(`${imgFolder}`);
-
   try {
-    const fileList = await folderRef.listAll(); // 폴더 내 모든 파일 목록 가져오기
-    // console.log(fileList);
-    const deletePromises = fileList.items.map((file) => file.delete()); // 모든 파일 삭제
-    await Promise.all(deletePromises);
+    if (type === "all") {
+      // 프로필 사진 폴더 삭제
+      const profileFolderRef = storage.ref(`/UserProfilePic/${userId}`);
+      const profileFileList = await profileFolderRef.listAll();
+      const profileDeletePromises = profileFileList.items.map((file) =>
+        file.delete()
+      );
+      await Promise.all(profileDeletePromises);
 
-    console.log("폴더 내 모든 파일 삭제 완료:", imgFolder);
-    return true;
+      // DiaryPic 하위 모든 폴더와 파일 삭제
+      const diaryRootRef = storage.ref(`/DiaryPic/${userId}`);
+      const diaryFolderList = await diaryRootRef.listAll();
+
+      // 하위 폴더들 순회
+      const folderDeletePromises = diaryFolderList.prefixes.map(
+        async (folderRef) => {
+          const fileList = await folderRef.listAll();
+          const fileDeletePromises = fileList.items.map((file) =>
+            file.delete()
+          );
+          return Promise.all(fileDeletePromises);
+        }
+      );
+
+      await Promise.all(folderDeletePromises);
+      return true;
+    } else {
+      // type이 "profile" 또는 "diary"일 경우
+      const folderPath =
+        type === "profile"
+          ? `/UserProfilePic/${userId}`
+          : `/DiaryPic/${userId}/${diaryId}`;
+
+      const folderRef = storage.ref(folderPath);
+      const fileList = await folderRef.listAll();
+      const deletePromises = fileList.items.map((file) => file.delete());
+      await Promise.all(deletePromises);
+
+      return true;
+    }
   } catch (error) {
     console.error("폴더 삭제 실패:", error);
     return false;

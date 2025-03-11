@@ -61,6 +61,7 @@
     "react-scripts": "5.0.1",
     "react-simple-maps": "^3.0.0",
     "react-slider": "^2.0.6",
+    "react-toastify": "^11.0.5",
     "redux": "^5.0.1",
     "styled-components": "^6.1.15",
     "swiper": "^11.2.4",

@@ -224,6 +224,9 @@ export const NearTravelList = styled.div`
       align-items: center;
       gap: 5px;
       margin-bottom: 10px;
+      span {
+        color: #333;
+      }
     }
   }
   @media (max-width: 1024px) {

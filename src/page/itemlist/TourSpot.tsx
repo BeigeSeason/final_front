@@ -361,7 +361,15 @@ export const TourSpot = () => {
                             {/* <p>{categoryPath}</p> */}
                             <p>
                               <GoStarFill style={{ color: "#FFD700" }} />{" "}
-                              {spot.avgRating}점
+                              {spot.avgRating}{" "}
+                              <span>
+                                (
+                                {String(spot.reviewCount).replace(
+                                  /\B(?=(\d{3})+(?!\d))/g,
+                                  ","
+                                )}
+                                )
+                              </span>
                             </p>
                           </Link>
                         </div>
