@@ -173,6 +173,18 @@ const AxiosApi = {
       throw error;
     }
   },
+  // 회원 탈퇴
+  signout: async (userId: string): Promise<boolean> => {
+    const data = {
+      userId: userId,
+    };
+    try {
+      return (await JwtAxios.delete(`/auth/sign-out`, { data })).data;
+    } catch (error) {
+      console.log("회원탈퇴 중 오류 발생");
+      return false;
+    }
+  },
   // 멤버 정보 조회
   memberInfo: async (userId?: string) => {
     console.log(JwtAxios.get(`/member/get-info/${userId}`));
@@ -283,14 +295,17 @@ const AxiosApi = {
     }
   },
   // 리뷰 작성
-  postReview: async  (data: Review) => {
+  postReview: async (data: Review) => {
     try {
-      return await JwtAxios.post(`${API_BASE_URL}/review-bookmark/add-review`, data);
+      return await JwtAxios.post(
+        `${API_BASE_URL}/review-bookmark/add-review`,
+        data
+      );
     } catch (error) {
       console.log("댓글 작성 오류");
       return false;
     }
-  }
+  },
 };
 
 export default AxiosApi;

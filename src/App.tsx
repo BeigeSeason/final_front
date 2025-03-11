@@ -30,7 +30,7 @@ import AdminChartUser from "./page/admin/chart/AdminChartUser";
 import AdminChartDiary from "./page/admin/chart/AdminChartDiary";
 import AdminChartReport from "./page/admin/chart/AdminChartReport";
 import MypageMain from "./page/user/MypageMain";
-import Signout from "./page/Signout";
+import Signout from "./page/auth/SignoutPage";
 import { OtherUserMain } from "./page/user/OtherUserMain";
 import { SearchPage } from "./page/itemlist/SearchPage";
 import { TourList } from "./page/itemlist/TourList";

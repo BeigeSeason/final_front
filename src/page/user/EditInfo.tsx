@@ -7,6 +7,7 @@ import AxiosApi from "../../api/AxiosApi";
 import { Button } from "../../component/ButtonComponent";
 import { InputBox } from "../../component/InputComponent";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 interface EditInfoData {
   isEditable: boolean;
@@ -17,6 +18,7 @@ interface EditInfoData {
 
 export const EditInfo = (props: EditInfoData) => {
   const { isEditable, setIsEditable, isPwEditable, setIsPwEditable } = props;
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { showToast } = useToast();
   const { userId, nickname, name, email, profile } = useSelector(
@@ -284,6 +286,7 @@ export const EditInfo = (props: EditInfoData) => {
           color="#ccc"
           border="1px solid #ccc"
           hoverBgColor="#f1f1f1"
+          onClick={() => navigate("/signout")}
         >
           회원 탈퇴
         </Button>
