@@ -315,7 +315,6 @@ const AxiosApi = {
           params: { page, size, tourSpotId },
         }
       );
-      console.log("axios: " + JSON.stringify(response.data.content));
       return response.data;
     } catch (error) {
       console.error("댓글 리스트 조회 중 오류 발생:", error);

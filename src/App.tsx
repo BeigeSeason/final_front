@@ -124,6 +124,8 @@ function App() {
                 <Route path="/tourspot" element={<TourSpot />} />
                 <Route path="/tourspot/:id" element={<TourSpot />} />
               </Route>
+
+              {/* 관리자 접근 페이지 */}
               <Route element={<AdminLayout />}>
                 <Route path="/admin" element={<AdminHome />} />
                 <Route

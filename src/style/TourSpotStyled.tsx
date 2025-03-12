@@ -290,4 +290,8 @@ export const CommentBox = styled.div`
       margin: 0;
     }
   }
+  .center {
+    display: flex;
+    align-items: center;
+  }
 `;

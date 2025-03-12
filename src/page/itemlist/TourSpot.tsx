@@ -43,22 +43,35 @@ export const TourSpot = () => {
   const [tourSpotDetail, setTourSpotDetail] = useState<TourSpotDetail | null>(
     null
   );
-  const [rating, setRating] = useState(0); // ⭐ 별점 상태 추가
+  const [rating, setRating] = useState(5); // ⭐ 별점 상태 추가
   const [ratingHover, setRatingHover] = useState(0); // 마우스 오버 별점
   const starRef = useRef<HTMLDivElement>(null);
 
-  const [comment, setComment] = useState("");
+  const [comment, setComment] = useState(""); // 댓글 입력창
   const [comments, setComments] = useState<
-    { text: string; rating: number | null; date: Date }[]
-  >([]);
-  const [needLoginModal, setNeedLoginModal] = useState<boolean>(false);
+    { nickname: string; content: string; rating: number; createdAt: Date }[]
+  >([]); // 현재 페이지 댓글 목록
+  const [totalComments, setTotalComments] = useState(0);
 
   const [currentPage, setCurrentPage] = useState(0); // 현재 페이지 상태 추가
   const commentsPerPage = 10;
-  const totalPages = Math.ceil(comments.length / commentsPerPage);
+  const totalPages = Math.ceil(totalComments / commentsPerPage);
+
+  const [needLoginModal, setNeedLoginModal] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (tourSpotDetail) {
+      getPaginatedComments(); // tourSpotDetail이 로드되면 댓글을 불러옴
+    }
+  }, [tourSpotDetail]);
+  useEffect(() => {
+    if (currentPage === 0) {
+      getPaginatedComments();
+    }
+  }, [currentPage]);
 
   // 별점
-  const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
+  const handleRatingHover = (event: React.MouseEvent<HTMLDivElement>) => {
     if (!starRef.current) return;
 
     const { left, width } = starRef.current.getBoundingClientRect();
@@ -68,11 +81,40 @@ export const TourSpot = () => {
 
     setRatingHover(Math.ceil(position * 2) / 2); // 0.5 단위로 반올림
   };
+  const handleRatingLeave = () => {
+    setRatingHover(rating);
+  };
+  const handleRatingClick = () => {
+    setRating(ratingHover);
+  };
+
+  // 댓글 리스트
+  const getPaginatedComments = async () => {
+    if (!tourSpotDetail?.contentId) return;
+
+    try {
+      const response = await AxiosApi.reviewList(
+        currentPage,
+        commentsPerPage,
+        tourSpotDetail?.contentId
+      );
+
+      console.log(response);
+      console.log("data: ", JSON.stringify(response.content));
+
+      setComments(response.content);
+      setTotalComments(response.totalElements);
+      console.log("comments: ", comments);
+    } catch (error) {
+      console.error("댓글 불러오기 실패:", error);
+    }
+  };
 
   // 댓글 입력
   const handleAddComment = async () => {
-    if (!comment.trim() || rating === null) {
-      alert("별점과 댓글을 모두 입력해주세요!"); // ⭐ 별점과 댓글이 없으면 등록 불가
+    if (comment.trim() === "") {
+      alert("댓글을 입력해주세요!"); // ⭐ 별점과 댓글이 없으면 등록 불가
+      setComment("");
       return;
     }
 
@@ -83,31 +125,22 @@ export const TourSpot = () => {
         tourSpotId: tourSpotDetail?.contentId,
         content: comment,
       };
-      await AxiosApi.postReview(reviewData);
-      getPaginatedComments();
+
+      try {
+        await AxiosApi.postReview(reviewData);
+
+        setComment(""); // 입력 필드 초기화
+        setRating(5); // ⭐ 별점 초기화
+        setRatingHover(5);
+        setCurrentPage(0);
+
+        getPaginatedComments();
+      } catch (error) {
+        console.log("댓글 추가 실패: ", error);
+      }
+    } else {
+      setNeedLoginModal(true);
     }
-    setComment(""); // 입력 필드 초기화
-    setRating(0); // ⭐ 별점 초기화
-  };
-
-  // 댓글 리스트
-  const getPaginatedComments = async () => {
-    const response = await AxiosApi.reviewList(
-      currentPage,
-      commentsPerPage,
-      tourSpotDetail?.contentId
-    );
-
-    console.log("data: ", JSON.stringify(response.content));
-    setComments(response.content);
-    console.log("comments: ", comments);
-  };
-  useEffect(() => {
-    getPaginatedComments();
-  }, [currentPage]);
-
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
   };
 
   const parseLinks = (htmlString: string): React.ReactNode[] => {
@@ -237,6 +270,18 @@ export const TourSpot = () => {
   if (!tourSpotDetail) {
     return <Loading>정보를 불러오는 중입니다.</Loading>;
   }
+
+  // 페이지 번호 생성
+  const pageNumbers = [];
+  for (let i = 1; i <= Math.ceil(totalComments / commentsPerPage); i++) {
+    pageNumbers.push(i);
+  }
+
+  // 페이지 이동
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    getPaginatedComments();
+  };
 
   return (
     <>
@@ -382,8 +427,9 @@ export const TourSpot = () => {
           </div>
         </SpotDetail>
 
+        {/* 댓글 영역 */}
         <CommentBox>
-          <div className="commentCount">댓글 수 {comments.length}</div>
+          <div className="commentCount">댓글 수 {totalComments}</div>
           <div className="commentInput">
             <InputBox
               placeholder="댓글을 입력하세요..."
@@ -391,11 +437,13 @@ export const TourSpot = () => {
               onChange={(e) => setComment(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleAddComment()}
             />
+            {/* 별점 */}
             <StyledWrapper>
               <div
                 ref={starRef}
-                onMouseMove={handleMouseMove}
-                onClick={() => setRating(ratingHover)}
+                onMouseMove={handleRatingHover}
+                onMouseLeave={handleRatingLeave}
+                onClick={handleRatingClick}
                 style={{
                   display: "flex",
                   gap: 5,
@@ -425,20 +473,31 @@ export const TourSpot = () => {
             <Button onClick={handleAddComment}> 등록</Button>
           </div>
 
-          {/* {getPaginatedComments().map((c, index) => (
+          {/* 댓글 목록 */}
+          {comments.map((c, index) => (
             <div key={index}>
               <div className="commentList">
-                <p className="comment">{c.text}</p>
+                <p>{c.nickname}</p>
+                <p className="comment">{c.content}</p>
                 <div className="commentInfo">
-                  <p className="date">{c.date.toLocaleString()}</p>
-                  <p className="rate">
-                    <GoStarFill style={{ color: "#FFD700" }} /> {c.rating}점
+                  <p className="date">
+                    {new Date(c.createdAt)
+                      .toISOString()
+                      .replace("T", " ")
+                      .slice(0, 19)}
+                  </p>
+                  <p className="rate center">
+                    <GoStarFill
+                      style={{ color: "#FFD700", marginRight: "5px" }}
+                    />{" "}
+                    {c.rating}점
                   </p>
                 </div>
               </div>
             </div>
-          ))} */}
-          {comments.length > commentsPerPage && (
+          ))}
+          {/* 페이징 */}
+          {totalComments > commentsPerPage && (
             <Paginating
               currentPage={currentPage}
               totalPages={totalPages}
@@ -446,6 +505,7 @@ export const TourSpot = () => {
             />
           )}
         </CommentBox>
+
         {needLoginModal && (
           <CheckModal
             isOpen={needLoginModal}
