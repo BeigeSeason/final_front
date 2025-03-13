@@ -77,7 +77,24 @@ export const DiaryHeader = styled.div`
   }
 
   h1 {
-    margin: 40px 0;
+    margin: 40px 0 15px;
+  }
+
+  .travel-info-container {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    margin-bottom: 25px;
+    color: #444;
+    .travel-info {
+      display: flex;
+      align-items: center;
+      font-size: 13px;
+      span {
+        font-size: 15px;
+        margin-left: 5px;
+      }
+    }
   }
 
   .profile {
@@ -174,7 +191,7 @@ export const DiaryFooter = styled.div`
   .tag-container {
     display: flex;
     flex-wrap: wrap; /* 자동 줄바꿈 */
-    width: 100%;
+    width: 90%;
     padding: 7px 20px;
     gap: 10px;
 

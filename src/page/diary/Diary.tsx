@@ -9,7 +9,15 @@ import { DiaryInfo } from "../../types/DiaryTypes";
 import { ReportData } from "../../types/CommonTypes";
 import { BookmarkData } from "../../types/ItemTypes";
 import { GetProfileImageSrc } from "../../component/ProfileComponent";
-import { FaBookmark, FaRegBookmark } from "react-icons/fa";
+import {
+  FaBookmark,
+  FaRegBookmark,
+  FaRegCalendarAlt,
+  FaWonSign,
+} from "react-icons/fa";
+// import { FaCalendarDays } from "react-icons/fa6";
+import { TbPigMoney } from "react-icons/tb";
+import { PiPiggyBank } from "react-icons/pi";
 import { BiLock, BiLockOpen, BiTrash } from "react-icons/bi";
 import { GoPencil } from "react-icons/go";
 import { RiAlarmWarningLine } from "react-icons/ri";
@@ -251,6 +259,18 @@ const Diary = () => {
         <h1 onClick={() => setIsMenuToggleOpen(false)}>
           {diaryInfo?.title ?? "제목 없음"}
         </h1>
+        <div className="travel-info-container">
+          <div className="travel-info">
+            <FaRegCalendarAlt />{" "}
+            <span>
+              {diaryInfo?.startDate?.replaceAll("-", ". ")} ~{" "}
+              {diaryInfo?.endDate?.replaceAll("-", ". ")}
+            </span>
+          </div>
+          <div className="travel-info">
+            <FaWonSign /> <span>{diaryInfo?.totalCost.toLocaleString()}</span>
+          </div>
+        </div>
         <div className="profile">
           <div
             className="profile-img"

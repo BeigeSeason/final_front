@@ -71,7 +71,7 @@ export const ProfileInfo = styled.div`
   .report-button {
     display: flex;
     position: absolute;
-    right: 5%;
+    right: 7%;
     bottom: 15px;
   }
 `;

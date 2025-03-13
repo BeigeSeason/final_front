@@ -138,6 +138,7 @@ export const DiaryForm = ({ mode, initialData, onSubmit }: DiaryFormProps) => {
   const handleTravelCostChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.replace(/,/g, "");
     const numericValue = Number(value);
+    if (value !== "" && Number(value) >= 1_0000_0000_0000) return; // 1조 이상 입력 방지
     if (isNaN(numericValue) || numericValue === 0) {
       setTravelCost(null);
     } else {

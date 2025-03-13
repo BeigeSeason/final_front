@@ -6,6 +6,7 @@ import JwtAxios from "./JwtAxios";
 
 export const DiaryApi = {
   postDiary: async (data: DiaryData): Promise<boolean> => {
+    console.log(data);
     try {
       return (await JwtAxios.post(`${API_BASE_URL}/diary/post-diary`, data))
         .data;

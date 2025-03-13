@@ -80,11 +80,12 @@ export const NavSt = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 5%;
+  padding: 0 10%;
   .leftMenu,
   .rightMenu {
     display: flex;
-    gap: 50px;
+    /* gap: 50px; */
+    gap: 10%;
     align-items: center;
   }
   .tag {
