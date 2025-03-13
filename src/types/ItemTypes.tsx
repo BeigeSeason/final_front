@@ -50,6 +50,7 @@ export interface DiaryApiFilters {
   page?: number;
   size?: number;
   keyword?: string;
+  tag?: string;
   sort?: string;
   areaCode?: string;
   sigunguCode?: string;

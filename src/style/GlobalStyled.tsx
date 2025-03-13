@@ -78,6 +78,7 @@ export const NavSt = styled.div`
   height: 50px;
   background-color: ${colors.colorD};
   display: flex;
+  position: relative;
   justify-content: space-between;
   align-items: center;
   padding: 0 10%;
@@ -85,8 +86,16 @@ export const NavSt = styled.div`
   .rightMenu {
     display: flex;
     /* gap: 50px; */
-    gap: 10%;
     align-items: center;
+  }
+  .leftMenu {
+    gap: 35%;
+  }
+  .rightMenu {
+    display: flex;
+    position: absolute;
+    right: 13%;
+    gap: 17%;
   }
   .tag {
     text-decoration: none;

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   MainBox,
   BestSpot,
@@ -19,9 +19,15 @@ import koreaGeoJson from "../util/korea.geojson.json";
 import { areas } from "../util/TourCodes";
 import { useNavigate } from "react-router-dom";
 import FontSize from "@tiptap/extension-font-size";
+import { ItemApi } from "../api/ItemApi";
+import { TourSpot, Diary } from "../types/ItemTypes";
+import SpotBasicImg from "../img/item/type_100.png";
+import DiaryBasicImg from "../img/item/type_200.png";
 
 export const Main = () => {
   const navigate = useNavigate();
+  const [places, setPlaces] = useState<TourSpot[]>([]);
+  const [diaries, setDiaries] = useState<Diary[]>([]);
   const [hoveredArea, setHoveredArea] = useState<string | null>(null);
   const [tooltip, setTooltip] = useState({
     visible: false,
@@ -29,20 +35,38 @@ export const Main = () => {
     y: 0,
     name: "",
   });
-  const places = [
-    { id: 1, name: "장소 1", imgSrc: "path/to/image1.jpg" },
-    { id: 2, name: "장소 2", imgSrc: "path/to/image2.jpg" },
-    { id: 3, name: "장소 3", imgSrc: "path/to/image3.jpg" },
-    { id: 4, name: "장소 4", imgSrc: "path/to/image4.jpg" },
-    { id: 5, name: "장소 5", imgSrc: "path/to/image5.jpg" },
-  ];
-  const diaries = [
-    { id: 1, name: "여행일지 1", imgSrc: "path/to/image1.jpg" },
-    { id: 2, name: "여행일지 2", imgSrc: "path/to/image2.jpg" },
-    { id: 3, name: "여행일지 3", imgSrc: "path/to/image3.jpg" },
-    { id: 4, name: "여행일지 4", imgSrc: "path/to/image4.jpg" },
-    { id: 5, name: "여행일지 5", imgSrc: "path/to/image5.jpg" },
-  ];
+  // const places = [
+  //   { id: 1, name: "장소 1", imgSrc: "path/to/image1.jpg" },
+  //   { id: 2, name: "장소 2", imgSrc: "path/to/image2.jpg" },
+  //   { id: 3, name: "장소 3", imgSrc: "path/to/image3.jpg" },
+  //   { id: 4, name: "장소 4", imgSrc: "path/to/image4.jpg" },
+  //   { id: 5, name: "장소 5", imgSrc: "path/to/image5.jpg" },
+  // ];
+  // const diaries = [
+  //   { id: 1, name: "여행일지 1", imgSrc: "path/to/image1.jpg" },
+  //   { id: 2, name: "여행일지 2", imgSrc: "path/to/image2.jpg" },
+  //   { id: 3, name: "여행일지 3", imgSrc: "path/to/image3.jpg" },
+  //   { id: 4, name: "여행일지 4", imgSrc: "path/to/image4.jpg" },
+  //   { id: 5, name: "여행일지 5", imgSrc: "path/to/image5.jpg" },
+  // ];
+  const getBestSpots = async () => {
+    const filters = {
+      page: 0,
+      size: 5,
+      sort: "rating,desc",
+    };
+    const response = await ItemApi.getTourSpotList(filters);
+    setPlaces(response.content);
+  };
+  const getBestDiaries = async () => {
+    const filters = {
+      page: 0,
+      size: 5,
+      sort: "bookmark_count,desc",
+    };
+    const response = await ItemApi.getDiaryList(filters);
+    setDiaries(response.content);
+  };
   const handleClick = (areaCode: string) => {
     navigate(`/tourlist?areaCode=${areaCode}&pageSize=10&page=0`);
   };
@@ -53,6 +77,11 @@ export const Main = () => {
   const handleMouseLeave = () => {
     setHoveredArea(null); // 호버 끝나면 이름 제거
   };
+
+  useEffect(() => {
+    getBestSpots();
+    getBestDiaries();
+  }, []);
   return (
     <>
       <GlobalFont />
@@ -70,9 +99,9 @@ export const Main = () => {
             //  }}
           >
             {places.map((place) => (
-              <SwiperSlide key={place.id}>
-                <img src={place.imgSrc} alt={place.name} />
-                <p>{place.name}</p>
+              <SwiperSlide key={place.spotId}>
+                <img src={place.thumbnail || SpotBasicImg} alt={place.title} />
+                <p>{place.title}</p>
               </SwiperSlide>
             ))}
           </Swiper>
@@ -152,7 +181,7 @@ export const Main = () => {
           >
             {diaries.map((diary) => (
               <SwiperSlide
-                key={diary.id}
+                key={diary.diaryId}
                 style={{
                   display: "flex",
                   flexDirection: "column",
@@ -162,11 +191,11 @@ export const Main = () => {
                 }}
               >
                 <img
-                  src={diary.imgSrc}
-                  alt={diary.name}
+                  src={diary.thumbnail || DiaryBasicImg}
+                  alt={diary.title}
                   style={{ maxWidth: "100%", height: "auto" }}
                 />
-                <p>{diary.name}</p>
+                <p>{diary.title}</p>
               </SwiperSlide>
             ))}
           </Swiper>

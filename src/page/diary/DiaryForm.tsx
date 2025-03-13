@@ -107,7 +107,7 @@ export const DiaryForm = ({ mode, initialData, onSubmit }: DiaryFormProps) => {
     if (e.key === "Enter" || e.key === " ") {
       if (inputTag.trim() === "") return;
 
-      const formattedTag = `# ${inputTag.trim()}`;
+      const formattedTag = `#${inputTag.trim()}`;
 
       setTags((prevTags) => {
         if (prevTags.length >= 10) {
@@ -138,7 +138,7 @@ export const DiaryForm = ({ mode, initialData, onSubmit }: DiaryFormProps) => {
   const handleTravelCostChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.replace(/,/g, "");
     const numericValue = Number(value);
-    if (value !== "" && Number(value) >= 1_0000_0000_0000) return; // 1조 이상 입력 방지
+    if (value !== "" && Number(value) >= 1_000_000_000) return; // 10억 이상 입력 방지
     if (isNaN(numericValue) || numericValue === 0) {
       setTravelCost(null);
     } else {
@@ -163,9 +163,10 @@ export const DiaryForm = ({ mode, initialData, onSubmit }: DiaryFormProps) => {
 
   // 제목
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // 제목 길이가 40자 이하일 때만 상태 업데이트
-    if (e.target.value.length <= 40) {
-      setTitle(e.target.value);
+    const value = e.target.value;
+    // `#`이 포함되지 않고, 길이가 40자 이하일 때만 상태 업데이트
+    if (!value.includes("#") && value.length <= 40) {
+      setTitle(value);
     }
   };
 

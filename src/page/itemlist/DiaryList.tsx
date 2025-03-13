@@ -171,6 +171,7 @@ export const DiaryList: React.FC = () => {
 
   const handleSearch = () => {
     updateFilters("searchQuery", searchQuery);
+    setSearchQuery("");
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -229,11 +230,11 @@ export const DiaryList: React.FC = () => {
     const min =
       minPrice === ""
         ? ""
-        : Math.min(Number(minPrice) || 0, Number(maxPrice) || 9999999999999);
+        : Math.min(Number(minPrice) || 0, Number(maxPrice) || 999999999);
     const max =
       maxPrice === ""
         ? ""
-        : Math.max(Number(minPrice) || 0, Number(maxPrice) || 9999999999999);
+        : Math.max(Number(minPrice) || 0, Number(maxPrice) || 999999999);
 
     // minPrice와 maxPrice를 상태로 업데이트
     setMinPrice(String(min));
@@ -316,8 +317,8 @@ export const DiaryList: React.FC = () => {
                     value={formatPrice(minPrice)}
                     onChange={(e) => {
                       let value = e.target.value.replace(/\D/g, ""); // 숫자만 허용
-                      if (value !== "" && Number(value) >= 1_0000_0000_0000)
-                        return; // 1조 이상 입력 방지
+                      if (value !== "" && Number(value) >= 1_000_000_000)
+                        return; // 10억 이상 입력 방지
                       setMinPrice(value); // 빈 값도 허용
                     }}
                     onKeyDown={(e) => {
@@ -342,8 +343,8 @@ export const DiaryList: React.FC = () => {
                     value={formatPrice(maxPrice)}
                     onChange={(e) => {
                       let value = e.target.value.replace(/\D/g, ""); // 숫자만 허용
-                      if (value !== "" && Number(value) >= 1_0000_0000_0000)
-                        return; // 1조 이상 입력 방지
+                      if (value !== "" && Number(value) >= 1_000_000_000)
+                        return; // 10억 이상 입력 방지
                       setMaxPrice(value); // 빈 값도 허용
                     }}
                     onKeyDown={(e) => {

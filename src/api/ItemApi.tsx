@@ -46,6 +46,7 @@ export const ItemApi = {
   getDiaryList: async (
     filters: DiaryApiFilters = {}
   ): Promise<DiaryResponse> => {
+    console.log(filters);
     try {
       const response = await axios.get<DiaryResponse>(
         `${API_BASE_URL}/search/diary-list`,
