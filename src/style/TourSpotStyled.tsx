@@ -270,24 +270,47 @@ export const CommentBox = styled.div`
     display: flex;
     gap: 10px;
   }
+  textarea {
+    width: 100%;
+    resize: none;
+    padding: 5px;
+    outline: none;
+    border-radius: 10px;
+  }
   .commentCount {
     color: #8d8d8d;
-    margin-bottom: 5px;
+    margin: 10px 0;
   }
   .commentList {
     border-bottom: 1px solid #ddd;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
     padding: 10px;
+    gap: 5px;
     .date {
       color: #8d8d8d;
     }
   }
+  .comment-header {
+    display: flex;
+    justify-content: space-between;
+    .header-left {
+      display: flex;
+      gap: 10px;
+    }
+    .header-right {
+      display: flex;
+      justify-content: center;
+      gap: 5px;
+      font-size: 14px;
+      .button {
+        cursor: pointer;
+      }
+    }
+  }
   .commentInfo {
-    .rate,
     .date {
-      margin: 0;
+      font-size: 12px;
     }
   }
   .center {
