@@ -275,6 +275,7 @@ export const DiaryList: React.FC = () => {
             onChange={(e) => setSearchQuery(e.target.value)}
             onKeyDown={handleKeyDown}
             onSearch={handleSearch}
+            placeholder={"검색어 입력 (태그: #사용 및 공백으로 구분)"}
           />
           {/* <PriceRange>
             <div>

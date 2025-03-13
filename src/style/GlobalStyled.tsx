@@ -89,13 +89,13 @@ export const NavSt = styled.div`
     align-items: center;
   }
   .leftMenu {
-    gap: 35%;
+    gap: 5vw;
   }
   .rightMenu {
     display: flex;
     position: absolute;
-    right: 13%;
-    gap: 17%;
+    right: 9%;
+    gap: 3vw;
   }
   .tag {
     text-decoration: none;

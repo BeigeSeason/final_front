@@ -316,7 +316,7 @@ const Diary = () => {
         <div className="tag-container">
           {diaryInfo?.tags.map((tag, index) => (
             <span className="tag content-font1" key={index}>
-              {tag}
+              {tag.replace("#", "# ")}
             </span>
           ))}
         </div>
