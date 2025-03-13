@@ -37,7 +37,7 @@ import { FaRegStar, FaRegStarHalfStroke, FaStar } from "react-icons/fa6";
 
 export const TourSpot = () => {
   const { id } = useParams<{ id: string }>(); // id 값을 URL에서 받아옵니다.
-  const { userId } = useSelector((state: RootState) => state.auth);
+  const { userId, nickname } = useSelector((state: RootState) => state.auth);
   const [isBookmarked, setIsBookmarked] = useState<boolean | null>(null);
   const [bookmarkCount, setBookmarkCount] = useState<number>(0);
   const [tourSpotDetail, setTourSpotDetail] = useState<TourSpotDetail | null>(
@@ -65,9 +65,7 @@ export const TourSpot = () => {
     }
   }, [tourSpotDetail]);
   useEffect(() => {
-    if (currentPage === 0) {
-      getPaginatedComments();
-    }
+    getPaginatedComments();
   }, [currentPage]);
 
   // 별점
@@ -99,12 +97,8 @@ export const TourSpot = () => {
         tourSpotDetail?.contentId
       );
 
-      console.log(response);
-      console.log("data: ", JSON.stringify(response.content));
-
       setComments(response.content);
       setTotalComments(response.totalElements);
-      console.log("comments: ", comments);
     } catch (error) {
       console.error("댓글 불러오기 실패:", error);
     }
@@ -129,12 +123,25 @@ export const TourSpot = () => {
       try {
         await AxiosApi.postReview(reviewData);
 
+        setComments((prevComments) => {
+          const updatedComments = [
+            {
+              nickname: nickname || "", // 여기에 적절한 닉네임을 넣어야 해
+              content: comment,
+              rating: rating,
+              createdAt: new Date(),
+            },
+            ...prevComments,
+          ];
+  
+          // 10개 댓글만 유지
+          return updatedComments.slice(0, 10);
+        });
+
         setComment(""); // 입력 필드 초기화
         setRating(5); // ⭐ 별점 초기화
         setRatingHover(5);
         setCurrentPage(0);
-
-        getPaginatedComments();
       } catch (error) {
         console.log("댓글 추가 실패: ", error);
       }
@@ -279,8 +286,8 @@ export const TourSpot = () => {
 
   // 페이지 이동
   const handlePageChange = (page: number) => {
+    console.log("클릭한 페이지: " + page);
     setCurrentPage(page);
-    getPaginatedComments();
   };
 
   return (
