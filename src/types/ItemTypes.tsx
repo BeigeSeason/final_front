@@ -185,7 +185,6 @@ export interface DiaryFilters {
   areaCode: string;
   subAreaCode: string;
   searchQuery: string;
-  searchTagQuery: string;
   sortBy: string;
   currentPage: number;
   pageSize: number;

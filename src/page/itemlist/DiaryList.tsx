@@ -66,7 +66,6 @@ export const DiaryList: React.FC = () => {
       areaCode: queryParams.get("areaCode") || "",
       subAreaCode: queryParams.get("subAreaCode") || "",
       searchQuery: queryParams.get("searchQuery") || "",
-      searchTagQuery: queryParams.get("searchTagQuery") || "",
       sortBy: queryParams.get("sortBy") || "",
       currentPage: parseInt(queryParams.get("page") || "0", 10),
       pageSize: parseInt(queryParams.get("pageSize") || "10", 10),
@@ -79,9 +78,6 @@ export const DiaryList: React.FC = () => {
     };
   });
   const [searchQuery, setSearchQuery] = useState<string>(filters.searchQuery);
-  const [searchTagQuery, setSearchTagQuery] = useState<string>(
-    filters.searchTagQuery
-  );
   const [isSelectOpen, setIsSelectOpen] = useState<boolean>(false);
   const selectRef = useRef<HTMLDivElement | null>(null);
 
@@ -89,7 +85,7 @@ export const DiaryList: React.FC = () => {
     const queryParams = new URLSearchParams();
     Object.entries(filters).forEach(([key, value]) => {
       if (value) {
-        if (key === "searchQuery" || key === "searchTagQuery") {
+        if (key === "searchQuery") {
           queryParams.set(key, value);
         } else {
           queryParams.set(key, value.toString());
@@ -109,7 +105,6 @@ export const DiaryList: React.FC = () => {
     try {
       const data = await ItemApi.getDiaryList({
         keyword: filters.searchQuery || undefined,
-        tag: filters.searchTagQuery || undefined,
         page: page,
         size: filters.pageSize,
         sort: filters.sortBy.replace(/-(?=[^-]*$)/, ",") || undefined,
@@ -158,7 +153,6 @@ export const DiaryList: React.FC = () => {
       areaCode: "",
       subAreaCode: "",
       searchQuery: "",
-      searchTagQuery: "",
       sortBy: "",
       currentPage: 0,
       pageSize: 10,
@@ -166,7 +160,6 @@ export const DiaryList: React.FC = () => {
       maxPrice: undefined,
     });
     setSearchQuery("");
-    setSearchTagQuery("");
     setMinPrice("");
     setMaxPrice("");
   };
@@ -177,13 +170,8 @@ export const DiaryList: React.FC = () => {
   };
 
   const handleSearch = () => {
-    if (searchTagQuery) {
-      updateFilters("searchTagQuery", searchTagQuery); // 태그 검색일 경우
-    } else {
-      updateFilters("searchQuery", searchQuery); // 일반 검색일 경우
-    }
-    setSearchQuery(""); // 검색 후 일반 검색 입력 필드를 초기화
-    setSearchTagQuery(""); // 검색 후 태그 검색 입력 필드를 초기화
+    updateFilters("searchQuery", searchQuery);
+    setSearchQuery("");
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -284,15 +272,7 @@ export const DiaryList: React.FC = () => {
           </button>
           <SearchBox
             searchTerm={searchQuery}
-            onChange={(e) => {
-              const value = e.target.value;
-              console.log(value);
-              if (value.startsWith("#")) {
-                setSearchTagQuery(value);
-              } else {
-                setSearchQuery(value);
-              }
-            }}
+            onChange={(e) => setSearchQuery(e.target.value)}
             onKeyDown={handleKeyDown}
             onSearch={handleSearch}
           />

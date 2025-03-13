@@ -81,6 +81,7 @@ interface SearchBoxProps {
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
   onSearch: () => void;
+  placeholder?: string;
   width?: string;
   inputHeight?: string;
   borderColor?: string;
@@ -124,6 +125,7 @@ export const SearchBox: React.FC<SearchBoxProps> = ({
   onChange,
   onKeyDown,
   onSearch,
+  placeholder,
   width,
   inputHeight,
   borderColor,
@@ -135,7 +137,7 @@ export const SearchBox: React.FC<SearchBoxProps> = ({
     <SearchContainer>
       <StyleInput
         type="text"
-        placeholder="검색어를 입력하세요"
+        placeholder={placeholder || "검색어를 입력하세요"}
         value={searchTerm}
         onChange={onChange}
         onKeyDown={onKeyDown}
