@@ -306,6 +306,31 @@ const AxiosApi = {
       return false;
     }
   },
+  // 리뷰 수정
+  editReview: async (data: Review) => {
+    try {
+      return await JwtAxios.post(
+        `${API_BASE_URL}/review-bookmark/edit-review`,
+        data
+      );
+    } catch (error) {
+      console.log("댓글 수정 오류");
+      return false;
+    }
+  },
+  // 리뷰 삭제
+  deleteReview: async (id: number) => {
+    try {
+      return await JwtAxios.post(
+        `${API_BASE_URL}/review-bookmark/delete-review-redis`,
+        null,
+        { params: { reviewId: id } }
+      );
+    } catch (error) {
+      console.log("댓글 삭제 실패");
+      return false;
+    }
+  },
   // 리뷰 리스트 조회
   reviewList: async (page = 0, size = 10, tourSpotId = "1") => {
     try {

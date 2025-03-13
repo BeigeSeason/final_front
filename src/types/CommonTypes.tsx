@@ -13,6 +13,7 @@ export interface Comment {
   text: string;
 }
 export interface Review {
+  id: number | null;
   memberId: string;
   rating: number;
   tourSpotId: string | undefined;
