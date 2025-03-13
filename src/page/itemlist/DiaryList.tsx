@@ -66,6 +66,7 @@ export const DiaryList: React.FC = () => {
       areaCode: queryParams.get("areaCode") || "",
       subAreaCode: queryParams.get("subAreaCode") || "",
       searchQuery: queryParams.get("searchQuery") || "",
+      searchTagQuery: queryParams.get("searchTagQuery") || "",
       sortBy: queryParams.get("sortBy") || "",
       currentPage: parseInt(queryParams.get("page") || "0", 10),
       pageSize: parseInt(queryParams.get("pageSize") || "10", 10),
@@ -78,6 +79,9 @@ export const DiaryList: React.FC = () => {
     };
   });
   const [searchQuery, setSearchQuery] = useState<string>(filters.searchQuery);
+  const [searchTagQuery, setSearchTagQuery] = useState<string>(
+    filters.searchTagQuery
+  );
   const [isSelectOpen, setIsSelectOpen] = useState<boolean>(false);
   const selectRef = useRef<HTMLDivElement | null>(null);
 
@@ -85,7 +89,7 @@ export const DiaryList: React.FC = () => {
     const queryParams = new URLSearchParams();
     Object.entries(filters).forEach(([key, value]) => {
       if (value) {
-        if (key === "searchQuery") {
+        if (key === "searchQuery" || key === "searchTagQuery") {
           queryParams.set(key, value);
         } else {
           queryParams.set(key, value.toString());
@@ -105,6 +109,7 @@ export const DiaryList: React.FC = () => {
     try {
       const data = await ItemApi.getDiaryList({
         keyword: filters.searchQuery || undefined,
+        tag: filters.searchTagQuery || undefined,
         page: page,
         size: filters.pageSize,
         sort: filters.sortBy.replace(/-(?=[^-]*$)/, ",") || undefined,
@@ -153,6 +158,7 @@ export const DiaryList: React.FC = () => {
       areaCode: "",
       subAreaCode: "",
       searchQuery: "",
+      searchTagQuery: "",
       sortBy: "",
       currentPage: 0,
       pageSize: 10,
@@ -160,6 +166,7 @@ export const DiaryList: React.FC = () => {
       maxPrice: undefined,
     });
     setSearchQuery("");
+    setSearchTagQuery("");
     setMinPrice("");
     setMaxPrice("");
   };
@@ -170,7 +177,13 @@ export const DiaryList: React.FC = () => {
   };
 
   const handleSearch = () => {
-    updateFilters("searchQuery", searchQuery);
+    if (searchTagQuery) {
+      updateFilters("searchTagQuery", searchTagQuery); // 태그 검색일 경우
+    } else {
+      updateFilters("searchQuery", searchQuery); // 일반 검색일 경우
+    }
+    setSearchQuery(""); // 검색 후 일반 검색 입력 필드를 초기화
+    setSearchTagQuery(""); // 검색 후 태그 검색 입력 필드를 초기화
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -229,11 +242,11 @@ export const DiaryList: React.FC = () => {
     const min =
       minPrice === ""
         ? ""
-        : Math.min(Number(minPrice) || 0, Number(maxPrice) || 9999999999999);
+        : Math.min(Number(minPrice) || 0, Number(maxPrice) || 999999999);
     const max =
       maxPrice === ""
         ? ""
-        : Math.max(Number(minPrice) || 0, Number(maxPrice) || 9999999999999);
+        : Math.max(Number(minPrice) || 0, Number(maxPrice) || 999999999);
 
     // minPrice와 maxPrice를 상태로 업데이트
     setMinPrice(String(min));
@@ -271,7 +284,15 @@ export const DiaryList: React.FC = () => {
           </button>
           <SearchBox
             searchTerm={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={(e) => {
+              const value = e.target.value;
+              console.log(value);
+              if (value.startsWith("#")) {
+                setSearchTagQuery(value);
+              } else {
+                setSearchQuery(value);
+              }
+            }}
             onKeyDown={handleKeyDown}
             onSearch={handleSearch}
           />
@@ -316,8 +337,8 @@ export const DiaryList: React.FC = () => {
                     value={formatPrice(minPrice)}
                     onChange={(e) => {
                       let value = e.target.value.replace(/\D/g, ""); // 숫자만 허용
-                      if (value !== "" && Number(value) >= 1_0000_0000_0000)
-                        return; // 1조 이상 입력 방지
+                      if (value !== "" && Number(value) >= 1_000_000_000)
+                        return; // 10억 이상 입력 방지
                       setMinPrice(value); // 빈 값도 허용
                     }}
                     onKeyDown={(e) => {
@@ -342,8 +363,8 @@ export const DiaryList: React.FC = () => {
                     value={formatPrice(maxPrice)}
                     onChange={(e) => {
                       let value = e.target.value.replace(/\D/g, ""); // 숫자만 허용
-                      if (value !== "" && Number(value) >= 1_0000_0000_0000)
-                        return; // 1조 이상 입력 방지
+                      if (value !== "" && Number(value) >= 1_000_000_000)
+                        return; // 10억 이상 입력 방지
                       setMaxPrice(value); // 빈 값도 허용
                     }}
                     onKeyDown={(e) => {

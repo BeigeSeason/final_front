@@ -188,6 +188,7 @@ export const TourList: React.FC = () => {
 
   const handleSearch = () => {
     updateFilters("searchQuery", searchQuery);
+    setSearchQuery("");
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {

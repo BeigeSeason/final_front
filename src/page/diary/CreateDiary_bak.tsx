@@ -86,7 +86,7 @@ const CreateDiary = () => {
     if (e.key === "Enter" || e.key === " ") {
       if (inputTag.trim() === "") return;
 
-      const formattedTag = `# ${inputTag.trim()}`;
+      const formattedTag = `#${inputTag.trim()}`;
 
       setTags((prevTags) => [...prevTags, formattedTag]);
       setInputTag("");
