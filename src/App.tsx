@@ -5,7 +5,6 @@ import {
   Route,
   useNavigate,
 } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastProvider } from "./context/ToastContext";
 
@@ -50,7 +49,6 @@ function App() {
     <>
       <Provider store={store}>
         <Router>
-          {/* <ToastContainer /> */}
           <ToastProvider>
             <AuthInitializer />
             <Routes>

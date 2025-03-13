@@ -12,7 +12,12 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/autoplay";
-import { Navigation, Pagination, Autoplay } from "swiper/modules";
+import {
+  Navigation,
+  Pagination,
+  Autoplay,
+  EffectCoverflow,
+} from "swiper/modules";
 import { ComposableMap, Geographies, Geography } from "react-simple-maps";
 import { geoCentroid } from "d3-geo";
 import koreaGeoJson from "../util/korea.geojson.json";
@@ -52,7 +57,7 @@ export const Main = () => {
   const getBestSpots = async () => {
     const filters = {
       page: 0,
-      size: 5,
+      size: 10,
       sort: "rating,desc",
     };
     const response = await ItemApi.getTourSpotList(filters);
@@ -61,7 +66,7 @@ export const Main = () => {
   const getBestDiaries = async () => {
     const filters = {
       page: 0,
-      size: 5,
+      size: 4,
       sort: "bookmark_count,desc",
     };
     const response = await ItemApi.getDiaryList(filters);
@@ -88,24 +93,85 @@ export const Main = () => {
       <MainBox>
         <BestSpot className="GridItem">
           <Swiper
-            modules={[Navigation, Pagination, Autoplay]}
-            spaceBetween={50}
-            slidesPerView={1}
+            modules={[EffectCoverflow, Navigation, Pagination, Autoplay]}
+            effect="coverflow"
+            centeredSlides={true}
+            spaceBetween={10}
+            slidesPerView={3}
             loop={true}
+            coverflowEffect={{
+              rotate: 0, // 슬라이드 회전 각도
+              stretch: 0, // 슬라이드 간 간격 조정
+              depth: 500, // 입체감 (값이 클수록 깊이감 증가)
+              modifier: 0.8, // 효과 강도
+              slideShadows: false, // 슬라이드 그림자 효과
+            }}
             navigation
             pagination={{ clickable: true }}
-            // autoplay={{ delay: 3000,
-            //   disableOnInteraction: false
-            //  }}
+            // autoplay={{ delay: 3000, disableOnInteraction: false }}
+            // breakpoints={{
+            //   1024: { slidesPerView: 5, spaceBetween: 30 }, // 큰 화면에서는 5개
+            //   768: { slidesPerView: 3, spaceBetween: 20 }, // 태블릿에서는 3개
+            //   480: { slidesPerView: 2, spaceBetween: 10 }, // 모바일에서는 2개
+            // }}
           >
             {places.map((place) => (
-              <SwiperSlide key={place.spotId}>
-                <img src={place.thumbnail || SpotBasicImg} alt={place.title} />
-                <p>{place.title}</p>
+              <SwiperSlide key={place.spotId} className="swiper-slide-custom">
+                <img
+                  src={place.thumbnail || SpotBasicImg}
+                  alt={place.title}
+                  onClick={() => navigate(`/tourspot/${place.spotId}`)}
+                />
+                <p className="slide-text">{place.title}</p>
               </SwiperSlide>
             ))}
           </Swiper>
         </BestSpot>
+        <BestDiary className="GridItem">
+          {diaries.map((diary) => (
+            <div key={diary.diaryId} className="diary-card">
+              <img
+                src={diary.thumbnail || DiaryBasicImg}
+                alt={diary.title}
+                style={{
+                  width: "100%",
+                  height: "auto",
+                  borderRadius: "10px",
+                }}
+              />
+              <p className="diary-title">{diary.title}</p>
+            </div>
+          ))}
+          {/* <Swiper
+            modules={[Navigation, Pagination, Autoplay]}
+            spaceBetween={20}
+            slidesPerView={"auto"}
+            loop={true}
+            navigation
+            pagination={{ clickable: true }}
+            centeredSlides={true}
+          >
+            {diaries.map((diary) => (
+              <SwiperSlide
+                key={diary.diaryId}
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  width: "32%",
+                }}
+              >
+                <img
+                  src={diary.thumbnail || DiaryBasicImg}
+                  alt={diary.title}
+                  style={{ maxWidth: "100%", height: "auto" }}
+                />
+                <p>{diary.title}</p>
+              </SwiperSlide>
+            ))}
+          </Swiper> */}
+        </BestDiary>
         <PolygonMap>
           <ComposableMap
             width={500}
@@ -169,38 +235,7 @@ export const Main = () => {
             </div>
           )}
         </PolygonMap>
-        <BestDiary className="GridItem">
-          <Swiper
-            modules={[Navigation, Pagination, Autoplay]}
-            spaceBetween={20}
-            slidesPerView={"auto"}
-            loop={true}
-            navigation
-            pagination={{ clickable: true }}
-            centeredSlides={true}
-          >
-            {diaries.map((diary) => (
-              <SwiperSlide
-                key={diary.diaryId}
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  width: "32%",
-                }}
-              >
-                <img
-                  src={diary.thumbnail || DiaryBasicImg}
-                  alt={diary.title}
-                  style={{ maxWidth: "100%", height: "auto" }}
-                />
-                <p>{diary.title}</p>
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        </BestDiary>
-        <VisitGraph className="GridItem"></VisitGraph>
+        {/* <VisitGraph className="GridItem"></VisitGraph> */}
       </MainBox>
     </>
   );

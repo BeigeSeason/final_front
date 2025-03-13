@@ -16,11 +16,48 @@ export const GridItem = styled.div`
 `;
 // 인기 관광지 ----------------------------------------------------------------------
 export const BestSpot = styled(GridItem)`
-  grid-column: span 3;
-  border: 1px solid black;
+  grid-column: span 5;
+  /* border: 1px solid black; */
   width: 100%;
+  height: 500px;
   position: relative;
   display: flex;
+  padding: 2% 0 4%;
+
+  .swiper-slide-custom {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .swiper-slide-custom img {
+    /* width: 600px; // 슬라이드에 꽉 차도록 조정 */
+    max-width: 90%;
+    height: 450px; // 고정 높이 설정
+    object-fit: cover; // 비율을 유지하면서 꽉 차게 조정
+    border-radius: 10px;
+    cursor: pointer;
+  }
+
+  .slide-text {
+    position: absolute;
+    bottom: 10px;
+    left: 5%;
+    /* transform: translateX(-50%); */
+    color: white;
+    /* background: rgba(0, 0, 0, 0.6); // 반투명 배경 추가 */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 30px;
+    font-weight: bold;
+    white-space: nowrap; // 줄바꿈 방지
+    overflow: hidden; // 넘치는 글자를 잘라냄
+    text-overflow: ellipsis; // 넘치는 글자는 '...' 처리
+    max-width: 90%;
+  }
+
   .swiper-button-next,
   .swiper-button-prev {
     color: white !important;
@@ -33,6 +70,10 @@ export const BestSpot = styled(GridItem)`
     font-weight: bold;
   }
 
+  .swiper-pagination {
+    position: relative;
+    bottom: 20px;
+  }
   .swiper-pagination-bullet-active {
     background-color: ${colors.colorB};
   }
@@ -40,12 +81,32 @@ export const BestSpot = styled(GridItem)`
 
 // 인기 플래너 -------------------------------------------------------------------------
 export const BestDiary = styled(GridItem)`
-  grid-column: span 5;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 2열 */
+  grid-template-rows: repeat(2, auto); /* 🔹 2행 */
+  grid-column: span 3;
   width: 100%;
+  height: 500px;
   position: relative;
-  display: flex;
+  /* display: flex; */
   align-items: center;
-  .swiper {
+  gap: 30px; /* 🔹 카드 간 간격 */
+
+  .diary-card {
+    display: flex;
+    /* flex-direction: column;
+    align-items: center;
+    text-align: center; */
+    height: 200px;
+  }
+  .diary-card img {
+    width: 50%;
+    aspect-ratio: 9/16;
+    object-fit: cover;
+    border-radius: 10px;
+  }
+
+  /* .swiper {
     width: 100%;
   }
   .swiper-slide {
@@ -66,13 +127,13 @@ export const BestDiary = styled(GridItem)`
 
   .swiper-pagination-bullet-active {
     background-color: ${colors.colorB};
-  }
+  } */
 `;
 
 // 폴리곤 넣고싶다----------------------------------------------------------------------
 export const PolygonMap = styled(GridItem)`
   grid-column: span 2;
-  border: 1px solid black;
+  /* border: 1px solid black; */
   display: flex;
   position: relative;
   align-items: center;
