@@ -15,6 +15,7 @@ export interface TourSpot {
   title: string;
   addr: string;
   thumbnail: string;
+  avgRating: number;
 }
 
 export interface TourSpotResponse {

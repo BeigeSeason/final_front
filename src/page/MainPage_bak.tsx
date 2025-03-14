@@ -4,7 +4,7 @@ import {
   BestSpot,
   BestDiary,
   PolygonMap,
-  VisitGraph,
+  // VisitGraph,
 } from "../style/MainStyled";
 import { GlobalFont } from "../style/GlobalStyled";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -196,7 +196,7 @@ export const Main = () => {
             ))}
           </Swiper>
         </BestDiary>
-        <VisitGraph className="GridItem"></VisitGraph>
+        {/* <VisitGraph className="GridItem"></VisitGraph> */}
       </MainBox>
     </>
   );
