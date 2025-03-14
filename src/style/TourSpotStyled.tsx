@@ -318,3 +318,91 @@ export const CommentBox = styled.div`
     align-items: center;
   }
 `;
+
+export const RecommendBox = styled.div`
+  display: flex;
+  margin: 50px auto;
+  gap: 50px;
+  flex-direction: column;
+  .recommend-box {
+    display: flex;
+    .genderBox {
+      border: 1px solid #ddd;
+      border-radius: 15px;
+      padding: 15px;
+      cursor: pointer;
+      &:hover {
+        background-color: #ddd;
+      }
+    }
+    select {
+      padding: 10px;
+      border-radius: 10px;
+    }
+    .selected {
+      background-color: #ddd;
+    }
+  }
+  .radio-gap {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+  .radio-container {
+    display: flex;
+    gap: 10px;
+    .radio-box {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+    }
+    .radio-lineBox {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .radio-line {
+      position: absolute;
+      width: 60px;
+      height: 6px;
+      background-color: #ccc;
+      left: 12px;
+      top: 55%;
+      transform: translateY(-50%);
+      z-index: -1;
+    }
+    .radio-button {
+      appearance: none;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 3px solid #888;
+      transition: background-color 0.3s, border-color 0.3s;
+      cursor: pointer;
+      position: relative;
+    }
+    .radio-item {
+      width: 50px;
+    }
+  }
+  .gap30 {
+    gap: 30px;
+  }
+  .gap50 {
+    gap: 50px;
+  }
+  .title {
+    width: 70px;
+    font-weight: 600;
+  }
+  .center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .justify-center {
+    display: flex;
+    justify-content: center;
+  }
+`

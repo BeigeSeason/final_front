@@ -41,6 +41,7 @@ import CreateDiary from "./page/diary/CreateDiary";
 import EditDiary from "./page/diary/EditDiary";
 import Diary from "./page/diary/Diary";
 import { TourSpot } from "./page/itemlist/TourSpot";
+import TourRecommend from "./page/itemlist/TourRecommend";
 
 import Test from "./page/test";
 
@@ -121,6 +122,14 @@ function App() {
                 />
                 <Route path="/tourspot" element={<TourSpot />} />
                 <Route path="/tourspot/:id" element={<TourSpot />} />
+                <Route
+                  path="/tourRecommend"
+                  element={
+                    <ProtectedRoute>
+                      <TourRecommend />
+                    </ProtectedRoute>
+                  }
+                />
               </Route>
 
               {/* 관리자 접근 페이지 */}

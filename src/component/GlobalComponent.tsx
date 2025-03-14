@@ -212,9 +212,9 @@ export const Nav = () => {
         </Link>
         <Link
           className={`tag content-font1 ${
-            isActive("/recommTour") ? "active" : ""
+            isActive("/tourRecommend") ? "active" : ""
           }`}
-          to="/recommTour"
+          to="/tourRecommend"
         >
           여행지 추천
         </Link>

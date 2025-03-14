@@ -3,7 +3,7 @@ import { AxiosResponse } from "axios";
 import axios from "axios";
 import Common from "../util/Common";
 import { API_BASE_URL } from "../util/Common";
-import { ReportData, Review } from "../types/CommonTypes";
+import { Recommendation, RecommendInput, ReportData, Review } from "../types/CommonTypes";
 
 interface LoginRequest {
   userId: string;
@@ -343,6 +343,21 @@ const AxiosApi = {
       return response.data;
     } catch (error) {
       console.error("댓글 리스트 조회 중 오류 발생:", error);
+      throw error;
+    }
+  },
+  // 여행지 추천
+  recommendSpot: async (data: RecommendInput) => {
+    try {
+      const response = await axios.post<{ status: string, recommendations: Recommendation[] }>(`http://localhost:5000/recommend`, data);
+
+      if (response.data.status === 'success') {
+        return response.data.recommendations;
+      } else {
+        throw new Error('추천을 받는데 실패했습니다.');
+      }
+    } catch (error) {
+      console.log("여행지 추천 실패:", error);
       throw error;
     }
   },

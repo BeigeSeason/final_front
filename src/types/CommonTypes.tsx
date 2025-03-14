@@ -19,3 +19,22 @@ export interface Review {
   tourSpotId: string | undefined;
   content: string;
 }
+export interface RecommendInput {
+  GENDER: number;
+  AGE_GRP: number;
+  TRAVEL_STYL_1: number;
+  TRAVEL_STYL_2: number;
+  TRAVEL_STYL_3: number;
+  TRAVEL_STYL_4: number;
+  TRAVEL_STYL_5: number;
+  TRAVEL_STYL_6: number;
+  TRAVEL_STYL_7: number;
+  TRAVEL_STYL_8: number;
+  TRAVEL_MOTIVE_1: number;
+  TRAVEL_COMPANIONS_NUM: number;
+  TRAVEL_MISSION_INT: number;
+}
+export interface Recommendation {
+  destination: string;
+  score: number;
+}
