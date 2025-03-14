@@ -76,7 +76,8 @@ export const HeaderSt = styled.div`
 // 네비 스타일 -------------------------------------------------------------------------------------
 export const NavSt = styled.div`
   height: 50px;
-  background-color: ${colors.colorD};
+  /* background-color: ${colors.colorD}; */
+  /* border-bottom: 1px solid #ccc; */
   display: flex;
   position: relative;
   justify-content: space-between;
