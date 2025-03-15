@@ -3,7 +3,7 @@ import { colors } from "./GlobalStyled";
 
 export const MainBox = styled.div`
   height: 100%;
-  width: 90vw;
+  width: 100%;
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   /* grid-template-columns: minmax(0, 3fr) minmax(0, 2fr) minmax(0, 3fr); */
@@ -19,41 +19,45 @@ export const BestSpot = styled(GridItem)`
   grid-column: span 5;
   /* border: 1px solid black; */
   width: 100%;
-  height: 500px;
+  height: 30vw;
   position: relative;
   display: flex;
-  padding: 1% 0 4%;
+  padding: 0.5% 0 4%;
 
   .swiper-slide-custom {
     position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow: hidden;
+    /* overflow: hidden; */
   }
 
-  .blurred-background {
+  .background {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
+    height: 80%;
     filter: brightness(70%) blur(10px);
     z-index: -1;
   }
 
   .slide-content {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 80%;
+    /* align-items: center; */
+    /* justify-content: space-between; */
+    width: 90%;
     max-width: 1200px;
   }
 
   .slide-image {
-    width: 70%;
-    max-width: 700px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    max-width: 1300px;
     border-radius: 10px;
+    object-fit: contain;
   }
 
   .slide-text-container {
@@ -62,7 +66,6 @@ export const BestSpot = styled(GridItem)`
     color: white;
     text-align: left;
     white-space: nowrap; // 줄바꿈 방지
-    /* text-overflow: ellipsis; // 넘치는 글자는 '...' 처리 */
     z-index: 10;
 
     /* 📌 CSS 애니메이션 추가 */

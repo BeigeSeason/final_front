@@ -29,6 +29,7 @@ import { ItemApi } from "../api/ItemApi";
 import { TourSpot, Diary } from "../types/ItemTypes";
 import SpotBasicImg from "../img/item/type_100.png";
 import DiaryBasicImg from "../img/item/type_200.png";
+import TourBanner from "../img/banner/banner_tour.jpg";
 import { GoStarFill } from "react-icons/go";
 
 export const Main = () => {
@@ -115,7 +116,7 @@ export const Main = () => {
                   onClick={() => navigate(`/tourspot/${place.spotId}`)}
                 />
                 <p className="slide-text">{place.title}</p> */}
-                <div
+                {/* <div
                   className="blurred-background"
                   style={{
                     backgroundImage: `url(${place.thumbnail || SpotBasicImg})`,
@@ -133,6 +134,28 @@ export const Main = () => {
                   </div>
                   <img
                     src={place.thumbnail || SpotBasicImg}
+                    alt={place.title}
+                    className="slide-image"
+                    onClick={() => navigate(`/tourspot/${place.spotId}`)}
+                  />
+                </div> */}
+                <div
+                  className="background"
+                  style={{ backgroundColor: "#a6dbff" }}
+                />
+                <div className="slide-content">
+                  <div className="slide-text-container">
+                    <h1 className="title">완벽한 여행의 시작</h1>
+                    <h3 className="sub-title">
+                      관광지, 맛집, 숙소까지 한눈에 검색하고 떠나세요!
+                    </h3>
+                    {/* <p className="slide-rating">
+                      <GoStarFill style={{ color: "#FFD700" }} />
+                      &nbsp;{place.avgRating.toFixed(2)}
+                    </p> */}
+                  </div>
+                  <img
+                    src={TourBanner || SpotBasicImg}
                     alt={place.title}
                     className="slide-image"
                     onClick={() => navigate(`/tourspot/${place.spotId}`)}
