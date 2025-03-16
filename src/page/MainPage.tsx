@@ -30,6 +30,8 @@ import { TourSpot, Diary } from "../types/ItemTypes";
 import SpotBasicImg from "../img/item/type_100.png";
 import DiaryBasicImg from "../img/item/type_200.png";
 import TourBanner from "../img/banner/banner_tour.jpg";
+import DiaryBanner from "../img/banner/banner_diary.jpg";
+import RecommendBanner from "../img/banner/banner_recommend.png";
 import { GoStarFill } from "react-icons/go";
 
 export const Main = () => {
@@ -110,30 +112,37 @@ export const Main = () => {
           >
             {places.map((place) => (
               <SwiperSlide key={place.spotId} className="swiper-slide-custom">
-                {/* <img
-                  src={place.thumbnail || SpotBasicImg}
-                  alt={place.title}
-                  onClick={() => navigate(`/tourspot/${place.spotId}`)}
-                />
-                <p className="slide-text">{place.title}</p> */}
                 {/* <div
-                  className="blurred-background"
-                  style={{
-                    backgroundImage: `url(${place.thumbnail || SpotBasicImg})`,
-                  }}
+                  className="background"
+                  style={{ backgroundColor: "#a6dbff" }}
                 />
-
                 <div className="slide-content">
                   <div className="slide-text-container">
-                    <h2 className="slide-title">{place.title}</h2>
-                    <p className="slide-description">{place.addr}</p>
-                    <p className="slide-rating">
-                      <GoStarFill style={{ color: "#FFD700" }} />
-                      &nbsp;{place.avgRating.toFixed(2)}
-                    </p>
+                    <h1 className="title">완벽한 여행의 시작</h1>
+                    <h3 className="sub-title">
+                      관광지, 맛집, 숙소까지 한눈에 검색하고 떠나세요!
+                    </h3>
                   </div>
                   <img
-                    src={place.thumbnail || SpotBasicImg}
+                    src={TourBanner || SpotBasicImg}
+                    alt={place.title}
+                    className="slide-image"
+                    onClick={() => navigate(`/tourspot/${place.spotId}`)}
+                  />
+                </div> */}
+                {/* <div
+                  className="background"
+                  style={{ backgroundColor: "#f1c38d" }}
+                />
+                <div className="slide-content">
+                  <div className="slide-text-container">
+                    <h1 className="title">완벽한 여행의 시작</h1>
+                    <h3 className="sub-title">
+                      관광지, 맛집, 숙소까지 한눈에 검색하고 떠나세요!
+                    </h3>
+                  </div>
+                  <img
+                    src={DiaryBanner || SpotBasicImg}
                     alt={place.title}
                     className="slide-image"
                     onClick={() => navigate(`/tourspot/${place.spotId}`)}
@@ -149,13 +158,9 @@ export const Main = () => {
                     <h3 className="sub-title">
                       관광지, 맛집, 숙소까지 한눈에 검색하고 떠나세요!
                     </h3>
-                    {/* <p className="slide-rating">
-                      <GoStarFill style={{ color: "#FFD700" }} />
-                      &nbsp;{place.avgRating.toFixed(2)}
-                    </p> */}
                   </div>
                   <img
-                    src={TourBanner || SpotBasicImg}
+                    src={RecommendBanner || SpotBasicImg}
                     alt={place.title}
                     className="slide-image"
                     onClick={() => navigate(`/tourspot/${place.spotId}`)}

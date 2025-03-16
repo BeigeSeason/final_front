@@ -197,6 +197,11 @@ export const TourList: React.FC = () => {
     }
   };
 
+  const handleSortChange = (field: string) => {
+    const newSortBy = filters.sortBy === field ? "" : field;
+    updateFilters("sortBy", newSortBy);
+  };
+
   const handleAreaChange = (areaCode: string) => {
     const newAreaCode = filters.areaCode === areaCode ? "" : areaCode;
     updateFilters("areaCode", newAreaCode);
@@ -346,7 +351,7 @@ export const TourList: React.FC = () => {
                   <Button
                     key={option.value}
                     // onClick={() => handleSortFieldChange(option.value)}
-                    onClick={() => updateFilters("sortBy", option.value)}
+                    onClick={() => handleSortChange(option.value)}
                     className={`sort-button ${
                       filters.sortBy.startsWith(option.value) ? "selected" : ""
                     }`}
