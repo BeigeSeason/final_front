@@ -37,7 +37,9 @@ import { FaRegStar, FaRegStarHalfStroke, FaStar } from "react-icons/fa6";
 
 export const TourSpot = () => {
   const { id } = useParams<{ id: string }>(); // id 값을 URL에서 받아옵니다.
-  const { userId, nickname, profile } = useSelector((state: RootState) => state.auth);
+  const { userId, nickname, profile } = useSelector(
+    (state: RootState) => state.auth
+  );
   const [isBookmarked, setIsBookmarked] = useState<boolean | null>(null);
   const [bookmarkCount, setBookmarkCount] = useState<number>(0);
   const [tourSpotDetail, setTourSpotDetail] = useState<TourSpotDetail | null>(
@@ -57,7 +59,13 @@ export const TourSpot = () => {
   const [deleteReviewId, setDeleteReviewId] = useState(0);
 
   const [comments, setComments] = useState<
-    { id: number; nickname: string; content: string; rating: number; createdAt: Date }[]
+    {
+      id: number;
+      nickname: string;
+      content: string;
+      rating: number;
+      createdAt: Date;
+    }[]
   >([]); // 현재 페이지 댓글 목록
   const [totalComments, setTotalComments] = useState(0);
 
@@ -162,7 +170,7 @@ export const TourSpot = () => {
             },
             ...prevComments,
           ];
-  
+
           // 10개 댓글만 유지
           return updatedComments.slice(0, 10);
         });
@@ -186,7 +194,11 @@ export const TourSpot = () => {
     setEditContent(content);
   };
   // 댓글 수정 저장
-  const handleSaveEdit = async (id: number, content: string, rating: number) => {
+  const handleSaveEdit = async (
+    id: number,
+    content: string,
+    rating: number
+  ) => {
     // 수정 로직
     const reviewData: Review = {
       id: id,
@@ -220,20 +232,20 @@ export const TourSpot = () => {
   const clickReviewDelete = (id: number) => {
     setNeedDeleteModal(true);
     setDeleteReviewId(id);
-  }
+  };
   const handleReviewDelete = async () => {
     try {
       await AxiosApi.deleteReview(deleteReviewId);
 
       setComments((prevComments) => {
-        return prevComments.filter(comment => comment.id !== deleteReviewId);
+        return prevComments.filter((comment) => comment.id !== deleteReviewId);
       });
 
       setNeedDeleteModal(false);
     } catch (error) {
       console.log("댓글 삭제 실패");
     }
-  }
+  };
 
   const parseLinks = (htmlString: string): React.ReactNode[] => {
     // <a> 태그와 <br/> 태그를 모두 매칭하는 정규식
@@ -523,7 +535,7 @@ export const TourSpot = () => {
         <CommentBox>
           <div className="commentCount">댓글 수 {totalComments}</div>
           <div className="commentInput">
-            <textarea 
+            <textarea
               placeholder="댓글을 입력하세요..."
               value={comment}
               onChange={(e) => setComment(e.target.value)}
@@ -583,24 +595,25 @@ export const TourSpot = () => {
                   {c.nickname === nickname && (
                     <div className="header-right">
                       {editIndex === index ? (
-                        <div 
-                        className="button" 
-                        onClick={() => handleSaveEdit(c.id, editContent, editRating)}
-                      >
-                        저장
-                      </div>
+                        <div
+                          className="button"
+                          onClick={() =>
+                            handleSaveEdit(c.id, editContent, editRating)
+                          }
+                        >
+                          저장
+                        </div>
                       ) : (
-                        <div 
-                          className="button" 
+                        <div
+                          className="button"
                           onClick={() => handleReviewEdit(index, c.content)}
                         >
                           수정
                         </div>
                       )}
-                      
                       |
-                      <div 
-                        className="button" 
+                      <div
+                        className="button"
                         onClick={() => clickReviewDelete(c.id)}
                       >
                         삭제
@@ -611,65 +624,61 @@ export const TourSpot = () => {
 
                 <div className="comment" style={{ whiteSpace: "pre-line" }}>
                   {editIndex === index ? (
-                      <div className="commentInput">
-                        <textarea 
-                          value={editContent}
-                          onChange={(e) => setEditContent(e.target.value)}
-                          rows={3}
-                        />
-                        <StyledWrapper>
-                          <div
-                            ref={editStarRef}
-                            onMouseMove={handleEditRatingHover}
-                            onMouseLeave={handleEditRatingLeave}
-                            onClick={handleEditRatingClick}
-                            style={{
-                              display: "flex",
-                              gap: 5,
-                              cursor: "pointer",
-                              width: "140px",
-                            }}
-                          >
-                            {[...Array(5)].map((_, i) => {
-                              const score = editRatingHover || editRating; // 마우스 오버 or 확정된 값
-                              const full = score >= i + 1;
-                              const half = score >= i + 0.5 && score < i + 1;
+                    <div className="commentInput">
+                      <textarea
+                        value={editContent}
+                        onChange={(e) => setEditContent(e.target.value)}
+                        rows={3}
+                      />
+                      <StyledWrapper>
+                        <div
+                          ref={editStarRef}
+                          onMouseMove={handleEditRatingHover}
+                          onMouseLeave={handleEditRatingLeave}
+                          onClick={handleEditRatingClick}
+                          style={{
+                            display: "flex",
+                            gap: 5,
+                            cursor: "pointer",
+                            width: "140px",
+                          }}
+                        >
+                          {[...Array(5)].map((_, i) => {
+                            const score = editRatingHover || editRating; // 마우스 오버 or 확정된 값
+                            const full = score >= i + 1;
+                            const half = score >= i + 0.5 && score < i + 1;
 
-                              return (
-                                <div key={i} style={{ width: 24 }}>
-                                  {full ? (
-                                    <FaStar size={24} color="gold" />
-                                  ) : half ? (
-                                    <FaRegStarHalfStroke size={24} color="gold" />
-                                  ) : (
-                                    <FaRegStar size={24} color="gold" />
-                                  )}
-                                </div>
-                              );
-                            })}
-                          </div>
-                        </StyledWrapper>
-                      </div>
-                    ) : (
-                      c.content
-                    )}
+                            return (
+                              <div key={i} style={{ width: 24 }}>
+                                {full ? (
+                                  <FaStar size={24} color="gold" />
+                                ) : half ? (
+                                  <FaRegStarHalfStroke size={24} color="gold" />
+                                ) : (
+                                  <FaRegStar size={24} color="gold" />
+                                )}
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </StyledWrapper>
+                    </div>
+                  ) : (
+                    c.content
+                  )}
                 </div>
 
                 <div className="commentInfo">
                   <div className="date">
-                    {new Date(c.createdAt)
-                      .toLocaleString('ko-KR', 
-                        { 
-                          timeZone: 'Asia/Seoul', 
-                          hour12: false, 
-                          year: 'numeric', 
-                          month: '2-digit', 
-                          day: '2-digit', 
-                          hour: '2-digit', 
-                          minute: '2-digit' 
-                        }
-                      )
-                    }
+                    {new Date(c.createdAt).toLocaleString("ko-KR", {
+                      timeZone: "Asia/Seoul",
+                      hour12: false,
+                      year: "numeric",
+                      month: "2-digit",
+                      day: "2-digit",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
                   </div>
                 </div>
               </div>
@@ -684,7 +693,7 @@ export const TourSpot = () => {
             />
           )}
         </CommentBox>
-        
+
         {/* 댓글 모달 */}
         {needLoginModal && (
           <CheckModal

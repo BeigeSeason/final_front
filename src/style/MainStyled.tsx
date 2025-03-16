@@ -8,14 +8,15 @@ export const MainBox = styled.div`
   grid-template-columns: repeat(5, 1fr);
   /* grid-template-columns: minmax(0, 3fr) minmax(0, 2fr) minmax(0, 3fr); */
   margin: 0 auto;
-  flex-direction: column;
+  /* flex-direction: column; */
   gap: 20px;
 `;
+
 export const GridItem = styled.div`
   /* min-height: 500px; */
 `;
-// 인기 관광지 ----------------------------------------------------------------------
-export const BestSpot = styled(GridItem)`
+// 배너 ----------------------------------------------------------------------
+export const Banner = styled(GridItem)`
   grid-column: span 5;
   /* border: 1px solid black; */
   width: 100%;
@@ -55,9 +56,10 @@ export const BestSpot = styled(GridItem)`
     top: 0;
     right: 0;
     width: 100%;
+    height: 100%;
     max-width: 1100px;
     border-radius: 10px;
-    object-fit: contain;
+    object-fit: cover;
   }
 
   .slide-text-container {
@@ -81,10 +83,6 @@ export const BestSpot = styled(GridItem)`
       transform: translateX(0);
     }
   }
-  .slide-rating {
-    display: flex;
-    align-items: center;
-  }
 
   .swiper-button-next,
   .swiper-button-prev {
@@ -104,6 +102,56 @@ export const BestSpot = styled(GridItem)`
   }
   .swiper-pagination-bullet-active {
     background-color: ${colors.colorB};
+  }
+`;
+
+// 인기 관광지 -------------------------------------------------------------------------
+export const BestSpot = styled(GridItem)`
+  grid-column: span 5;
+  width: 100%;
+
+  .section-title {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  .bestspots-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    gap: 1.5%;
+
+    .spot-container {
+      width: 16vw;
+      cursor: pointer;
+      img {
+        width: 16vw;
+        height: 13vw;
+        border-radius: 7px;
+      }
+      .title {
+        width: 92%;
+        margin: 5px auto;
+        font-weight: bold;
+        font-size: 18px;
+        white-space: nowrap; // 줄바꿈 방지
+        overflow: hidden; // 넘치는 글자를 잘라냄
+        text-overflow: ellipsis; // 넘치는 글자는 '...' 처리
+      }
+      .categories {
+        width: 92%;
+        margin: 5px auto;
+        font-size: 12px;
+        color: #333;
+      }
+      .rating {
+        display: flex;
+        align-items: center;
+        width: 92%;
+        margin: 3px auto;
+        font-size: 14px;
+      }
+    }
   }
 `;
 

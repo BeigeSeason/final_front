@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import {
   MainBox,
+  Banner,
   BestSpot,
   BestDiary,
   PolygonMap,
@@ -23,6 +24,7 @@ import { ComposableMap, Geographies, Geography } from "react-simple-maps";
 import { geoCentroid } from "d3-geo";
 import koreaGeoJson from "../util/korea.geojson.json";
 import { areas, types } from "../util/TourCodes";
+import { ServiceCode } from "../util/ServiceCode";
 import { useNavigate } from "react-router-dom";
 import FontSize from "@tiptap/extension-font-size";
 import { ItemApi } from "../api/ItemApi";
@@ -33,6 +35,14 @@ import TourBanner from "../img/banner/banner_tour.jpg";
 import DiaryBanner from "../img/banner/banner_diary.jpg";
 import RecommendBanner from "../img/banner/banner_recommend.png";
 import { GoStarFill } from "react-icons/go";
+
+interface Place {
+  thumbnail: string;
+  title: string;
+  cat1?: string | null; // 선택적이고 null일 수도 있음
+  cat2?: string | null;
+  cat3?: string | null;
+}
 
 export const Main = () => {
   const navigate = useNavigate();
@@ -102,6 +112,28 @@ export const Main = () => {
     setHoveredArea(null); // 호버 끝나면 이름 제거
   };
 
+  // 카테고리 이름을 찾는 유틸 함수
+  const getCategoryNames = (
+    cat1: string | null | undefined,
+    cat2: string | null | undefined
+  ): string[] => {
+    const result: string[] = [];
+
+    if (!cat1 || typeof cat1 !== "string") return result;
+
+    const cat1Data = ServiceCode.find((item) => item.cat1 === cat1);
+    if (!cat1Data) return result;
+    result.push(cat1Data.cat1Name);
+
+    if (!cat2 || typeof cat2 !== "string") return result;
+
+    const cat2Data = cat1Data.cat2List.find((item) => item.cat2 === cat2);
+    if (!cat2Data) return result;
+    result.push(cat2Data.cat2Name);
+
+    return result; // cat3는 무시
+  };
+
   useEffect(() => {
     getBestSpots();
     getBestDiaries();
@@ -110,7 +142,7 @@ export const Main = () => {
     <>
       <GlobalFont />
       <MainBox>
-        <BestSpot className="GridItem">
+        <Banner className="GridItem">
           <Swiper
             modules={[Navigation, Pagination, Autoplay]}
             spaceBetween={50}
@@ -118,9 +150,7 @@ export const Main = () => {
             loop={true}
             navigation
             pagination={{ clickable: true }}
-            // autoplay={{ delay: 3000,
-            //   disableOnInteraction: false
-            //  }}
+            autoplay={{ delay: 5000, disableOnInteraction: false }}
           >
             {bannerData.map((data) => (
               <SwiperSlide key={data.title} className="swiper-slide-custom">
@@ -143,6 +173,35 @@ export const Main = () => {
               </SwiperSlide>
             ))}
           </Swiper>
+        </Banner>
+        <BestSpot>
+          <h2 className="section-title">
+            🎉 지금 가장 핫한 여행지! 놓치면 후회할 곳은?
+          </h2>
+          <div className="bestspots-container">
+            {places.map((place) => {
+              const categories = getCategoryNames(place.cat1, place.cat2).join(
+                " > "
+              );
+
+              return (
+                <div
+                  className="spot-container"
+                  key={place.thumbnail}
+                  onClick={() => navigate(`/tourspot/${place.spotId}`)}
+                >
+                  <img src={place.thumbnail} alt="썸네일" />
+                  <p className="title">{place.title}</p>
+                  {categories && <p className="categories">{categories}</p>}
+                  <p className="rating">
+                    <GoStarFill style={{ color: "#FFD700" }} />
+                    &nbsp;{place.avgRating.toFixed(2)} (
+                    {place.reviewCount.toLocaleString()})
+                  </p>
+                </div>
+              );
+            })}
+          </div>
         </BestSpot>
         <PolygonMap>
           <ComposableMap

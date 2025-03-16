@@ -16,6 +16,10 @@ export interface TourSpot {
   addr: string;
   thumbnail: string;
   avgRating: number;
+  reviewCount: number;
+  cat1?: string;
+  cat2?: string;
+  cat3?: string;
 }
 
 export interface TourSpotResponse {

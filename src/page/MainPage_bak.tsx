@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import {
   MainBox,
-  BestSpot,
+  Banner,
   BestDiary,
   PolygonMap,
   // VisitGraph,
@@ -91,7 +91,7 @@ export const Main = () => {
     <>
       <GlobalFont />
       <MainBox>
-        <BestSpot className="GridItem">
+        <Banner className="GridItem">
           <Swiper
             modules={[Navigation, Pagination, Autoplay]}
             spaceBetween={50}
@@ -110,7 +110,7 @@ export const Main = () => {
               </SwiperSlide>
             ))}
           </Swiper>
-        </BestSpot>
+        </Banner>
         <PolygonMap ref={mapRef}>
           <ComposableMap
             width={mapSize.width}
