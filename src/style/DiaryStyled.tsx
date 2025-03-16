@@ -143,6 +143,7 @@ export const DiaryHeader = styled.div`
 export const DiaryBody = styled.div`
   display: flex;
   width: 700px;
+  min-height: 400px;
   padding: 1vh 2vw;
   margin: auto;
   box-sizing: border-box;
