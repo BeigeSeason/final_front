@@ -430,6 +430,10 @@ export const DiaryList: React.FC = () => {
           )}
         </SelectSearchItem>
         <ItemList>
+          <div className="totalCount">
+            총{" "}
+            {totalElements > 9999 ? "9,999+" : totalElements.toLocaleString()}건
+          </div>
           <SelectedFilters
             filters={{
               areaCode: filters.areaCode,

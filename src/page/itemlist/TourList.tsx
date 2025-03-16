@@ -251,21 +251,7 @@ export const TourList: React.FC = () => {
     const newCategory = filters.category === category ? "" : category;
     updateFilters("category", newCategory);
   };
-  // 정렬 필드 변경
-  // const handleSortFieldChange = (field: string) => {
-  //   const [currentField, currentDirection] = filters.sortBy.split(",");
-  //   const newDirection = currentDirection || "ASC"; // 기본값 ASC
-  //   const newSortBy = currentField === field ? "" : `${field},${newDirection}`;
-  //   console.log("newSortBy : ", newSortBy);
-  //   updateFilters("sortBy", newSortBy);
-  // };
 
-  // 정렬 방향 변경
-  // const handleSortDirectionChange = (direction: "ASC" | "DESC") => {
-  //   const [currentField] = filters.sortBy.split(",");
-  //   if (!currentField) return; // 필드가 없으면 무시
-  //   updateFilters("sortBy", `${currentField},${direction}`);
-  // };
   const handleTopFilterChange = (key: keyof SelectFilters, name: string) => {
     setFilters((prev) => {
       const newFilters: TourSpotFilters = { ...prev };
@@ -359,25 +345,6 @@ export const TourList: React.FC = () => {
                     # {option.label}
                   </Button>
                 ))}
-                {/* 오름차순/내림차순 버튼 */}
-                {/* <Button
-                  onClick={() => handleSortDirectionChange("ASC")}
-                  className={`sort-direction ${
-                    filters.sortBy.endsWith("ASC") ? "selected" : ""
-                  }`}
-                  disabled={!filters.sortBy.split(",")[0]} // 필드가 없으면 비활성화
-                >
-                  오름차순
-                </Button>
-                <Button
-                  onClick={() => handleSortDirectionChange("DESC")}
-                  className={`sort-direction ${
-                    filters.sortBy.endsWith("DESC") ? "selected" : ""
-                  }`}
-                  disabled={!filters.sortBy.split(",")[0]} // 필드가 없으면 비활성화
-                >
-                  내림차순
-                </Button> */}
               </div>
             </ToggleSection>
           </div>
