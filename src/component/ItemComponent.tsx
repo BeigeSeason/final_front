@@ -7,6 +7,7 @@ import { ServiceCode } from "../util/ServiceCode";
 import { useMemo } from "react";
 import basicImg from "../img/item/type_200.png";
 import { GetProfileImageSrc } from "./ProfileComponent";
+import { FaRegCalendarAlt, FaWonSign } from "react-icons/fa";
 
 // 관광지 목록 아이템 컴포넌트 -------------------------------------------------------------------
 const SpotContainer = styled(Link)`
@@ -130,6 +131,18 @@ export const DiaryItem: React.FC<DiaryItemProps> = ({
       <SpotDescription>
         <div className="title">{description[0]}</div>
         <div className="summary">{description[1]}</div>
+        {/* <div className="travel-info-container">
+          <div className="travel-info">
+            <FaRegCalendarAlt />{" "}
+            <span>
+              {diaryInfo?.startDate?.replaceAll("-", ". ")} ~{" "}
+              {diaryInfo?.endDate?.replaceAll("-", ". ")}
+            </span>
+          </div>
+          <div className="travel-info">
+            <FaWonSign /> <span>{diaryInfo?.totalCost.toLocaleString()}</span>
+          </div>
+        </div> */}
         <div className="writer">
           <div className="profile">
             <img src={GetProfileImageSrc(profile ?? null)} alt="프로필" />

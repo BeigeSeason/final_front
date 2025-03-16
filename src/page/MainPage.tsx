@@ -45,20 +45,32 @@ export const Main = () => {
     y: 0,
     name: "",
   });
-  // const places = [
-  //   { id: 1, name: "장소 1", imgSrc: "path/to/image1.jpg" },
-  //   { id: 2, name: "장소 2", imgSrc: "path/to/image2.jpg" },
-  //   { id: 3, name: "장소 3", imgSrc: "path/to/image3.jpg" },
-  //   { id: 4, name: "장소 4", imgSrc: "path/to/image4.jpg" },
-  //   { id: 5, name: "장소 5", imgSrc: "path/to/image5.jpg" },
-  // ];
-  // const diaries = [
-  //   { id: 1, name: "여행일지 1", imgSrc: "path/to/image1.jpg" },
-  //   { id: 2, name: "여행일지 2", imgSrc: "path/to/image2.jpg" },
-  //   { id: 3, name: "여행일지 3", imgSrc: "path/to/image3.jpg" },
-  //   { id: 4, name: "여행일지 4", imgSrc: "path/to/image4.jpg" },
-  //   { id: 5, name: "여행일지 5", imgSrc: "path/to/image5.jpg" },
-  // ];
+  const bannerData = [
+    {
+      backgroundColor: "#86ffd7",
+      imageSrc: TourBanner,
+      alt: "관광지",
+      title: "완벽한 여행의 시작",
+      subTitle: "관광지, 맛집, 숙소까지 한눈에 검색하고 떠나세요!",
+      navigatePath: "/tourlist",
+    },
+    {
+      backgroundColor: "#f1c38d",
+      imageSrc: DiaryBanner,
+      alt: "여행일지",
+      title: "여행일지입니다.",
+      subTitle: "여행일지에요!",
+      navigatePath: "/diarylist",
+    },
+    {
+      backgroundColor: "#a6dbff",
+      imageSrc: RecommendBanner,
+      alt: "관광지 추천",
+      title: "관광지 추천입니다.",
+      subTitle: "관광지 추천이에요!",
+      navigatePath: "/tourRecommend",
+    },
+  ];
   const getBestSpots = async () => {
     const filters = {
       page: 0,
@@ -110,60 +122,22 @@ export const Main = () => {
             //   disableOnInteraction: false
             //  }}
           >
-            {places.map((place) => (
-              <SwiperSlide key={place.spotId} className="swiper-slide-custom">
-                {/* <div
-                  className="background"
-                  style={{ backgroundColor: "#a6dbff" }}
-                />
-                <div className="slide-content">
-                  <div className="slide-text-container">
-                    <h1 className="title">완벽한 여행의 시작</h1>
-                    <h3 className="sub-title">
-                      관광지, 맛집, 숙소까지 한눈에 검색하고 떠나세요!
-                    </h3>
-                  </div>
-                  <img
-                    src={TourBanner || SpotBasicImg}
-                    alt={place.title}
-                    className="slide-image"
-                    onClick={() => navigate(`/tourspot/${place.spotId}`)}
-                  />
-                </div> */}
-                {/* <div
-                  className="background"
-                  style={{ backgroundColor: "#f1c38d" }}
-                />
-                <div className="slide-content">
-                  <div className="slide-text-container">
-                    <h1 className="title">완벽한 여행의 시작</h1>
-                    <h3 className="sub-title">
-                      관광지, 맛집, 숙소까지 한눈에 검색하고 떠나세요!
-                    </h3>
-                  </div>
-                  <img
-                    src={DiaryBanner || SpotBasicImg}
-                    alt={place.title}
-                    className="slide-image"
-                    onClick={() => navigate(`/tourspot/${place.spotId}`)}
-                  />
-                </div> */}
+            {bannerData.map((data) => (
+              <SwiperSlide key={data.title} className="swiper-slide-custom">
                 <div
                   className="background"
-                  style={{ backgroundColor: "#a6dbff" }}
+                  style={{ backgroundColor: data.backgroundColor }}
                 />
                 <div className="slide-content">
                   <div className="slide-text-container">
-                    <h1 className="title">완벽한 여행의 시작</h1>
-                    <h3 className="sub-title">
-                      관광지, 맛집, 숙소까지 한눈에 검색하고 떠나세요!
-                    </h3>
+                    <h1 className="title">{data.title}</h1>
+                    <h3 className="sub-title">{data.subTitle}</h3>
                   </div>
                   <img
-                    src={RecommendBanner || SpotBasicImg}
-                    alt={place.title}
+                    src={data.imageSrc || SpotBasicImg}
+                    alt={data.alt}
                     className="slide-image"
-                    onClick={() => navigate(`/tourspot/${place.spotId}`)}
+                    onClick={() => navigate(data.navigatePath)}
                   />
                 </div>
               </SwiperSlide>

@@ -55,7 +55,7 @@ export const BestSpot = styled(GridItem)`
     top: 0;
     right: 0;
     width: 100%;
-    max-width: 1300px;
+    max-width: 1100px;
     border-radius: 10px;
     object-fit: contain;
   }
