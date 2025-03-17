@@ -181,6 +181,9 @@ export const DiaryBody = styled.div`
       margin-top: 5px;
       padding-left: 16px;
     }
+    img {
+      max-width: 100%;
+    }
   }
 `;
 

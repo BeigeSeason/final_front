@@ -35,6 +35,12 @@ import TourBanner from "../img/banner/banner_tour.jpg";
 import DiaryBanner from "../img/banner/banner_diary.jpg";
 import RecommendBanner from "../img/banner/banner_recommend.png";
 import { GoStarFill } from "react-icons/go";
+import {
+  FaBookmark,
+  FaRegBookmark,
+  FaRegCalendarAlt,
+  FaWonSign,
+} from "react-icons/fa";
 
 interface Place {
   thumbnail: string;
@@ -131,7 +137,7 @@ export const Main = () => {
     if (!cat2Data) return result;
     result.push(cat2Data.cat2Name);
 
-    return result; // cat3는 무시
+    return result;
   };
 
   useEffect(() => {
@@ -174,9 +180,9 @@ export const Main = () => {
             ))}
           </Swiper>
         </Banner>
-        <BestSpot>
+        <BestSpot className="GridItem">
           <h2 className="section-title">
-            🎉 지금 가장 핫한 여행지! 놓치면 후회할 곳은?
+            🔥 지금 가장 핫한 여행지! 놓치면 후회할 곳은?
           </h2>
           <div className="bestspots-container">
             {places.map((place) => {
@@ -187,10 +193,10 @@ export const Main = () => {
               return (
                 <div
                   className="spot-container"
-                  key={place.thumbnail}
+                  key={place.spotId}
                   onClick={() => navigate(`/tourspot/${place.spotId}`)}
                 >
-                  <img src={place.thumbnail} alt="썸네일" />
+                  <img src={place.thumbnail || SpotBasicImg} alt="썸네일" />
                   <p className="title">{place.title}</p>
                   {categories && <p className="categories">{categories}</p>}
                   <p className="rating">
@@ -203,6 +209,60 @@ export const Main = () => {
             })}
           </div>
         </BestSpot>
+        <BestDiary className="GridItem">
+          <h2 className="section-title">
+            📖 여행은 끝났지만, 이야기로 남았다.
+          </h2>
+          <div className="bestdiaries-container">
+            {diaries.map((diary) => (
+              <div className="diary-container" key={diary.diaryId}>
+                <img src={diary.thumbnail || DiaryBasicImg} alt="썸네일" />
+                <p className="title">{diary.title}</p>
+                <p className="content">{diary.contentSummary}</p>
+                <div className="travel-info">
+                  <FaRegCalendarAlt />{" "}
+                  <span>
+                    {diary.startDate?.replaceAll("-", ". ")} ~{" "}
+                    {diary.endDate?.replaceAll("-", ". ")}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+          {/* <Swiper
+            modules={[Navigation, Pagination, Autoplay]}
+            spaceBetween={20}
+            slidesPerView={3}
+            loop={true}
+            navigation
+            pagination={{ clickable: true }}
+            centeredSlides={true}
+          >
+            {diaries.map((diary) => (
+              <SwiperSlide
+                key={diary.diaryId}
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  width: "31%",
+                }}
+              >
+                <img
+                  className="diary-thumbnail"
+                  src={diary.thumbnail || DiaryBasicImg}
+                  alt={diary.title}
+                  // style={{ maxWidth: "100%", height: "auto" }}
+                />
+                <div className="diary-info">
+                  <p className="diary-title">{diary.title}</p>
+                  <p className="diary-content">{diary.contentSummary}</p>
+                </div>
+              </SwiperSlide>
+            ))}
+          </Swiper> */}
+        </BestDiary>
         <PolygonMap>
           <ComposableMap
             width={500}
@@ -288,55 +348,6 @@ export const Main = () => {
           </div>
         </QuickSearch>
         {/* <VisitGraph className="GridItem"></VisitGraph> */}
-        <BestDiary className="GridItem">
-          {/* {diaries.map((diary) => (
-            <div key={diary.diaryId} className="diary-card">
-              <img
-                src={diary.thumbnail || DiaryBasicImg}
-                alt={diary.title}
-                style={{
-                  width: "100%",
-                  height: "auto",
-                  borderRadius: "10px",
-                }}
-              />
-              <p className="diary-title">{diary.title}</p>
-            </div>
-          ))} */}
-          <Swiper
-            modules={[Navigation, Pagination, Autoplay]}
-            spaceBetween={20}
-            slidesPerView={3}
-            loop={true}
-            navigation
-            pagination={{ clickable: true }}
-            centeredSlides={true}
-          >
-            {diaries.map((diary) => (
-              <SwiperSlide
-                key={diary.diaryId}
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  width: "31%",
-                }}
-              >
-                <img
-                  className="diary-thumbnail"
-                  src={diary.thumbnail || DiaryBasicImg}
-                  alt={diary.title}
-                  // style={{ maxWidth: "100%", height: "auto" }}
-                />
-                <div className="diary-info">
-                  <p className="diary-title">{diary.title}</p>
-                  <p className="diary-content">{diary.contentSummary}</p>
-                </div>
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        </BestDiary>
       </MainBox>
     </>
   );

@@ -78,6 +78,9 @@ export interface Diary {
   writer: string;
   writerImg: string | null;
   createdAt: string;
+  startDate: string;
+  endDate: string;
+  region: string;
 }
 
 interface Pageable {

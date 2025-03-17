@@ -128,12 +128,13 @@ export const BestSpot = styled(GridItem)`
         width: 16vw;
         height: 13vw;
         border-radius: 7px;
+        object-fit: cover;
       }
       .title {
         width: 92%;
         margin: 5px auto;
         font-weight: bold;
-        font-size: 18px;
+        font-size: 1.2em;
         white-space: nowrap; // 줄바꿈 방지
         overflow: hidden; // 넘치는 글자를 잘라냄
         text-overflow: ellipsis; // 넘치는 글자는 '...' 처리
@@ -141,7 +142,7 @@ export const BestSpot = styled(GridItem)`
       .categories {
         width: 92%;
         margin: 5px auto;
-        font-size: 12px;
+        font-size: 0.75em;
         color: #333;
       }
       .rating {
@@ -149,7 +150,7 @@ export const BestSpot = styled(GridItem)`
         align-items: center;
         width: 92%;
         margin: 3px auto;
-        font-size: 14px;
+        font-size: 0.85em;
       }
     }
   }
@@ -158,64 +159,66 @@ export const BestSpot = styled(GridItem)`
 // 인기 여행일지 -------------------------------------------------------------------------
 export const BestDiary = styled(GridItem)`
   grid-column: span 5;
-  width: 90%;
-  height: 500px;
-  margin: 0 auto;
-  position: relative;
-  display: flex;
-  align-items: center;
-  .swiper {
-    width: 90%;
+  width: 100%;
+  background-color: #fff5e6;
+  margin: 4% 0;
+  padding: 2% 0;
+
+  .section-title {
+    text-align: center;
+    margin-bottom: 50px;
   }
-  .swiper-slide {
-    height: 400px;
-    /* border: 1px solid black; */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-    border-radius: 10px;
-    overflow: hidden;
-    .diary-thumbnail {
-      height: 60%;
-      width: 100%;
-      object-fit: contain;
-    }
-    .diary-info {
-      height: 40%;
-      width: 90%;
-      .diary-title {
-        font-size: 20px;
+
+  .bestdiaries-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    gap: 1.5%;
+
+    .diary-container {
+      width: 18vw;
+      padding-bottom: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      border-radius: 7px;
+      background-color: #fff;
+      cursor: pointer;
+      img {
+        width: 18vw;
+        height: 10vw;
+        border-radius: 7px 7px 0 0;
+        object-fit: cover;
+      }
+      .title {
+        width: 92%;
+        margin: 5px auto;
         font-weight: bold;
+        font-size: 1.2em;
         white-space: nowrap; // 줄바꿈 방지
         overflow: hidden; // 넘치는 글자를 잘라냄
         text-overflow: ellipsis; // 넘치는 글자는 '...' 처리
       }
-      .diary-content {
-        display: -webkit-box; /* 줄 수 제한을 위한 설정 */
-        -webkit-line-clamp: 3; /* 최대 3줄까지만 표시 */
-        -webkit-box-orient: vertical; /* 세로 방향 설정 */
-        overflow: hidden; /* 넘치는 텍스트 숨김 */
-        text-overflow: ellipsis; /* '...' 처리 */
-        word-break: break-word; /* 단어가 길어도 줄바꿈 */
-        line-height: 1.5; /* 줄 간격 조정 */
-        max-height: calc(1.5em * 3); /* 3줄 기준으로 높이 설정 */
-
+      .content {
+        width: 92%;
+        height: 2.8em;
+        margin: 5px auto;
+        font-size: 0.9em;
+        line-height: 1.4em;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .travel-info {
+        width: 92%;
+        margin: 7px auto;
         color: #333;
+        font-size: 0.8em;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
     }
-  }
-  .swiper-button-next,
-  .swiper-button-prev {
-    color: white !important;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-  }
-
-  .swiper-button-next:after,
-  .swiper-button-prev:after {
-    font-size: 24px;
-    font-weight: bold;
-  }
-
-  .swiper-pagination-bullet-active {
-    background-color: ${colors.colorB};
   }
 `;
 
