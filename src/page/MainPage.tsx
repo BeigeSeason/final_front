@@ -21,7 +21,6 @@ import {
   EffectCoverflow,
 } from "swiper/modules";
 import { ComposableMap, Geographies, Geography } from "react-simple-maps";
-import { geoCentroid } from "d3-geo";
 import koreaGeoJson from "../util/korea.geojson.json";
 import { areas, types } from "../util/TourCodes";
 import { ServiceCode } from "../util/ServiceCode";
@@ -35,12 +34,7 @@ import TourBanner from "../img/banner/banner_tour.jpg";
 import DiaryBanner from "../img/banner/banner_diary.jpg";
 import RecommendBanner from "../img/banner/banner_recommend.png";
 import { GoStarFill } from "react-icons/go";
-import {
-  FaBookmark,
-  FaRegBookmark,
-  FaRegCalendarAlt,
-  FaWonSign,
-} from "react-icons/fa";
+import { FaRegMap, FaRegCalendarAlt } from "react-icons/fa";
 
 interface Place {
   thumbnail: string;
@@ -215,10 +209,17 @@ export const Main = () => {
           </h2>
           <div className="bestdiaries-container">
             {diaries.map((diary) => (
-              <div className="diary-container" key={diary.diaryId}>
+              <div
+                className="diary-container"
+                key={diary.diaryId}
+                onClick={() => navigate(`/diary/${diary.diaryId}`)}
+              >
                 <img src={diary.thumbnail || DiaryBasicImg} alt="썸네일" />
                 <p className="title">{diary.title}</p>
                 <p className="content">{diary.contentSummary}</p>
+                <div className="travel-info">
+                  <FaRegMap /> <span>{diary.region}</span>
+                </div>
                 <div className="travel-info">
                   <FaRegCalendarAlt />{" "}
                   <span>
@@ -229,39 +230,6 @@ export const Main = () => {
               </div>
             ))}
           </div>
-          {/* <Swiper
-            modules={[Navigation, Pagination, Autoplay]}
-            spaceBetween={20}
-            slidesPerView={3}
-            loop={true}
-            navigation
-            pagination={{ clickable: true }}
-            centeredSlides={true}
-          >
-            {diaries.map((diary) => (
-              <SwiperSlide
-                key={diary.diaryId}
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  width: "31%",
-                }}
-              >
-                <img
-                  className="diary-thumbnail"
-                  src={diary.thumbnail || DiaryBasicImg}
-                  alt={diary.title}
-                  // style={{ maxWidth: "100%", height: "auto" }}
-                />
-                <div className="diary-info">
-                  <p className="diary-title">{diary.title}</p>
-                  <p className="diary-content">{diary.contentSummary}</p>
-                </div>
-              </SwiperSlide>
-            ))}
-          </Swiper> */}
         </BestDiary>
         <PolygonMap>
           <ComposableMap
@@ -274,12 +242,8 @@ export const Main = () => {
             }}
           >
             <Geographies geography={koreaGeoJson}>
-              {({ geographies, projection }) => {
+              {({ geographies }) => {
                 return geographies.map((geo) => {
-                  const centroid = geoCentroid(geo) || [0, 0];
-                  const projected = projection(centroid); // 화면 좌표로 변환
-                  if (!projected) return null;
-                  const [x, y] = projected;
                   const areaCode = geo.properties.areaCode;
                   const area = areas.find((a) => a.code === areaCode);
                   const areaName = area ? area.name : geo.properties.NAME_1;
@@ -289,14 +253,8 @@ export const Main = () => {
                       key={geo.rsmKey}
                       geography={geo}
                       onClick={() => areaCode && handleClick(areaCode)}
-                      // onMouseEnter={() => handleMouseEnter(areaName)}
-                      // onMouseLeave={handleMouseLeave}
-                      onMouseEnter={() =>
-                        setTooltip({ visible: true, x, y, name: areaName })
-                      }
-                      onMouseLeave={() =>
-                        setTooltip({ ...tooltip, visible: false })
-                      }
+                      onMouseEnter={() => setHoveredArea(areaName)}
+                      onMouseLeave={() => setHoveredArea(null)}
                     />
                   );
                 });

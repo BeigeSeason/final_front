@@ -1,10 +1,12 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   MainBox,
   Banner,
+  BestSpot,
   BestDiary,
   PolygonMap,
-  // VisitGraph,
+  QuickSearch,
+  CateButton,
 } from "../style/MainStyled";
 import { GlobalFont } from "../style/GlobalStyled";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -12,57 +14,93 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/autoplay";
-import { Navigation, Pagination, Autoplay } from "swiper/modules";
+import {
+  Navigation,
+  Pagination,
+  Autoplay,
+  EffectCoverflow,
+} from "swiper/modules";
 import { ComposableMap, Geographies, Geography } from "react-simple-maps";
-import { geoCentroid } from "d3-geo";
 import koreaGeoJson from "../util/korea.geojson.json";
-import { areas } from "../util/TourCodes";
+import { areas, types } from "../util/TourCodes";
+import { ServiceCode } from "../util/ServiceCode";
 import { useNavigate } from "react-router-dom";
 import FontSize from "@tiptap/extension-font-size";
-import styled from "styled-components";
+import { ItemApi } from "../api/ItemApi";
+import { TourSpot, Diary } from "../types/ItemTypes";
+import SpotBasicImg from "../img/item/type_100.png";
+import DiaryBasicImg from "../img/item/type_200.png";
+import TourBanner from "../img/banner/banner_tour.jpg";
+import DiaryBanner from "../img/banner/banner_diary.jpg";
+import RecommendBanner from "../img/banner/banner_recommend.png";
+import { GoStarFill } from "react-icons/go";
+import { FaRegMap, FaRegCalendarAlt } from "react-icons/fa";
 
-const Tooltip = styled.div<{ x: number; y: number }>`
-  position: absolute;
-  left: ${({ x }) => `${x}px`};
-  top: ${({ y }) => `${y - 30}px`};
-  background: rgba(0, 0, 0, 0.75);
-  color: #fff;
-  padding: 5px 10px;
-  border-radius: 5px;
-  pointer-events: none;
-  transform: translate(-50%, -100%);
-  whitespace: nowrap;
-  z-index: 10;
-`;
+interface Place {
+  thumbnail: string;
+  title: string;
+  cat1?: string | null; // 선택적이고 null일 수도 있음
+  cat2?: string | null;
+  cat3?: string | null;
+}
 
 export const Main = () => {
   const navigate = useNavigate();
+  const [places, setPlaces] = useState<TourSpot[]>([]);
+  const [diaries, setDiaries] = useState<Diary[]>([]);
   const [hoveredArea, setHoveredArea] = useState<string | null>(null);
-  const mapRef = useRef<HTMLDivElement>(null);
   const [tooltip, setTooltip] = useState({
     visible: false,
     x: 0,
     y: 0,
     name: "",
   });
-  const [mapSize, setMapSize] = useState<{ width: number; height: number }>({
-    width: 500,
-    height: 730,
-  });
-  const places = [
-    { id: 1, name: "장소 1", imgSrc: "path/to/image1.jpg" },
-    { id: 2, name: "장소 2", imgSrc: "path/to/image2.jpg" },
-    { id: 3, name: "장소 3", imgSrc: "path/to/image3.jpg" },
-    { id: 4, name: "장소 4", imgSrc: "path/to/image4.jpg" },
-    { id: 5, name: "장소 5", imgSrc: "path/to/image5.jpg" },
+  const bannerData = [
+    {
+      backgroundColor: "#86ffd7",
+      imageSrc: TourBanner,
+      alt: "관광지",
+      title: "완벽한 여행의 시작",
+      subTitle: "관광지, 맛집, 숙소까지 한눈에 검색하고 떠나세요!",
+      navigatePath: "/tourlist",
+    },
+    {
+      backgroundColor: "#f1c38d",
+      imageSrc: DiaryBanner,
+      alt: "여행일지",
+      title: "여행일지입니다.",
+      subTitle: "여행일지에요!",
+      navigatePath: "/diarylist",
+    },
+    {
+      backgroundColor: "#a6dbff",
+      imageSrc: RecommendBanner,
+      alt: "관광지 추천",
+      title: "관광지 추천입니다.",
+      subTitle: "관광지 추천이에요!",
+      navigatePath: "/tourRecommend",
+    },
   ];
-  const diaries = [
-    { id: 1, name: "여행일지 1", imgSrc: "path/to/image1.jpg" },
-    { id: 2, name: "여행일지 2", imgSrc: "path/to/image2.jpg" },
-    { id: 3, name: "여행일지 3", imgSrc: "path/to/image3.jpg" },
-    { id: 4, name: "여행일지 4", imgSrc: "path/to/image4.jpg" },
-    { id: 5, name: "여행일지 5", imgSrc: "path/to/image5.jpg" },
-  ];
+  const getBestSpots = async () => {
+    const filters = {
+      page: 0,
+      size: 5,
+      sort: "rating,desc",
+    };
+    const response = await ItemApi.getTourSpotList(filters);
+    console.log(response.content);
+    setPlaces(response.content);
+  };
+  const getBestDiaries = async () => {
+    const filters = {
+      page: 0,
+      size: 4,
+      sort: "bookmark_count,desc",
+    };
+    const response = await ItemApi.getDiaryList(filters);
+    console.log(response.content);
+    setDiaries(response.content);
+  };
   const handleClick = (areaCode: string) => {
     navigate(`/tourlist?areaCode=${areaCode}&pageSize=10&page=0`);
   };
@@ -74,19 +112,32 @@ export const Main = () => {
     setHoveredArea(null); // 호버 끝나면 이름 제거
   };
 
+  // 카테고리 이름을 찾는 유틸 함수
+  const getCategoryNames = (
+    cat1: string | null | undefined,
+    cat2: string | null | undefined
+  ): string[] => {
+    const result: string[] = [];
+
+    if (!cat1 || typeof cat1 !== "string") return result;
+
+    const cat1Data = ServiceCode.find((item) => item.cat1 === cat1);
+    if (!cat1Data) return result;
+    result.push(cat1Data.cat1Name);
+
+    if (!cat2 || typeof cat2 !== "string") return result;
+
+    const cat2Data = cat1Data.cat2List.find((item) => item.cat2 === cat2);
+    if (!cat2Data) return result;
+    result.push(cat2Data.cat2Name);
+
+    return result;
+  };
+
   useEffect(() => {
-    const updateMapSize = () => {
-      if (mapRef.current) {
-        const { width, height } = mapRef.current.getBoundingClientRect();
-        setMapSize({ width, height });
-      }
-    };
-
-    updateMapSize(); // 초기 크기 설정
-    window.addEventListener("resize", updateMapSize);
-    return () => window.removeEventListener("resize", updateMapSize);
+    getBestSpots();
+    getBestDiaries();
   }, []);
-
   return (
     <>
       <GlobalFont />
@@ -99,22 +150,91 @@ export const Main = () => {
             loop={true}
             navigation
             pagination={{ clickable: true }}
-            // autoplay={{ delay: 3000,
-            //   disableOnInteraction: false
-            //  }}
+            autoplay={{ delay: 5000, disableOnInteraction: false }}
           >
-            {places.map((place) => (
-              <SwiperSlide key={place.id}>
-                <img src={place.imgSrc} alt={place.name} />
-                <p>{place.name}</p>
+            {bannerData.map((data) => (
+              <SwiperSlide key={data.title} className="swiper-slide-custom">
+                <div
+                  className="background"
+                  style={{ backgroundColor: data.backgroundColor }}
+                />
+                <div className="slide-content">
+                  <div className="slide-text-container">
+                    <h1 className="title">{data.title}</h1>
+                    <h3 className="sub-title">{data.subTitle}</h3>
+                  </div>
+                  <img
+                    src={data.imageSrc || SpotBasicImg}
+                    alt={data.alt}
+                    className="slide-image"
+                    onClick={() => navigate(data.navigatePath)}
+                  />
+                </div>
               </SwiperSlide>
             ))}
           </Swiper>
         </Banner>
-        <PolygonMap ref={mapRef}>
+        <BestSpot className="GridItem">
+          <h2 className="section-title">
+            🔥 지금 가장 핫한 여행지! 놓치면 후회할 곳은?
+          </h2>
+          <div className="bestspots-container">
+            {places.map((place) => {
+              const categories = getCategoryNames(place.cat1, place.cat2).join(
+                " > "
+              );
+
+              return (
+                <div
+                  className="spot-container"
+                  key={place.spotId}
+                  onClick={() => navigate(`/tourspot/${place.spotId}`)}
+                >
+                  <img src={place.thumbnail || SpotBasicImg} alt="썸네일" />
+                  <p className="title">{place.title}</p>
+                  {categories && <p className="categories">{categories}</p>}
+                  <p className="rating">
+                    <GoStarFill style={{ color: "#FFD700" }} />
+                    &nbsp;{place.avgRating.toFixed(2)} (
+                    {place.reviewCount.toLocaleString()})
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+        </BestSpot>
+        <BestDiary className="GridItem">
+          <h2 className="section-title">
+            📖 여행은 끝났지만, 이야기로 남았다.
+          </h2>
+          <div className="bestdiaries-container">
+            {diaries.map((diary) => (
+              <div
+                className="diary-container"
+                key={diary.diaryId}
+                onClick={() => navigate(`/diary/${diary.diaryId}`)}
+              >
+                <img src={diary.thumbnail || DiaryBasicImg} alt="썸네일" />
+                <p className="title">{diary.title}</p>
+                <p className="content">{diary.contentSummary}</p>
+                <div className="travel-info">
+                  <FaRegMap /> <span>{diary.region}</span>
+                </div>
+                <div className="travel-info">
+                  <FaRegCalendarAlt />{" "}
+                  <span>
+                    {diary.startDate?.replaceAll("-", ". ")} ~{" "}
+                    {diary.endDate?.replaceAll("-", ". ")}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </BestDiary>
+        <PolygonMap>
           <ComposableMap
-            width={mapSize.width}
-            height={mapSize.height}
+            width={500}
+            height={730}
             projection="geoMercator"
             projectionConfig={{
               scale: 6000,
@@ -122,35 +242,19 @@ export const Main = () => {
             }}
           >
             <Geographies geography={koreaGeoJson}>
-              {({ geographies, projection }) => {
+              {({ geographies }) => {
                 return geographies.map((geo) => {
-                  // const centroid = geoCentroid(geo) || [0, 0];
-                  // const projected = projection(centroid); // 화면 좌표로 변환
-                  const tooltipCoord = geo.properties.tooltip || [127.5, 36];
-                  const projected = projection(tooltipCoord);
-                  if (!projected) return null;
-                  let [x, y] = projected;
                   const areaCode = geo.properties.areaCode;
                   const area = areas.find((a) => a.code === areaCode);
                   const areaName = area ? area.name : geo.properties.NAME_1;
-                  // 툴팁 위치를 지도 경계 내로 제한
-                  const padding = 5;
-                  x = Math.max(padding, Math.min(x, mapSize.width - padding));
-                  y = Math.max(padding, Math.min(y, mapSize.height - padding));
 
                   return (
                     <Geography
                       key={geo.rsmKey}
                       geography={geo}
                       onClick={() => areaCode && handleClick(areaCode)}
-                      // onMouseEnter={() => handleMouseEnter(areaName)}
-                      // onMouseLeave={handleMouseLeave}
-                      onMouseEnter={() =>
-                        setTooltip({ visible: true, x, y, name: areaName })
-                      }
-                      onMouseLeave={() =>
-                        setTooltip({ ...tooltip, visible: false })
-                      }
+                      onMouseEnter={() => setHoveredArea(areaName)}
+                      onMouseLeave={() => setHoveredArea(null)}
                     />
                   );
                 });
@@ -160,42 +264,47 @@ export const Main = () => {
 
           {hoveredArea && <div className="tooltip">{hoveredArea}</div>}
           {tooltip.visible && (
-            <Tooltip x={tooltip.x} y={tooltip.y}>
+            <div
+              style={{
+                position: "absolute",
+                left: `${tooltip.x * 0.8}px`,
+                top: `${tooltip.y * 0.8}px`,
+                background: "rgba(255, 255, 255, 0.8)",
+                color: "black",
+                fontWeight: "bold",
+                fontSize: "17px",
+                padding: "8px 12px",
+                borderRadius: "5px",
+                pointerEvents: "none",
+                // transform: "translate(-50%, -100%)",
+                whiteSpace: "nowrap",
+              }}
+            >
               {tooltip.name}
-            </Tooltip>
+            </div>
           )}
         </PolygonMap>
-        <BestDiary className="GridItem">
-          <Swiper
-            modules={[Navigation, Pagination, Autoplay]}
-            spaceBetween={20}
-            slidesPerView={"auto"}
-            loop={true}
-            navigation
-            pagination={{ clickable: true }}
-            centeredSlides={true}
-          >
-            {diaries.map((diary) => (
-              <SwiperSlide
-                key={diary.id}
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  width: "32%",
-                }}
-              >
-                <img
-                  src={diary.imgSrc}
-                  alt={diary.name}
-                  style={{ maxWidth: "100%", height: "auto" }}
-                />
-                <p>{diary.name}</p>
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        </BestDiary>
+        <QuickSearch>
+          <div className="SelectCategory">
+            <p>어떤 카테고리 you want?</p>
+            <div className="catebuttons">
+              {types.map((type) => (
+                <CateButton
+                  key={type.code}
+                  onClick={() => navigate(`/tourlist?category=${type.code}`)}
+                >
+                  {type.name}
+                </CateButton>
+              ))}
+            </div>
+          </div>
+          <div className="recommend-banner">
+            <p>어디갈지 모르겠다구~?</p>
+            <div className="banner" onClick={() => navigate("/recommTour")}>
+              AI 추천 받아보면 어떨까요?
+            </div>
+          </div>
+        </QuickSearch>
         {/* <VisitGraph className="GridItem"></VisitGraph> */}
       </MainBox>
     </>

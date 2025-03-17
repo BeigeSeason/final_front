@@ -162,7 +162,7 @@ export const BestDiary = styled(GridItem)`
   width: 100%;
   background-color: #fff5e6;
   margin: 4% 0;
-  padding: 2% 0;
+  padding: 2% 0 4%;
 
   .section-title {
     text-align: center;
@@ -177,7 +177,7 @@ export const BestDiary = styled(GridItem)`
 
     .diary-container {
       width: 18vw;
-      padding-bottom: 10px;
+      padding-bottom: 20px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       border-radius: 7px;
       background-color: #fff;
@@ -200,9 +200,9 @@ export const BestDiary = styled(GridItem)`
       .content {
         width: 92%;
         height: 2.8em;
-        margin: 5px auto;
+        margin: 5px auto 10px;
         font-size: 0.9em;
-        line-height: 1.4em;
+        box-sizing: border-box;
         display: -webkit-box;
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
@@ -211,7 +211,7 @@ export const BestDiary = styled(GridItem)`
       }
       .travel-info {
         width: 92%;
-        margin: 7px auto;
+        margin: 3px auto;
         color: #333;
         font-size: 0.8em;
         white-space: nowrap;
@@ -266,20 +266,20 @@ export const PolygonMap = styled(GridItem)`
     }
   }
   .tooltip {
-    /* display: flex;
+    display: flex;
     position: absolute;
-    right: 10px;
-    bottom: 10px;
+    left: 6vw;
+    top: -2vw;
     width: 20%;
     height: 10%;
     max-width: 100px;
     justify-content: center;
-    align-items: center; */
-    background: rgba(0, 0, 0, 0.8);
+    align-items: center;
+    background: ${colors.colorA};
     color: white;
     /* padding: 5px 10px; */
     border-radius: 3px;
-    /* font-size: 20px; */
+    font-size: clamp(14px, 2vw, 20px); /* 최소 14px, 최대 20px로 제한 */
     pointer-events: none; /* 툴팁 클릭 방지 */
     z-index: 10;
     transition: opacity 0.2s ease;
