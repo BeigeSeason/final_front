@@ -287,7 +287,7 @@ export const Main = () => {
         <QuickSearch>
           <div className="SelectCategory">
             <p>어떤 카테고리 you want?</p>
-            <div className="catebuttons">
+            {/* <div className="catebuttons">
               {types.map((type) => (
                 <CateButton
                   key={type.code}
@@ -296,7 +296,7 @@ export const Main = () => {
                   {type.name}
                 </CateButton>
               ))}
-            </div>
+            </div> */}
           </div>
           <div className="recommend-banner">
             <p>어디갈지 모르겠다구~?</p>
