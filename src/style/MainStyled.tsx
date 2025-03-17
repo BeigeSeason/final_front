@@ -271,14 +271,25 @@ export const QuickSearch = styled(GridItem)`
   }
   .recommend-banner {
     display: flex;
+    position: relative;
     flex-direction: column;
     align-items: center;
     .banner {
-      width: 100%;
+      width: 95%;
       height: 10vw;
       margin-top: 2vw;
       background-color: ${colors.colorD};
       cursor: pointer;
+
+      img {
+        width: 100%;
+        height: 90%;
+        object-fit: contain;
+        position: absolute;
+        right: -30%;
+        /* object-position: 50% 27%; */
+        /* filter: brightness(70%); */
+      }
     }
   }
 `;

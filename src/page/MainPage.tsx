@@ -36,6 +36,8 @@ import DiaryBasicImg from "../img/item/type_200.png";
 import TourBanner from "../img/banner/banner_tour.jpg";
 import DiaryBanner from "../img/banner/banner_diary.jpg";
 import RecommendBanner from "../img/banner/banner_recommend.png";
+import AIBanner from "../img/banner/banner_ai.jpg";
+import SampleBanner from "../img/banner/20945925.jpg";
 import { GoStarFill } from "react-icons/go";
 import { FaRegMap, FaRegCalendarAlt } from "react-icons/fa";
 
@@ -313,12 +315,12 @@ export const Main = () => {
           </div>
         </BestDiary>
         <PolygonMap>
-          <h2 className="section-title">내가 원하는 지역을 바로 검색</h2>
+          <h2 className="section-title">원하는 지역을 바로 찾기🔍</h2>
           <div className="map" ref={mapRef} />
         </PolygonMap>
         <QuickSearch>
           <div className="SelectCategory">
-            <h2 className="section-title">취향 따라 골라보는 여행 Pick</h2>
+            <h2 className="section-title">취향 맞춤 카테고리 Pick🎯</h2>
             <div className="catebuttons">
               {types.map((type) => (
                 <CateButton
@@ -338,7 +340,8 @@ export const Main = () => {
           </div>
           <div className="recommend-banner">
             <div className="banner" onClick={() => navigate("/recommTour")}>
-              AI 추천 받아보면 어떨까요?
+              <img src={SampleBanner} alt="" />
+              {/* <div className="banner-text">나만의 맞춤 여행 추천 받기</div> */}
             </div>
           </div>
         </QuickSearch>
