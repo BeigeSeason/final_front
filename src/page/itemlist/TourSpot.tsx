@@ -491,9 +491,9 @@ export const TourSpot = () => {
           </div> */}
             <NearTravelList>
               <h3>주변 관광지</h3>
-              {tourSpotDetail.nearSpots.content.length > 0 && (
+              {tourSpotDetail.nearSpots.length > 0 && (
                 <div className="nearby-travelspot">
-                  {tourSpotDetail.nearSpots.content.map((spot) => {
+                  {tourSpotDetail.nearSpots.map((spot) => {
                     // const categoryPath = getCategoryName(
                     //   spot.cat1,
                     //   spot.cat2,
