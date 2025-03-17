@@ -1,6 +1,6 @@
 import TourCard from "../img/card/card_tour.jpg";
-import RestaurantCard from "../img/card/card_restaurant.jpg";
-import RoomCard from "../img/card/card_room.jpg";
+import RestaurantCard from "../img/card/card_restaurant.png";
+import RoomCard from "../img/card/card_room.png";
 
 export const types = [
   {
