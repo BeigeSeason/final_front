@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { TourItemInfoBox, SpotTitle, RecommendBox } from "../../style/TourSpotStyled";
+import {
+  TourItemInfoBox,
+  SpotTitle,
+  RecommendBox,
+} from "../../style/TourSpotStyled";
 import AxiosApi from "../../api/AxiosApi";
-import basicImg from "../../img/item/type_200.png"
+import basicImg from "../../img/item/type_200.png";
 
 import { FaArrowRight } from "react-icons/fa";
 
@@ -41,37 +45,53 @@ const TourRecResult = () => {
     console.log("recArray: ", recArray);
     sendToBackend(); // 컴포넌트 마운트 시 API 요청
   }, [recommendations]); // recommendations가 변경될 때마다 호출
-  
-  return(
+
+  return (
     <TourItemInfoBox>
       <SpotTitle>
         <h1 className="tour-title">여행지 추천</h1>
       </SpotTitle>
-      <h2>회원님과 {(recommendations[4]["Probability_5.0"] * 100).toFixed(0)}% 맞는 여행지에요!</h2>
+      <h2>
+        회원님과 {(recommendations[4]["Probability_5.0"] * 100).toFixed(0)}%
+        맞는 여행지에요!
+      </h2>
 
       <RecommendBox>
         {Object.keys(recArray).map((area: string, index: number) => (
           <div key={index}>
             <div className="result-item-head">
-              <span className="name">
-                {area} 
-              </span>
-              <span className="link center">
-                더보기<FaArrowRight />
+              <span className="name">{area}</span>
+              <span
+                className="link center"
+                onClick={() =>
+                  navigate(`/tourlist?searchQuery=${area}&pageSize=10&page=0`)
+                }
+              >
+                더보기
+                <FaArrowRight />
               </span>
             </div>
             <div className="flex-row gap30">
               {recArray[area].map((item: any, idx: number) => (
-                <div 
-                  key={idx} 
+                <div
+                  key={idx}
                   onClick={() => navigate(`/tourspot/${item.spotId}`)}
-                  style={{ cursor: "pointer" }}
+                  style={{ cursor: "pointer", width: "120px" }}
                 >
-                  {item.thumbnail === "" 
-                    ? <img src={basicImg} alt={area} style={{ width: '100px', height: '100px' }} /> 
-                    : <img src={item.thumbnail} alt={area} style={{ width: '100px', height: '100px' }} />
-                  }
-                  <div>{item.title || '제목 없음'}</div>
+                  {item.thumbnail === "" ? (
+                    <img
+                      src={basicImg}
+                      alt={area}
+                      style={{ width: "120px", height: "120px" }}
+                    />
+                  ) : (
+                    <img
+                      src={item.thumbnail}
+                      alt={area}
+                      style={{ width: "120px", height: "120px" }}
+                    />
+                  )}
+                  <div>{item.title || "제목 없음"}</div>
                   {/* <div>사진주소: {item.thumbnail || "없음"}</div>
                   <div>링크주소: {item.spotId}</div> */}
                 </div>

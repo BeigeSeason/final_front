@@ -396,6 +396,7 @@ export const RecommendBox = styled.div`
     }
     .link {
       font-size: 12px;
+      cursor: pointer;
     }
   }
   .flex-row {
@@ -421,4 +422,4 @@ export const RecommendBox = styled.div`
     display: flex;
     justify-content: center;
   }
-`
+`;
