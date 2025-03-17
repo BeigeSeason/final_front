@@ -361,6 +361,24 @@ const AxiosApi = {
       throw error;
     }
   },
+  // 여행지 추천 결과
+  recommendResult: async (keyword: string[]) => {
+    try {
+      const response = await axios.post(
+        `${API_BASE_URL}/search/recommend-spot`,
+        keyword
+      );
+
+      if (response.status === 200) {
+        return response.data;  // 성공적으로 받은 recommendations
+      } else {
+        throw new Error('추천을 받는데 실패했습니다.');
+      }
+    } catch (error) {
+      console.error("여행지 추천 실패:", error);
+      throw error;
+    }
+  },
 };
 
 export default AxiosApi;
