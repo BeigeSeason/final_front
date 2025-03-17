@@ -161,7 +161,7 @@ export const BestDiary = styled(GridItem)`
   grid-column: span 5;
   width: 100%;
   background-color: #fff5e6;
-  margin: 4% 0;
+  margin: 4% 0 2%;
   padding: 2% 0 4%;
 
   .section-title {
@@ -177,7 +177,7 @@ export const BestDiary = styled(GridItem)`
 
     .diary-container {
       width: 18vw;
-      padding-bottom: 20px;
+      padding-bottom: 13px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       border-radius: 7px;
       background-color: #fff;
@@ -222,84 +222,38 @@ export const BestDiary = styled(GridItem)`
   }
 `;
 
-// 폴리곤 넣고싶다----------------------------------------------------------------------
+// 폴리곤 -------------------------------------------------------------------------------
 export const PolygonMap = styled(GridItem)`
   grid-column: span 2;
-  /* border: 1px solid black; */
   display: flex;
+  flex-direction: column;
   position: relative;
   align-items: center;
   justify-content: center;
-  width: 100%;
+  width: 90%;
   height: 100%;
-  aspect-ratio: 5 / 7.3;
-  /* @media (max-width: 980px) {
-    max-width: 400px;
-    max-height: 400px;
-  } */
-
-  /* 큰 화면 */
-  @media (min-width: 1200px) {
-    max-width: 700px;
-    max-height: 600px;
+  min-height: 5vw;
+  margin-left: 20%;
+  .section-title {
+    font-size: clamp(14px, 2vw, 22px);
+    white-space: nowrap;
   }
-
-  & svg {
+  .map {
     width: 100%;
-    height: 100%;
-  }
-
-  & path {
-    fill: ${colors.colorB}; /* 기본 색상 */
-    stroke: #ffffff; /* 경계선 색상 */
-    stroke-width: 0.5px; /* 경계선 두께 */
-    outline: none; /* 기본 상태 outline 제거 */
-    transition: all 0.3s ease;
-    cursor: pointer;
-
-    &:hover {
-      fill: ${colors.colorC}; /* 호버 시 색상 */
-    }
-
-    &:active {
-      outline: none; /* 클릭 시 outline 제거 */
-    }
-  }
-  .tooltip {
-    display: flex;
-    position: absolute;
-    left: 6vw;
-    top: -2vw;
-    width: 20%;
-    height: 10%;
-    max-width: 100px;
-    justify-content: center;
-    align-items: center;
-    background: ${colors.colorA};
-    color: white;
-    /* padding: 5px 10px; */
-    border-radius: 3px;
-    font-size: clamp(14px, 2vw, 20px); /* 최소 14px, 최대 20px로 제한 */
-    pointer-events: none; /* 툴팁 클릭 방지 */
-    z-index: 10;
-    transition: opacity 0.2s ease;
-    opacity: 0; /* 기본적으로 숨김 */
-  }
-  &:hover .tooltip {
-    opacity: 1; /* 호버 시 툴팁 보이게 */
+    height: 90%;
+    margin-bottom: 10%;
   }
 `;
-
-// 지역별 시각화 --------------------------------------------------------------------
-// export const VisitGraph = styled(GridItem)`
-//   grid-column: span 3;
-//   border: 1px solid black;
-// `;
 
 // 빠른 이동 ------------------------------------------------------------------------
 export const QuickSearch = styled(GridItem)`
   grid-column: span 3;
+  width: 70%;
+  margin: 0 0 10% 10%;
   /* border: 1px solid black; */
+  .section-title {
+    font-size: clamp(14px, 2vw, 22px);
+  }
   .SelectCategory {
     display: flex;
     flex-direction: column;
@@ -322,16 +276,19 @@ export const QuickSearch = styled(GridItem)`
     .banner {
       width: 100%;
       height: 10vw;
-      /* margin: 0 auto; */
+      margin-top: 2vw;
       background-color: ${colors.colorD};
       cursor: pointer;
     }
   }
 `;
 
-export const CateButton = styled.button`
+interface CateButtonProps {
+  typeName: string; // typeName을 필수 props로 정의
+}
+
+export const CateButton = styled.button<CateButtonProps>`
   width: 90%;
-  /* height: 100%; */
   height: 15vw;
   margin: 0 auto;
   position: relative;
@@ -342,7 +299,9 @@ export const CateButton = styled.button`
   cursor: pointer;
   overflow: hidden;
 
-  /* hover 시 배경 어두워지기 */
+  color: transparent; /* 필요 시 제거 */
+
+  /* ::before로 배경 어두움 효과 */
   &::before {
     content: "";
     position: absolute;
@@ -350,13 +309,36 @@ export const CateButton = styled.button`
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0); /* 기본값은 투명 */
-    transition: background-color 0.5s ease; /* 어두워지는 효과 */
-    z-index: 1; /* 텍스트보다 아래 */
+    background-color: rgba(0, 0, 0, 0);
+    transition: background-color 0.3s ease;
+    z-index: 1;
   }
 
-  /* hover 시 배경 어두워지기 */
+  /* 호버 시 배경 더 어둡게 */
   &:hover::before {
-    background-color: rgba(0, 0, 0, 0.3); /* 어두운 레이어 */
+    background-color: rgba(0, 0, 0, 0.5); /* 요청하신 0.5 */
+  }
+
+  /* ::after로 텍스트 설정 */
+  &::after {
+    content: ${({ typeName }) => `"${typeName}"`};
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #ffffff; /* 최대한 밝은 흰색 */
+    font-size: clamp(14px, 2vw, 25px); /* 반응형 크기 */
+    font-weight: 700; /* 두꺼운 폰트 */
+    opacity: 0; /* 기본값 숨김 */
+    z-index: 2; /* ::before 위 */
+    transition: opacity 0.3s ease;
+    white-space: nowrap;
+    padding: 6px 12px; /* 텍스트 주변 여백 */
+    border-radius: 8px; /* 둥근 모서리 */
+  }
+
+  /* 호버 시 텍스트 보이기 */
+  &:hover::after {
+    opacity: 1;
   }
 `;

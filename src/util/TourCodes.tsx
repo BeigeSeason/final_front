@@ -1,15 +1,22 @@
+import TourCard from "../img/card/card_tour.jpg";
+import RestaurantCard from "../img/card/card_restaurant.jpg";
+import RoomCard from "../img/card/card_room.jpg";
+
 export const types = [
   {
     code: "100",
     name: "관광지",
+    img: TourCard,
   },
   {
     code: "200",
     name: "숙소",
+    img: RoomCard,
   },
   {
     code: "300",
     name: "음식점",
+    img: RestaurantCard,
   },
 ];
 
@@ -347,5 +354,93 @@ export const areas = [
       { code: "3", name: "서귀포시" },
       { code: "4", name: "제주시" },
     ],
+  },
+];
+
+export const tooltipAreas = [
+  {
+    code: "1",
+    name: "서울",
+    tooltip: "Seoul",
+  },
+  {
+    code: "2",
+    name: "인천",
+    tooltip: "Incheon",
+  },
+  {
+    code: "3",
+    name: "대전",
+    tooltip: "Daejeon",
+  },
+  {
+    code: "4",
+    name: "대구",
+    tooltip: "Daegu",
+  },
+  {
+    code: "5",
+    name: "광주",
+    tooltip: "Gwangju",
+  },
+  {
+    code: "6",
+    name: "부산",
+    tooltip: "Busan",
+  },
+  {
+    code: "7",
+    name: "울산",
+    tooltip: "Ulsan",
+  },
+  {
+    code: "8",
+    name: "세종",
+    tooltip: "Sejong",
+  },
+  {
+    code: "31",
+    name: "경기",
+    tooltip: "Gyeonggi",
+  },
+  {
+    code: "32",
+    name: "강원",
+    tooltip: "Gangwon",
+  },
+  {
+    code: "33",
+    name: "충북",
+    tooltip: "North Chungcheong",
+  },
+  {
+    code: "34",
+    name: "충남",
+    tooltip: "South Chungcheong",
+  },
+  {
+    code: "35",
+    name: "경북",
+    tooltip: "North Gyeongsang",
+  },
+  {
+    code: "36",
+    name: "경남",
+    tooltip: "South Gyeongsang",
+  },
+  {
+    code: "37",
+    name: "전북",
+    tooltip: "North Jeolla",
+  },
+  {
+    code: "38",
+    name: "전남",
+    tooltip: "South Jeolla",
+  },
+  {
+    code: "39",
+    name: "제주",
+    tooltip: "Jeju",
   },
 ];

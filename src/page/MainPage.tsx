@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   MainBox,
   Banner,
@@ -22,7 +22,10 @@ import {
 } from "swiper/modules";
 import { ComposableMap, Geographies, Geography } from "react-simple-maps";
 import koreaGeoJson from "../util/korea.geojson.json";
-import { areas, types } from "../util/TourCodes";
+import * as am4core from "@amcharts/amcharts4/core";
+import * as am4maps from "@amcharts/amcharts4/maps";
+import am4geodata_koreaLow from "@amcharts/amcharts4-geodata/southKoreaLow";
+import { areas, types, tooltipAreas } from "../util/TourCodes";
 import { ServiceCode } from "../util/ServiceCode";
 import { useNavigate } from "react-router-dom";
 import FontSize from "@tiptap/extension-font-size";
@@ -48,13 +51,15 @@ export const Main = () => {
   const navigate = useNavigate();
   const [places, setPlaces] = useState<TourSpot[]>([]);
   const [diaries, setDiaries] = useState<Diary[]>([]);
-  const [hoveredArea, setHoveredArea] = useState<string | null>(null);
+  // const [hoveredArea, setHoveredArea] = useState<string | null>(null);
   const [tooltip, setTooltip] = useState({
     visible: false,
     x: 0,
     y: 0,
     name: "",
   });
+  const mapRef = useRef<HTMLDivElement>(null);
+
   const bannerData = [
     {
       backgroundColor: "#86ffd7",
@@ -104,13 +109,13 @@ export const Main = () => {
   const handleClick = (areaCode: string) => {
     navigate(`/tourlist?areaCode=${areaCode}&pageSize=10&page=0`);
   };
-  const handleMouseEnter = (areaName: string) => {
-    setHoveredArea(areaName); // 호버 시작 시 이름 설정
-  };
+  // const handleMouseEnter = (areaName: string) => {
+  //   setHoveredArea(areaName); // 호버 시작 시 이름 설정
+  // };
 
-  const handleMouseLeave = () => {
-    setHoveredArea(null); // 호버 끝나면 이름 제거
-  };
+  // const handleMouseLeave = () => {
+  //   setHoveredArea(null); // 호버 끝나면 이름 제거
+  // };
 
   // 카테고리 이름을 찾는 유틸 함수
   const getCategoryNames = (
@@ -134,10 +139,86 @@ export const Main = () => {
     return result;
   };
 
+  // amCharts 지도 설정
+  useEffect(() => {
+    if (!mapRef.current) return;
+
+    const chart = am4core.create(mapRef.current, am4maps.MapChart);
+    if (chart.logo) {
+      chart.logo.disabled = true;
+    }
+    chart.geodata = am4geodata_koreaLow; // 한국 지도 데이터 사용
+    chart.projection = new am4maps.projections.Mercator();
+
+    // 초기 줌 레벨과 중심 설정
+    chart.homeZoomLevel = 1;
+    chart.homeGeoPoint = { latitude: 36, longitude: 127.5 }; // 한국 중심
+
+    // 줌 기능 비활성화
+    chart.seriesContainer.draggable = false; // 드래그로 이동 비활성화
+    chart.seriesContainer.resizable = false; // 크기 조정 비활성화
+    chart.seriesContainer.wheelable = false; // 마우스 휠로 줌 비활성화
+    chart.maxZoomLevel = 1; // 최대 줌 레벨을 1로 고정
+    chart.minZoomLevel = 1; // 최소 줌 레벨을 1로 고정
+    chart.seriesContainer.events.on("wheel", (ev) => {
+      // 페이지 스크롤을 위해 이벤트 전달
+      window.scrollBy(0, ev.event.deltaY);
+    });
+
+    const polygonSeries = chart.series.push(new am4maps.MapPolygonSeries());
+    polygonSeries.useGeodata = true;
+
+    const polygonTemplate = polygonSeries.mapPolygons.template;
+
+    // polygonTemplate.tooltipText = "{name}";
+    // 툴팁을 한국어로 설정
+    polygonTemplate.adapter.add("tooltipText", (text, target) => {
+      const data = target.dataItem.dataContext as any;
+      if (data && data.name) {
+        const area = tooltipAreas.find(
+          (a) => a.tooltip === data.name || a.name === data.name
+        );
+        return area ? area.name : data.name; // 한국어 이름 반환, 없으면 기본 이름
+      }
+      return text;
+    });
+
+    polygonTemplate.fill = am4core.color("#7BAE7F");
+    // #74B266 / #D7CEC7
+    polygonTemplate.stroke = am4core.color("#FFFFFF");
+    polygonTemplate.strokeWidth = 1;
+
+    // 호버 효과
+    const hoverState = polygonTemplate.states.create("hover");
+    hoverState.properties.fill = am4core.color("#B0D8A4");
+    // #367B25 / #E8D8C4
+
+    // 호버 시 커서를 pointer로 변경
+    polygonTemplate.cursorOverStyle = am4core.MouseCursorStyle.pointer;
+
+    // 클릭 이벤트
+    polygonTemplate.events.on("hit", (ev) => {
+      const data = ev.target.dataItem.dataContext as any;
+      if (data && data.name) {
+        // tooltipAreas에서 해당 지역의 code를 찾음
+        const area = tooltipAreas.find(
+          (a) => a.tooltip === data.name || a.name === data.name
+        );
+        if (area && area.code) {
+          navigate(`/tourlist?areaCode=${area.code}&pageSize=10&page=0`);
+        }
+      }
+    });
+    return () => {
+      chart.dispose(); // 컴포넌트 언마운트 시 정리
+    };
+  }, []);
+
   useEffect(() => {
     getBestSpots();
     getBestDiaries();
   }, []);
+
   return (
     <>
       <GlobalFont />
@@ -232,74 +313,30 @@ export const Main = () => {
           </div>
         </BestDiary>
         <PolygonMap>
-          <ComposableMap
-            width={500}
-            height={730}
-            projection="geoMercator"
-            projectionConfig={{
-              scale: 6000,
-              center: [127.5, 36],
-            }}
-          >
-            <Geographies geography={koreaGeoJson}>
-              {({ geographies }) => {
-                return geographies.map((geo) => {
-                  const areaCode = geo.properties.areaCode;
-                  const area = areas.find((a) => a.code === areaCode);
-                  const areaName = area ? area.name : geo.properties.NAME_1;
-
-                  return (
-                    <Geography
-                      key={geo.rsmKey}
-                      geography={geo}
-                      onClick={() => areaCode && handleClick(areaCode)}
-                      onMouseEnter={() => setHoveredArea(areaName)}
-                      onMouseLeave={() => setHoveredArea(null)}
-                    />
-                  );
-                });
-              }}
-            </Geographies>
-          </ComposableMap>
-
-          {hoveredArea && <div className="tooltip">{hoveredArea}</div>}
-          {tooltip.visible && (
-            <div
-              style={{
-                position: "absolute",
-                left: `${tooltip.x * 0.8}px`,
-                top: `${tooltip.y * 0.8}px`,
-                background: "rgba(255, 255, 255, 0.8)",
-                color: "black",
-                fontWeight: "bold",
-                fontSize: "17px",
-                padding: "8px 12px",
-                borderRadius: "5px",
-                pointerEvents: "none",
-                // transform: "translate(-50%, -100%)",
-                whiteSpace: "nowrap",
-              }}
-            >
-              {tooltip.name}
-            </div>
-          )}
+          <h2 className="section-title">내가 원하는 지역을 바로 검색</h2>
+          <div className="map" ref={mapRef} />
         </PolygonMap>
         <QuickSearch>
           <div className="SelectCategory">
-            <p>어떤 카테고리 you want?</p>
+            <h2 className="section-title">취향 따라 골라보는 여행 Pick</h2>
             <div className="catebuttons">
               {types.map((type) => (
                 <CateButton
                   key={type.code}
                   onClick={() => navigate(`/tourlist?category=${type.code}`)}
+                  typeName={type.name}
+                  style={{
+                    backgroundImage: `url(${type.img})`,
+                    backgroundSize: "cover", // 이미지가 버튼을 덮도록
+                    backgroundPosition: "center", // 이미지의 중앙을 버튼에 맞춤
+                  }}
                 >
-                  {type.name}
+                  {/* <span>{type.name}</span> */}
                 </CateButton>
               ))}
             </div>
           </div>
           <div className="recommend-banner">
-            <p>어디갈지 모르겠다구~?</p>
             <div className="banner" onClick={() => navigate("/recommTour")}>
               AI 추천 받아보면 어떨까요?
             </div>
