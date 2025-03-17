@@ -42,6 +42,7 @@ import EditDiary from "./page/diary/EditDiary";
 import Diary from "./page/diary/Diary";
 import { TourSpot } from "./page/itemlist/TourSpot";
 import TourRecommend from "./page/itemlist/TourRecommend";
+import TourRecResult from "./page/itemlist/TourRecResult";
 
 import Test from "./page/test";
 
@@ -125,9 +126,13 @@ function App() {
                 <Route
                   path="/tourRecommend"
                   element={
-                    <ProtectedRoute>
                       <TourRecommend />
-                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/tourRecommend/result"
+                  element={
+                      <TourRecResult />
                   }
                 />
               </Route>

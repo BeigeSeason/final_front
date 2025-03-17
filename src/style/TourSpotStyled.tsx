@@ -386,6 +386,22 @@ export const RecommendBox = styled.div`
       width: 50px;
     }
   }
+  .result-item-head {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 5px;
+    .name {
+      font-size: 18px;
+      font-weight: 700;
+    }
+    .link {
+      font-size: 12px;
+    }
+  }
+  .flex-row {
+    display: flex;
+    flex-direction: row;
+  }
   .gap30 {
     gap: 30px;
   }

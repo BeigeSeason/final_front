@@ -1,8 +1,9 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import AxiosApi from "../../api/AxiosApi";
 import { TourItemInfoBox, SpotTitle, RecommendBox } from "../../style/TourSpotStyled";
 import { CheckModal } from "../../component/ModalComponent";
-import { RecommendInput } from "../../types/CommonTypes";
+import { Recommendation, RecommendInput } from "../../types/CommonTypes";
 
 const TourRecommend = () => {
   const [gender, setGender] = useState<number>(-1);
@@ -20,6 +21,7 @@ const TourRecommend = () => {
   const [purpose, setPurpose] = useState<number>(0);
 
   const [isCheckModalOpen, setIsCheckModalOpen] = useState<boolean>(false);
+  const navigate = useNavigate();
 
   const handleRecommend = async () => {
     if (
@@ -56,12 +58,13 @@ const TourRecommend = () => {
       TRAVEL_MISSION_INT: purpose,
     }
     const response = await AxiosApi.recommendSpot(data);
-    console.log(response);
-  }
+
+    navigate(`/tourRecommend/result`, { state: { recommendations: response } });
+  };
 
   const handleCheckModalClose = () => {
     setIsCheckModalOpen(false);
-  }
+  };
 
   return (
     <TourItemInfoBox>
