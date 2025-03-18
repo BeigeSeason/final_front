@@ -190,6 +190,7 @@ export const MyReviewContainer = styled.div`
       .spot-title {
         font-size: 18px;
         font-weight: bold;
+        cursor: pointer;
       }
       .review-rating {
         display: flex;
@@ -206,11 +207,13 @@ export const MyReviewContainer = styled.div`
 
     .review-content {
       margin: 10px 0 5px;
+      cursor: pointer;
     }
     .review-date {
       margin: 0;
       font-size: 13px;
       color: #333;
+      cursor: pointer;
     }
   }
   hr {

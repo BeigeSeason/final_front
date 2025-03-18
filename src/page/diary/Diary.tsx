@@ -14,6 +14,7 @@ import {
   FaRegBookmark,
   FaRegCalendarAlt,
   FaWonSign,
+  FaRegMap,
 } from "react-icons/fa";
 // import { FaCalendarDays } from "react-icons/fa6";
 import { TbPigMoney } from "react-icons/tb";
@@ -260,6 +261,10 @@ const Diary = () => {
           {diaryInfo?.title ?? "제목 없음"}
         </h1>
         <div className="travel-info-container">
+          <div className="travel-info">
+            <FaRegMap />
+            <span>{diaryInfo?.region}</span>
+          </div>
           <div className="travel-info">
             <FaRegCalendarAlt />{" "}
             <span>

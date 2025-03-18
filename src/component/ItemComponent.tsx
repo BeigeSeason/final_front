@@ -22,10 +22,10 @@ const SpotContainer = styled(Link)`
 `;
 
 const SpotImage = styled.img`
-  min-width: 150px;
-  min-height: 110px;
-  max-width: 150px;
-  max-height: 110px;
+  min-width: 170px;
+  min-height: 130px;
+  max-width: 170px;
+  max-height: 130px;
   margin-right: 10px;
   object-fit: cover;
 `;
@@ -33,7 +33,7 @@ const SpotImage = styled.img`
 const SpotDescription = styled.div`
   display: flex;
   flex-direction: column;
-  height: 110px;
+  height: 140px;
   justify-content: center;
   width: 100%;
   overflow: hidden;
@@ -44,12 +44,20 @@ const SpotDescription = styled.div`
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  .addr {
+  .period {
     font-size: 13px;
+    color: #333;
+    margin: 2px 0 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .addr {
+    font-size: 14px;
     color: gray;
   }
   .summary {
-    font-size: 13px;
+    font-size: 14px;
     color: #222;
     margin: 3px 0;
     display: -webkit-box;
@@ -130,6 +138,10 @@ export const DiaryItem: React.FC<DiaryItemProps> = ({
       <SpotImage src={thumbnail || basicImg} alt="다이어리 썸네일" />
       <SpotDescription>
         <div className="title">{description[0]}</div>
+        <div className="period">
+          <FaRegCalendarAlt style={{ marginRight: "3px", fontSize: "11px" }} />
+          {description[6]} ~ {description[7]}
+        </div>
         <div className="summary">{description[1]}</div>
         {/* <div className="travel-info-container">
           <div className="travel-info">

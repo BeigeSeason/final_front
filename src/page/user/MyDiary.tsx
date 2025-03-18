@@ -95,6 +95,8 @@ const MyDiary: React.FC<MyDiaryProps> = React.memo(({ type, userId }) => {
               diary.createdAt.slice(0, 10).replaceAll("-", ". "),
               new Date(diary.createdAt).toLocaleString(),
               `${diary.writer} (${new Date(diary.createdAt).toLocaleString()})`,
+              diary.startDate.slice(0, 10).replaceAll("-", ". "),
+              diary.endDate.slice(0, 10).replaceAll("-", ". "),
             ]}
           />
         ))

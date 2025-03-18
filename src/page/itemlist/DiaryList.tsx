@@ -460,6 +460,8 @@ export const DiaryList: React.FC = () => {
                 `${diary.writer} (${new Date(
                   diary.createdAt
                 ).toLocaleString()})`,
+                diary.startDate.slice(0, 10).replaceAll("-", ". "),
+                diary.endDate.slice(0, 10).replaceAll("-", ". "),
               ]}
             />
           ))}

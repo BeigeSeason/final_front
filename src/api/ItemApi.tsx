@@ -135,6 +135,13 @@ export const ItemApi = {
   myBookmarkedTourspots: async (
     params: BookmarkedItem
   ): Promise<TourSpotResponse> => {
+    console.log(
+      (
+        await JwtAxios.get(
+          `${API_BASE_URL}/search/my-bookmarked-tourspots?userId=${params.userId}&page=${params.page}&size=${params.size}`
+        )
+      ).data
+    );
     try {
       return (
         await JwtAxios.get(

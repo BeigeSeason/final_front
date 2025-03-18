@@ -16,7 +16,7 @@ const MyBMDiary = React.memo(() => {
     const queryParams = new URLSearchParams(location.search);
     return {
       page: parseInt(queryParams.get("page") || "0", 10),
-      size: parseInt(queryParams.get("size") || "10", 10),
+      size: parseInt(queryParams.get("size") || "5", 10),
     };
   });
   const { userId } = useSelector((state: RootState) => state.auth);
@@ -81,6 +81,8 @@ const MyBMDiary = React.memo(() => {
               diary.createdAt.slice(0, 10).replaceAll("-", ". "),
               new Date(diary.createdAt).toLocaleString(),
               `${diary.writer} (${new Date(diary.createdAt).toLocaleString()})`,
+              diary.startDate.slice(0, 10).replaceAll("-", ". "),
+              diary.endDate.slice(0, 10).replaceAll("-", ". "),
             ]}
           />
         ))

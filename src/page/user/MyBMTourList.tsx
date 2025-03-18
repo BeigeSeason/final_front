@@ -16,7 +16,7 @@ const MyBMTourList = React.memo(() => {
     const queryParams = new URLSearchParams(location.search);
     return {
       page: parseInt(queryParams.get("page") || "0", 10),
-      size: parseInt(queryParams.get("size") || "10", 10),
+      size: parseInt(queryParams.get("size") || "5", 10),
     };
   });
   const { userId } = useSelector((state: RootState) => state.auth);
@@ -28,7 +28,7 @@ const MyBMTourList = React.memo(() => {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const fetchDiaries = async (page: number) => {
+  const fetchTourSpots = async (page: number) => {
     setLoading(true);
     if (userId) {
       const data = await ItemApi.myBookmarkedTourspots({
@@ -36,6 +36,7 @@ const MyBMTourList = React.memo(() => {
         page: page,
         size: filters.size,
       });
+      console.log(data);
       setTourspots(data.content);
       setTotalPages(data.totalPages);
       setTotalElements(data.totalElements);
@@ -52,11 +53,12 @@ const MyBMTourList = React.memo(() => {
 
   useEffect(() => {
     if (userId) {
-      fetchDiaries(filters.page);
+      fetchTourSpots(filters.page);
     }
   }, [filters.page, userId]);
 
   const handlePageChange = (page: number) => {
+    setCurrentPage(page);
     setFilters((prev) => ({ ...prev, page }));
     const queryParams = new URLSearchParams();
     queryParams.set("menu", "북마크 관광지");
