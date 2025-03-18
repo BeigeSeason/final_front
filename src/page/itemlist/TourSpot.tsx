@@ -241,6 +241,7 @@ export const TourSpot = () => {
         return prevComments.filter((comment) => comment.id !== deleteReviewId);
       });
 
+      setTotalComments(totalComments - 1);
       setNeedDeleteModal(false);
     } catch (error) {
       console.log("댓글 삭제 실패");
