@@ -4,6 +4,7 @@ import AxiosApi from "../../api/AxiosApi";
 import { TourItemInfoBox, SpotTitle, RecommendBox } from "../../style/TourSpotStyled";
 import { CheckModal } from "../../component/ModalComponent";
 import { Recommendation, RecommendInput } from "../../types/CommonTypes";
+import { Button } from "../../component/ButtonComponent";
 
 const TourRecommend = () => {
   const [gender, setGender] = useState<number>(-1);
@@ -376,11 +377,11 @@ const TourRecommend = () => {
             <option value={28}>등산 및 등반 여행</option>
           </select>
         </div>
-        <button
+        <Button
           onClick={handleRecommend}
         >
           추천받기
-        </button>
+        </Button>
       </RecommendBox>
       <CheckModal
         isOpen={isCheckModalOpen}

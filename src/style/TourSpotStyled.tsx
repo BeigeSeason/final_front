@@ -263,6 +263,14 @@ export const StyledWrapper = styled.div`
   .rating label:hover ~ label {
     color: ${colors.colorC};
   }
+  .reviewRating {
+    display: flex;
+    gap: 5px;
+    cursor: pointer;
+    width: 140px;
+    height: 100%;
+    align-items: center;
+  }
 `;
 
 export const CommentBox = styled.div`
@@ -397,6 +405,12 @@ export const RecommendBox = styled.div`
     .link {
       font-size: 12px;
       cursor: pointer;
+    }
+  }
+  .underLine {
+    &:hover {
+      text-decoration: underline;
+      opacity: 0.7;
     }
   }
   .flex-row {

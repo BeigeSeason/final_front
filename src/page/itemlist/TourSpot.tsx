@@ -249,6 +249,7 @@ export const TourSpot = () => {
       });
       setTotalComments(totalComments - 1);
 
+      setTotalComments(totalComments - 1);
       setNeedDeleteModal(false);
     } catch (error) {
       console.log("댓글 삭제 실패");
@@ -557,12 +558,7 @@ export const TourSpot = () => {
                 onMouseMove={handleRatingHover}
                 onMouseLeave={handleRatingLeave}
                 onClick={handleRatingClick}
-                style={{
-                  display: "flex",
-                  gap: 5,
-                  cursor: "pointer",
-                  width: "140px",
-                }}
+                className="reviewRating"
               >
                 {[...Array(5)].map((_, i) => {
                   const score = ratingHover || rating; // 마우스 오버 or 확정된 값
@@ -645,12 +641,7 @@ export const TourSpot = () => {
                           onMouseMove={handleEditRatingHover}
                           onMouseLeave={handleEditRatingLeave}
                           onClick={handleEditRatingClick}
-                          style={{
-                            display: "flex",
-                            gap: 5,
-                            cursor: "pointer",
-                            width: "140px",
-                          }}
+                          className="reviewRating"
                         >
                           {[...Array(5)].map((_, i) => {
                             const score = editRatingHover || editRating; // 마우스 오버 or 확정된 값
