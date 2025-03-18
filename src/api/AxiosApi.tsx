@@ -334,7 +334,7 @@ const AxiosApi = {
   // 리뷰 리스트 조회
   reviewList: async (page = 0, size = 10, tourSpotId = "1") => {
     try {
-      const response = await JwtAxios.get(
+      const response = await axios.get(
         `${API_BASE_URL}/review-bookmark/review-list`,
         {
           params: { page, size, tourSpotId },

@@ -399,6 +399,12 @@ export const RecommendBox = styled.div`
       cursor: pointer;
     }
   }
+  .underLine {
+    &:hover {
+      text-decoration: underline;
+      opacity: 0.7;
+    }
+  }
   .flex-row {
     display: flex;
     flex-direction: row;

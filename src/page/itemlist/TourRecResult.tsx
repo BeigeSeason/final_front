@@ -62,7 +62,7 @@ const TourRecResult = () => {
             <div className="result-item-head">
               <span className="name">{area}</span>
               <span
-                className="link center"
+                className="link center underLine"
                 onClick={() =>
                   navigate(`/tourlist?searchQuery=${area}&pageSize=10&page=0`)
                 }
@@ -77,6 +77,7 @@ const TourRecResult = () => {
                   key={idx}
                   onClick={() => navigate(`/tourspot/${item.spotId}`)}
                   style={{ cursor: "pointer", width: "120px" }}
+                  className="underLine"
                 >
                   {item.thumbnail === "" ? (
                     <img
