@@ -162,3 +162,58 @@ export const MyProfileContainer = styled.div`
     width: 76%;
   }
 `;
+
+export const MyReviewContainer = styled.div`
+  width: 100%;
+  height: 100%;
+
+  .review-item {
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    margin: 10px auto;
+    .review-info {
+      display: flex;
+      position: relative;
+      align-items: flex-end;
+
+      button {
+        display: flex;
+        position: absolute;
+        right: 0;
+        top: 5px;
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+      }
+
+      .spot-title {
+        font-size: 18px;
+        font-weight: bold;
+      }
+      .review-rating {
+        display: flex;
+        align-items: center; /* 아이콘과 텍스트 수직 정렬 */
+        font-size: 14px;
+        color: #333;
+
+        svg {
+          vertical-align: middle; /* 아이콘 수직 정렬 */
+          margin-bottom: -2px; /* 미세 조정 */
+        }
+      }
+    }
+
+    .review-content {
+      margin: 10px 0 5px;
+    }
+    .review-date {
+      margin: 0;
+      font-size: 13px;
+      color: #333;
+    }
+  }
+  hr {
+    width: 100%;
+  }
+`;

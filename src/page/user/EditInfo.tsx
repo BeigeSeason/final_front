@@ -8,6 +8,7 @@ import { Button } from "../../component/ButtonComponent";
 import { InputBox } from "../../component/InputComponent";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { Loading } from "../../component/Loading";
 
 interface EditInfoData {
   isEditable: boolean;
@@ -21,6 +22,7 @@ export const EditInfo = (props: EditInfoData) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { showToast } = useToast();
+  const [loading, setLoading] = useState<boolean>(false);
   const { userId, nickname, name, email, profile } = useSelector(
     (state: RootState) => state.auth
   );
@@ -62,11 +64,13 @@ export const EditInfo = (props: EditInfoData) => {
       (name !== editName || nickname !== editNickname)
     ) {
       // 수정 완료 시 서버로 데이터 전송 가능
+      setLoading(true);
       const response = await AxiosApi.updateMember(
         userId,
         editName,
         editNickname
       );
+      setLoading(false);
       if (response.data) {
         dispatch(
           setUserInfo({
@@ -97,8 +101,10 @@ export const EditInfo = (props: EditInfoData) => {
     if (isPwEditable && isPwValid) {
       // 비밀번호 변경 완료 시 서버로 데이터 전송 가능
       if (userId) {
+        setLoading(true);
         await AxiosApi.changeMemberPw(userId, newPw);
         showToast("비밀번호 변경이 완료되었습니다.", "success");
+        setLoading(false);
       }
     }
     if (!isPwEditable) {
@@ -246,22 +252,6 @@ export const EditInfo = (props: EditInfoData) => {
             readOnly={!isEditable}
             onChange={(e) => handleInputChange(e, "id")}
           />
-          {/* {isEditable && (
-            <Button onClick={handleCheckId} disabled={idChecked}>
-              {idChecked ? "사용 가능" : "중복 확인"}
-            </Button>
-          )}
-          {idError && (
-            <span
-              className="error-message"
-              style={{
-                color:
-                  idError === "사용 가능한 아이디입니다." ? "blue" : "red",
-              }}
-            >
-              {idError}
-            </span>
-          )} */}
         </div>
         <div className="info-item">
           <span className="title content-font1">이메일</span>
@@ -337,6 +327,11 @@ export const EditInfo = (props: EditInfoData) => {
             </div>
           </div>
         </>
+      )}
+      {loading && (
+        <Loading istransparent={"true"}>
+          <p></p>
+        </Loading>
       )}
     </>
   );

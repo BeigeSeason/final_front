@@ -3,7 +3,11 @@ import { AxiosResponse } from "axios";
 import axios from "axios";
 import Common from "../util/Common";
 import { API_BASE_URL } from "../util/Common";
-import { Recommendation, RecommendInput, ReportData, Review } from "../types/CommonTypes";
+import {
+  Recommendation,
+  RecommendInput,
+  ReportData,
+} from "../types/CommonTypes";
 
 interface LoginRequest {
   userId: string;
@@ -294,67 +298,18 @@ const AxiosApi = {
       return false;
     }
   },
-  // 리뷰 작성
-  postReview: async (data: Review) => {
-    try {
-      return await JwtAxios.post(
-        `${API_BASE_URL}/review-bookmark/add-review`,
-        data
-      );
-    } catch (error) {
-      console.log("댓글 작성 오류");
-      return false;
-    }
-  },
-  // 리뷰 수정
-  editReview: async (data: Review) => {
-    try {
-      return await JwtAxios.post(
-        `${API_BASE_URL}/review-bookmark/edit-review`,
-        data
-      );
-    } catch (error) {
-      console.log("댓글 수정 오류");
-      return false;
-    }
-  },
-  // 리뷰 삭제
-  deleteReview: async (id: number) => {
-    try {
-      return await JwtAxios.post(
-        `${API_BASE_URL}/review-bookmark/delete-review-redis`,
-        null,
-        { params: { reviewId: id } }
-      );
-    } catch (error) {
-      console.log("댓글 삭제 실패");
-      return false;
-    }
-  },
-  // 리뷰 리스트 조회
-  reviewList: async (page = 0, size = 10, tourSpotId = "1") => {
-    try {
-      const response = await JwtAxios.get(
-        `${API_BASE_URL}/review-bookmark/review-list`,
-        {
-          params: { page, size, tourSpotId },
-        }
-      );
-      return response.data;
-    } catch (error) {
-      console.error("댓글 리스트 조회 중 오류 발생:", error);
-      throw error;
-    }
-  },
   // 여행지 추천
   recommendSpot: async (data: RecommendInput) => {
     try {
-      const response = await axios.post<{ status: string, recommendations: Recommendation[] }>(`http://localhost:5000/recommend`, data);
+      const response = await axios.post<{
+        status: string;
+        recommendations: Recommendation[];
+      }>(`http://localhost:5000/recommend`, data);
 
-      if (response.data.status === 'success') {
+      if (response.data.status === "success") {
         return response.data.recommendations;
       } else {
-        throw new Error('추천을 받는데 실패했습니다.');
+        throw new Error("추천을 받는데 실패했습니다.");
       }
     } catch (error) {
       console.log("여행지 추천 실패:", error);
@@ -370,9 +325,9 @@ const AxiosApi = {
       );
 
       if (response.status === 200) {
-        return response.data;  // 성공적으로 받은 recommendations
+        return response.data; // 성공적으로 받은 recommendations
       } else {
-        throw new Error('추천을 받는데 실패했습니다.');
+        throw new Error("추천을 받는데 실패했습니다.");
       }
     } catch (error) {
       console.error("여행지 추천 실패:", error);

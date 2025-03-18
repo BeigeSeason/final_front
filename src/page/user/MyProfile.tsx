@@ -8,6 +8,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import AxiosApi from "../../api/AxiosApi";
 import { MyProfileContainer } from "../../style/MypageComponentStyled";
 import { EditInfo } from "./EditInfo";
+import { MyReview } from "./MyReview";
 import { setUserInfo } from "../../redux/authSlice";
 import { useNavigate } from "react-router-dom";
 
@@ -37,14 +38,6 @@ const MyProfile = React.memo(() => {
     { label: "아이디", value: userId ?? "", editable: true },
     { label: "이메일", value: email ?? "", editable: false },
   ];
-
-  const MyComments = () => {
-    return (
-      <>
-        <div className="info-item">내가 작성한 댓글</div>
-      </>
-    );
-  };
 
   const handleConfirmPw = async () => {
     if (userId) {
@@ -119,7 +112,7 @@ const MyProfile = React.memo(() => {
               setIsPwEditable={setIsPwEditable}
             />
           )}
-          {selectedMenu === "내가 작성한 댓글" && <MyComments />}
+          {selectedMenu === "내가 작성한 댓글" && <MyReview />}
         </>
       )}
     </MyProfileContainer>

@@ -67,7 +67,8 @@ export const Banner = styled(GridItem)`
   .slide-text-container {
     flex: 1;
     max-width: 30%;
-    margin-top: -3.5vw;
+    margin-top: -5vw;
+    padding-left: 1vw;
     color: white;
     text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.6);
     text-align: left;
@@ -78,10 +79,10 @@ export const Banner = styled(GridItem)`
     animation: fadeInLeft 0.8s ease-out;
 
     .title {
-      font-size: clamp(30px, 3vw, 70px);
+      font-size: clamp(30px, 3vw, 50px);
     }
     .sub-title {
-      font-size: clamp(15px, 1.7vw, 35px);
+      font-size: clamp(15px, 1.7vw, 25px);
     }
   }
   @keyframes fadeInLeft {

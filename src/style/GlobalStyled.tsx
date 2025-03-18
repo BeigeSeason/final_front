@@ -90,17 +90,20 @@ export const NavSt = styled.div`
     align-items: center;
   }
   .leftMenu {
-    gap: 5vw;
+    gap: 4vw;
   }
   .rightMenu {
     display: flex;
     position: absolute;
     right: 9%;
-    gap: 3vw;
+    gap: 2vw;
   }
   .tag {
     text-decoration: none;
+    border-bottom: 2px solid transparent;
     color: ${colors.colorA};
+    padding: 0 8px 5px;
+    box-sizing: border-box;
     transition: all 0.3s ease;
     font-weight: bold;
     cursor: pointer;
@@ -110,6 +113,7 @@ export const NavSt = styled.div`
     }
     &.active {
       opacity: 0.7;
+      border-bottom: 2px solid #7d6458;
     }
   }
 `;

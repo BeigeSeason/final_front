@@ -19,6 +19,50 @@ export interface Review {
   tourSpotId: string | undefined;
   content: string;
 }
+export interface ReviewReq {
+  size?: number;
+  page?: number;
+  tourSpotId?: string;
+  userId?: string;
+}
+export interface ReviewRes {
+  id: number;
+  memberId: string;
+  nickname: string;
+  createdAt: string;
+  rating: number;
+  content: string;
+  tourspotId: string;
+  tourspotTitle: string;
+}
+export interface ReviewPageResponse {
+  content: ReviewRes[]; // 리뷰 목록
+  pageable: {
+    sort: {
+      empty: boolean;
+      sorted: boolean;
+      unsorted: boolean;
+    };
+    offset: number;
+    pageSize: number;
+    pageNumber: number;
+    paged: boolean;
+    unpaged: boolean;
+  };
+  last: boolean;
+  totalElements: number;
+  totalPages: number;
+  first: boolean;
+  size: number;
+  number: number;
+  sort: {
+    empty: boolean;
+    sorted: boolean;
+    unsorted: boolean;
+  };
+  numberOfElements: number;
+  empty: boolean;
+}
 export interface RecommendInput {
   GENDER: number;
   AGE_GRP: number;
