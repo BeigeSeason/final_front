@@ -38,13 +38,26 @@ export const SearchPage = () => {
 
   useEffect(() => {
     setSearchQuery(filters.searchQuery);
-    fetchTourSpots(filters.currentPage);
-    fetchDiaries(filters.currentPage);
-  }, [filters.searchQuery, filters.currentPage]);
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        await Promise.all([
+          fetchTourSpots(filters.currentPage),
+          fetchDiaries(filters.currentPage),
+        ]);
+      } catch (err) {
+        setError("데이터를 가져오는 데 오류가 발생했습니다.");
+      } finally {
+        setLoading(false);
+      }
+    };
+    if (filters.searchQuery && filters.searchQuery.length >= 1) {
+      fetchData();
+    }
+  }, [filters.searchQuery]);
 
   const fetchTourSpots = async (page: number) => {
     try {
-      setLoading(true);
       const requestFilters = {
         keyword: filters.searchQuery || undefined, // 상태에서 직접 필터값을 가져옵니다.
         page: page,
@@ -56,26 +69,22 @@ export const SearchPage = () => {
       setTotalItems(data.totalElements);
     } catch (err) {
       setError("데이터를 가져오는 데 오류가 발생했습니다.");
-    } finally {
-      setLoading(false);
     }
   };
   const fetchDiaries = async (page: number) => {
     try {
-      setLoading(true);
       const requestFilters = {
         keyword: filters.searchQuery || undefined,
         page: page,
         size: 5,
       };
       const data = await ItemApi.getDiaryList(requestFilters);
+      console.log(data);
       setDiaries(data.content || []);
       setTotalDiaryPages(data.totalPages);
       setTotalDiaryItems(data.totalElements);
     } catch (err) {
       setError("여행일지 데이터를 가져오는 데 오류가 발생했습니다.");
-    } finally {
-      setLoading(false);
     }
   };
   const handleTourMoreClick = () => {
