@@ -36,8 +36,7 @@ import DiaryBasicImg from "../img/item/type_200.png";
 import TourBanner from "../img/banner/banner_tour.jpg";
 import DiaryBanner from "../img/banner/banner_diary.jpg";
 import RecommendBanner from "../img/banner/banner_recommend.png";
-import AIBanner from "../img/banner/banner_ai.jpg";
-import SampleBanner from "../img/banner/20945925.jpg";
+import AIBanner from "../img/banner/banner_ai.png";
 import { GoStarFill } from "react-icons/go";
 import { FaRegMap, FaRegCalendarAlt } from "react-icons/fa";
 
@@ -75,16 +74,16 @@ export const Main = () => {
       backgroundColor: "#f1c38d",
       imageSrc: DiaryBanner,
       alt: "여행일지",
-      title: "여행일지입니다.",
-      subTitle: "여행일지에요!",
+      title: "여행 이야기 공유",
+      subTitle: "다양한 여행 이야기를 보고, 멋진 여행을 구상해보세요!",
       navigatePath: "/diarylist",
     },
     {
       backgroundColor: "#a6dbff",
       imageSrc: RecommendBanner,
       alt: "관광지 추천",
-      title: "관광지 추천입니다.",
-      subTitle: "관광지 추천이에요!",
+      title: "나만의 여행지 찾기",
+      subTitle: "AI가 추천하는 맞춤형 여행지, 지금 확인하세요!",
       navigatePath: "/tourRecommend",
     },
   ];
@@ -275,6 +274,7 @@ export const Main = () => {
                 >
                   <img src={place.thumbnail || SpotBasicImg} alt="썸네일" />
                   <p className="title">{place.title}</p>
+                  <p className="address">{place.addr}</p>
                   {categories && <p className="categories">{categories}</p>}
                   <p className="rating">
                     <GoStarFill style={{ color: "#FFD700" }} />
@@ -340,12 +340,10 @@ export const Main = () => {
           </div>
           <div className="recommend-banner">
             <div className="banner" onClick={() => navigate("/recommTour")}>
-              <img src={SampleBanner} alt="" />
-              {/* <div className="banner-text">나만의 맞춤 여행 추천 받기</div> */}
+              <img src={AIBanner} alt="" />
             </div>
           </div>
         </QuickSearch>
-        {/* <VisitGraph className="GridItem"></VisitGraph> */}
       </MainBox>
     </>
   );

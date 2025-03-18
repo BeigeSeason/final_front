@@ -20,10 +20,12 @@ export const Banner = styled(GridItem)`
   grid-column: span 5;
   /* border: 1px solid black; */
   width: 100%;
-  height: 30vw;
+  height: 32vw;
+  min-height: 400px;
   position: relative;
   display: flex;
   padding: 0.5% 0 4%;
+  margin-bottom: clamp(20px, 2.7vw, 80px);
 
   .swiper-slide-custom {
     position: relative;
@@ -65,13 +67,22 @@ export const Banner = styled(GridItem)`
   .slide-text-container {
     flex: 1;
     max-width: 30%;
+    margin-top: -3.5vw;
     color: white;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.6);
     text-align: left;
     white-space: nowrap; // 줄바꿈 방지
     z-index: 10;
 
     /* 📌 CSS 애니메이션 추가 */
     animation: fadeInLeft 0.8s ease-out;
+
+    .title {
+      font-size: clamp(30px, 3vw, 70px);
+    }
+    .sub-title {
+      font-size: clamp(15px, 1.7vw, 35px);
+    }
   }
   @keyframes fadeInLeft {
     from {
@@ -112,13 +123,15 @@ export const BestSpot = styled(GridItem)`
 
   .section-title {
     text-align: center;
-    margin-bottom: 40px;
+    margin-bottom: clamp(20px, 3vw, 100px);
+    font-size: clamp(20px, 3vw, 38px);
   }
 
   .bestspots-container {
     display: flex;
     justify-content: center;
     width: 100%;
+    height: 24vw;
     gap: 1.5%;
 
     .spot-container {
@@ -133,24 +146,32 @@ export const BestSpot = styled(GridItem)`
       .title {
         width: 92%;
         margin: 5px auto;
+        margin-bottom: clamp(10px, 2vw, 30px);
         font-weight: bold;
-        font-size: 1.2em;
+        font-size: clamp(14px, 1.2vw, 22px);
         white-space: nowrap; // 줄바꿈 방지
         overflow: hidden; // 넘치는 글자를 잘라냄
         text-overflow: ellipsis; // 넘치는 글자는 '...' 처리
       }
+      .address,
       .categories {
         width: 92%;
         margin: 5px auto;
-        font-size: 0.75em;
+        font-size: clamp(8.5px, 1vw, 14px);
+        white-space: nowrap; // 줄바꿈 방지
+        overflow: hidden; // 넘치는 글자를 잘라냄
+        text-overflow: ellipsis; // 넘치는 글자는 '...' 처리
         color: #333;
+      }
+      .address {
+        margin-bottom: 10px;
       }
       .rating {
         display: flex;
         align-items: center;
         width: 92%;
         margin: 3px auto;
-        font-size: 0.85em;
+        font-size: clamp(9px, 1vw, 14px);
       }
     }
   }
@@ -160,13 +181,15 @@ export const BestSpot = styled(GridItem)`
 export const BestDiary = styled(GridItem)`
   grid-column: span 5;
   width: 100%;
-  background-color: #fff5e6;
-  margin: 4% 0 2%;
+  /* background-color: #fff5e6; */
+  margin: 2vw 0 5vw;
   padding: 2% 0 4%;
 
   .section-title {
     text-align: center;
-    margin-bottom: 50px;
+    margin-bottom: clamp(30px, 5vw, 100px);
+    margin-top: clamp(15px, 2vw, 50px);
+    font-size: clamp(20px, 3vw, 38px);
   }
 
   .bestdiaries-container {
@@ -184,15 +207,16 @@ export const BestDiary = styled(GridItem)`
       cursor: pointer;
       img {
         width: 18vw;
-        height: 10vw;
+        height: 13vw;
         border-radius: 7px 7px 0 0;
         object-fit: cover;
       }
       .title {
         width: 92%;
         margin: 5px auto;
+        margin-bottom: clamp(10px, 1.5vw, 25px);
         font-weight: bold;
-        font-size: 1.2em;
+        font-size: clamp(15px, 2.8vw, 23px);
         white-space: nowrap; // 줄바꿈 방지
         overflow: hidden; // 넘치는 글자를 잘라냄
         text-overflow: ellipsis; // 넘치는 글자는 '...' 처리
@@ -200,7 +224,8 @@ export const BestDiary = styled(GridItem)`
       .content {
         width: 92%;
         height: 2.8em;
-        margin: 5px auto 10px;
+        margin: 5px auto;
+        margin-bottom: clamp(10px, 1.4vw, 25px);
         font-size: 0.9em;
         box-sizing: border-box;
         display: -webkit-box;
@@ -212,6 +237,7 @@ export const BestDiary = styled(GridItem)`
       .travel-info {
         width: 92%;
         margin: 3px auto;
+        margin-bottom: clamp(5px, 0.8vw, 10px);
         color: #333;
         font-size: 0.8em;
         white-space: nowrap;
@@ -231,11 +257,12 @@ export const PolygonMap = styled(GridItem)`
   align-items: center;
   justify-content: center;
   width: 90%;
-  height: 100%;
+  height: 90%;
   min-height: 5vw;
   margin-left: 20%;
   .section-title {
-    font-size: clamp(14px, 2vw, 22px);
+    font-size: clamp(15px, 3vw, 27px);
+    margin-bottom: clamp(17px, 3vw, 50px);
     white-space: nowrap;
   }
   .map {
@@ -249,16 +276,18 @@ export const PolygonMap = styled(GridItem)`
 export const QuickSearch = styled(GridItem)`
   grid-column: span 3;
   width: 70%;
-  margin: 0 0 10% 10%;
+  margin: 0 0 20% 10%;
   /* border: 1px solid black; */
   .section-title {
-    font-size: clamp(14px, 2vw, 22px);
+    font-size: clamp(15px, 3vw, 27px);
+    margin-bottom: clamp(17px, 3vw, 50px);
   }
   .SelectCategory {
     display: flex;
     flex-direction: column;
     text-align: center;
     width: 100%;
+    margin-bottom: clamp(11px, 2vw, 40px);
     .catebuttons {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -271,23 +300,26 @@ export const QuickSearch = styled(GridItem)`
   }
   .recommend-banner {
     display: flex;
-    position: relative;
     flex-direction: column;
     align-items: center;
     .banner {
-      width: 95%;
-      height: 10vw;
+      width: 100%;
+      aspect-ratio: 4 / 1;
       margin-top: 2vw;
-      background-color: ${colors.colorD};
+      /* background-color: #c9a5fc; */
+      /* border: 2px solid #90bdfc; */
+      border-radius: 20px;
+      overflow: hidden;
       cursor: pointer;
 
       img {
         width: 100%;
-        height: 90%;
-        object-fit: contain;
-        position: absolute;
-        right: -30%;
-        /* object-position: 50% 27%; */
+        height: 100%;
+        object-fit: cover;
+        /* position: absolute; */
+        /* right: -35%; */
+        /* top: 5%; */
+        object-position: 50% 27%;
         /* filter: brightness(70%); */
       }
     }
