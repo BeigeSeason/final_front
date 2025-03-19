@@ -10,12 +10,12 @@ export const GlobalFont = createGlobalStyle`
   font-style: normal;
 }
 .content-font1{
-  font-family: "Gothic A1", serif;
+  font-family: "Nanum Gothic", sans-serif;
   font-weight: 400;
   font-style: normal;
 }
 .content-font2{
-  font-family: "Nanum Brush Script", serif;
+  font-family: "Poor Story", system-ui;
   font-weight: 400; 
   font-style: normal;
 }

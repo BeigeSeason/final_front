@@ -95,7 +95,7 @@ const MypageMain = () => {
     queryParams.set("menu", selectedMenu);
     if (selectedMenu === "내 여행일지") {
       queryParams.set("page", "0");
-      queryParams.set("size", "10");
+      queryParams.set("size", "5");
     }
     navigate(`?${queryParams.toString()}`, { replace: true });
   }, [selectedMenu, navigate]);
@@ -123,12 +123,6 @@ const MypageMain = () => {
         </div>
       </ProfileInfo>
       <MypageMenuContainer>
-        {/* <Button
-          className="write-diary-button"
-          onClick={() => navigate("/creatediary")}
-        >
-          여행일지 작성
-        </Button> */}
         {menuItems.map((menu) => (
           <button
             key={menu}

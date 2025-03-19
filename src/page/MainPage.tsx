@@ -339,7 +339,7 @@ export const Main = () => {
             </div>
           </div>
           <div className="recommend-banner">
-            <div className="banner" onClick={() => navigate("/recommTour")}>
+            <div className="banner" onClick={() => navigate("/tourRecommend")}>
               <img src={AIBanner} alt="" />
             </div>
           </div>

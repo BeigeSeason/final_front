@@ -68,6 +68,9 @@ export const ProfileInfo = styled.div`
       cursor: pointer;
     }
   }
+  .user-info > p {
+    font-weight: bold;
+  }
   .report-button {
     display: flex;
     position: absolute;

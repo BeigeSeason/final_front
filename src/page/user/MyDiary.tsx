@@ -16,7 +16,7 @@ const MyDiary: React.FC<MyDiaryProps> = React.memo(({ type, userId }) => {
     const queryParams = new URLSearchParams(location.search);
     return {
       page: parseInt(queryParams.get("page") || "0", 10),
-      size: parseInt(queryParams.get("size") || "10", 10),
+      size: parseInt(queryParams.get("size") || "5", 10),
     };
   });
   const [diaries, setDiaries] = useState<Diary[]>([]);

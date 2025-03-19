@@ -102,6 +102,8 @@ export const MyProfileContainer = styled.div`
     .title {
       width: 100px;
       font-size: 16px;
+      font-weight: bold;
+      flex-shrink: 0;
     }
     .new-pw-container {
       display: flex;
