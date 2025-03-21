@@ -384,6 +384,7 @@ const TourRecommend = () => {
         </div>
         <Button
           onClick={handleRecommend}
+          $width="700px"
         >
           추천받기
         </Button>
