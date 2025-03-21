@@ -391,7 +391,7 @@ export const RecommendBox = styled.div`
       position: relative;
     }
     .radio-item {
-      width: 50px;
+      width: 65px;
     }
   }
   .result-item-head {

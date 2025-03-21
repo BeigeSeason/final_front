@@ -300,7 +300,6 @@ const AxiosApi = {
   },
   // 여행지 추천
   recommendSpot: async (data: RecommendInput) => {
-    console.log(data);
     try {
       const response = await axios.post<{
         status: string;
