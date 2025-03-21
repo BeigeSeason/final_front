@@ -22,6 +22,7 @@ const TourRecommend = () => {
   const [purpose, setPurpose] = useState<number>(0);
 
   const [isCheckModalOpen, setIsCheckModalOpen] = useState<boolean>(false);
+  const [modalText, setModalText] = useState("");
   const navigate = useNavigate();
 
   const handleRecommend = async () => {
@@ -39,8 +40,8 @@ const TourRecommend = () => {
       motive === 0 ||
       purpose === 0
     ) {
-      console.log("모든 값을 설정해야 합니다.");
       setIsCheckModalOpen(true);
+      setModalText("모든 값을 설정해야 합니다.");
       return;
     }
     const data: RecommendInput = {
@@ -59,8 +60,12 @@ const TourRecommend = () => {
       TRAVEL_MISSION_INT: purpose,
     }
     const response = await AxiosApi.recommendSpot(data);
-
-    navigate(`/tourRecommend/result`, { state: { recommendations: response } });
+    if (response.length === 0) {
+      setIsCheckModalOpen(true);
+      setModalText("추천 결과가 없는 조건입니다. 다시 시도해주세요.");
+    } else {
+      navigate(`/tourRecommend/result`, { state: { recommendations: response } });
+    }
   };
 
   const handleCheckModalClose = () => {
@@ -230,7 +235,7 @@ const TourRecommend = () => {
                   </div>
                 ))}
               </div>
-              <div className="cenradio-item centerter">경제적</div>
+              <div className="radio-item center">경제적</div>
             </div>
             <div className="radio-container">
               <div className="radio-item center">여유</div>
@@ -387,7 +392,7 @@ const TourRecommend = () => {
         isOpen={isCheckModalOpen}
         onClose={handleCheckModalClose}
       >
-        <p>모든 항목을 선택해야 합니다.</p>
+        <p>{modalText}</p>
       </CheckModal>
     </TourItemInfoBox>
   );

@@ -51,11 +51,14 @@ const TourRecResult = () => {
       <SpotTitle>
         <h1 className="tour-title">여행지 추천</h1>
       </SpotTitle>
-      <h2>
-        회원님과 {(recommendations[4]["Probability_5.0"] * 100).toFixed(0)}%
-        맞는 여행지에요!
-      </h2>
-
+      {recommendations.length===0
+      ? <h2>
+          없어요.
+        </h2>
+      : <h2>
+          회원님과 {(recommendations[0].Probability * 100).toFixed(0)}% 맞는 여행지에요!
+        </h2>
+      }
       <RecommendBox>
         {Object.keys(recArray).map((area: string, index: number) => (
           <div key={index}>
