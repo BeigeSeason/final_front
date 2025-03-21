@@ -9,26 +9,19 @@ import {
   CateButton,
 } from "../style/MainStyled";
 import { GlobalFont } from "../style/GlobalStyled";
+import { useMediaQuery } from "react-responsive";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/autoplay";
-import {
-  Navigation,
-  Pagination,
-  Autoplay,
-  EffectCoverflow,
-} from "swiper/modules";
-import { ComposableMap, Geographies, Geography } from "react-simple-maps";
-import koreaGeoJson from "../util/korea.geojson.json";
+import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4maps from "@amcharts/amcharts4/maps";
 import am4geodata_koreaLow from "@amcharts/amcharts4-geodata/southKoreaLow";
-import { areas, types, tooltipAreas } from "../util/TourCodes";
+import { types, tooltipAreas } from "../util/TourCodes";
 import { ServiceCode } from "../util/ServiceCode";
 import { useNavigate } from "react-router-dom";
-import FontSize from "@tiptap/extension-font-size";
 import { ItemApi } from "../api/ItemApi";
 import { TourSpot, Diary } from "../types/ItemTypes";
 import SpotBasicImg from "../img/item/type_100.png";
@@ -40,25 +33,11 @@ import AIBanner from "../img/banner/banner_ai.png";
 import { GoStarFill } from "react-icons/go";
 import { FaRegMap, FaRegCalendarAlt } from "react-icons/fa";
 
-interface Place {
-  thumbnail: string;
-  title: string;
-  cat1?: string | null; // 선택적이고 null일 수도 있음
-  cat2?: string | null;
-  cat3?: string | null;
-}
-
 export const Main = () => {
   const navigate = useNavigate();
+  const isMobile = useMediaQuery({ query: "(max-width: 860px)" });
   const [places, setPlaces] = useState<TourSpot[]>([]);
   const [diaries, setDiaries] = useState<Diary[]>([]);
-  // const [hoveredArea, setHoveredArea] = useState<string | null>(null);
-  const [tooltip, setTooltip] = useState({
-    visible: false,
-    x: 0,
-    y: 0,
-    name: "",
-  });
   const mapRef = useRef<HTMLDivElement>(null);
 
   const bannerData = [
@@ -94,7 +73,6 @@ export const Main = () => {
       sort: "rating,desc",
     };
     const response = await ItemApi.getTourSpotList(filters);
-    console.log(response.content);
     setPlaces(response.content);
   };
   const getBestDiaries = async () => {
@@ -104,19 +82,8 @@ export const Main = () => {
       sort: "bookmark_count,desc",
     };
     const response = await ItemApi.getDiaryList(filters);
-    console.log(response.content);
     setDiaries(response.content);
   };
-  const handleClick = (areaCode: string) => {
-    navigate(`/tourlist?areaCode=${areaCode}&pageSize=10&page=0`);
-  };
-  // const handleMouseEnter = (areaName: string) => {
-  //   setHoveredArea(areaName); // 호버 시작 시 이름 설정
-  // };
-
-  // const handleMouseLeave = () => {
-  //   setHoveredArea(null); // 호버 끝나면 이름 제거
-  // };
 
   // 카테고리 이름을 찾는 유틸 함수
   const getCategoryNames = (
@@ -171,7 +138,6 @@ export const Main = () => {
 
     const polygonTemplate = polygonSeries.mapPolygons.template;
 
-    // polygonTemplate.tooltipText = "{name}";
     // 툴팁을 한국어로 설정
     polygonTemplate.adapter.add("tooltipText", (text, target) => {
       const data = target.dataItem.dataContext as any;
@@ -232,7 +198,7 @@ export const Main = () => {
             loop={true}
             navigation
             pagination={{ clickable: true }}
-            autoplay={{ delay: 5000, disableOnInteraction: false }}
+            // autoplay={{ delay: 5000, disableOnInteraction: false }}
           >
             {bannerData.map((data) => (
               <SwiperSlide key={data.title} className="swiper-slide-custom">
@@ -261,7 +227,7 @@ export const Main = () => {
             🔥 지금 가장 핫한 여행지! 놓치면 후회할 곳은?
           </h2>
           <div className="bestspots-container">
-            {places.map((place) => {
+            {(isMobile ? places.slice(0, 4) : places).map((place) => {
               const categories = getCategoryNames(place.cat1, place.cat2).join(
                 " > "
               );
@@ -291,7 +257,7 @@ export const Main = () => {
             📖 여행은 끝났지만, 이야기로 남았다.
           </h2>
           <div className="bestdiaries-container">
-            {diaries.map((diary) => (
+            {(isMobile ? diaries.slice(0, 3) : diaries).map((diary) => (
               <div
                 className="diary-container"
                 key={diary.diaryId}
@@ -332,9 +298,7 @@ export const Main = () => {
                     backgroundSize: "cover", // 이미지가 버튼을 덮도록
                     backgroundPosition: "center", // 이미지의 중앙을 버튼에 맞춤
                   }}
-                >
-                  {/* <span>{type.name}</span> */}
-                </CateButton>
+                ></CateButton>
               ))}
             </div>
           </div>

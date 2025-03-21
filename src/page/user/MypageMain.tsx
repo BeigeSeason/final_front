@@ -165,7 +165,6 @@ const MypageMain = () => {
                 src={profileImg.name}
                 alt={profileImg.alt}
                 onClick={() => {
-                  // setSelectedProfile(profileImg.keyName);
                   handleProfileSelect(profileImg.keyName);
                 }}
               />

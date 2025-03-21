@@ -71,6 +71,25 @@ export const HeaderSt = styled.div`
   .show {
     visibility: visible;
   }
+  @media (max-width: 860px) {
+    padding-top: 10px;
+    height: 80px;
+    gap: 20px;
+    .logo {
+      width: 150px;
+      min-width: 150px;
+    }
+    .inputSearch {
+    }
+    .usericon {
+      width: 60px;
+      height: 60px;
+      flex-shrink: 0;
+    }
+    /* .inputSearch {
+      display: none;
+    } */
+  }
 `;
 
 // 네비 스타일 -------------------------------------------------------------------------------------
@@ -115,6 +134,44 @@ export const NavSt = styled.div`
       opacity: 0.7;
       border-bottom: 2px solid #7d6458;
     }
+  }
+  /* .menu-icon {
+    display: none;
+    font-size: 28px;
+    margin-left: 2%;
+    color: #333;
+  }
+  .inputSearch {
+    display: flex;
+    position: absolute;
+    right: 10%;
+    width: 68%;
+    display: none;
+  }
+  @media (max-width: 860px) {
+    .leftMenu,
+    .rightMenu {
+      display: none;
+    }
+    .inputSearch,
+    .menu-icon {
+      display: block;
+    }
+  } */
+
+  @media (max-width: 860px) {
+    .leftMenu {
+      gap: 2px;
+    }
+    .rightMenu {
+      gap: 1vw;
+    }
+    .desktop {
+      display: none;
+    }
+  }
+
+  @media (max-width: 600px) {
   }
 `;
 

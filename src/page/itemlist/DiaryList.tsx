@@ -433,6 +433,9 @@ export const DiaryList: React.FC = () => {
           <div className="totalCount">
             총{" "}
             {totalElements > 9999 ? "9,999+" : totalElements.toLocaleString()}건
+            <Button onClick={() => navigate("/creatediary")}>
+              여행일지 작성
+            </Button>
           </div>
           <SelectedFilters
             filters={{

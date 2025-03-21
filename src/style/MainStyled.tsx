@@ -60,7 +60,6 @@ export const Banner = styled(GridItem)`
     width: 100%;
     height: 100%;
     max-width: 1100px;
-    border-radius: 10px;
     object-fit: cover;
   }
 
@@ -176,6 +175,17 @@ export const BestSpot = styled(GridItem)`
       }
     }
   }
+
+  @media (max-width: 860px) {
+    .bestspots-container {
+      .spot-container {
+        width: 20vw;
+        img {
+          width: 20vw;
+        }
+      }
+    }
+  }
 `;
 
 // 인기 여행일지 -------------------------------------------------------------------------
@@ -217,7 +227,7 @@ export const BestDiary = styled(GridItem)`
         margin: 5px auto;
         margin-bottom: clamp(10px, 1.5vw, 25px);
         font-weight: bold;
-        font-size: clamp(15px, 2.8vw, 23px);
+        font-size: clamp(15px, 2.5vw, 23px);
         white-space: nowrap; // 줄바꿈 방지
         overflow: hidden; // 넘치는 글자를 잘라냄
         text-overflow: ellipsis; // 넘치는 글자는 '...' 처리
@@ -247,6 +257,18 @@ export const BestDiary = styled(GridItem)`
       }
     }
   }
+  @media (max-width: 860px) {
+    margin-bottom: 0;
+    .bestdiaries-container {
+      .diary-container {
+        width: 25vw;
+        img {
+          width: 25vw;
+          height: 15vw;
+        }
+      }
+    }
+  }
 `;
 
 // 폴리곤 -------------------------------------------------------------------------------
@@ -271,6 +293,17 @@ export const PolygonMap = styled(GridItem)`
     height: 90%;
     margin-bottom: 10%;
   }
+  @media (max-width: 860px) {
+    grid-column: span 5;
+    height: 60vw;
+    margin: 0 auto 20px;
+    .section-title {
+      font-size: clamp(20px, 3vw, 38px);
+    }
+    .map {
+      margin-bottom: 2%;
+    }
+  }
 `;
 
 // 빠른 이동 ------------------------------------------------------------------------
@@ -278,7 +311,6 @@ export const QuickSearch = styled(GridItem)`
   grid-column: span 3;
   width: 70%;
   margin: 0 0 20% 10%;
-  /* border: 1px solid black; */
   .section-title {
     font-size: clamp(15px, 3vw, 27px);
     margin-bottom: clamp(17px, 3vw, 50px);
@@ -294,9 +326,6 @@ export const QuickSearch = styled(GridItem)`
       grid-template-columns: repeat(3, 1fr);
       width: 100%;
       height: 100%;
-      @media (max-width: 768px) {
-        height: 80%;
-      }
     }
   }
   .recommend-banner {
@@ -307,8 +336,6 @@ export const QuickSearch = styled(GridItem)`
       width: 100%;
       aspect-ratio: 4 / 1;
       margin-top: 2vw;
-      /* background-color: #c9a5fc; */
-      /* border: 2px solid #90bdfc; */
       border-radius: 20px;
       overflow: hidden;
       cursor: pointer;
@@ -317,13 +344,14 @@ export const QuickSearch = styled(GridItem)`
         width: 100%;
         height: 100%;
         object-fit: cover;
-        /* position: absolute; */
-        /* right: -35%; */
-        /* top: 5%; */
         object-position: 50% 27%;
-        /* filter: brightness(70%); */
       }
     }
+  }
+  @media (max-width: 860px) {
+    grid-column: span 5;
+    width: 80%;
+    margin: 0 auto 50px;
   }
 `;
 
@@ -384,5 +412,9 @@ export const CateButton = styled.button<CateButtonProps>`
   /* 호버 시 텍스트 보이기 */
   &:hover::after {
     opacity: 1;
+  }
+
+  @media (max-width: 860px) {
+    height: 28vw;
   }
 `;
