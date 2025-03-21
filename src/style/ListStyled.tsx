@@ -3,22 +3,24 @@ import { colors } from "./GlobalStyled";
 
 export const List = styled.div`
   display: flex;
-  width: 80%;
+  width: 90%;
   min-height: 1000px;
   margin: auto;
   margin-top: 20px;
   margin-bottom: 50px;
   justify-content: center;
   @media (max-width: 768px) {
-    width: 90%;
+    width: 95%;
   }
 `;
 
 export const SelectSearchItem = styled.div`
   position: relative;
-  margin-right: 50px;
-  margin-top: 100px;
-  width: 350px;
+  margin-right: 4vw;
+  margin-top: 70px;
+  /* width: 350px; */
+  /* width: 20vw; */
+  width: 300px;
   height: 100%;
   padding: 40px 20px 20px 20px;
   border-radius: 30px;
@@ -137,12 +139,12 @@ export const SelectSearchItem = styled.div`
   .toggle-button:hover {
     color: ${colors.colorB};
   }
-  @media (max-width: 1024px) {
+  /* @media (max-width: 1024px) {
     width: 300px;
     .buttons {
       grid-template-columns: repeat(2, 1fr);
     }
-  }
+  } */
   /* SelectTourItem 기본 상태 숨기기 (모바일 화면) */
   @media (max-width: 768px) {
     visibility: hidden;
@@ -204,7 +206,7 @@ export const ItemList = styled.div`
   flex-direction: column;
   align-items: center;
   height: 100%;
-  width: 40vw;
+  width: 50vw;
   .totalCount {
     align-self: flex-start;
     font-size: 25px;

@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { useMediaQuery } from "react-responsive";
 import { colors } from "../style/GlobalStyled";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
@@ -110,6 +111,9 @@ const StyleInput = styled.input<{
   border-radius: ${({ borderRadius }) => borderRadius || "50px"};
   font-size: ${({ fontSize }) => fontSize || "14px"};
   outline: none;
+  @media (max-width: 860px) {
+    height: 13px;
+  }
 `;
 
 const SearchIcon = styled(FontAwesomeIcon)<{ iconColor?: string }>`
@@ -133,11 +137,15 @@ export const SearchBox: React.FC<SearchBoxProps> = ({
   fontSize,
   iconColor,
 }) => {
+  const isMobile = useMediaQuery({ query: "(max-width: 860px)" });
+
   return (
     <SearchContainer>
       <StyleInput
         type="text"
-        placeholder={placeholder || "검색어를 입력하세요"}
+        placeholder={
+          isMobile ? "검색어 입력" : placeholder || "검색어를 입력하세요"
+        }
         value={searchTerm}
         onChange={onChange}
         onKeyDown={onKeyDown}
