@@ -7,7 +7,8 @@ import { ServiceCode } from "../util/ServiceCode";
 import { useMemo } from "react";
 import basicImg from "../img/item/type_200.png";
 import { GetProfileImageSrc } from "./ProfileComponent";
-import { FaRegCalendarAlt, FaWonSign } from "react-icons/fa";
+import { FaRegCalendarAlt, FaBookmark } from "react-icons/fa";
+import { GoStarFill } from "react-icons/go";
 
 // 관광지 목록 아이템 컴포넌트 -------------------------------------------------------------------
 const SpotContainer = styled(Link)`
@@ -53,8 +54,18 @@ const SpotDescription = styled.div`
     text-overflow: ellipsis;
   }
   .addr {
+    margin-top: 10px;
     font-size: 14px;
-    color: gray;
+    color: #333;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .rating {
+    display: flex;
+    align-items: center;
+    margin: 3px 0 0;
+    color: #333;
   }
   .summary {
     font-size: 14px;
@@ -116,6 +127,22 @@ export const TourItem: React.FC<TourItemProps> = ({
       <SpotDescription>
         <div className="title">{description[0]}</div>
         <div className="addr">{description[1]}</div>
+        <div className="rating">
+          <GoStarFill
+            style={{ color: "#FFD700", marginRight: "4px", paddingTop: "1px" }}
+          />
+          {description[2] === 0 ? 0 : Number(description[2]).toFixed(2)} (
+          {description[3]}) &nbsp;
+          <FaBookmark
+            style={{
+              color: "#888",
+              marginRight: "4px",
+              paddingTop: "2px",
+              fontSize: "13px",
+            }}
+          />
+          {description[4]}
+        </div>
       </SpotDescription>
     </SpotContainer>
   );
@@ -303,7 +330,7 @@ const TopFilters = styled.div`
     font-size: 13px;
 
     .filter-tag {
-      font-size: 10px;
+      font-size: 11px;
       padding: 3px 4px;
     }
   }

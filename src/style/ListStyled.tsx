@@ -125,6 +125,7 @@ export const SelectSearchItem = styled.div`
     }
     @media (max-width: 768px) {
       top: 4px;
+      right: 4px;
       scale: 80%;
     }
   }
@@ -151,6 +152,7 @@ export const SelectSearchItem = styled.div`
     opacity: 0;
     transform: translateX(-100%);
     transition: all 0.3s ease;
+    height: 730px;
 
     &.open {
       visibility: visible;
@@ -161,19 +163,19 @@ export const SelectSearchItem = styled.div`
     z-index: 10;
     top: 90px;
     left: 40px;
-    padding: 10px;
+    padding: 35px 10px 10px;
     border-radius: 10px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    .buttons {
+    /* .buttons {
       width: 80%;
-    }
+    } */
     button {
-      font-size: 9px;
+      font-size: 11px;
       width: 90px;
       height: 28px;
     }
     h3 {
-      font-size: 15px;
+      font-size: 17px;
       margin: 15px 0 5px 10px;
       &.title {
         margin-left: 0;

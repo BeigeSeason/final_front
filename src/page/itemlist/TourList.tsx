@@ -527,7 +527,13 @@ export const TourList: React.FC = () => {
               key={spot.spotId}
               id={spot.spotId}
               image={spot.thumbnail}
-              description={[spot.title, spot.addr]}
+              description={[
+                spot.title,
+                spot.addr,
+                spot.avgRating,
+                spot.reviewCount,
+                spot.bookmarkCount,
+              ]}
             />
           ))}
           <Paginating

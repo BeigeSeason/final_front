@@ -21,6 +21,7 @@ import { FaBars } from "react-icons/fa";
 import { ItemApi } from "../../api/ItemApi";
 import { Loading } from "../../component/Loading";
 import { Paginating } from "../../component/PaginationComponent";
+import { useMediaQuery } from "react-responsive";
 
 export const DiaryList: React.FC = () => {
   const [diaries, setDiaries] = useState<Diary[]>([]);
@@ -31,6 +32,7 @@ export const DiaryList: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const location = useLocation();
   const navigate = useNavigate();
+  const isMobile = useMediaQuery({ query: "(max-width: 950px)" });
   const [loading, setLoading] = useState<boolean>(true);
   const [isPriceOpen, setIsPriceOpen] = useState<boolean>(true);
   const [isSortOpen, setIsSortOpen] = useState(true);
@@ -275,7 +277,11 @@ export const DiaryList: React.FC = () => {
             onChange={(e) => setSearchQuery(e.target.value)}
             onKeyDown={handleKeyDown}
             onSearch={handleSearch}
-            placeholder={"검색어 입력 (태그: #사용 및 공백으로 구분)"}
+            placeholder={
+              isMobile
+                ? "검색어 (태그: #사용)"
+                : "검색어 (태그: #사용 및 공백으로 구분)"
+            }
           />
           {/* <PriceRange>
             <div>

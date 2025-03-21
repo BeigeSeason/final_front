@@ -17,6 +17,7 @@ export interface TourSpot {
   thumbnail: string;
   avgRating: number;
   reviewCount: number;
+  bookmarkCount: number;
   cat1?: string;
   cat2?: string;
   cat3?: string;
@@ -122,7 +123,6 @@ export interface NearSpot {
   avgRating: number;
   bookmarkCount: number;
 }
-
 
 export interface TourSpotDetailDto {
   contentId: string;

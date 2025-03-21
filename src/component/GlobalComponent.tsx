@@ -20,45 +20,6 @@ import { clearTokens } from "../redux/authSlice";
 import { RootState } from "../redux/store";
 import { GetProfileImageSrc } from "./ProfileComponent";
 
-// 검색창------------------------------------------------------------------------------
-// const SearchBar = () => {
-//   const navigate = useNavigate();
-//   const [searchTerm, setSearchTerm] = useState("");
-
-//   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-//     setSearchTerm(e.target.value);
-//   };
-
-//   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-//     if (e.key === "Enter" && searchTerm.trim() !== "") {
-//       const params = new URLSearchParams();
-//       params.set("searchQuery", searchTerm.trim());
-//       setSearchTerm("");
-//       navigate(`/searchpage?${params.toString()}`);
-//     }
-//   };
-
-//   const handleSearch = () => {
-//     if (searchTerm.trim() !== "") {
-//       const params = new URLSearchParams();
-//       params.set("searchQuery", searchTerm.trim());
-//       setSearchTerm("");
-//       navigate(`/searchpage?${params.toString()}`);
-//     }
-//   };
-
-//   return (
-//     <div className="inputSearch">
-//       <SearchBox
-//         searchTerm={searchTerm}
-//         onChange={handleInputChange}
-//         onKeyDown={handleKeyDown}
-//         onSearch={handleSearch}
-//       />
-//     </div>
-//   );
-// };
-
 // 헤더---------------------------------------------------------------------------------
 export const Header = () => {
   const navigate = useNavigate();
@@ -106,8 +67,6 @@ export const Header = () => {
             onSearch={handleSearch}
           />
         </div>
-        {/* <SearchBar /> */}
-
         <Link to="/mypage" className={`usericon ${accessToken ? "show" : ""}`}>
           <img src={GetProfileImageSrc(profile)} alt="사용자 아이콘" />
         </Link>
@@ -141,8 +100,6 @@ export const AdminHeader = () => {
   };
   const handleConfirmLogout = () => {
     dispatch(clearTokens());
-    // localStorage.removeItem("accessToken");
-    // localStorage.removeItem("refreshToken");
     handleCloseModal();
     navigate("/");
   };
@@ -221,8 +178,6 @@ export const Nav = () => {
 
   const handleConfirmLogout = () => {
     dispatch(clearTokens());
-    // localStorage.removeItem("accessToken");
-    // localStorage.removeItem("refreshToken");
     handleCloseModal();
     navigate("/");
   };
@@ -297,7 +252,6 @@ export const Nav = () => {
           )}
         </div>
       </div>
-      {/* <SearchBar /> */}
       <Modal
         isOpen={isLogoutModalOpen}
         onClose={handleCloseModal}
