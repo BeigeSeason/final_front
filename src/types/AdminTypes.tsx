@@ -6,6 +6,8 @@ export interface Member {
   nickname: string;
   imgPath: string;
   regDate: string;
+  sso: string;
+  ssoId: string;
   banned: Boolean;
 }
 export interface Report {

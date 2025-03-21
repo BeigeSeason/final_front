@@ -43,6 +43,7 @@ const AdminHome = () => {
         sort
       );
       setMembers(data.members);
+      console.log(data);
       setTotalElements(data.totalElements);
     } catch (error) {
       console.log("멤버 리스트 조회 실패:", error);
@@ -311,8 +312,8 @@ const AdminHome = () => {
                     <td>{member.name}</td>
                     <td>{member.nickname}</td>
                     <td>{member.regDate}</td>
-                    <td></td>
-                    <td></td>
+                    <td>{member.sso ? member.sso : ""}</td>
+                    <td>{member.ssoId ? member.ssoId : ""}</td>
                     <td className={member.banned ? "text-red" : "text-green"}>
                       {member.banned ? "정지" : "정상"}
                     </td>
