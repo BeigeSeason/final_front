@@ -6,12 +6,13 @@ import { ItemApi } from "../../api/ItemApi";
 import { Diary } from "../../types/ItemTypes";
 import { MyDiaryProps } from "../../types/DiaryTypes";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useMediaQuery } from "react-responsive";
 import { Loading } from "../../component/Loading";
 
 const MyDiary: React.FC<MyDiaryProps> = React.memo(({ type, userId }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  // const { userId } = useSelector((state: RootState) => state.auth);
+  const isMobile = useMediaQuery({ query: "(max-width: 860px)" });
   const [filters, setFilters] = useState(() => {
     const queryParams = new URLSearchParams(location.search);
     return {
@@ -80,7 +81,7 @@ const MyDiary: React.FC<MyDiaryProps> = React.memo(({ type, userId }) => {
     // updateFilters("currentPage", page);
   };
   return (
-    <ItemList style={{ width: "48vw", margin: "0 auto" }}>
+    <ItemList style={{ width: isMobile ? "80vw" : "48vw", margin: "0 auto" }}>
       {diaries.length > 0 ? (
         diaries.map((diary, index) => (
           <DiaryItem

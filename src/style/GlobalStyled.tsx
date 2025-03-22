@@ -172,6 +172,10 @@ export const NavSt = styled.div`
   }
 
   @media (max-width: 600px) {
+    padding: 0 4%;
+    .rightMenu {
+      right: 4%;
+    }
   }
 `;
 

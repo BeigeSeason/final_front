@@ -3,6 +3,7 @@ import { ItemApi } from "../../api/ItemApi";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useMediaQuery } from "react-responsive";
 import { Diary } from "../../types/ItemTypes";
 import { ItemList } from "../../style/ListStyled";
 import { DiaryItem } from "../../component/ItemComponent";
@@ -12,6 +13,7 @@ import { Loading } from "../../component/Loading";
 const MyBMDiary = React.memo(() => {
   const navigate = useNavigate();
   const location = useLocation();
+  const isMobile = useMediaQuery({ query: "(max-width: 860px)" });
   const [filters, setFilters] = useState(() => {
     const queryParams = new URLSearchParams(location.search);
     return {
@@ -66,7 +68,7 @@ const MyBMDiary = React.memo(() => {
   };
 
   return (
-    <ItemList style={{ width: "48vw", margin: "0 auto" }}>
+    <ItemList style={{ width: isMobile ? "80vw" : "48vw", margin: "0 auto" }}>
       {Array.isArray(diaries) && diaries.length > 0 ? (
         diaries.map((diary, index) => (
           <DiaryItem

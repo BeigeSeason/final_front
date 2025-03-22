@@ -100,7 +100,7 @@ export const EditInfo = (props: EditInfoData) => {
     setIsPwEditable(!isPwEditable);
     if (isPwEditable && isPwValid) {
       // 비밀번호 변경 완료 시 서버로 데이터 전송 가능
-      if (userId) {
+      if (userId && newPw.length > 0) {
         setLoading(true);
         await AxiosApi.changeMemberPw(userId, newPw);
         showToast("비밀번호 변경이 완료되었습니다.", "success");
@@ -111,6 +111,11 @@ export const EditInfo = (props: EditInfoData) => {
       setIsEditable(false);
       setNewPw("");
       setConfirmPwValue("");
+      setEditName(name ?? "");
+      setEditNickname(nickname ?? "");
+      setNameError("");
+      setNicknameError("");
+      setNicknameChecked(false);
     }
   };
 

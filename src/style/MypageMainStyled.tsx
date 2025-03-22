@@ -24,6 +24,9 @@ export const MypageMainContainer = styled.div`
       cursor: pointer;
     }
   }
+  @media (max-width: 1000px) {
+    width: 97%;
+  }
 `;
 
 export const ProfileInfo = styled.div`
@@ -92,7 +95,6 @@ export const MypageMenuContainer = styled.div`
   button {
     width: 25%;
     border: none;
-    /* border-bottom: 5px solid transparent; */
     background-color: transparent;
     font-size: 17px;
     font-weight: bold;
@@ -111,9 +113,6 @@ export const MypageMenuContainer = styled.div`
         border-bottom: 5px solid ${colors.colorD};
       }
     }
-    /* &.selected {
-      border-bottom: 5px solid ${colors.colorD};
-    } */
   }
   .write-diary-button {
     display: flex;
@@ -124,12 +123,21 @@ export const MypageMenuContainer = styled.div`
     width: 150px;
     height: 32px;
   }
+  @media (max-width: 1000px) {
+    button {
+      font-size: 15px;
+      span {
+        border-bottom: 3px solid transparent;
+        &.selected {
+          border-bottom: 3px solid ${colors.colorD};
+        }
+      }
+    }
+  }
 `;
 
 export const MyContentContainer = styled.div`
   width: 90%;
   height: 100%;
   margin: 0 auto 7vh;
-  /* overflow-y: auto; */
-  /* ${ScrollBar} */
 `;

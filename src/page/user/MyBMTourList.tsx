@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useMediaQuery } from "react-responsive";
 import { RootState } from "../../redux/store";
 import { TourSpot } from "../../types/ItemTypes";
 import { ItemApi } from "../../api/ItemApi";
@@ -12,6 +13,7 @@ import { Loading } from "../../component/Loading";
 const MyBMTourList = React.memo(() => {
   const navigate = useNavigate();
   const location = useLocation();
+  const isMobile = useMediaQuery({ query: "(max-width: 860px)" });
   const [filters, setFilters] = useState(() => {
     const queryParams = new URLSearchParams(location.search);
     return {
@@ -68,7 +70,7 @@ const MyBMTourList = React.memo(() => {
   };
 
   return (
-    <ItemList style={{ width: "48vw", margin: "0 auto" }}>
+    <ItemList style={{ width: isMobile ? "80vw" : "48vw", margin: "0 auto" }}>
       {Array.isArray(tourspots) && tourspots.length > 0 ? (
         tourspots.map((spot, index) => (
           <TourItem

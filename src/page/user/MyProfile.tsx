@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../redux/store";
 import { GlobalFont } from "../../style/GlobalStyled";
@@ -49,6 +49,17 @@ const MyProfile = React.memo(() => {
       }
     }
   };
+
+  const resetEditState = () => {
+    setIsEditable(false);
+    setIsPwEditable(false);
+  };
+
+  useEffect(() => {
+    if (selectedMenu === "내가 작성한 댓글") {
+      resetEditState(); // "내가 작성한 댓글" 탭으로 전환 시 상태 리셋
+    }
+  }, [selectedMenu]);
 
   return (
     <MyProfileContainer>
