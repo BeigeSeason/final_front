@@ -186,6 +186,27 @@ export const FooterSt = styled.div`
   background-color: lightgray;
   position: static;
   bottom: 0;
+  padding: 5px;
+  box-sizing: border-box;
+  h4,
+  p {
+    margin: 5px 0 0 5px;
+    opacity: 0.7;
+  }
+  h4 {
+    font-size: 19px;
+  }
+  p {
+    font-size: 13px;
+  }
+  @media (max-width: 768px) {
+    h4 {
+      font-size: 17px;
+    }
+    p {
+      font-size: 11.5px;
+    }
+  }
 `;
 
 // 전체 적용하려면 여기서 -------------------------------------------------------------------------------------
