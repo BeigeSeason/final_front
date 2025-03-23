@@ -436,4 +436,24 @@ export const RecommendBox = styled.div`
     display: flex;
     justify-content: center;
   }
+  @media (max-width: 860px) {
+    margin: 30px auto;
+    gap: 30px;
+    .recommend-box {
+      .genderBox {
+        padding: 10px;
+      }
+      select {
+        padding: 7px;
+      }
+    }
+    .radio-gap {
+      gap: 20px;
+    }
+    .radio-container {
+      .radio-box {
+        gap: 15px;
+      }
+    }
+  }
 `;
