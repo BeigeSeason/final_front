@@ -1,10 +1,15 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AxiosApi from "../../api/AxiosApi";
-import { TourItemInfoBox, SpotTitle, RecommendBox } from "../../style/TourSpotStyled";
+import {
+  TourItemInfoBox,
+  SpotTitle,
+  RecommendBox,
+} from "../../style/TourSpotStyled";
 import { CheckModal } from "../../component/ModalComponent";
 import { Recommendation, RecommendInput } from "../../types/CommonTypes";
 import { Button } from "../../component/ButtonComponent";
+import { Loading } from "../../component/Loading";
 
 const TourRecommend = () => {
   const [gender, setGender] = useState<number>(-1);
@@ -23,9 +28,12 @@ const TourRecommend = () => {
 
   const [isCheckModalOpen, setIsCheckModalOpen] = useState<boolean>(false);
   const [modalText, setModalText] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
   const navigate = useNavigate();
 
   const handleRecommend = async () => {
+    setIsLoading(true);
     if (
       gender === -1 ||
       age === 0 ||
@@ -58,13 +66,16 @@ const TourRecommend = () => {
       TRAVEL_MOTIVE_1: motive,
       TRAVEL_COMPANIONS_NUM: companions,
       TRAVEL_MISSION_INT: purpose,
-    }
+    };
     const response = await AxiosApi.recommendSpot(data);
+    setIsLoading(false);
     if (response.length === 0) {
       setIsCheckModalOpen(true);
       setModalText("추천 결과가 없는 조건입니다. 다시 시도해주세요.");
     } else {
-      navigate(`/tourRecommend/result`, { state: { recommendations: response } });
+      navigate(`/tourRecommend/result`, {
+        state: { recommendations: response },
+      });
     }
   };
 
@@ -79,16 +90,14 @@ const TourRecommend = () => {
       </SpotTitle>
       <RecommendBox>
         <div className="recommend-box gap30">
-          <div className="title center">
-            성별
-          </div>
-          <div 
+          <div className="title center">성별</div>
+          <div
             className={`genderBox ${gender === 1 ? "selected" : ""}`}
             onClick={() => setGender(1)}
           >
             남자
           </div>
-          <div 
+          <div
             className={`genderBox ${gender === 0 ? "selected" : ""}`}
             onClick={() => setGender(0)}
           >
@@ -96,34 +105,32 @@ const TourRecommend = () => {
           </div>
         </div>
         <div className="recommend-box gap30">
-          <div className="title center">
-            나이
-          </div>
-          <div 
+          <div className="title center">나이</div>
+          <div
             className={`genderBox ${age === 20 ? "selected" : ""}`}
             onClick={() => setAge(20)}
           >
             20대
           </div>
-          <div 
+          <div
             className={`genderBox ${age === 30 ? "selected" : ""}`}
             onClick={() => setAge(30)}
           >
             30대
           </div>
-          <div 
+          <div
             className={`genderBox ${age === 40 ? "selected" : ""}`}
             onClick={() => setAge(40)}
           >
             40대
           </div>
-          <div 
+          <div
             className={`genderBox ${age === 50 ? "selected" : ""}`}
             onClick={() => setAge(50)}
           >
             50대
           </div>
-          <div 
+          <div
             className={`genderBox ${age === 60 ? "selected" : ""}`}
             onClick={() => setAge(60)}
           >
@@ -131,15 +138,16 @@ const TourRecommend = () => {
           </div>
         </div>
         <div className="recommend-box gap30">
-          <div className="title center">
-            인원
-          </div>
-            <select value={companions} onChange={(e) => setCompanions(Number(e.target.value))}>
-              {Array.from({ length: 20 }, (_, i) => (
-                <option key={i + 1} value={i + 1}>
-                  {i + 1}
-                </option>
-              ))}
+          <div className="title center">인원</div>
+          <select
+            value={companions}
+            onChange={(e) => setCompanions(Number(e.target.value))}
+          >
+            {Array.from({ length: 20 }, (_, i) => (
+              <option key={i + 1} value={i + 1}>
+                {i + 1}
+              </option>
+            ))}
           </select>
         </div>
         <div className="recommend-box gap30">
@@ -154,7 +162,7 @@ const TourRecommend = () => {
                   <div key={i + 1} className="radio-lineBox">
                     {/* 선 (버튼을 연결하는 역할) */}
                     {i !== 6 && ( // 마지막 버튼에는 선을 추가하지 않음
-                      <div className="radio-line"/>
+                      <div className="radio-line" />
                     )}
                     {/* 버튼 */}
                     <input
@@ -164,7 +172,9 @@ const TourRecommend = () => {
                       checked={style1 === i + 1}
                       onChange={() => setStyle1(i + 1)}
                       className="radio-button"
-                      style={{ backgroundColor: style1 === i + 1 ? "#aaa" : "white" }}
+                      style={{
+                        backgroundColor: style1 === i + 1 ? "#aaa" : "white",
+                      }}
                     />
                   </div>
                 ))}
@@ -176,9 +186,7 @@ const TourRecommend = () => {
               <div className="radio-box">
                 {Array.from({ length: 7 }, (_, i) => (
                   <div key={i + 1} className="radio-lineBox">
-                    {i !== 6 && (
-                      <div className="radio-line"/>
-                    )}
+                    {i !== 6 && <div className="radio-line" />}
                     <input
                       type="radio"
                       name="survey"
@@ -186,7 +194,9 @@ const TourRecommend = () => {
                       checked={style2 === i + 1}
                       onChange={() => setStyle2(i + 1)}
                       className="radio-button"
-                      style={{ backgroundColor: style2 === i + 1 ? "#aaa" : "white" }}
+                      style={{
+                        backgroundColor: style2 === i + 1 ? "#aaa" : "white",
+                      }}
                     />
                   </div>
                 ))}
@@ -198,9 +208,7 @@ const TourRecommend = () => {
               <div className="radio-box">
                 {Array.from({ length: 7 }, (_, i) => (
                   <div key={i + 1} className="radio-lineBox">
-                    {i !== 6 && (
-                      <div className="radio-line"/>
-                    )}
+                    {i !== 6 && <div className="radio-line" />}
                     <input
                       type="radio"
                       name="survey"
@@ -208,7 +216,9 @@ const TourRecommend = () => {
                       checked={style3 === i + 1}
                       onChange={() => setStyle3(i + 1)}
                       className="radio-button"
-                      style={{ backgroundColor: style3 === i + 1 ? "#aaa" : "white" }}
+                      style={{
+                        backgroundColor: style3 === i + 1 ? "#aaa" : "white",
+                      }}
                     />
                   </div>
                 ))}
@@ -220,9 +230,7 @@ const TourRecommend = () => {
               <div className="radio-box">
                 {Array.from({ length: 7 }, (_, i) => (
                   <div key={i + 1} className="radio-lineBox">
-                    {i !== 6 && (
-                      <div className="radio-line"/>
-                    )}
+                    {i !== 6 && <div className="radio-line" />}
                     <input
                       type="radio"
                       name="survey"
@@ -230,7 +238,9 @@ const TourRecommend = () => {
                       checked={style4 === i + 1}
                       onChange={() => setStyle4(i + 1)}
                       className="radio-button"
-                      style={{ backgroundColor: style4 === i + 1 ? "#aaa" : "white" }}
+                      style={{
+                        backgroundColor: style4 === i + 1 ? "#aaa" : "white",
+                      }}
                     />
                   </div>
                 ))}
@@ -242,9 +252,7 @@ const TourRecommend = () => {
               <div className="radio-box">
                 {Array.from({ length: 7 }, (_, i) => (
                   <div key={i + 1} className="radio-lineBox">
-                    {i !== 6 && (
-                      <div className="radio-line"/>
-                    )}
+                    {i !== 6 && <div className="radio-line" />}
                     <input
                       type="radio"
                       name="survey"
@@ -252,7 +260,9 @@ const TourRecommend = () => {
                       checked={style5 === i + 1}
                       onChange={() => setStyle5(i + 1)}
                       className="radio-button"
-                      style={{ backgroundColor: style5 === i + 1 ? "#aaa" : "white" }}
+                      style={{
+                        backgroundColor: style5 === i + 1 ? "#aaa" : "white",
+                      }}
                     />
                   </div>
                 ))}
@@ -264,9 +274,7 @@ const TourRecommend = () => {
               <div className="radio-box">
                 {Array.from({ length: 7 }, (_, i) => (
                   <div key={i + 1} className="radio-lineBox">
-                    {i !== 6 && (
-                      <div className="radio-line"/>
-                    )}
+                    {i !== 6 && <div className="radio-line" />}
                     <input
                       type="radio"
                       name="survey"
@@ -274,7 +282,9 @@ const TourRecommend = () => {
                       checked={style6 === i + 1}
                       onChange={() => setStyle6(i + 1)}
                       className="radio-button"
-                      style={{ backgroundColor: style6 === i + 1 ? "#aaa" : "white" }}
+                      style={{
+                        backgroundColor: style6 === i + 1 ? "#aaa" : "white",
+                      }}
                     />
                   </div>
                 ))}
@@ -286,9 +296,7 @@ const TourRecommend = () => {
               <div className="radio-box">
                 {Array.from({ length: 7 }, (_, i) => (
                   <div key={i + 1} className="radio-lineBox">
-                    {i !== 6 && (
-                      <div className="radio-line"/>
-                    )}
+                    {i !== 6 && <div className="radio-line" />}
                     <input
                       type="radio"
                       name="survey"
@@ -296,7 +304,9 @@ const TourRecommend = () => {
                       checked={style7 === i + 1}
                       onChange={() => setStyle7(i + 1)}
                       className="radio-button"
-                      style={{ backgroundColor: style7 === i + 1 ? "#aaa" : "white" }}
+                      style={{
+                        backgroundColor: style7 === i + 1 ? "#aaa" : "white",
+                      }}
                     />
                   </div>
                 ))}
@@ -308,9 +318,7 @@ const TourRecommend = () => {
               <div className="radio-box">
                 {Array.from({ length: 7 }, (_, i) => (
                   <div key={i + 1} className="radio-lineBox">
-                    {i !== 6 && (
-                      <div className="radio-line"/>
-                    )}
+                    {i !== 6 && <div className="radio-line" />}
                     <input
                       type="radio"
                       name="survey"
@@ -318,7 +326,9 @@ const TourRecommend = () => {
                       checked={style8 === i + 1}
                       onChange={() => setStyle8(i + 1)}
                       className="radio-button"
-                      style={{ backgroundColor: style8 === i + 1 ? "#aaa" : "white" }}
+                      style={{
+                        backgroundColor: style8 === i + 1 ? "#aaa" : "white",
+                      }}
                     />
                   </div>
                 ))}
@@ -328,17 +338,19 @@ const TourRecommend = () => {
           </div>
         </div>
         <div className="recommend-box gap30">
-          <div className="title center">
-            여행 동기
-          </div>
-          <select 
+          <div className="title center">여행 동기</div>
+          <select
             name="motive"
             value={motive}
             onChange={(e) => setMotive(Number(e.target.value))}
           >
             <option value={0}>여행 동기를 선택하세요</option>
-            <option value={1}>일상에서 벗어나기 (지루함 탈피, 환경 및 역할 변화)</option>
-            <option value={2}>휴식과 재충전 (육체적 피로 해소 및 정신적 힐링)</option>
+            <option value={1}>
+              일상에서 벗어나기 (지루함 탈피, 환경 및 역할 변화)
+            </option>
+            <option value={2}>
+              휴식과 재충전 (육체적 피로 해소 및 정신적 힐링)
+            </option>
             <option value={3}>여행 동반자와의 유대감 형성</option>
             <option value={4}>자신을 돌아보는 시간 (자아 탐색)</option>
             <option value={5}>추억 남기기 및 SNS 공유</option>
@@ -350,10 +362,8 @@ const TourRecommend = () => {
           </select>
         </div>
         <div className="recommend-box gap30">
-          <div className="title center">
-            여행 목적
-          </div>
-          <select 
+          <div className="title center">여행 목적</div>
+          <select
             name="purpose"
             value={purpose}
             onChange={(e) => setPurpose(Number(e.target.value))}
@@ -382,19 +392,19 @@ const TourRecommend = () => {
             <option value={28}>등산 및 등반 여행</option>
           </select>
         </div>
-        <Button
-          onClick={handleRecommend}
-          $width="700px"
-        >
+        <Button onClick={handleRecommend} $width="700px">
           추천받기
         </Button>
       </RecommendBox>
-      <CheckModal
-        isOpen={isCheckModalOpen}
-        onClose={handleCheckModalClose}
-      >
+      <CheckModal isOpen={isCheckModalOpen} onClose={handleCheckModalClose}>
         <p>{modalText}</p>
       </CheckModal>
+      {/* 로딩 */}
+      {isLoading && (
+        <Loading>
+          <p>추천 결과 받는중...</p>
+        </Loading>
+      )}
     </TourItemInfoBox>
   );
 };
