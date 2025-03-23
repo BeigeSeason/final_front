@@ -6,6 +6,12 @@ export const SignoutContainer = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100%;
+  padding: 0 20px;
+  box-sizing: border-box;
+
+  .delete-details {
+    width: 620px;
+  }
 
   .sub-title {
     font-size: 17px;
@@ -73,5 +79,11 @@ export const SignoutContainer = styled.div`
 
   .modal {
     font-size: 17px;
+  }
+
+  @media (max-width: 680px) {
+    .delete-details {
+      width: 90vw;
+    }
   }
 `;
