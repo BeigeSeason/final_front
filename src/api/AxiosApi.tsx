@@ -330,7 +330,7 @@ const AxiosApi = {
         throw new Error("추천을 받는데 실패했습니다.");
       }
     } catch (error) {
-      console.error("여행지 추천 실패:", error);
+      console.error("여행지 추천 결과 에러:", error);
       throw error;
     }
   },
