@@ -198,7 +198,7 @@ export const Main = () => {
             loop={true}
             navigation
             pagination={{ clickable: true }}
-            // autoplay={{ delay: 5000, disableOnInteraction: false }}
+            autoplay={{ delay: 5000, disableOnInteraction: false }}
           >
             {bannerData.map((data) => (
               <SwiperSlide key={data.title} className="swiper-slide-custom">
