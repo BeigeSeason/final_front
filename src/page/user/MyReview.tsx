@@ -103,13 +103,13 @@ export const MyReview = () => {
               </div>
               <p
                 className="review-content"
-                onClick={() => navigate(`/tourspot/${review.id}`)}
+                onClick={() => navigate(`/tourspot/${review.tourspotId}`)}
               >
                 {review.content}
               </p>
               <p
                 className="review-date"
-                onClick={() => navigate(`/tourspot/${review.id}`)}
+                onClick={() => navigate(`/tourspot/${review.tourspotId}`)}
               >
                 {review.createdAt.slice(0, 10).replaceAll("-", ". ")}
               </p>
