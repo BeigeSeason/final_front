@@ -82,8 +82,11 @@ export const SpotBasic = styled.div`
         justify-content: center;
       }
     }
-    @media (max-width: 860px) {
-      
+  }
+  @media (max-width: 860px) {
+    flex-direction: column;
+    .tourThumb {
+      width: 100%;
     }
   }
 `;
@@ -179,9 +182,6 @@ export const SpotDetail = styled.div`
     flex-grow: 1; /* MapSpot이 여유 공간을 차지하도록 */
     flex-shrink: 0; /* MapSpot은 크기가 줄어들지 않도록 설정 */
   }
-  @media (max-width: 860px) {
-    
-  }
 `;
 export const NearTravelList = styled.div`
   width: 40%;
@@ -239,9 +239,6 @@ export const NearTravelList = styled.div`
   @media (max-width: 1024px) {
     height: 50%;
     width: 100%;
-  }
-  @media (max-width: 860px) {
-    
   }
 `;
 
