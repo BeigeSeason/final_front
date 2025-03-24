@@ -8,7 +8,6 @@ export const AdminContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: pink;
   .center {
     display: flex;
     justify-content: center;
