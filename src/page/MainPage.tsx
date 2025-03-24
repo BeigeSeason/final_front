@@ -70,7 +70,7 @@ export const Main = () => {
     const filters = {
       page: 0,
       size: 5,
-      sort: "rating,desc",
+      sort: "avg_rating,desc",
     };
     const response = await ItemApi.getTourSpotList(filters);
     setPlaces(response.content);

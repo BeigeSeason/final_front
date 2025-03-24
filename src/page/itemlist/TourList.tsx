@@ -73,8 +73,12 @@ export const TourList: React.FC = () => {
       label: "가나다순",
       newSortBy: "title,ASC",
     },
-    { value: "rating-desc", label: "별점 높은 순", newSortBy: "rating,DESC" },
-    { value: "rating-asc", label: "별점 낮은 순", newSortBy: "rating,ASC" },
+    {
+      value: "rating-desc",
+      label: "별점 높은 순",
+      newSortBy: "avg_rating,DESC",
+    },
+    { value: "rating-asc", label: "별점 낮은 순", newSortBy: "avg_rating,ASC" },
     {
       value: "review_count-desc",
       label: "리뷰 많은 순",
