@@ -345,9 +345,10 @@ export const DiaryForm = ({ mode, initialData, onSubmit }: DiaryFormProps) => {
             onChange={setContent}
           />
           <div className="diaryLast">
-            <p>
+            <p></p>
+            {/* <p>
               현재 내용 길이: {new TextEncoder().encode(content).length} bytes
-            </p>
+            </p> */}
             <Button
               className="submit-button"
               disabled={!isFormValid}

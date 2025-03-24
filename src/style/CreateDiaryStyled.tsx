@@ -7,6 +7,9 @@ export const CreateDiaryContainer = styled.div`
   margin: 0 auto;
   margin-bottom: 20px;
   height: 100%;
+  @media (max-width: 860px) {
+    width: 80vw;
+  }
 `;
 
 export const TourInfoContainer = styled.div`
@@ -94,7 +97,6 @@ export const TourInfoContainer = styled.div`
       border-radius: 0;
       padding: 8px 12px;
       margin-top: 20px;
-      font-size: 16px;
       width: 45vw;
       font-size: 30px;
     }
@@ -103,6 +105,14 @@ export const TourInfoContainer = styled.div`
       position: absolute;
       right: 12px;
       bottom: 8px;
+    }
+  }
+  @media (max-width: 860px) {
+    .title-container {
+      width: 65vw;
+      .title {
+        font-size: 25px;
+      }
     }
   }
 `;
@@ -265,6 +275,7 @@ export const StyledWrapper = styled.div`
 
 export const TourContentContainer = styled.div`
   width: 100%;
+  margin-bottom: 80px;
   .diaryLast {
     margin-top: 10px;
     p {

@@ -5,21 +5,13 @@ import { ScrollBar } from "../component/ButtonComponent";
 export const DiaryContainer = styled.div`
   display: flex;
   flex-direction: column;
-  /* 
-  hr {
-    min-width: 768px;
-    width: 60vw;
-    height: 2px;
-    border: none;
-    background-color: #ccc;
-  } */
 `;
 
 export const DiaryHeader = styled.div`
   display: flex;
   flex-direction: column;
   position: relative;
-  width: 768px;
+  width: clamp(400px, 55vw, 1100px);
   margin: auto;
   padding: 20px 4vw;
   box-sizing: border-box;
@@ -138,11 +130,57 @@ export const DiaryHeader = styled.div`
       }
     }
   }
+  @media (max-width: 860px) {
+    .menu-icons {
+      font-size: 18px;
+      .menu-icon {
+        font-size: 30px;
+      }
+      .menu-toggle-container {
+        padding: 3px 1px 3px 5px;
+        width: 60px;
+        font-size: 15px;
+        .menu-item {
+          span {
+            font-size: 12px;
+          }
+        }
+      }
+    }
+    h1 {
+      font-size: 23px;
+    }
+    .travel-info-container {
+      gap: 5px;
+      margin-bottom: 17px;
+      .travel-info {
+        font-size: 12px;
+        span {
+          font-size: 13px;
+        }
+      }
+    }
+    .profile {
+      .profile-img {
+        width: 50px;
+        height: 50px;
+        margin-right: 12px;
+      }
+      .profile-info {
+        .nickname {
+          font-size: 15px;
+        }
+        .create-time {
+          font-size: 12px;
+        }
+      }
+    }
+  }
 `;
 
 export const DiaryBody = styled.div`
   display: flex;
-  width: 700px;
+  width: clamp(380px, 52vw, 1000px);
   min-height: 400px;
   padding: 1vh 2vw;
   margin: auto;
@@ -188,7 +226,7 @@ export const DiaryBody = styled.div`
 `;
 
 export const DiaryFooter = styled.div`
-  width: 768px;
+  width: clamp(380px, 52vw, 1000px);
   margin: 0 auto 30px;
   height: 100%;
   border-top: 1px solid #ccc;
@@ -200,10 +238,18 @@ export const DiaryFooter = styled.div`
     gap: 10px;
 
     .tag {
-      background-color: #ccc;
+      background-color: #ddd;
       padding: 2px 8px;
       border-radius: 5px;
       white-space: nowrap;
+    }
+  }
+  @media (max-width: 860px) {
+    .tag-container {
+      .tag {
+        padding: 1px 6px;
+        font-size: 12px;
+      }
     }
   }
 `;

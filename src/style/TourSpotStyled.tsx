@@ -82,6 +82,9 @@ export const SpotBasic = styled.div`
         justify-content: center;
       }
     }
+    @media (max-width: 860px) {
+      
+    }
   }
 `;
 
@@ -176,6 +179,9 @@ export const SpotDetail = styled.div`
     flex-grow: 1; /* MapSpot이 여유 공간을 차지하도록 */
     flex-shrink: 0; /* MapSpot은 크기가 줄어들지 않도록 설정 */
   }
+  @media (max-width: 860px) {
+    
+  }
 `;
 export const NearTravelList = styled.div`
   width: 40%;
@@ -206,6 +212,7 @@ export const NearTravelList = styled.div`
     .nearbyspot:active {
       color: inherit;
     }
+    
   }
   .nearbybox {
     display: flex;
@@ -232,6 +239,9 @@ export const NearTravelList = styled.div`
   @media (max-width: 1024px) {
     height: 50%;
     width: 100%;
+  }
+  @media (max-width: 860px) {
+    
   }
 `;
 
@@ -435,5 +445,25 @@ export const RecommendBox = styled.div`
   .justify-center {
     display: flex;
     justify-content: center;
+  }
+  @media (max-width: 860px) {
+    margin: 30px auto;
+    gap: 30px;
+    .recommend-box {
+      .genderBox {
+        padding: 10px;
+      }
+      select {
+        padding: 7px;
+      }
+    }
+    .radio-gap {
+      gap: 20px;
+    }
+    .radio-container {
+      .radio-box {
+        gap: 15px;
+      }
+    }
   }
 `;

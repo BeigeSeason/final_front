@@ -266,7 +266,13 @@ export const Nav = () => {
 
 // 푸터---------------------------------------------------------------------------
 export const Footer = () => {
-  return <FooterSt>푸터</FooterSt>;
+  return (
+    <FooterSt>
+      <h4>GotGam</h4>
+      <p>문의가 필요한 사항은 메일 부탁드립니다.</p>
+      <p>mail: plan4land.mail@gmail.com</p>
+    </FooterSt>
+  );
 };
 
 // 전체 레이아웃 씌우기---------------------------------------------------------------

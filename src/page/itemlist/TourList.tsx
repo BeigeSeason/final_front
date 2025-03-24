@@ -30,7 +30,7 @@ export const TourList: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [tourSpots, setTourSpots] = useState<TourSpot[]>([]);
-  const [currentPage, setCurrentPage] = useState(0);
+  // const [currentPage, setCurrentPage] = useState(0);
   const [totalItems, setTotalItems] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [loading, setLoading] = useState<boolean>(true); // 로딩 상태
@@ -61,12 +61,6 @@ export const TourList: React.FC = () => {
   const [isSelectOpen, setIsSelectOpen] = useState<boolean>(false);
   const selectRef = useRef<HTMLDivElement | null>(null);
 
-  // const sortOptions = [
-  //   { value: "rating", label: "별점순", newSortBy: "rating," },
-  //   { value: "review_count", label: "리뷰순" },
-  //   { value: "bookmark_count", label: "북마크순" },
-  //   { value: "title", label: "가나다순" },
-  // ];
   const sortOptions = [
     {
       value: "title-asc",
@@ -139,13 +133,13 @@ export const TourList: React.FC = () => {
         }
       }
     });
-    queryParams.set("page", currentPage.toString());
+    queryParams.set("page", filters.currentPage.toString());
     navigate(
       `/tourlist${queryParams.toString() ? `?${queryParams.toString()}` : ""}`,
       { replace: true }
     );
-    fetchTourSpots(currentPage);
-  }, [filters, navigate, currentPage]);
+    fetchTourSpots(filters.currentPage);
+  }, [filters, navigate, filters.currentPage]);
 
   const updateFilters = (
     key: keyof TourSpotFilters,
@@ -185,7 +179,14 @@ export const TourList: React.FC = () => {
   };
 
   const handlePageChange = (page: number) => {
-    setCurrentPage(page);
+    // setCurrentPage(page);
+    setFilters((prev) => {
+      const newFilters: TourSpotFilters = {
+        ...prev,
+        currentPage: page,
+      };
+      return newFilters;
+    });
     fetchTourSpots(page);
     updateFilters("currentPage", page);
   };
@@ -541,7 +542,7 @@ export const TourList: React.FC = () => {
             />
           ))}
           <Paginating
-            currentPage={currentPage}
+            currentPage={filters.currentPage}
             totalPages={totalPages}
             handlePageChange={handlePageChange}
           />

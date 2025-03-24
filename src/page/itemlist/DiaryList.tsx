@@ -22,8 +22,12 @@ import { ItemApi } from "../../api/ItemApi";
 import { Loading } from "../../component/Loading";
 import { Paginating } from "../../component/PaginationComponent";
 import { useMediaQuery } from "react-responsive";
+import { CheckModal } from "../../component/ModalComponent";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
 export const DiaryList: React.FC = () => {
+  const { userId } = useSelector((state: RootState) => state.auth);
   const [diaries, setDiaries] = useState<Diary[]>([]);
   const [totalPages, setTotalPages] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState<number>(0);
@@ -82,6 +86,7 @@ export const DiaryList: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState<string>(filters.searchQuery);
   const [isSelectOpen, setIsSelectOpen] = useState<boolean>(false);
   const selectRef = useRef<HTMLDivElement | null>(null);
+  const [needLoginModal, setNeedLoginModal] = useState<boolean>(false);
 
   useEffect(() => {
     const queryParams = new URLSearchParams();
@@ -257,6 +262,14 @@ export const DiaryList: React.FC = () => {
   const formatPrice = (value: string) => {
     const numericValue = value.replace(/\D/g, ""); // 숫자만 남기기
     return numericValue.replace(/\B(?=(\d{3})+(?!\d))/g, ","); // 1000 단위 콤마 추가
+  };
+
+  const clickCreateDiary = () => {
+    if (userId) {
+      navigate("/creatediary");
+    } else {
+      setNeedLoginModal(true);
+    }
   };
   return (
     <>
@@ -439,9 +452,7 @@ export const DiaryList: React.FC = () => {
           <div className="totalCount">
             총{" "}
             {totalElements > 9999 ? "9,999+" : totalElements.toLocaleString()}건
-            <Button onClick={() => navigate("/creatediary")}>
-              여행일지 작성
-            </Button>
+            <Button onClick={() => clickCreateDiary()}>여행일지 작성</Button>
           </div>
           <SelectedFilters
             filters={{
@@ -480,6 +491,14 @@ export const DiaryList: React.FC = () => {
             handlePageChange={handlePageChange}
           />
         </ItemList>
+        {needLoginModal && (
+          <CheckModal
+            isOpen={needLoginModal}
+            onClose={() => setNeedLoginModal(false)}
+          >
+            <p>로그인이 필요한 서비스입니다.</p>
+          </CheckModal>
+        )}
         {loading && (
           <Loading istransparent={"true"}>
             <p>목록을 불러오는 중 입니다.</p>
