@@ -257,9 +257,7 @@ export const TourSpot = () => {
   };
 
   // 댓글 신고
-  const clickReport = (id: number) => {
-
-  }
+  const clickReport = (id: number) => {};
 
   const parseLinks = (htmlString: string): React.ReactNode[] => {
     // <a> 태그와 <br/> 태그를 모두 매칭하는 정규식
@@ -500,9 +498,6 @@ export const TourSpot = () => {
                 mapY={tourSpotDetail.mapY}
               />
             </div>
-            {/* <div className="nearbySpot">
-            <p>여기에 주변 관광지 목록</p>
-          </div> */}
             <NearTravelList>
               <h3>주변 관광지</h3>
               {tourSpotDetail.nearSpots.length > 0 && (
@@ -602,50 +597,50 @@ export const TourSpot = () => {
                     </div>
                   </div>
                   {c.nickname === nickname &&
-                    c.content !== "해당 댓글은 삭제되었습니다." ? (
-                      <div className="header-right">
-                        {editIndex === index ? (
-                          <div
-                            className="button"
-                            onClick={() =>
-                              handleSaveEdit(c.id, editContent, editRating)
-                            }
-                          >
-                            저장
-                          </div>
-                        ) : (
-                          <div
-                            className="button"
-                            onClick={() => handleReviewEdit(index, c.content)}
-                          >
-                            수정
-                          </div>
-                        )}
-                        |
+                  c.content !== "해당 댓글은 삭제되었습니다." ? (
+                    <div className="header-right">
+                      {editIndex === index ? (
                         <div
                           className="button"
-                          onClick={() => clickReviewDelete(c.id)}
+                          onClick={() =>
+                            handleSaveEdit(c.id, editContent, editRating)
+                          }
                         >
-                          삭제
+                          저장
                         </div>
-                        |
+                      ) : (
                         <div
-                          className="button red"
-                          onClick={() => clickReport(c.id)}
+                          className="button"
+                          onClick={() => handleReviewEdit(index, c.content)}
                         >
-                          신고
+                          수정
                         </div>
+                      )}
+                      |
+                      <div
+                        className="button"
+                        onClick={() => clickReviewDelete(c.id)}
+                      >
+                        삭제
                       </div>
-                    ) : (
-                      <div className="header-right">
-                        <div
-                          className="button red"
-                          onClick={() => clickReport(c.id)}
-                        >
-                          신고
-                        </div>
+                      |
+                      <div
+                        className="button red"
+                        onClick={() => clickReport(c.id)}
+                      >
+                        신고
                       </div>
-                    )}
+                    </div>
+                  ) : (
+                    <div className="header-right">
+                      <div
+                        className="button red"
+                        onClick={() => clickReport(c.id)}
+                      >
+                        신고
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 <div className="comment" style={{ whiteSpace: "pre-line" }}>

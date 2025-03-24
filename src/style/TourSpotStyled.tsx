@@ -6,18 +6,22 @@ export const TourItemInfoBox = styled.div`
   width: 80%;
   margin: auto;
   padding: 20px;
-  .tour-title {
-    width: 100%;
-    border-bottom: 2px solid #ddd;
-    margin-bottom: 2px;
-    display: table;
-  }
 `;
 
 export const SpotTitle = styled.div`
   display: flex;
   position: relative;
   width: 100%;
+  border-bottom: 2px solid #ddd;
+  .tour-title {
+    width: 90%;
+    margin-bottom: 2px;
+    display: table;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
   .icon-container {
     display: flex;
     position: absolute;
@@ -31,6 +35,11 @@ export const SpotTitle = styled.div`
     .bookmarked-count {
       font-size: 18px;
       margin-left: 3px;
+    }
+  }
+  @media (max-width: 860px) {
+    .tour-title {
+      font-size: 27px;
     }
   }
 `;
@@ -176,11 +185,22 @@ export const SpotDetail = styled.div`
     min-width: 300px;
     max-width: 700px;
     width: 60%;
+    height: 500px;
     gap: 10px;
     background-color: #aaa;
     justify-content: center; /* 가운데 정렬 */
     flex-grow: 1; /* MapSpot이 여유 공간을 차지하도록 */
     flex-shrink: 0; /* MapSpot은 크기가 줄어들지 않도록 설정 */
+  }
+
+  @media (max-width: 860px) {
+    .map-near-container {
+      flex-direction: column;
+      align-items: center;
+    }
+    .MapSpot {
+      width: 70vw;
+    }
   }
 `;
 export const NearTravelList = styled.div`
@@ -212,7 +232,6 @@ export const NearTravelList = styled.div`
     .nearbyspot:active {
       color: inherit;
     }
-    
   }
   .nearbybox {
     display: flex;
@@ -239,6 +258,16 @@ export const NearTravelList = styled.div`
   @media (max-width: 1024px) {
     height: 50%;
     width: 100%;
+  }
+  @media (max-width: 860px) {
+    margin-top: 50px;
+    margin-left: 0;
+    margin: 50px 0;
+    width: 65vw;
+    max-width: 100%;
+    .nearby-travelspot {
+      width: 95%;
+    }
   }
 `;
 
