@@ -154,9 +154,14 @@ export const SearchPage = () => {
                 description={[
                   diary.title,
                   diary.contentSummary,
+                  diary.writer,
+                  diary.createdAt.slice(0, 10).replaceAll("-", ". "),
+                  new Date(diary.createdAt).toLocaleString(),
                   `${diary.writer} (${new Date(
                     diary.createdAt
                   ).toLocaleString()})`,
+                  diary.startDate.slice(0, 10).replaceAll("-", ". "),
+                  diary.endDate.slice(0, 10).replaceAll("-", ". "),
                 ]}
               />
             ))
