@@ -8,7 +8,6 @@ export const AdminContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: pink;
   .center {
     display: flex;
     justify-content: center;
@@ -254,7 +253,7 @@ export const AdminNav = () => {
           </Link>
           <Link
             className={`tag content-font1 ${
-              isActive("/admin/chart/review") ? "active" : ""
+              isActive("/admin/chart/report") ? "active" : ""
             }`}
             to="/admin/chart/report"
           >

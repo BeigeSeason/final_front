@@ -33,7 +33,7 @@ const TourRecommend = () => {
   const navigate = useNavigate();
 
   const handleRecommend = async () => {
-    setIsLoading(true);
+    
     if (
       gender === -1 ||
       age === 0 ||
@@ -52,6 +52,7 @@ const TourRecommend = () => {
       setModalText("모든 값을 설정해야 합니다.");
       return;
     }
+    setIsLoading(true);
     const data: RecommendInput = {
       GENDER: gender,
       AGE_GRP: age,
