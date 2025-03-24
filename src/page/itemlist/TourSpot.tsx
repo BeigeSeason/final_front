@@ -623,13 +623,13 @@ export const TourSpot = () => {
                       >
                         삭제
                       </div>
-                      |
+                      {/* |
                       <div
                         className="button red"
                         onClick={() => clickReport(c.id)}
                       >
                         신고
-                      </div>
+                      </div> */}
                     </div>
                   ) : (
                     <div className="header-right">
