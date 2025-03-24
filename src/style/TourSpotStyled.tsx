@@ -332,6 +332,9 @@ export const CommentBox = styled.div`
     display: flex;
     align-items: center;
   }
+  .red {
+    color: red;
+  }
 `;
 
 export const RecommendBox = styled.div`

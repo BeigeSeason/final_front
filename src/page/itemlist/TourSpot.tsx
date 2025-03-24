@@ -256,6 +256,11 @@ export const TourSpot = () => {
     }
   };
 
+  // 댓글 신고
+  const clickReport = (id: number) => {
+
+  }
+
   const parseLinks = (htmlString: string): React.ReactNode[] => {
     // <a> 태그와 <br/> 태그를 모두 매칭하는 정규식
     const regex =
@@ -597,7 +602,7 @@ export const TourSpot = () => {
                     </div>
                   </div>
                   {c.nickname === nickname &&
-                    c.content !== "해당 댓글은 삭제되었습니다." && (
+                    c.content !== "해당 댓글은 삭제되었습니다." ? (
                       <div className="header-right">
                         {editIndex === index ? (
                           <div
@@ -622,6 +627,22 @@ export const TourSpot = () => {
                           onClick={() => clickReviewDelete(c.id)}
                         >
                           삭제
+                        </div>
+                        |
+                        <div
+                          className="button red"
+                          onClick={() => clickReport(c.id)}
+                        >
+                          신고
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="header-right">
+                        <div
+                          className="button red"
+                          onClick={() => clickReport(c.id)}
+                        >
+                          신고
                         </div>
                       </div>
                     )}
