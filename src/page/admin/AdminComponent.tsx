@@ -253,7 +253,7 @@ export const AdminNav = () => {
           </Link>
           <Link
             className={`tag content-font1 ${
-              isActive("/admin/chart/review") ? "active" : ""
+              isActive("/admin/chart/report") ? "active" : ""
             }`}
             to="/admin/chart/report"
           >
