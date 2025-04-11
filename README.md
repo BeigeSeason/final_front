@@ -1,46 +1,62 @@
-# Getting Started with Create React App
+## 📁 폴더 구조 (`src/` 기준)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+```
+src/
 
-## Available Scripts
+  ├── api/        : Axios를 활용한 API 요청 함수들을 모아둔 폴더입니다.
+  
+  ├── component/  : 페이지에서 분리한 공통 컴포넌트 및 재사용 가능한 UI 요소들이 위치해 있습니다.
+  
+  ├── context/    : 토스트 메시지 전역 관리와 관련된 기능을 제공하는 컨텍스트와 훅이 포함돼 있습니다.
+  
+  ├── img/        : 프로젝트에서 사용하는 이미지 파일들을 보관합니다.
+  
+  ├── page/       : 실제 화면에 렌더링되는 주요 페이지 컴포넌트들이 위치한 폴더입니다.
 
-In the project directory, you can run:
+  ├── redux/      : 사용자 인증 정보를 관리하는 리덕스 상태 및 액션, 스토어 설정 파일입니다.
+  
+  ├── style/      : styled-components로 작성한 스타일 정의 파일들이 있으며, 각 페이지와 연결됩니다.
 
-### `npm start`
+  ├── types/      : 애플리케이션 전역에서 재사용되는 TypeScript 타입 정의들이 위치한 폴더입니다.
+  
+  └── util/       : 유틸 함수 및 공통 사용 데이터(지역 코드 등)들을 모아둔 폴더입니다.
+```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+<br/>
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## 📦 패키지 설치 및 실행 방법
 
-### `npm test`
+```bash
+yarn install
+yarn start
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+단, `.env` 파일이 있어야 정상적으로 작동합니다.
 
-### `npm run build`
+해당 파일은 보안사항으로 공개되지 않습니다.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+<br/>
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## 🧱 개발 환경
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- **React** `19.0.0`
 
-### `npm run eject`
+- **Styled-components** `6.1.15`
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+- **React Chartjs 2** `5.3.0`
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- **Firebase** `11.3.1`
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+- **Kakao Maps SDK** `1.1.27`
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+- **React Quill** `2.0.0`
 
-## Learn More
+- **Quill Image Resize Module** `3.0.3`  
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- **Swiper** `11.2.4`  
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+- **Uuid** `11.1.0`
+
+- **Jwt Decode** `4.0.0`
+
+- **React Datepicker** `8.1.0`
