@@ -1,13 +1,13 @@
-import { useParams, Link } from "react-router-dom";
-import { ItemApi } from "../../api/ItemApi";
-import { TourSpotDetail } from "../../types/TourSpotTypes";
-import { Comment } from "html-react-parser";
-import React, { useEffect, useRef, useState } from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
+import {useParams, Link} from "react-router-dom";
+import {ItemApi} from "../../api/ItemApi";
+import {TourSpotDetail} from "../../types/TourSpotTypes";
+import {Comment} from "html-react-parser";
+import React, {useEffect, useRef, useState} from "react";
+import {Swiper, SwiperSlide} from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import { Navigation, Pagination } from "swiper/modules";
+import {Navigation, Pagination} from "swiper/modules";
 import {
   TourItemInfoBox,
   SpotTitle,
@@ -18,26 +18,26 @@ import {
   CommentBox,
 } from "../../style/TourSpotStyled";
 import basicImg from "../../img/item/type_200.png";
-import { Loading } from "../../component/Loading";
-import { Modal, CheckModal } from "../../component/ModalComponent";
-import { InputBox } from "../../component/InputComponent";
-import { Button } from "../../component/ButtonComponent";
-import { Paginating } from "../../component/PaginationComponent";
-import { FaBookmark, FaRegBookmark } from "react-icons/fa";
-import { useSelector } from "react-redux";
-import { RootState } from "../../redux/store";
-import { KakaoMapSpot } from "../../component/KakaoMapComponent";
+import {Loading} from "../../component/Loading";
+import {Modal, CheckModal} from "../../component/ModalComponent";
+import {InputBox} from "../../component/InputComponent";
+import {Button} from "../../component/ButtonComponent";
+import {Paginating} from "../../component/PaginationComponent";
+import {FaBookmark, FaRegBookmark} from "react-icons/fa";
+import {useSelector} from "react-redux";
+import {RootState} from "../../redux/store";
+import {KakaoMapSpot} from "../../component/KakaoMapComponent";
 import AxiosApi from "../../api/AxiosApi";
-import { Review } from "../../types/CommonTypes";
-import { BookmarkData } from "../../types/ItemTypes";
-import { GoStarFill } from "react-icons/go";
+import {Review} from "../../types/CommonTypes";
+import {BookmarkData} from "../../types/ItemTypes";
+import {GoStarFill} from "react-icons/go";
 
 // icon
-import { FaRegStar, FaRegStarHalfStroke, FaStar } from "react-icons/fa6";
+import {FaRegStar, FaRegStarHalfStroke, FaStar} from "react-icons/fa6";
 
 export const TourSpot = () => {
-  const { id } = useParams<{ id: string }>(); // id 값을 URL에서 받아옵니다.
-  const { userId, nickname, profile } = useSelector(
+  const {id} = useParams<{ id: string }>(); // id 값을 URL에서 받아옵니다.
+  const {userId, nickname, profile} = useSelector(
     (state: RootState) => state.auth
   );
   const [isBookmarked, setIsBookmarked] = useState<boolean | null>(null);
@@ -89,7 +89,7 @@ export const TourSpot = () => {
   const handleRatingHover = (event: React.MouseEvent<HTMLDivElement>) => {
     if (!starRef.current) return;
 
-    const { left, width } = starRef.current.getBoundingClientRect();
+    const {left, width} = starRef.current.getBoundingClientRect();
     const relativeX = event.clientX - left; // 부모 div 내 상대적 X 좌표
     const starWidth = width / 5; // 별 하나의 너비 (간격 포함)
     const position = relativeX / starWidth; // 몇 번째 별인지 계산
@@ -106,7 +106,7 @@ export const TourSpot = () => {
   const handleEditRatingHover = (event: React.MouseEvent<HTMLDivElement>) => {
     if (!editStarRef.current) return;
 
-    const { left, width } = editStarRef.current.getBoundingClientRect();
+    const {left, width} = editStarRef.current.getBoundingClientRect();
     const relativeX = event.clientX - left; // 부모 div 내 상대적 X 좌표
     const starWidth = width / 5; // 별 하나의 너비 (간격 포함)
     const position = relativeX / starWidth; // 몇 번째 별인지 계산
@@ -243,7 +243,7 @@ export const TourSpot = () => {
       setComments((prevComments) => {
         return prevComments.map((comment) =>
           comment.id === deleteReviewId
-            ? { ...comment, content: "해당 댓글은 삭제되었습니다." } // content만 변경
+            ? {...comment, content: "해당 댓글은 삭제되었습니다."} // content만 변경
             : comment
         );
       });
@@ -255,9 +255,6 @@ export const TourSpot = () => {
       console.log("댓글 삭제 실패");
     }
   };
-
-  // 댓글 신고
-  const clickReport = (id: number) => {};
 
   const parseLinks = (htmlString: string): React.ReactNode[] => {
     // <a> 태그와 <br/> 태그를 모두 매칭하는 정규식
@@ -289,7 +286,7 @@ export const TourSpot = () => {
       }
       // <br> 또는 <br/> 태그 처리
       else if (match[0].startsWith("<br")) {
-        parts.push(<br key={match.index} />);
+        parts.push(<br key={match.index}/>);
       }
 
       lastIndex = regex.lastIndex;
@@ -432,7 +429,7 @@ export const TourSpot = () => {
               <Swiper
                 modules={[Navigation, Pagination]}
                 navigation
-                pagination={{ clickable: true }}
+                pagination={{clickable: true}}
                 spaceBetween={10}
                 slidesPerView={1}
               >
@@ -498,6 +495,9 @@ export const TourSpot = () => {
                 mapY={tourSpotDetail.mapY}
               />
             </div>
+            {/* <div className="nearbySpot">
+            <p>여기에 주변 관광지 목록</p>
+          </div> */}
             <NearTravelList>
               <h3>주변 관광지</h3>
               {tourSpotDetail.nearSpots.length > 0 && (
@@ -518,7 +518,7 @@ export const TourSpot = () => {
                             <h4>{spot.title}</h4>
                             {/* <p>{categoryPath}</p> */}
                             <p>
-                              <GoStarFill style={{ color: "#FFD700" }} />{" "}
+                              <GoStarFill style={{color: "#FFD700"}}/>{" "}
                               {spot.avgRating}{" "}
                               <span>
                                 (
@@ -549,7 +549,7 @@ export const TourSpot = () => {
               value={comment}
               onChange={(e) => setComment(e.target.value)}
               rows={3}
-              style={{ width: "100%", resize: "none" }}
+              style={{width: "100%", resize: "none"}}
             />
             {/* 별점 */}
             <StyledWrapper>
@@ -566,13 +566,13 @@ export const TourSpot = () => {
                   const half = score >= i + 0.5 && score < i + 1;
 
                   return (
-                    <div key={i} style={{ width: 24 }}>
+                    <div key={i} style={{width: 24}}>
                       {full ? (
-                        <FaStar size={24} color="gold" />
+                        <FaStar size={24} color="gold"/>
                       ) : half ? (
-                        <FaRegStarHalfStroke size={24} color="gold" />
+                        <FaRegStarHalfStroke size={24} color="gold"/>
                       ) : (
-                        <FaRegStar size={24} color="gold" />
+                        <FaRegStar size={24} color="gold"/>
                       )}
                     </div>
                   );
@@ -591,59 +591,43 @@ export const TourSpot = () => {
                     <div>{c.nickname}</div>
                     <div className="rate center">
                       <GoStarFill
-                        style={{ color: "#FFD700", marginRight: "5px" }}
+                        style={{color: "#FFD700", marginRight: "5px"}}
                       />{" "}
                       {c.rating}점
                     </div>
                   </div>
                   {c.nickname === nickname &&
-                  c.content !== "해당 댓글은 삭제되었습니다." ? (
-                    <div className="header-right">
-                      {editIndex === index ? (
+                    c.content !== "해당 댓글은 삭제되었습니다." && (
+                      <div className="header-right">
+                        {editIndex === index ? (
+                          <div
+                            className="button"
+                            onClick={() =>
+                              handleSaveEdit(c.id, editContent, editRating)
+                            }
+                          >
+                            저장
+                          </div>
+                        ) : (
+                          <div
+                            className="button"
+                            onClick={() => handleReviewEdit(index, c.content)}
+                          >
+                            수정
+                          </div>
+                        )}
+                        |
                         <div
                           className="button"
-                          onClick={() =>
-                            handleSaveEdit(c.id, editContent, editRating)
-                          }
+                          onClick={() => clickReviewDelete(c.id)}
                         >
-                          저장
+                          삭제
                         </div>
-                      ) : (
-                        <div
-                          className="button"
-                          onClick={() => handleReviewEdit(index, c.content)}
-                        >
-                          수정
-                        </div>
-                      )}
-                      |
-                      <div
-                        className="button"
-                        onClick={() => clickReviewDelete(c.id)}
-                      >
-                        삭제
                       </div>
-                      {/* |
-                      <div
-                        className="button red"
-                        onClick={() => clickReport(c.id)}
-                      >
-                        신고
-                      </div> */}
-                    </div>
-                  ) : (
-                    <div className="header-right">
-                      <div
-                        className="button red"
-                        onClick={() => clickReport(c.id)}
-                      >
-                        신고
-                      </div>
-                    </div>
-                  )}
+                    )}
                 </div>
 
-                <div className="comment" style={{ whiteSpace: "pre-line" }}>
+                <div className="comment" style={{whiteSpace: "pre-line"}}>
                   {editIndex === index ? (
                     <div className="commentInput">
                       <textarea
@@ -665,13 +649,13 @@ export const TourSpot = () => {
                             const half = score >= i + 0.5 && score < i + 1;
 
                             return (
-                              <div key={i} style={{ width: 24 }}>
+                              <div key={i} style={{width: 24}}>
                                 {full ? (
-                                  <FaStar size={24} color="gold" />
+                                  <FaStar size={24} color="gold"/>
                                 ) : half ? (
-                                  <FaRegStarHalfStroke size={24} color="gold" />
+                                  <FaRegStarHalfStroke size={24} color="gold"/>
                                 ) : (
-                                  <FaRegStar size={24} color="gold" />
+                                  <FaRegStar size={24} color="gold"/>
                                 )}
                               </div>
                             );
