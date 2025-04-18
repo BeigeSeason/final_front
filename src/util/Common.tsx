@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 
-export const API_BASE_URL = "http://localhost:8111";
+export const API_BASE_URL = "";
 
 interface Token {
   accessToken: string | null;
@@ -8,7 +8,7 @@ interface Token {
 }
 
 const Common = {
-  FINAL_DOMAIN: "http://localhost:8111",
+  FINAL_DOMAIN: "",
 
   getAccessToken: (): string | null => {
     return localStorage.getItem("accessToken");
@@ -38,7 +38,7 @@ const Common = {
     try {
       const response: AxiosResponse<Token> = await axios.post(
         // POST 요청으로 변경 (일반적인 refreshToken API 방식)
-        `${Common.FINAL_DOMAIN}/auth//token-refreshing`, // refreshToken API 엔드포인트 (POST body로 refreshToken 전달)
+        `${Common.FINAL_DOMAIN}/auth/token-refreshing`, // refreshToken API 엔드포인트 (POST body로 refreshToken 전달)
         { refreshToken: refreshToken }, // 요청 body에 refreshToken 전달
         {
           headers: {

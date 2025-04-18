@@ -1,15 +1,15 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, {useState} from "react";
+import {useNavigate} from "react-router-dom";
 import AxiosApi from "../../api/AxiosApi";
 import {
   TourItemInfoBox,
   SpotTitle,
   RecommendBox,
 } from "../../style/TourSpotStyled";
-import { CheckModal } from "../../component/ModalComponent";
-import { Recommendation, RecommendInput } from "../../types/CommonTypes";
-import { Button } from "../../component/ButtonComponent";
-import { Loading } from "../../component/Loading";
+import {CheckModal} from "../../component/ModalComponent";
+import {Recommendation, RecommendInput} from "../../types/CommonTypes";
+import {Button} from "../../component/ButtonComponent";
+import {Loading} from "../../component/Loading";
 
 const TourRecommend = () => {
   const [gender, setGender] = useState<number>(-1);
@@ -33,7 +33,7 @@ const TourRecommend = () => {
   const navigate = useNavigate();
 
   const handleRecommend = async () => {
-    
+
     if (
       gender === -1 ||
       age === 0 ||
@@ -75,7 +75,7 @@ const TourRecommend = () => {
       setModalText("추천 결과가 없는 조건입니다. 다시 시도해주세요.");
     } else {
       navigate(`/tourRecommend/result`, {
-        state: { recommendations: response },
+        state: {recommendations: response},
       });
     }
   };
@@ -144,7 +144,7 @@ const TourRecommend = () => {
             value={companions}
             onChange={(e) => setCompanions(Number(e.target.value))}
           >
-            {Array.from({ length: 20 }, (_, i) => (
+            {Array.from({length: 20}, (_, i) => (
               <option key={i + 1} value={i + 1}>
                 {i + 1}
               </option>
@@ -152,18 +152,18 @@ const TourRecommend = () => {
           </select>
         </div>
         <div className="recommend-box gap30">
-          <div className="title justify-center" style={{ paddingTop: "8px" }}>
+          <div className="title justify-center" style={{paddingTop: "8px"}}>
             스타일
           </div>
           <div className="radio-gap">
             <div className="radio-container">
               <div className="radio-item center">자연형</div>
               <div className="radio-box">
-                {Array.from({ length: 7 }, (_, i) => (
+                {Array.from({length: 7}, (_, i) => (
                   <div key={i + 1} className="radio-lineBox">
                     {/* 선 (버튼을 연결하는 역할) */}
                     {i !== 6 && ( // 마지막 버튼에는 선을 추가하지 않음
-                      <div className="radio-line" />
+                      <div className="radio-line"/>
                     )}
                     {/* 버튼 */}
                     <input
@@ -185,9 +185,9 @@ const TourRecommend = () => {
             <div className="radio-container">
               <div className="radio-item center">숙박</div>
               <div className="radio-box">
-                {Array.from({ length: 7 }, (_, i) => (
+                {Array.from({length: 7}, (_, i) => (
                   <div key={i + 1} className="radio-lineBox">
-                    {i !== 6 && <div className="radio-line" />}
+                    {i !== 6 && <div className="radio-line"/>}
                     <input
                       type="radio"
                       name="survey"
@@ -207,9 +207,9 @@ const TourRecommend = () => {
             <div className="radio-container">
               <div className="radio-item center">새로움</div>
               <div className="radio-box">
-                {Array.from({ length: 7 }, (_, i) => (
+                {Array.from({length: 7}, (_, i) => (
                   <div key={i + 1} className="radio-lineBox">
-                    {i !== 6 && <div className="radio-line" />}
+                    {i !== 6 && <div className="radio-line"/>}
                     <input
                       type="radio"
                       name="survey"
@@ -229,9 +229,9 @@ const TourRecommend = () => {
             <div className="radio-container">
               <div className="radio-item center">고급</div>
               <div className="radio-box">
-                {Array.from({ length: 7 }, (_, i) => (
+                {Array.from({length: 7}, (_, i) => (
                   <div key={i + 1} className="radio-lineBox">
-                    {i !== 6 && <div className="radio-line" />}
+                    {i !== 6 && <div className="radio-line"/>}
                     <input
                       type="radio"
                       name="survey"
@@ -251,9 +251,9 @@ const TourRecommend = () => {
             <div className="radio-container">
               <div className="radio-item center">여유</div>
               <div className="radio-box">
-                {Array.from({ length: 7 }, (_, i) => (
+                {Array.from({length: 7}, (_, i) => (
                   <div key={i + 1} className="radio-lineBox">
-                    {i !== 6 && <div className="radio-line" />}
+                    {i !== 6 && <div className="radio-line"/>}
                     <input
                       type="radio"
                       name="survey"
@@ -273,9 +273,9 @@ const TourRecommend = () => {
             <div className="radio-container">
               <div className="radio-item center">한적함</div>
               <div className="radio-box">
-                {Array.from({ length: 7 }, (_, i) => (
+                {Array.from({length: 7}, (_, i) => (
                   <div key={i + 1} className="radio-lineBox">
-                    {i !== 6 && <div className="radio-line" />}
+                    {i !== 6 && <div className="radio-line"/>}
                     <input
                       type="radio"
                       name="survey"
@@ -295,9 +295,9 @@ const TourRecommend = () => {
             <div className="radio-container">
               <div className="radio-item center">계획적</div>
               <div className="radio-box">
-                {Array.from({ length: 7 }, (_, i) => (
+                {Array.from({length: 7}, (_, i) => (
                   <div key={i + 1} className="radio-lineBox">
-                    {i !== 6 && <div className="radio-line" />}
+                    {i !== 6 && <div className="radio-line"/>}
                     <input
                       type="radio"
                       name="survey"
@@ -317,9 +317,9 @@ const TourRecommend = () => {
             <div className="radio-container">
               <div className="radio-item center">경험</div>
               <div className="radio-box">
-                {Array.from({ length: 7 }, (_, i) => (
+                {Array.from({length: 7}, (_, i) => (
                   <div key={i + 1} className="radio-lineBox">
-                    {i !== 6 && <div className="radio-line" />}
+                    {i !== 6 && <div className="radio-line"/>}
                     <input
                       type="radio"
                       name="survey"
