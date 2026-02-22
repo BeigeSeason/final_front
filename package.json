@@ -40,7 +40,7 @@
     "@types/react-dom": "^19.0.4",
     "@xeger/quill-image-actions": "^0.7.2",
     "@xeger/quill-image-formats": "^0.7.2",
-    "axios": "^1.7.9",
+    "axios": "^1.13.5",
     "browser-image-compression": "^2.0.2",
     "chart.js": "^4.4.8",
     "color-thief-react": "^2.1.0",
